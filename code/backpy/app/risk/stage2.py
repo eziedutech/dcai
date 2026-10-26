@@ -104,7 +104,9 @@ async def assess(
             system=SYSTEM,
             user=build_payload(window, contact_known, channel, age_range),
             schema=RiskAssessment,
-            max_tokens=1500,
+            # Muse Spark on the Meta API reasons 600 to 1100 tokens on a typical window and
+            # sometimes more; 1500 cut 52 of 208 dev calls. Thinking counts toward this cap.
+            max_tokens=3000,
         )
     except LLMError as exc:
         log.warning("stage2_unavailable error=%s", type(exc).__name__)

@@ -183,3 +183,15 @@ def test_parent_text_with_a_marker_is_rejected():
 
     with pytest.raises(ValidationError):
         assessment(40, rationale="Kontak menyebut [NAMA] berulang kali.")
+
+
+async def test_message_without_new_evidence_keeps_the_model_explanation():
+    reasoning = ScriptedReasoning([70])
+    a = analyzer(reasoning=reasoning)
+    first = await a.add("contact", "kirim foto kamu")
+    second = await a.add("contact", "oke")
+    assert reasoning.calls == 1
+    assert first.source == "model"
+    assert second.source == "carried"
+    assert second.rationale == first.rationale
+    assert second.level == first.level

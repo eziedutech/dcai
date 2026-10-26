@@ -37,7 +37,7 @@ Parental control apps either block or show parents everything. dcAI does neither
 
 - **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on W&B Inference. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
-- **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`. Stage 1 is measured with a live model (below). Stage 2 and the full pipeline are tested with scripted models so far; the live run on the dev split is next.
+- **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call.
 - **50 synthetic scenarios** (543 messages, six groups), with a locked 34/16 dev/test split.
@@ -132,6 +132,27 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 |---|---|
 | Unit and API tests on SQLite | 170 passed |
 | The database tests again on PostgreSQL 18 | 25 passed |
+
+### Full pipeline on the dev split
+
+34 synthetic scenarios played message by message: Llama 3.3 70B for stage 1, Muse Spark on the Meta Model API and Fireworks for stage 2, and the rule floor. Expected levels are dataset drafts. These are development numbers; the test split is kept for the final evaluation.
+
+| Measure | Result | Spec target |
+|---|---|---|
+| Risky approaches reaching `waspada` or higher | 8 of 8 | at least 0.9 |
+| Ordinary chats and hard cases reaching `waspada` or higher | 0 of 14 | at most 0.1 |
+| Detection delay, median | 0 messages (n=19) | at most 2 |
+| Final level exactly as expected | 28 of 34 | |
+| Self-harm scenarios flagged for a support response | 3 of 3 | |
+| Messages without a complete analysis | 0 of 366 | |
+| Stage 2 latency per call | p50 6.1 s, p95 15.3 s | p95 under 5 s per message |
+
+- **Stage 2 latency misses the target.** It runs only on messages that bring new evidence (96 of 366), but each of those calls takes several seconds. The next step is to answer with stage 1 and the floor at once, and push the stage 2 update afterwards.
+- **One bullying case is missed.** Exclusion from a class group (`perundungan-001`) stays `aman`.
+- **Two ordinary chats end at `perhatian`.** One is a teacher asking for a parent's phone number, where the child's reply sets the personal data rule.
+- A first run with a 1500-token cap for stage 2 had 52 of 208 calls cut while the model was still reasoning. The cap is now 3000.
+
+Full tables are in `eval/pipeline/dev.md`.
 
 ### Stage 1 on the dev split
 

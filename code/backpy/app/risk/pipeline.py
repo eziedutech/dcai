@@ -17,7 +17,8 @@ from app.risk.schemas import Confidence, Level, Pattern, level_for
 from app.risk.stage1 import Stage1Result, label_message
 from app.risk.stage2 import WINDOW, WindowMessage, assess
 
-# Stage 2 runs when any message in the window carries a label or this much signal.
+# Stage 2 runs when the new message brings evidence: a label or this much signal. A message
+# without new evidence keeps the last assessment; the rule floor is still recomputed.
 SIGNAL_TRIGGER = 30
 
 _RULE_RATIONALE = {
@@ -101,7 +102,8 @@ class ConversationAnalyzer:
         prev_score = prev.score if prev else self.base_score
         prev_level = prev.level if prev else level_for(self.base_score)
 
-        triggered = any(m.labels or (m.signal or 0) >= SIGNAL_TRIGGER for m in self.window)
+        newest = self.window[-1]
+        triggered = bool(newest.labels) or (newest.signal or 0) >= SIGNAL_TRIGGER
         model = None
         model_version = "rules"
         if triggered:
@@ -133,6 +135,11 @@ class ConversationAnalyzer:
                 # the explanation comes from whatever set that level.
                 rationale = self._floor_text(floor) or (prev.rationale if prev else rationale)
                 source = "rules"
+        elif not triggered and prev is not None and level == prev.level:
+            # No new evidence and no new level: keep the last explanation as it was.
+            patterns, rationale, confidence = prev.patterns, prev.rationale, prev.confidence
+            trajectory, reason, source = "stabil", "Belum ada perubahan.", "carried"
+            model_version = prev.model_version
         elif triggered or floor.score > 0:
             patterns = tuple(sorted(str(p) for p in self.seen.contact if p in set(Pattern)))
             rationale = self._floor_text(floor) or (prev.rationale if prev else _CALM)
