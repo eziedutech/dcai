@@ -1,0 +1,48 @@
+# Secrets: never commit
+/credentials/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Owner and agent workspace, not for the public repo
+/agents/
+/skills/
+/scripts/
+/docs/private/
+/Digital Safe dcAI*.md
+/project-global-rule.md
+/read_folder.md
+/meta-docs.txt
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Local databases
+*.db
+*.sqlite3
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+test-results/
+playwright-report/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

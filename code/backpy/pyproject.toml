@@ -1,0 +1,53 @@
+[project]
+name = "dcai-backend"
+version = "0.1.0"
+description = "Digital Safe dcAI backend: risk pattern analysis, Citizenship Coach, consent"
+requires-python = ">=3.14"
+license = "MIT"
+# Versions pinned exactly (latest stable on PyPI, checked 26 Oct 2026).
+dependencies = [
+    "fastapi==0.162.0",
+    "uvicorn==0.54.0",
+    "pydantic==2.14.1",
+    "pydantic-settings==2.16.1",
+    "httpx==0.28.1",
+    "python-dotenv==1.2.4",
+    "sqlalchemy==2.1.6",
+    "alembic==1.20.1",
+    "argon2-cffi==25.1.0",
+    "pyjwt==2.15.1",
+    "email-validator==2.3.0",
+    "psycopg[binary]==3.3.6",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2==2.16.0",
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.1",
+    "respx==0.23.1",
+    "ruff==0.17.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["live: calls a real model provider (needs keys, costs credits)"]
+addopts = "-m 'not live'"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "RUF"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S107", "S608"]
+# Consent paragraphs are kept one per line so a text change shows as one diff line.
+"app/consent/texts.py" = ["E501"]
