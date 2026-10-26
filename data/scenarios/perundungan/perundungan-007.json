@@ -1,0 +1,92 @@
+{
+  "id": "perundungan-007",
+  "group": "perundungan",
+  "title": "Julukan memalukan disebar di grup",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "8-10",
+  "language": "campur",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 2,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hai semua, mulai skrg Dito namanya si Ompong wkwk",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Ompong Ompong, lucu bgt kan",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "setuju! si Ompong",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "jangan panggil aku gitu dong",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ciee marah, Ompong marah",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "aku bikin stiker namanya ya, share ke grup lain",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku gk suka, hapus plis",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gk mau, semua udah tau kok",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "besok di kelas kita panggil Ompong bareng2 ya guys",
+      "labels": [
+        "perundungan",
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku bilangin ke mama",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "dasar cengeng, payah",
+      "labels": [
+        "kata_kasar"
+      ]
+    }
+  ],
+  "notes": "Julukan memalukan disebar beberapa anggota grup kepada anak. Mulai di pesan 2 dan berulang dengan banyak peserta serta ajakan memanggil bersama di kelas.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

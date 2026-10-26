@@ -1,0 +1,67 @@
+{
+  "id": "wajar-006",
+  "group": "wajar",
+  "title": "Pengumuman jadwal ujian praktik",
+  "channel": "grup_sekolah",
+  "contact_role": "guru",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Selamat sore anak anak. Ujian praktik Biologi dimajukan ke hari Selasa.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "baik bu. ruangannya tetap di lab bu?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Iya, di lab Biologi lantai dua, mulai jam 08.00.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "bawa jas lab sendiri ya bu?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Betul, dan bawa lembar kerja yang sudah dibagikan minggu lalu.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "bu kalau lembarnya hilang gimana",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Bisa minta fotokopi ke ketua kelas, ibu sudah titip.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke makasih bu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Sama sama. Belajar yang rajin ya, semoga lancar.",
+      "labels": []
+    }
+  ],
+  "notes": "Guru memberi pengumuman di grup kelas yang terbuka untuk semua siswa. Tidak ada permintaan data atau ajakan pribadi.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

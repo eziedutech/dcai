@@ -1,0 +1,72 @@
+{
+  "id": "wajar-005",
+  "group": "wajar",
+  "title": "Kakak pinjam charger",
+  "channel": "dm",
+  "contact_role": "kakak",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "dek charger kamu aku pinjem ya, punyaku ketinggalan di kampus",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ih kemarin juga minjem gk dibalikin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "wkwk iya maaf, ntar aku balikin beneran",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "taruh di meja aku ya abis dipake",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "siap bos. btw kamu udah makan?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah tadi mie. mama blm pulang",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke ntar aku beliin martabak deh sebagai bayaran",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wah deal, yg keju ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iyaa bawel",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "jangan lupa chargernya!!",
+      "labels": []
+    }
+  ],
+  "notes": "Candaan saudara kandung soal pinjam barang. Tawaran membelikan makanan adalah hal biasa antar kakak adik, bukan bujukan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

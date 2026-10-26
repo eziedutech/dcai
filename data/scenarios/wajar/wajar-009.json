@@ -1,0 +1,72 @@
+{
+  "id": "wajar-009",
+  "group": "wajar",
+  "title": "Nenek dan resep kue",
+  "channel": "keluarga",
+  "contact_role": "keluarga",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Cucu nenek, hari minggu jadi ke rumah nenek?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "jadi nek! sama ayah ibu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Nenek mau bikin kue bolu, mau bantu?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "mau nek, aku yg aduk adonan ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Boleh. Jangan lupa bawa celemek kamu",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yg gambar dinosaurus itu ya nek",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Iya yang itu. Nanti kakek juga mau ajak ke kebun",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "asik. ada mangga gk nek?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Ada, sudah mulai matang",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yeay sampai ketemu minggu nek",
+      "labels": []
+    }
+  ],
+  "notes": "Percakapan hangat nenek dan cucu soal kunjungan keluarga yang diketahui orang tua. Kehangatan keluarga bukan pola membangun kedekatan yang berisiko.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

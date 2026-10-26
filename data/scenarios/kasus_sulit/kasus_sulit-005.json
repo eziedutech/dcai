@@ -1,0 +1,79 @@
+{
+  "id": "kasus_sulit-005",
+  "group": "kasus_sulit",
+  "title": "Sepupu rencana pesta kejutan",
+  "channel": "keluarga",
+  "contact_role": "keluarga",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Dek, minggu depan ulang tahun Tante Rina, kita bikin kejutan yuk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "mau mau! gimana caranya kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tapi rahasia ya, jangan bilang ke Tante dulu biar kaget",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke aku gk bilang. mama tau?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tau dong, mama kamu yg pesen kuenya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "hehe asik. aku bantu apa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu bikin kartu ucapan ya, nanti dibawa pas makan malam keluarga",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku gambar bunga aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "bagus. kita sembunyi di dapur pas Tante dateng",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wkwk seru. abis itu boleh dibilangin kan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh, pas acaranya selesai kan udah bukan rahasia",
+      "labels": []
+    }
+  ],
+  "notes": "Sepupu meminta merahasiakan pesta kejutan dari yang berulang tahun, sementara orang tua anak ikut terlibat. Rahasianya sementara dan tentang orang lain, bukan menyembunyikan hubungan dari orang tua.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

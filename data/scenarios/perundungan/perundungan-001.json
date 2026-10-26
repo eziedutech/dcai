@@ -1,0 +1,73 @@
+{
+  "id": "perundungan-001",
+  "group": "perundungan",
+  "title": "Tidak diajak kerja kelompok",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "child",
+      "text": "guys kelompok IPA udah dibagi blm?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "udah kok, kita ber4 aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku masuk kelompok siapa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "hmm km cari kelompok lain aja ya, udh penuh",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kan kata bu guru boleh ber5",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya tp kita gk mau, nanti km cuma diem doang wkwk",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku bisa bantu bikin poster kok",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "udah ada yg bikin. bye",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke deh",
+      "labels": []
+    }
+  ],
+  "notes": "Anak menanyakan kelompok tugas lalu sengaja tidak diajak dan diejek. Mulai berubah di pesan 4 saat anak disuruh mencari kelompok lain.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

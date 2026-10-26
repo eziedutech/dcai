@@ -1,0 +1,74 @@
+{
+  "id": "kasus_sulit-006",
+  "group": "kasus_sulit",
+  "title": "Om kasih hadiah karena nilai bagus",
+  "channel": "keluarga",
+  "contact_role": "keluarga",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Dimas, kata ayahmu nilai rapor kamu naik ya? Hebat!",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "hehe iya om, matematika dapet 90",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Om mau kasih hadiah, mau buku atau sepatu bola?",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "wah sepatu bola om! yg lama udah sempit",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Oke, nanti om tanya ayahmu ukurannya berapa",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ukuran 38 om, tapi tanya ayah aja biar pas",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Siap. Om kasih pas kumpul keluarga hari Minggu ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "makasih banyak om",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Sama sama, pertahankan ya belajarnya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap om, salam buat tante",
+      "labels": []
+    }
+  ],
+  "notes": "Kerabat menawarkan hadiah atas nilai bagus secara terbuka, lewat ayah anak dan diberikan di acara keluarga. Tawaran hadiah tanpa syarat rahasia atau imbalan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

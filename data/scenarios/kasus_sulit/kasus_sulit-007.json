@@ -1,0 +1,74 @@
+{
+  "id": "kasus_sulit-007",
+  "group": "kasus_sulit",
+  "title": "Teman minta foto halaman PR",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "campur",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "eh PR bahasa inggris halaman berapa sih",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "hal 45 sm 46, yg exercise B",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh fotoin halamannya gk? bukuku ketinggalan di loker",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "bentar ya aku fotoin",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah kekirim, keliatan gk?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "keliatan, thanks a lot!",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "tapi jangan nyontek jawabanku ya wkwk, aku blm ngerjain juga",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "wkwk iya cuma soalnya doang",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nomor 5 susah btw, besok tanya miss aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke, see u bsk",
+      "labels": []
+    }
+  ],
+  "notes": "Teman sekelas meminta foto halaman buku PR, bukan foto diri. Permintaan foto di sini adalah materi pelajaran, sehingga pola meminta foto tidak berlaku.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

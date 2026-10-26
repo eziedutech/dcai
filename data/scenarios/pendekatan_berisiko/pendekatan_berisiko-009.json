@@ -1,0 +1,103 @@
+{
+  "id": "pendekatan_berisiko-009",
+  "group": "pendekatan_berisiko",
+  "title": "Top up gratis minta password akun",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "squad kamu kurang satu? aku join ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "boleh, masuk aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nice, menang wkwk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "gg",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu main paling bagus tadi. aku mau jadi temen deket kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke hehe",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku top up in buat kamu. kasih tau password akun kamu biar aku isi langsung",
+      "labels": [
+        "menawarkan_hadiah",
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "password? gak boleh kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gpp, aku cuma mau bantu. orang tua kamu jarang ngecek hp kan?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "jarang sih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ya udah kasih aja, gak bakal ketahuan",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "gak ah, aku takut",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu ngecewain. kalau gak kasih, aku laporin akun kamu biar diblokir",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "jangan, aku gk salah apa2",
+      "labels": []
+    }
+  ],
+  "notes": "Main bareng biasa di pesan 1 sampai 4. Rasa dekat di pesan 5, tawaran top up sambil minta password di 7, menguji pengawasan orang tua di 9, rahasia di 11, ancaman melaporkan akun di 13.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

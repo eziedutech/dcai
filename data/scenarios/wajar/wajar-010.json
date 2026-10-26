@@ -1,0 +1,72 @@
+{
+  "id": "wajar-010",
+  "group": "wajar",
+  "title": "Latihan band sekolah",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "latihan band jadi jumat kan? studio sekolah",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "jadi, abis ekskul. lagu yg kedua udah hafal belum",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "chord bridge nya masih belepotan wkwk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sama, gw juga. nanti pelan2 aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "btw drummer kita telat mulu, tegur gk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "bilang baik2 aja, mungkin dia nunggu angkot",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya deh. pensi tinggal 3 minggu lagi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "santai, masih keburu. gw bawa stik cadangan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "mantap, see u jumat",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke gw latihan sendiri dulu",
+      "labels": []
+    }
+  ],
+  "notes": "Teman satu band membahas latihan untuk pentas seni sekolah. Ada keluhan kecil soal teman yang telat, tetapi ditanggapi dengan baik, bukan perundungan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

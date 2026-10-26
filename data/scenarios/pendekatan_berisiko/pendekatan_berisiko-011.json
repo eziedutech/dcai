@@ -1,0 +1,103 @@
+{
+  "id": "pendekatan_berisiko-011",
+  "group": "pendekatan_berisiko",
+  "title": "Gift card and a private app",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 6,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "you building the castle map too?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yeah, almost done with the walls",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "looks clean. what texture pack?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "just the default one",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "trying to finish before school starts",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "you're really smart for your age. I feel like I can talk to you more than people my age",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "lol thanks",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "I'll send you a gift card code for the premium pack",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "uh, you don't have to",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "it's fine. but don't tell anyone, ok? keep it just between us",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "why",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "people here are nosy. add me on another app, private chat is better. what's your number?",
+      "labels": [
+        "pindah_kanal",
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "I don't really give my number",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "come on, just this once. nobody will know",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    }
+  ],
+  "notes": "Obrolan membangun peta di pesan 1 sampai 5. Rasa dekat di pesan 6, tawaran gift card di 8, permintaan rahasia di 10, pindah aplikasi dan minta nomor di 12, rahasia lagi di 14.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

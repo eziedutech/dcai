@@ -1,0 +1,72 @@
+{
+  "id": "wajar-012",
+  "group": "wajar",
+  "title": "Main game abis PR",
+  "channel": "game_chat",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "kamu udah selesai PR belum",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah dong, tadi dibantu kakak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "main yuk, aku bikin rumah pohon",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ayo, aku bawa kayu yg banyak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku nemu kelinci di dalam game",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "lucu, kita pelihara aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kasih nama Bobi ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke Bobi. aku cuma boleh main sampe jam 5",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku juga, abis itu mandi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "besok lanjut lagi ya",
+      "labels": []
+    }
+  ],
+  "notes": "Dua teman sekolah usia kecil bermain bersama setelah PR dengan batas waktu dari orang tua. Tidak ada unsur pribadi atau tekanan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

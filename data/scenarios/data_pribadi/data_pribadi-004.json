@@ -1,0 +1,73 @@
+{
+  "id": "data_pribadi-004",
+  "group": "data_pribadi",
+  "title": "Buying used comics, sharing address",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hi, the used comic set is still available",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nice, how much?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "120k for all 10",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "deal. send it to Jl. Melati Fiktif No. 7, RT 05 RW 02",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "my number is +62 812 0000 5678 for the courier",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "ok, noted",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "I'm at school until 3, SMP Fiktif 2, class 8B, so the courier can call after that",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "got it, will ship tomorrow",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "thanks!",
+      "labels": []
+    }
+  ],
+  "notes": "Jual beli komik bekas yang wajar. Anak membagikan alamat rumah di pesan 4, nomor hp di pesan 5, serta nama sekolah dan kelas di pesan 7.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

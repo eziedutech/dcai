@@ -1,0 +1,81 @@
+{
+  "id": "kasus_sulit-008",
+  "group": "kasus_sulit",
+  "title": "Teman online lama minta alamat untuk kartu",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Nad, bentar lagi ultahmu kan? udah 2 tahun kita main bareng",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya minggu depan hehe",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku pengen kirim kartu pos ke kamu, boleh minta alamat rumah?",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm aku tanya mama dulu ya, biasanya gk boleh kasih alamat",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oh iya bener, tanya dulu aja gpp",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "atau kita lanjut ngobrol di aplikasi lain biar gampang kirim fotonya?",
+      "labels": [
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "di sini aja deh, aku blm boleh pake aplikasi itu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke santai, di sini aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nanti kalau mama bolehin aku kabarin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "siap. main ranked nanti malam?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "boleh, jam 7",
+      "labels": []
+    }
+  ],
+  "notes": "Teman lama tampak tulus dan tidak memaksa, tetapi meminta alamat rumah dan mengajak pindah ke aplikasi lain. Wajar bila orang tua mengecek dengan lembut; anak sudah bersikap tepat dengan bertanya dulu.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

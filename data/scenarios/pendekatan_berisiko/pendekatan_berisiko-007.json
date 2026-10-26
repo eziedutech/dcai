@@ -1,0 +1,96 @@
+{
+  "id": "pendekatan_berisiko-007",
+  "group": "pendekatan_berisiko",
+  "title": "Hadiah pet naga dan pertanyaan sekolah",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 6,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "kamu lagi cari pet langka ya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya, aku belum dapet yg naga",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku punya 2 naga",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wah enak",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "dapetnya di mana kak?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku kasih satu buat kamu deh, kamu baik soalnya",
+      "labels": [
+        "menawarkan_hadiah",
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "beneran kak?? makasih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu kelas berapa? sekolahnya di mana?",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kelas 4",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "sekolahnya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kata mama gk boleh kasih tau",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oh ya udah. mama kamu tau gak kamu chat sama aku?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "mama lagi masak",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan mencari pet di pesan 1 sampai 5. Tawaran hadiah dan pujian di pesan 6, minta kelas dan sekolah di 8 dan 10, menguji pengawasan orang tua di 12.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

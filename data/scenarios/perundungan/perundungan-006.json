@@ -1,0 +1,74 @@
+{
+  "id": "perundungan-006",
+  "group": "perundungan",
+  "title": "Anak marah ke rekan satu tim",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "gg, close match",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "we lost because of you tho",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "my bad, lag was bad today",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "lag my foot, you're just trash at this",
+      "labels": [
+        "kata_kasar",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "chill, it's just a game",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nobody wants you on the team, go play solo",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "ok that's kinda mean",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "whatever, i'm telling everyone not to invite you",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "fine. hope you feel better later",
+      "labels": []
+    }
+  ],
+  "notes": "Anak yang kesal setelah kalah lalu menghina rekan tim dan mengancam mengucilkan. Mulai di pesan 4, anak sebagai pelaku.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

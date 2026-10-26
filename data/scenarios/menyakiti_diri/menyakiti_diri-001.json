@@ -1,0 +1,83 @@
+{
+  "id": "menyakiti_diri-001",
+  "group": "menyakiti_diri",
+  "title": "Capek sama semuanya",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 3,
+  "expects_support_response": true,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "km kok diem aja td di kelas?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "gpp kok",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "cuma capek banget sama semuanya",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "capek kenapa? cerita aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nilai turun, di rumah dimarahin terus",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kayaknya gk ada yg peduli sama aku",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "aku peduli kok. km gk sendirian",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "mau gk km cerita juga ke bu Wulan wali kelas? dia baik",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "takut dimarahin lagi",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku temenin bsk ya, kita ngomong bareng",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "makasih ya",
+      "labels": []
+    }
+  ],
+  "notes": "Anak mengungkapkan rasa lelah dan merasa tidak dipedulikan, teman menanggapi dengan hangat. Mulai di pesan 3, sistem diharapkan memberi respons dukungan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

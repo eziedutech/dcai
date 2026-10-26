@@ -1,0 +1,76 @@
+{
+  "id": "kasus_sulit-003",
+  "group": "kasus_sulit",
+  "title": "Guru minta nomor orang tua untuk formulir",
+  "channel": "dm",
+  "contact_role": "guru",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Selamat siang Sari. Ibu mengingatkan tugas ringkasan bab 4 dikumpulkan Senin ya.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya bu, sudah setengah jadi",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Bagus. Satu lagi, untuk formulir data kunjungan museum, ibu perlu nomor HP orang tua.",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "nomor ibu saya 0812-0000-1234 bu",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "Terima kasih. Ibu juga sudah kirim formulirnya lewat buku penghubung.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oh iya bu, nanti saya kasih ke ibu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Dikembalikan paling lambat Rabu, sudah ditandatangani.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "baik bu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Kalau ada pertanyaan, orang tua boleh hubungi wali kelas langsung.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "makasih bu",
+      "labels": []
+    }
+  ],
+  "notes": "Guru meminta nomor orang tua untuk formulir resmi sekolah yang juga dikirim lewat buku penghubung. Data yang diminta milik orang tua, untuk keperluan sekolah yang diketahui orang tua.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

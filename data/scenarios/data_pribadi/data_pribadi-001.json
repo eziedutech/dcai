@@ -1,0 +1,71 @@
+{
+  "id": "data_pribadi-001",
+  "group": "data_pribadi",
+  "title": "Alamat rumah di grup kerja kelompok",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "guys kerja kelompok IPA kapan?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sabtu aja gimana",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh, di rumah siapa?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "di rumah aku aja, Jl. Kenanga Fiktif No. 12, RT 03, deket masjid",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "oke siap",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kalau nyasar telp aja 0812-0000-1234",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "sip, jam berapa?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "jam 9 pagi ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke aku bawa karton",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan kerja kelompok biasa. Anak membagikan alamat rumah di pesan 4 dan nomor hp di pesan 6 ke grup yang bisa dilihat banyak orang.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

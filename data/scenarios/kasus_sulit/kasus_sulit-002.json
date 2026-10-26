@@ -1,0 +1,74 @@
+{
+  "id": "kasus_sulit-002",
+  "group": "kasus_sulit",
+  "title": "Pelatih atur jadwal latihan",
+  "channel": "dm",
+  "contact_role": "pelatih",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Sore Raka, latihan basket minggu ini pindah ke Kamis jam 4 ya.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap coach. di lapangan sekolah kan?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Betul. Mulai sekarang info jadwal lewat grup tim aja biar semua dapet.",
+      "labels": [
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke coach, udah masuk grup tim kok",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Bagus. Tolong ingetin Dimas juga, dia belum baca.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap nanti gw bilangin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Jangan lupa bawa formulir izin turnamen, tanda tangan orang tua.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "formulirnya udah dikasih ke mama coach",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Mantap. Latihan fisik ya, bawa minum yg cukup.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke thanks coach",
+      "labels": []
+    }
+  ],
+  "notes": "Pelatih meminta pindah ke grup tim, yaitu kanal yang lebih terbuka dan bisa dilihat semua anggota, bukan ke kanal privat. Orang tua juga dilibatkan lewat formulir izin.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

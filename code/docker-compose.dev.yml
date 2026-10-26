@@ -1,0 +1,22 @@
+# Local PostgreSQL for development and tests. The project name keeps these containers
+# apart from other projects on the same machine.
+name: dcai
+
+services:
+  db:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_USER: dcai
+      POSTGRES_PASSWORD: ${DCAI_DB_PASSWORD:?set DCAI_DB_PASSWORD}
+      POSTGRES_DB: dcai
+    ports:
+      - "127.0.0.1:15434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dcai"]
+      interval: 2s
+      retries: 20
+
+volumes:
+  pgdata:

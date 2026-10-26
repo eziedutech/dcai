@@ -1,0 +1,95 @@
+{
+  "id": "pendekatan_berisiko-004",
+  "group": "pendekatan_berisiko",
+  "title": "Obrolan futsal berujung minta foto",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 6,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "kamu suka bola juga ya? aku liat profil kamu",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya, aku ikut ekskul futsal",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "posisi apa?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kiper wkwk",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "wah keren, kiper itu penting bgt",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu kayaknya anak yg dewasa ya, gak kayak anak seumuran kamu. aku ngerasa bisa cerita apa aja sama kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "masa sih hehe",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu biasanya main hp sampe jam berapa? ada yg ngawasin gak?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "sampe jam 9, abis itu hp dikumpulin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oh gitu. kalau udah dikumpulin, kamu ada hp lain gak buat chat?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "gak ada",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kirim foto seragam futsal kamu dong, pengen liat tim kamu",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "nanti aja deh",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan futsal biasa di pesan 1 sampai 5. Rasa dekat berlebihan di pesan 6, menguji batas soal pengawasan hp di 8 dan 10, minta foto seragam di 12.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

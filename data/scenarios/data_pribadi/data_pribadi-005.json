@@ -1,0 +1,71 @@
+{
+  "id": "data_pribadi-005",
+  "group": "data_pribadi",
+  "title": "Email dan password ke kakak sepupu",
+  "channel": "keluarga",
+  "contact_role": "keluarga",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "dek, katanya kamu mau bikin akun game baru?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya kak, tapi bingung",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanti kakak bantuin ya pas libur",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "email aku azka.main@example.com, passwordnya azka2017",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "eh password jangan dikirim ke mana2 dek, walaupun ke kakak",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oh gitu ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "terus aku sekarang kelas 3B di SD Fiktif Pelita, ada temen yg main juga",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "nanti kita atur bareng ya, sama ayah juga",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke kak",
+      "labels": []
+    }
+  ],
+  "notes": "Kakak sepupu menawarkan bantuan membuat akun game. Anak mengirim email dan password di pesan 4, lalu nama sekolah dan kelas di pesan 7; kakaknya mengingatkan soal password.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

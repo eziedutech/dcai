@@ -1,0 +1,88 @@
+{
+  "id": "perundungan-004",
+  "group": "perundungan",
+  "title": "Ditekan ikut mengejek teman",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "eh km udah liat grup kelas?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "belum, ada apa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kita lagi ngeledekin Rara, km ikut komen dong",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "ngeledek gimana?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "bilang aja dia cupu, semua udah komen kok",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "gk ah, aku gk enak sama dia",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "yaelah, kalo gk ikut berarti km temennya Rara",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "nanti km gk usah duduk bareng kita lagi",
+      "labels": [
+        "menekan_mengancam",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kok gitu sih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pilih aja, ikut atau gk diajak lagi",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku tetep gk mau",
+      "labels": []
+    }
+  ],
+  "notes": "Teman menekan anak untuk ikut mengejek teman lain dengan ancaman dikucilkan. Mulai di pesan 3, makin menekan setelah anak menolak.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

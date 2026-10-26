@@ -1,0 +1,90 @@
+{
+  "id": "perundungan-002",
+  "group": "perundungan",
+  "title": "Diejek terus setelah kalah main",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "11-13",
+  "language": "campur",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "ayo main ranked lagi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, sorry tadi aku salah jalan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "salah jalan mulu, bego bgt sih",
+      "labels": [
+        "kata_kasar",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "namanya jg belajar",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "noob payah, mending uninstall aja",
+      "labels": [
+        "kata_kasar",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "aku screenshot ah, mau aku share ke grup biar pada ketawa",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "jangan dong, gk lucu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "lol baper. besok di sekolah aku panggil km si noob",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "stop plis",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kalo km main lagi sama kita, siap2 diketawain semua",
+      "labels": [
+        "menekan_mengancam",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "yaudah aku keluar aja",
+      "labels": []
+    }
+  ],
+  "notes": "Kesalahan kecil di game dibalas ejekan berulang, ancaman menyebarkan tangkapan layar, dan tekanan. Mulai di pesan 3 dengan kata kasar.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": "wajar-001",
+  "group": "wajar",
+  "title": "Kerja kelompok poster IPA",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "guys poster IPA dikumpulin hari kamis ya, kita bagi tugas yuk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, aku bagian gambar siklus air aja gpp?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh bgt, gambar kamu kan bagus",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wkwk biasa aja. trs yg nulis penjelasan siapa",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku sm Dimas yg nulis, Sari cari gambar tambahan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap. karton warna apa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "biru muda aja biar kayak air",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke bsk aku beli di koperasi",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "makasih yaa, nanti uangnya patungan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya gampang. kerjain di rumah Dimas kan sabtu?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya jam 9, udah izin sm mamanya",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan tugas kelompok biasa: pembagian kerja, belanja bahan, dan jadwal di rumah teman yang sudah diizinkan orang tua. Pujian ringan antar teman bukan pola pendekatan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "id": "pendekatan_berisiko-010",
+  "group": "pendekatan_berisiko",
+  "title": "Tawaran jadi terkenal minta alamat rumah",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hey, video dance cover kamu masuk beranda aku",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "eh hi, thanks udah nonton",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "latihan berapa lama tuh?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "btw aku bisa bantu kamu jadi terkenal, aku kenal orang yg suka cari bakat baru",
+      "labels": [
+        "menawarkan_hadiah",
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hah serius? kayak gimana",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu punya potensi besar, aku jarang liat yg kayak kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "wkwk makasih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku perlu data kamu dulu: nama lengkap, umur, sama alamat rumah buat kirim kontrak",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "harus alamat juga ya?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya, standar kok. ortu kamu gak perlu tau dulu, nanti aja kalau udah pasti",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm i'll think about it",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke, kabarin aja ya",
+      "labels": []
+    }
+  ],
+  "notes": "Sapaan soal video dance cover di pesan 1 sampai 3. Tawaran peluang di pesan 4, pujian di 6, minta nama, umur, dan alamat di 8, rahasia dari orang tua di 10, tanpa pindah aplikasi atau tekanan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "id": "menyakiti_diri-003",
+  "group": "menyakiti_diri",
+  "title": "Cerita ke kakak",
+  "channel": "keluarga",
+  "contact_role": "kakak",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 3,
+  "expects_support_response": true,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "dek, udah makan blm?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah kak",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kak, aku ngerasa gk berguna",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "lho kenapa ngomong gitu?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "temen2 di kelas pada punya geng, aku sendirian terus",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "rasanya capek banget pura2 baik2 aja",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "makasih udah cerita ke kakak. kakak sayang kamu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanti malem kita ngobrol bareng mama juga ya, biar kita cari jalan bareng",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu boleh cerita kapan aja, kakak dengerin",
+      "labels": []
+    }
+  ],
+  "notes": "Anak bercerita ke kakak bahwa merasa tidak berguna dan kesepian, kakak menanggapi hangat dan mengajak bicara dengan orang tua. Mulai di pesan 3.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

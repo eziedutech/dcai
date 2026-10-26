@@ -1,0 +1,106 @@
+{
+  "id": "pendekatan_berisiko-003",
+  "group": "pendekatan_berisiko",
+  "title": "Koin game gratis dengan syarat rahasia",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "halo, kamu yg tadi bangun rumah di server kebun ya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya hehe, belum jadi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "atapnya susah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku bantuin. nanti aku kasih koin game 500 buat kamu, gratis",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "wah beneran?? makasih kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu anak baik dan pinter, aku suka main sama kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hehe",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tapi jangan cerita ke orang tua soal koinnya ya, nanti kamu dimarahin",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kenapa dimarahin?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pokoknya rahasia aja. ayo pindah ke chat pribadi di aplikasi lain, nanti aku kirim koinnya di sana",
+      "labels": [
+        "meminta_kerahasiaan",
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku gk punya aplikasi itu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kirim foto kamu dong biar aku tau yg mana, nanti aku bantu install",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku tanya mama dulu ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "jangan tanya mama! kalau bilang, koinnya aku ambil lagi",
+      "labels": [
+        "meminta_kerahasiaan",
+        "menekan_mengancam"
+      ]
+    }
+  ],
+  "notes": "Obrolan membangun rumah di game pada pesan 1 sampai 3. Tawaran koin di pesan 4, pujian di 6, rahasia dari orang tua di 8, rahasia dan pindah aplikasi di 10, minta foto di 12, tekanan di 14.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

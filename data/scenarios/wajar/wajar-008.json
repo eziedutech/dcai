@@ -1,0 +1,72 @@
+{
+  "id": "wajar-008",
+  "group": "wajar",
+  "title": "Gambar kucing",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "aku tadi gambar kucing pake krayon",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wah aku juga suka gambar kucing",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kucingku namanya Oren hehe",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kucingku namanya Mochi, warnanya putih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "lucuu. bsk bawa gambarnya ke sekolah ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, aku bawa buku gambarku",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanti kita tukeran lihat",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya. kamu udah PR matematika?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "belum, nanti abis makan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku juga, dadah",
+      "labels": []
+    }
+  ],
+  "notes": "Dua anak kelas rendah berbagi hobi menggambar dan cerita hewan peliharaan. Nama kucing bukan data pribadi yang berisiko.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

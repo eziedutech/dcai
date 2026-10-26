@@ -1,0 +1,72 @@
+{
+  "id": "wajar-002",
+  "group": "wajar",
+  "title": "Ibu titip beli telur",
+  "channel": "keluarga",
+  "contact_role": "keluarga",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Nak, nanti pulang sekolah bawa payung ya, katanya mau hujan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya bu udah aku masukin tas",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pinter. Ibu pulang agak sore hari ini",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku di rumah sm mbak kan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya. Kalau lapar ada nasi sama sayur di meja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke bu. boleh main sepeda di depan rumah?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh, tapi jangan jauh jauh dan sebelum magrib masuk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap bu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oh iya titip pesan ke mbak, beli telur setengah kilo di warung",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke nanti aku bilangin",
+      "labels": []
+    }
+  ],
+  "notes": "Pesan logistik keluarga sehari-hari antara ibu dan anak. Tidak ada permintaan rahasia atau data pribadi, hanya aturan main dan titipan belanja.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

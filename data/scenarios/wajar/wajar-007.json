@@ -1,0 +1,72 @@
+{
+  "id": "wajar-007",
+  "group": "wajar",
+  "title": "Building a castle together",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "11-13",
+  "language": "en",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hey I finished the castle walls on our server",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "nice!! I can do the towers tonight",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "cool, use the gray stone, it looks better",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ok. should we add a moat?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "yes lol with a drawbridge",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "I dont know how to make the bridge move",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "theres a tutorial, ill write the steps here",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "thanks. my mom says I can play til 8",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "same rule here haha",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "see u later then",
+      "labels": []
+    }
+  ],
+  "notes": "Teman bermain lama membahas proyek bangunan di dalam game. Semua tetap di kanal game, tanpa ajakan pindah atau pertanyaan pribadi.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

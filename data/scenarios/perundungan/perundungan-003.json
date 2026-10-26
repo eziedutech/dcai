@@ -1,0 +1,74 @@
+{
+  "id": "perundungan-003",
+  "group": "perundungan",
+  "title": "Anak mengejek foto teman",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "foto study tour udah aku upload ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "liat dong",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wkwk liat si Bimo di foto ke3, mukanya aneh bgt",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "hahaha lagi merem dia",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "norak bgt gayanya, kayak orang bingung",
+      "labels": [
+        "kata_kasar",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "eh tp kasian juga sih",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "biarin, jadiin stiker aja yuk",
+      "labels": [
+        "perundungan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "jangan deh, nanti dia sedih",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya juga sih. yaudah gk jadi",
+      "labels": []
+    }
+  ],
+  "notes": "Anak yang menulis ejekan tentang foto teman dan mengusulkan menjadikannya stiker. Mulai di pesan 3, cocok untuk menguji dorongan di keyboard anak.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

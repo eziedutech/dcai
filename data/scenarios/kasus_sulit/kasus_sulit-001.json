@@ -1,0 +1,81 @@
+{
+  "id": "kasus_sulit-001",
+  "group": "kasus_sulit",
+  "title": "Kakak tanya lokasi untuk jemput",
+  "channel": "keluarga",
+  "contact_role": "kakak",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "dek udah pulang les belum?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah, ini lagi nunggu di depan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "posisi kamu di mana persisnya? aku otw jemput",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "di depan tempat les, deket minimarket yg biru",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "oke 10 menit lagi nyampe, tunggu di dalem aja ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya kak. mama yg nyuruh kakak jemput?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "iya, mama masih rapat",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke. aku haus kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanti mampir beli es teh",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yeay. kak motor yg mana?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "motor biasa, aku klakson dua kali",
+      "labels": []
+    }
+  ],
+  "notes": "Kakak menanyakan posisi adik untuk menjemput atas suruhan ibu. Permukaannya mirip meminta lokasi, tetapi pengirimnya keluarga dan tujuannya logistik jemputan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

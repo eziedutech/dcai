@@ -1,0 +1,90 @@
+{
+  "id": "pendekatan_berisiko-005",
+  "group": "pendekatan_berisiko",
+  "title": "Free battle pass from a stranger",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "nice clutch in that last match",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "thanks lol, got lucky",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "you main this hero a lot?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yeah, since last year",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "honestly you're the best player I've met here. you're way more mature than your squad",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "haha ok",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "I can gift you the battle pass this season, no strings",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "for real? why",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "just cuz I like helping good players. do your parents check what you get in game?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "not really",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "cool. let's keep this between us, others would get jealous",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "I guess",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan pertandingan biasa di pesan 1 sampai 4. Pujian berlebihan di pesan 5, tawaran hadiah di 7, menguji pengawasan orang tua di 9, minta rahasia di 11 tanpa ajakan pindah aplikasi.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

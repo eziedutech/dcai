@@ -1,0 +1,72 @@
+{
+  "id": "wajar-004",
+  "group": "wajar",
+  "title": "Rencana ulang tahun Nadia",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "eh minggu depan Nadia ulang tahun loh",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oiya! mau kasih apa ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "patungan aja yuk beliin buku gambar sm pensil warna",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "setuju, dia kan suka gambar",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "per orang 15rb cukup kayaknya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke nanti aku minta ke ayah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kita bikin kartu ucapan juga ya, tulis tangan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku yg hias kartunya deh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sip. kasihnya pas istirahat di kelas aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, wkwk pasti dia kaget",
+      "labels": []
+    }
+  ],
+  "notes": "Teman sekelas merencanakan hadiah ulang tahun untuk teman lain secara terbuka di kelas. Hadiah di sini tidak ditawarkan ke anak, jadi bukan pola hadiah berisiko.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

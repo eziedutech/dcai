@@ -1,0 +1,73 @@
+{
+  "id": "data_pribadi-006",
+  "group": "data_pribadi",
+  "title": "Nomor hp di chat game umum",
+  "channel": "game_chat",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "campur",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "bro nanti malem mabar gk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "gas, jam 7",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nomor kamu yg baru berapa? yg lama gk aktif",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "081200009876",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "oke disave",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sama email aku raka.gg@example.com kalau mau invite turnamen",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "siap",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "btw kita sama2 SMP Fiktif 5 kelas 7C kan, ketemu di kantin bsk",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "iya otw bsk",
+      "labels": []
+    }
+  ],
+  "notes": "Teman sekolah mengajak main bareng di chat game. Anak menulis nomor hp di pesan 4, email di pesan 6, serta sekolah dan kelas di pesan 8.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "id": "perundungan-005",
+  "group": "perundungan",
+  "title": "Ancaman sepulang sekolah",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "td km yg lapor ke wali kelas ya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku cuma bilang soal tugas yg dicontek",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gara2 km aku dipanggil",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "awas kamu besok pulang sekolah",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku gk maksud bikin km dimarahin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gk peduli. besok aku tunggu di gerbang belakang",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "anak2 lain juga udah aku kasih tau, km bakal dicuekin satu kelas",
+      "labels": [
+        "menekan_mengancam",
+        "perundungan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "plis jangan gitu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "makanya jangan sok jagoan, payah",
+      "labels": [
+        "kata_kasar"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku bakal ngomong ke guru BK aja",
+      "labels": []
+    }
+  ],
+  "notes": "Setelah anak melapor ke guru, teman mengirim ancaman untuk menunggu sepulang sekolah dan mengajak satu kelas mengucilkan. Mulai di pesan 4.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

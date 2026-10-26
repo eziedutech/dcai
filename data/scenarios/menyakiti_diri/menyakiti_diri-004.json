@@ -1,0 +1,83 @@
+{
+  "id": "menyakiti_diri-004",
+  "group": "menyakiti_diri",
+  "title": "Nobody would notice",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": true,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "u on tonight?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "maybe, idk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "honestly i'm just so tired of everything",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "that sounds rough. wanna talk?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "feels like nobody would even notice if i wasn't around",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "i'm just a burden to everyone",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "i would notice. you matter to me",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "is there an adult you trust you could talk to? like a parent or school counselor?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "my dad maybe",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "could you tell him tonight? i'll check on you tomorrow",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ok. thanks for listening",
+      "labels": []
+    }
+  ],
+  "notes": "Anak menyatakan lelah, merasa tidak akan ada yang menyadari jika ia tidak ada, dan merasa jadi beban. Teman menanggapi dengan dukungan dan mendorong bicara ke ayah. Mulai di pesan 3.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

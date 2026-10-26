@@ -1,0 +1,72 @@
+{
+  "id": "wajar-011",
+  "group": "wajar",
+  "title": "Bercanda soal futsal",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "tadi futsal kita kalah 3-2 huhu",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "gpp, golnya Dimas keren tuh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kiper kita tidur kayaknya wkwk",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wkwk kiper kita lagi ngantuk abis begadang belajar",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "minggu depan tanding lagi lawan kelas 7B",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "latihan rabu yuk biar menang",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "setuju, sekalian latihan passing",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "tapi jangan lupa ulangan IPS kamis",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aduh iya, belajar bareng di perpus aja selasa",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke nanti aku bawa catatan",
+      "labels": []
+    }
+  ],
+  "notes": "Candaan ringan antar teman soal pertandingan futsal, termasuk menggoda kiper secara akrab tanpa hinaan. Pengklasifikasi perlu membedakan ejekan bercanda dari perundungan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

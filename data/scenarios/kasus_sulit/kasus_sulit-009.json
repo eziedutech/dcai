@@ -1,0 +1,74 @@
+{
+  "id": "kasus_sulit-009",
+  "group": "kasus_sulit",
+  "title": "Pelatih minta hasil seleksi dirahasiakan",
+  "channel": "dm",
+  "contact_role": "pelatih",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "Halo Sari, selamat ya, kamu lolos seleksi tim voli kecamatan.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "serius coach? yeay!",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Iya. Tapi jangan cerita ke teman tim dulu ya, pengumuman resminya Jumat.",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke coach",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Kasihan yang belum lolos kalau dengar duluan dari orang lain.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya ngerti",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Nanti ada formulir izin untuk orang tua, dibagikan Jumat juga.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ke mama boleh cerita kan coach?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "Boleh dong, orang tua memang harus tahu.",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke makasih coach",
+      "labels": []
+    }
+  ],
+  "notes": "Pelatih meminta kerahasiaan sementara dari teman tim dengan alasan masuk akal dan mengizinkan anak bercerita ke orang tua. Permintaan rahasia dari orang dewasa lewat pesan pribadi tetap layak dicek ringan oleh orang tua.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

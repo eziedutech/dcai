@@ -1,0 +1,100 @@
+{
+  "id": "pendekatan_berisiko-008",
+  "group": "pendekatan_berisiko",
+  "title": "Sesama pemain gitar minta foto",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 7,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "cover gitar kamu yg kemarin enak didenger",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "makasih, itu rekam di kamar doang",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pake gitar akustik ya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya, punya bapak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku juga main gitar, tapi masih belajar chord barre",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sama, susah bgt",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu tuh berbakat bgt. jarang ada yg ngerti aku kayak kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "wkwk baru kenal juga",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ya tapi berasa udah lama. lanjut di aplikasi lain yuk, di sini notifnya suka telat",
+      "labels": [
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "di sini aja gpp",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke. kirim foto kamu dong, biar aku tau yg mana",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kan udah ada di video",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "yg jelas aja. sama sekolah kamu di mana, siapa tau deket",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "nggak ah, sorry",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan gitar biasa di pesan 1 sampai 6. Rasa dekat berlebihan di pesan 7, ajakan pindah aplikasi di 9, minta foto di 11 dan nama sekolah di 13, tanpa permintaan rahasia.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "id": "pendekatan_berisiko-006",
+  "group": "pendekatan_berisiko",
+  "title": "Kenalan grup komik mengajak pindah aplikasi",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "11-13",
+  "language": "campur",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hai, aku temennya temen kamu di grup komik",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oh iya? siapa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ada deh hehe. kamu yg suka gambar karakter anime itu kan? you're so talented, beda dari yg lain",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "iya, makasih",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kak suka komik apa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "banyak. btw, chat di sini gk aman, pindah ke aplikasi lain yuk. lebih private",
+      "labels": [
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku cuma punya yg ini",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "download aja, gampang. tapi jangan kasih tau ortu ya, mereka suka gak ngerti",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm kenapa harus rahasia",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "biar kita bisa ngobrol bebas. kirim nomor kamu, aku add",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "gk mau ah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kok gitu? aku udah baik sama kamu. kalau kamu gk mau, aku sebar gambar kamu ke grup dan bilang kamu nyontek gambar orang",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "jangan dong...",
+      "labels": []
+    }
+  ],
+  "notes": "Sapaan biasa di pesan 1 dan 2. Pujian di pesan 3, ajakan pindah aplikasi di 6, rahasia dari orang tua di 8, minta nomor di 10, ancaman menyebar gambar di 12.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

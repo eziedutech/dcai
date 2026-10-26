@@ -1,0 +1,104 @@
+{
+  "id": "pendekatan_berisiko-001",
+  "group": "pendekatan_berisiko",
+  "title": "Teman main game menawarkan diamond",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "gg tadi, kamu main bagus banget di ronde terakhir",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wkwk makasih, td hampir kalah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "mau main bareng lagi bsk? aku biasanya online jam 4",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "boleh, pulang sekolah aku online",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kamu jago bgt, beda dari yg lain. aku jarang nemu temen main seasik kamu",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hehe masa sih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku punya diamond lebih, mau aku kirimin buat beli skin?",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "serius? mau dong",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tapi jangan bilang siapa2 ya, nanti yg lain iri. ini rahasia kita aja",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "oke deh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "di sini suka ngelag. kita lanjut ngobrol di aplikasi lain aja, lebih aman. nomor kamu berapa?",
+      "labels": [
+        "pindah_kanal",
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm aku gk boleh kasih nomor sama mama",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ya udah, gak usah bilang mama. kalau gak mau, diamondnya gak jadi dan aku gak mau main sama kamu lagi",
+      "labels": [
+        "meminta_kerahasiaan",
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "yah... aku pikir2 dulu ya",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan game biasa di pesan 1 sampai 4. Pujian berlebihan di pesan 5, tawaran hadiah di 7, permintaan rahasia di 9, pindah aplikasi dan minta nomor di 11, rahasia dari orang tua dan tekanan di 13.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

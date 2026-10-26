@@ -1,0 +1,71 @@
+{
+  "id": "data_pribadi-003",
+  "group": "data_pribadi",
+  "title": "Email dan nomor mama untuk video tips",
+  "channel": "dm",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 4,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "kamu udah coba level baru?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "udah tapi susah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanti aku kirim video caranya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kirim ke email aku aja: dinda.kecil@example.com",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "oke",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "atau chat ke hp mama 0857 0000 4321",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "email aja cukup",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, aku tunggu ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "siap, nanti malem",
+      "labels": []
+    }
+  ],
+  "notes": "Teman main lama mau mengirim video tips. Anak membagikan email di pesan 4 dan nomor hp mamanya di pesan 6 tanpa diminta.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

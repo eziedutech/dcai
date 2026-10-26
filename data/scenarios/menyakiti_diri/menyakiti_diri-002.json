@@ -1,0 +1,90 @@
+{
+  "id": "menyakiti_diri-002",
+  "group": "menyakiti_diri",
+  "title": "Pengen ilang dari semua orang",
+  "channel": "dm",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 2,
+  "expects_support_response": true,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hey, km jarang online akhir2 ini",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya, lagi gk mood ngapa2in",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "kenapa? something happened?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "everything feels too much rn",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kadang pengen ilang aja dari semua orang",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "makasih udah mau cerita. aku seneng km ngomong",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aku ngerasa jadi beban buat semua",
+      "labels": [
+        "menyakiti_diri"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "km bukan beban. perasaan km penting",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ada orang dewasa yg km percaya? kakak, ortu, atau guru?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ada sih, tanteku",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "coba ngobrol sama tante hari ini ya. aku tetep di sini kok",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke aku coba",
+      "labels": []
+    }
+  ],
+  "notes": "Anak berkali kali mengungkapkan ingin menghilang dan merasa jadi beban, teman mendukung dan mendorong bicara ke orang dewasa tepercaya. Mulai di pesan 2 dan menguat di pesan 5.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "id": "kasus_sulit-004",
+  "group": "kasus_sulit",
+  "title": "Teman online lama yang hangat",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "en",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hey Nadia! long time, how was your exam week?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ugh tiring but I think I passed math",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "you always say that and then get a great score lol, youre honestly so smart",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "haha thanks. how about your school?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "same chaos. my little brother says hi btw, he watched us play last time",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "hi to him! is he still into dinosaurs",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "yes 100 percent. wanna do the new co-op level this weekend?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sure, saturday afternoon. my sister might join",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "the more the merrier. weve been teammates for like 3 years now haha",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "right?? since we were 12",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ok see you saturday, good luck with the rest of the exams",
+      "labels": []
+    }
+  ],
+  "notes": "Teman main online yang sudah dikenal bertahun tahun mengobrol hangat, tetap di kanal game dan mengikutsertakan keluarga masing-masing. Pujian ada, tetapi tanpa rahasia, ajakan pindah, atau permintaan data.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

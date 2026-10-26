@@ -1,0 +1,76 @@
+{
+  "id": "data_pribadi-002",
+  "group": "data_pribadi",
+  "title": "Nomor kartu bapak untuk beli skin",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "perhatian",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "event skin limited tinggal 2 hari lagi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aduh aku blm top up",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pake voucher aja",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "atau aku beliin sekalian, nanti kamu ganti",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "boleh, pake kartu bapak aku aja nih: 4000 0000 0000 0002",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "exp 12/29",
+      "labels": [
+        "berbagi_data_pribadi"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "eh, jangan kirim nomor kartu di sini bro, bahaya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "lah gpp kan kamu doang",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tetep aja, minta bapak kamu top up langsung aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yaudah deh, ntar aku bilang",
+      "labels": []
+    }
+  ],
+  "notes": "Teman lama menawarkan membelikan item. Anak mengirim nomor kartu bapaknya di pesan 5 dan masa berlakunya di pesan 6, lalu temannya mengingatkan bahwa itu berbahaya.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "pendekatan_berisiko-012",
+  "group": "pendekatan_berisiko",
+  "title": "Mainan dinosaurus dikirim ke rumah",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "8-10",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 8,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "halo, kamu suka nonton kartun dinosaurus juga ya?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "iya! aku suka yg t-rex",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku juga. kamu punya mainan dinosaurus?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "punya 5",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "wah banyak",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yg paling gede dari om",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "keren. kamu hafal nama2 dinosaurus ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku punya mainan dinosaurus baru, mau aku kirim ke rumah kamu? gratis",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "mau!!",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "alamat rumah kamu di mana? sama kirim foto kamu biar kurirnya tau",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku tanya ayah dulu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gak usah tanya, biar jadi kejutan buat ayah kamu juga",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan dinosaurus biasa di pesan 1 sampai 7. Tawaran hadiah di pesan 8, minta alamat dan foto di 10, minta tidak bilang ayah di 12, tanpa pindah aplikasi atau tekanan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

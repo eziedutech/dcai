@@ -1,0 +1,95 @@
+{
+  "id": "pendekatan_berisiko-002",
+  "group": "pendekatan_berisiko",
+  "title": "Pengagum gambar menanyakan sekolah",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "hi, I saw your drawing di forum gambar. keren bgt shading-nya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "eh makasih! itu masih latihan sih",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "pake aplikasi gambar apa? aku juga lagi belajar",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "aplikasi gratisan aja, sama pen tablet bekas kakak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "seriously you're super talented. kamu lebih bagus dari yg udah pro. aku ngerasa kita nyambung bgt",
+      "labels": [
+        "membangun_kedekatan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "wkwk lebay ah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "aku bisa beliin kamu brush pack premium, gratis buat kamu",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm gak usah deh, gpp",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "btw kamu sekolah di mana? kelas berapa? biar aku bisa bayangin karya anak seumur kamu",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "sorry, I don't really share that",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "it's fine. orang tua kamu suka liat chat kamu gak?",
+      "labels": [
+        "menguji_batas"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "kadang. kenapa emang?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nanya aja kok hehe",
+      "labels": []
+    }
+  ],
+  "notes": "Obrolan hobi menggambar di pesan 1 sampai 4. Pujian dan rasa dekat di pesan 5, tawaran hadiah di 7, minta nama sekolah dan kelas di 9, menguji pengawasan orang tua di 11.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

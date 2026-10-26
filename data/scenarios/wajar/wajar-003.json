@@ -1,0 +1,77 @@
+{
+  "id": "wajar-003",
+  "group": "wajar",
+  "title": "Strategi tim di game",
+  "channel": "game_chat",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "campur",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "bro next round lo jaga kiri ya, gw push tengah",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "ok siap, tadi gw kalah gara2 telat rotate wkwk",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "santai, musuhnya emang jago",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "btw ammo gw tinggal dikit, ada yg spare?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gw drop di deket tembok ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "thanks bro, nice",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "GG tadi clutch lo keren parah",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "hoki doang itu haha",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "main lagi abis isya? Raka mau ikut juga",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "bisa, tp jam 9 udahan ya bsk ulangan mtk",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sip, gw juga belum belajar",
+      "labels": []
+    }
+  ],
+  "notes": "Koordinasi permainan antar teman sekolah dengan istilah game. Pujian dan ajakan main lagi adalah percakapan wajar, anak juga menetapkan batas waktu sendiri.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}
