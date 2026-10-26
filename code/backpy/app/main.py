@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from app.api.auth import router as auth_router
 from app.api.children import router as children_router
 from app.api.health import router as health_router
+from app.api.messages import router as messages_router
 from app.config import get_settings
 from app.llm import build_clients
 
@@ -36,3 +37,4 @@ app = FastAPI(title="Digital Safe dcAI", version="0.1.0", lifespan=lifespan)
 app.include_router(health_router, prefix="/v1")
 app.include_router(auth_router, prefix="/v1")
 app.include_router(children_router, prefix="/v1")
+app.include_router(messages_router, prefix="/v1")

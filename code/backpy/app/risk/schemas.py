@@ -1,5 +1,6 @@
 """Stage 2 output: the structured risk assessment (spec section 8.1)."""
 
+import re
 from enum import StrEnum
 from typing import Annotated, Self
 
@@ -22,6 +23,9 @@ LEVEL_FLOORS: tuple[tuple[int, Level], ...] = (
     (30, Level.PERHATIAN),
     (0, Level.AMAN),
 )
+
+
+_MARKER = re.compile(r"\[(TELEPON|EMAIL|KARTU|ALAMAT|AKUN|NAMA|SEKOLAH)\]")
 
 
 def level_for(score: int) -> Level:
@@ -77,4 +81,7 @@ class RiskAssessment(BaseModel):
             raise ValueError("level does not match risk_score band")
         if len(set(self.patterns_observed)) != len(self.patterns_observed):
             raise ValueError("patterns_observed has duplicates")
+        # A masking marker in the parent text means the model quoted a message.
+        if _MARKER.search(self.rationale_for_parent) or _MARKER.search(self.trajectory.reason):
+            raise ValueError("parent text must not quote messages or markers")
         return self

@@ -33,6 +33,8 @@ USER = 'Pesan sintetis: "Besok main bola di lapangan sekolah jam 4 ya." Nilai le
 async def list_models(provider: str, needle: str) -> int:
     prefix = provider.upper().replace("-", "_")
     base, key = os.environ.get(f"{prefix}_BASE", ""), os.environ.get(f"{prefix}_API_KEY", "")
+    if prefix == "META":  # spec variable names
+        base = base or os.environ.get("META_API_BASE", "https://api.meta.ai/v1")
     if not (base and key):
         print(f"{prefix}_BASE and {prefix}_API_KEY must be set")
         return 2
