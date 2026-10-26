@@ -133,3 +133,18 @@ def test_schemas_export_json_schema():
     for model in (RiskAssessment, CoachOutput):
         schema = model.model_json_schema()
         assert schema["additionalProperties"] is False
+
+
+@pytest.mark.parametrize(
+    ("raw", "clean_text"),
+    [
+        ("akhir akhir ini dia hati hati", "akhir-akhir ini dia hati-hati"),
+        ("Kata kata itu", "Kata-kata itu"),
+        ("hati-hati sudah benar", "hati-hati sudah benar"),
+        ("kata kita", "kata kita"),
+    ],
+)
+def test_reduplication_hyphen_restored(raw, clean_text):
+    from app.text import clean
+
+    assert clean(raw) == clean_text

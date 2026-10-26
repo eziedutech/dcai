@@ -103,3 +103,27 @@ def test_window_rebuilt_after_restart_keeps_the_score(api):
     api.app.state.analyzers = None  # what a restart does to the in-memory windows
     after = send(api, tokens, child, "halo", cid["conversation_id"]).json()
     assert after["level"] == "mendesak"
+
+
+def test_coach_runs_when_level_rises_and_is_stored(api, db_url):
+    tokens, child = setup(api)
+    calm = send(api, tokens, child, "halo").json()
+    assert calm["coach"] is None
+    raised = send(api, tokens, child, "kirim foto kamu", calm["conversation_id"]).json()
+    assert raised["raised"] is True
+    c = raised["coach"]
+    assert c["child_nudge"] and len(c["parent_insight"]["conversation_starters"]) == 3
+    assert c["help_channels"]  # waspada shows the verified help channels
+    again = send(api, tokens, child, "oke", calm["conversation_id"]).json()
+    assert again["coach"] is None  # no new level, no new coaching
+    with create_engine(db_url).connect() as conn:
+        assert conn.execute(text("SELECT COUNT(*) FROM insight")).scalar_one() == 1
+
+
+def test_coach_outage_still_guides_with_templates(api):
+    tokens, child = setup(api)
+    api.app.state.muse = ScriptedReasoning(fail=True)
+    out = send(api, tokens, child, "aku sedih banget, capek sama semua", sender="child").json()
+    assert out["support_needed"] is True
+    assert out["coach"]["source"] == "template"
+    assert out["coach"]["situation"] == "distress"

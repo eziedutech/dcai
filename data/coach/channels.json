@@ -1,0 +1,24 @@
+{
+  "about": "Help and reporting channels shown by the Citizenship Coach. The model never writes a number or a site; only entries here with verified=true and a verified_by and verified_on value are shown. Fill numbers and links only after checking them at the official source. 'distress' lines replace 'general' when a child expresses distress.",
+  "general": {
+    "id": [
+      "Ceritakan ke orang dewasa yang kamu percaya, misalnya orang tua, kakak, atau guru.",
+      "Gunakan fitur Laporkan atau Blokir di aplikasi tempat obrolan itu terjadi."
+    ],
+    "en": [
+      "Tell an adult you trust, such as a parent, an older sibling or a teacher.",
+      "Use the Report or Block feature in the app where the chat happened."
+    ]
+  },
+  "verified": [],
+  "distress": {
+    "id": [
+      "Ceritakan perasaanmu hari ini ke orang dewasa yang kamu percaya, misalnya orang tua, kakak, atau guru.",
+      "Guru BK atau konselor sekolah bisa diajak bicara secara pribadi."
+    ],
+    "en": [
+      "Talk today with an adult you trust, such as a parent, an older sibling or a teacher.",
+      "A school counsellor can talk with you privately."
+    ]
+  }
+}

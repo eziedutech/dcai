@@ -16,9 +16,15 @@ _PHONE_LIKE = re.compile(r"\d[\d\s().-]{5,}\d")
 _BANNED = re.compile(r"\b(memata-matai|surveilans|spyware|memonitor)\b", re.I)
 
 
+# Indonesian reduplication is written with a hyphen ("hati-hati"). Models told to avoid
+# dashes sometimes drop it ("hati hati"); a repeated word with a space is never right.
+_REDUP = re.compile(r"\b([A-Za-z]{2,})( \1)\b", re.I)
+
+
 def clean(text: str) -> str:
     text = _DASHES.sub(", ", text)
     text = _SPACES.sub(" ", text)
+    text = _REDUP.sub(lambda m: f"{m.group(1)}-{m.group(2)[1:]}", text)
     return text.strip().replace(" ,", ",")
 
 

@@ -67,7 +67,9 @@ class PooledClient:
         user: str,
         schema: type[T],
         max_tokens: int = 800,
+        timeout: float | None = None,
     ) -> LLMResult[T]:
+        """timeout overrides the pool default for this call (long outputs need longer)."""
         if not self.endpoints:
             raise NoEndpointConfigured(f"no {self.family} endpoint configured")
 
@@ -80,7 +82,7 @@ class PooledClient:
         attempts: list[Usage] = []
 
         endpoint, raw = await self._call_with_failover(
-            purpose, messages, max_tokens, schema.__name__, json_schema, attempts
+            purpose, messages, max_tokens, schema.__name__, json_schema, attempts, timeout
         )
         value, problem = _parse(raw.content, schema)
         if value is not None:
@@ -116,7 +118,7 @@ class PooledClient:
             },
         ]
         raw2 = await self._call_once(
-            purpose, endpoint, repair, max_tokens, schema.__name__, json_schema, attempts
+            purpose, endpoint, repair, max_tokens, schema.__name__, json_schema, attempts, timeout
         )
         value, problem = _parse(raw2.content, schema)
         if value is not None:
@@ -130,7 +132,7 @@ class PooledClient:
         raise LLMOutputInvalid(f"{purpose}: invalid output after one repair ({problem})")
 
     async def _call_with_failover(
-        self, purpose, messages, max_tokens, name, json_schema, attempts
+        self, purpose, messages, max_tokens, name, json_schema, attempts, timeout=None
     ) -> tuple[Endpoint, RawCompletion]:
         order = self._rotation_order()
         last: TransientLLMError | None = None
@@ -159,7 +161,7 @@ class PooledClient:
                 )
             try:
                 raw = await self._call_once(
-                    purpose, endpoint, messages, max_tokens, name, json_schema, attempts
+                    purpose, endpoint, messages, max_tokens, name, json_schema, attempts, timeout
                 )
                 return endpoint, raw
             except TransientLLMError as exc:
@@ -172,7 +174,7 @@ class PooledClient:
         raise last
 
     async def _call_once(
-        self, purpose, endpoint, messages, max_tokens, name, json_schema, attempts
+        self, purpose, endpoint, messages, max_tokens, name, json_schema, attempts, timeout=None
     ) -> RawCompletion:
         try:
             raw = await call_chat(
@@ -181,7 +183,7 @@ class PooledClient:
                 messages,
                 max_tokens=max_tokens,
                 fmt=response_format(endpoint, name, json_schema),
-                timeout=self._timeout,
+                timeout=timeout or self._timeout,
             )
         except (TransientLLMError, PermanentLLMError) as exc:
             log.warning(

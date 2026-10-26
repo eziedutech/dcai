@@ -31,20 +31,21 @@ Parental control apps either block or show parents everything. dcAI does neither
 1. **Mask.** Names, phone numbers, emails, card numbers, addresses and schools are replaced by markers before any model sees a message.
 2. **Label.** Llama labels each message with behaviour patterns: building closeness fast, asking for secrecy, moving to a private app, asking for personal data or photos, offering gifts, testing limits, pressure, bullying, distress.
 3. **Assess.** When the recent messages show a signal, Muse Spark assesses the conversation window. A deterministic rule floor sits under the model: the score is the highest of the model, the rules and the previous score.
-4. **Guide** *(Citizenship Coach, in progress)*. The child gets a nudge, the parent gets insight and three conversation starters.
+4. **Guide.** When the level rises, or a child first shows distress, the Citizenship Coach gives the child a nudge of at most two sentences, the parent insight with three conversation starters and what to do and avoid, and a one-minute lesson.
 
 ### Built today
 
 - **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on W&B Inference. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
+- **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call.
 - **50 synthetic scenarios** (543 messages, six groups), with a locked 34/16 dev/test split.
 
 ### Not built yet
 
-Citizenship Coach, parent dashboard with live updates, keyboard nudge (Android IME or web fallback), conversation simulator with replay mode, `make eval` report, homepage.
+Parent dashboard with live updates, keyboard nudge (Android IME or web fallback), conversation simulator with replay mode, `make eval` report, homepage.
 
 ## How it works
 
@@ -130,8 +131,8 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 170 passed |
-| The database tests again on PostgreSQL 18 | 25 passed |
+| Unit and API tests on SQLite | 246 passed |
+| The database tests again on PostgreSQL 18 | 27 passed |
 
 ### Full pipeline on the dev split
 
@@ -153,6 +154,12 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 - A first run with a 1500-token cap for stage 2 had 52 of 208 calls cut while the model was still reasoning. The cap is now 3000.
 
 Full tables are in `eval/pipeline/dev.md`.
+
+### Citizenship Coach
+
+9 cases covering every situation (approach, child bullied, child bullying, shared data, distress, general) at `perhatian`, `waspada` and `mendesak`, in Indonesian and English. All 9 were answered by the model and passed the schema and tone rules. Latency was 4 to 8 s on the Meta Model API and 18 to 27 s on Fireworks. The tone review by a person (spec rubric, target 4 of 5) is pending.
+
+Found and fixed on the way: Fireworks timed out at 20 s on every coach call (the coach now gets 45 s); English output mixed in Indonesian words (now rejected and replaced by a template); and Indonesian reduplication lost its hyphen ("hati hati", now repaired in code).
 
 ### Stage 1 on the dev split
 

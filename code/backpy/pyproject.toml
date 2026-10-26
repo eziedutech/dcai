@@ -51,3 +51,4 @@ ignore = ["S101"]
 "tests/**" = ["S105", "S106", "S107", "S608"]
 # Consent paragraphs are kept one per line so a text change shows as one diff line.
 "app/consent/texts.py" = ["E501"]
+"app/coach/templates.py" = ["E501"]

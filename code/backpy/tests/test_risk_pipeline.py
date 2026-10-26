@@ -59,6 +59,16 @@ class ScriptedReasoning:
         self.calls = 0
 
     async def complete_json(self, **kw):
+        if self.fail and kw.get("purpose") == "coach":
+            raise TransientLLMError("HTTP 503", status=503)
+        if kw.get("purpose") == "coach":
+            # The coach shares the reasoning pool; answer it without spending a score.
+            from app.coach.coach import Situation
+            from app.coach.templates import template
+
+            self.coach_calls = getattr(self, "coach_calls", 0) + 1
+            out = template(Situation.APPROACH, Level.WASPADA, "id")
+            return LLMResult(value=out, usage=USAGE, attempts=(USAGE,))
         self.calls += 1
         if self.fail:
             raise TransientLLMError("HTTP 503", status=503)

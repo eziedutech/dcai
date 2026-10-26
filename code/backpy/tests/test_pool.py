@@ -220,3 +220,12 @@ async def test_reasoning_effort_omitted_by_default(sleeper):
     await ask(client([ep], sleeper))
 
     assert "reasoning_effort" not in json.loads(route.calls[0].request.content)
+
+
+@respx.mock
+async def test_per_call_timeout_overrides_pool_default(sleeper):
+    ep = make_endpoint()
+    route = respx.post(f"{ep.base_url}/chat/completions").respond(json=chat_response(GOOD))
+    c = client([ep], sleeper)
+    await c.complete_json(purpose="t", system="s", user="u", schema=Echo, timeout=45.0)
+    assert route.calls[0].request.extensions["timeout"]["read"] == 45.0

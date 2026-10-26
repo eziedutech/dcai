@@ -14,10 +14,12 @@ from pydantic import BaseModel, Field, StringConstraints
 from sqlalchemy import func, select
 
 from app.api.deps import DbDep, GuardianDep, owned_child
+from app.coach.coach import coach
 from app.consent.service import has_consent
 from app.consent.texts import Scope
-from app.db.models import Conversation, Event, RiskAssessment
+from app.db.models import Conversation, Event, Insight, RiskAssessment
 from app.risk.pipeline import ConversationAnalyzer
+from app.risk.schemas import Level
 from app.scenarios.schema import Channel
 
 router = APIRouter(tags=["analysis"])
@@ -34,6 +36,15 @@ class AnalyzeIn(BaseModel):
     text: Annotated[str, StringConstraints(min_length=1, max_length=1000)]
     # Used only to mask this name before any model sees the text; never stored.
     contact_name: Annotated[str, StringConstraints(max_length=40)] | None = None
+
+
+class CoachOut(BaseModel):
+    situation: str
+    source: str  # model | template
+    child_nudge: str
+    parent_insight: dict
+    micro_lesson: dict | None
+    help_channels: list[str]
 
 
 class AnalyzeOut(BaseModel):
@@ -53,6 +64,9 @@ class AnalyzeOut(BaseModel):
     support_needed: bool
     source: str
     masked_kinds: list[str] = Field(description="kinds of personal data found, no values")
+    # Present when this message raised the level to perhatian or above, or first showed
+    # distress: the moment the child is guided and the parent informed.
+    coach: CoachOut | None = None
 
 
 class _Analyzers:
@@ -122,24 +136,57 @@ async def analyze(
 
     step = await analyzer.add(body.sender, body.text)
 
-    if step.raised or step.source == "model" or step.index == 1:
+    first_support = step.support_needed and not any(s.support_needed for s in analyzer.steps[:-1])
+    needs_coach = (step.raised and step.level != Level.AMAN) or first_support
+    assessment = None
+    if step.raised or step.source == "model" or step.index == 1 or needs_coach:
+        assessment = RiskAssessment(
+            conversation_id=conversation.id,
+            score=step.score,
+            level=step.level.value,
+            patterns=list(step.patterns),
+            trajectory=step.trajectory,
+            rationale=step.rationale,
+            confidence=str(step.confidence),
+            model_version=step.model_version,
+        )
+        db.add(assessment)
+        db.flush()
+    coach_out = None
+    if needs_coach:
+        result = await coach(
+            request.app.state.muse,
+            level=step.level,
+            patterns=list(step.patterns),
+            contact_labels=set(analyzer.seen.contact),
+            child_labels=set(analyzer.seen.child),
+            support_needed=step.support_needed,
+            age_range=child.age_range,
+            language=guardian.language,
+        )
+        out = result.output
+        assert assessment is not None
         db.add(
-            RiskAssessment(
-                conversation_id=conversation.id,
-                score=step.score,
-                level=step.level.value,
-                patterns=list(step.patterns),
-                trajectory=step.trajectory,
-                rationale=step.rationale,
-                confidence=str(step.confidence),
-                model_version=step.model_version,
+            Insight(
+                assessment_id=assessment.id,
+                child_nudge=out.child_nudge,
+                parent_insight=out.parent_insight.model_dump(),
+                micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
             )
+        )
+        coach_out = CoachOut(
+            situation=result.situation.value,
+            source=result.source,
+            child_nudge=out.child_nudge,
+            parent_insight=out.parent_insight.model_dump(),
+            micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
+            help_channels=list(result.help_channels),
         )
     if step.raised:
         db.add(Event(child_id=child.id, kind="risiko_naik", level=step.level.value))
     if body.sender == "child" and step.stage1.masked_kinds:
         db.add(Event(child_id=child.id, kind="data_pribadi_dibagikan", level=step.level.value))
-    if step.support_needed and not any(s.support_needed for s in analyzer.steps[:-1]):
+    if first_support:
         db.add(Event(child_id=child.id, kind="dukungan_dibutuhkan", level=step.level.value))
     db.commit()
 
@@ -158,4 +205,5 @@ async def analyze(
         support_needed=step.support_needed,
         source=step.source,
         masked_kinds=sorted(k.value for k in step.stage1.masked_kinds),
+        coach=coach_out,
     )

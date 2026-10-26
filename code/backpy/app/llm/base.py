@@ -62,4 +62,5 @@ class LLMClient(Protocol):
         user: str,
         schema: type[T],
         max_tokens: int = 800,
+        timeout: float | None = None,
     ) -> LLMResult[T]: ...
