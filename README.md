@@ -11,7 +11,7 @@
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
 
-**Direction:** dcAI Guardian, an Android app a parent installs on the child's phone (ages 10 to 17), as a second layer next to Google Family Link: Family Link for limits, dcAI for understanding. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud. Decision record: [docs/proposals/0002-arah-c-dcai-guardian.md](docs/proposals/0002-arah-c-dcai-guardian.md).
+**Direction:** dcAI Guardian, an Android app a parent installs on the child's phone (ages 10 to 17), as a second layer next to Google Family Link: Family Link for limits, dcAI for understanding. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud.
 
 ## Table of Contents
 
@@ -99,7 +99,7 @@ eval/          measurement output (ids and labels only, no text)
 code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
-docs/          ADRs and daily log
+docs/          architecture decision records
 ```
 
 - **No column can hold conversation text.** A test inspects the migrated database. The conversation window lives in memory only.
@@ -234,7 +234,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 
 ## How this was built
 
-A Code Assistant was used to accelerate development and debugging. Design decisions, measurements and claims were checked against real runs. The daily log is in `docs/log/`.
+A Code Assistant was used to accelerate development and debugging. Design decisions, measurements and claims were checked against real runs.
 
 ## License
 

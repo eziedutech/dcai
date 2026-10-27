@@ -4,7 +4,7 @@ Status: accepted, 27 Oct 2026
 
 ## Context
 
-Direction C (proposal 0002) puts dcAI Guardian on the child's phone. The phone sends only
+dcAI Guardian runs on the child's phone. The phone sends only
 flagged, masked messages, image labels and confirmed false detections. Stage 2 measured
 p50 6.1 s and p95 15.3 s on the dev split, and the Coach adds 4 to 10 s, so a phone that
 waits for the full analysis would hold a connection for up to 25 s per message, and a
