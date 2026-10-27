@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "dcai-android"
 include(":app")
+include(":sample")

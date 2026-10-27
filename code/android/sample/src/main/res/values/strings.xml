@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GameChat (contoh)</string>
+    <string name="subtitle">Aplikasi chat sintetis untuk menguji dcAI</string>
+    <string name="contact">Teman baru di game</string>
+    <string name="play_next">Kirim pesan berikutnya dari lawan bicara</string>
+    <string name="restart">Ulang dari awal</string>
+    <string name="type_hint">Tulis balasan anak…</string>
+    <string name="send">Kirim</string>
+    <string name="linked">Terhubung ke dcAI Guardian</string>
+    <string name="not_linked">dcAI Guardian belum terpasang di ponsel ini</string>
+    <string name="done">Skenario selesai</string>
+</resources>

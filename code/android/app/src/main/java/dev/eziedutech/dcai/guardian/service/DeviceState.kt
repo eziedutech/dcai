@@ -1,7 +1,7 @@
 package dev.eziedutech.dcai.guardian.service
 
 import android.content.Context
-import android.provider.Settings
+import android.view.inputmethod.InputMethodManager
 
 /** The protection services this phone is actually running, for the heartbeat. */
 object DeviceState {
@@ -11,17 +11,10 @@ object DeviceState {
         "keyboard" to isKeyboardEnabled(context),
     )
 
+    /** Whether the dcAI keyboard is enabled. InputMethodManager needs no special read
+     * permission, unlike Settings.Secure.ENABLED_INPUT_METHODS (blocked for targetSdk > 33). */
     fun isKeyboardEnabled(context: Context): Boolean {
-        val enabled = Settings.Secure.getString(
-            context.contentResolver, Settings.Secure.ENABLED_INPUT_METHODS,
-        ) ?: return false
-        return enabled.split(":").any { it.startsWith(context.packageName) }
-    }
-
-    fun isKeyboardSelected(context: Context): Boolean {
-        val current = Settings.Secure.getString(
-            context.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD,
-        ) ?: return false
-        return current.startsWith(context.packageName)
+        val imm = context.getSystemService(InputMethodManager::class.java) ?: return false
+        return imm.enabledInputMethodList.any { it.packageName == context.packageName }
     }
 }

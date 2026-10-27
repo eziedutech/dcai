@@ -18,9 +18,9 @@ data class Masked(val text: String, val findings: List<Finding>) {
 object Mask {
     private val U = RegexOption.IGNORE_CASE
 
-    // Python's re is Unicode-aware for \w, \d and \b; Java needs (?U) for the same.
+    // Android's regex engine (ICU) rejects the inline (?U) flag. Scenarios are ASCII, so
     private fun rx(pattern: String, vararg options: RegexOption) =
-        Regex("(?U)$pattern", options.toSet())
+        Regex(pattern, options.toSet())
 
     private val EMAIL = rx("""[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}""")
     private val CARD = rx("""(?<![\d])(?:\d[ -]?){12,18}\d(?![\d])""")
@@ -91,7 +91,7 @@ object Mask {
         }
         for (name in knownNames) {
             if (name.length < 2) continue
-            Regex("(?U)(?<!\\w)${Regex.escape(name)}(?!\\w)", RegexOption.IGNORE_CASE)
+            Regex("(?<!\\w)${Regex.escape(name)}(?!\\w)", RegexOption.IGNORE_CASE)
                 .findAll(text).forEach { add(Kind.NAMA, it.range.first, it.range.last + 1) }
         }
         return spans.sortedBy { it.start }

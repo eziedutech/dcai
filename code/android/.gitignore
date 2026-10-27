@@ -7,3 +7,8 @@ local.properties
 captures/
 *.keystore
 *.jks
+
+# local debug screenshots
+/scr*.png
+/chat*.png
+/notif.png

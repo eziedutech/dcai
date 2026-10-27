@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -223,7 +224,3 @@ private fun scopeLabel(scope: String): String = stringResource(
         else -> R.string.scope_percakapan
     },
 )
-
-@Composable
-private fun stringResource(id: Int, vararg args: Any): String =
-    androidx.compose.ui.platform.LocalContext.current.getString(id, *args)
