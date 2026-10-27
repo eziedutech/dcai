@@ -65,3 +65,31 @@ def new_refresh_token() -> tuple[str, str]:
 
 def hash_refresh_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+# Pairing codes are read off the dashboard and typed on the phone: no 0/O, 1/I/L.
+_PAIRING_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ"
+PAIRING_CODE_LENGTH = 8
+DEVICE_TOKEN_PREFIX = "dcd_"  # noqa: S105  (a label, not a secret)
+
+
+def new_pairing_code() -> tuple[str, str]:
+    """Returns (code shown to the guardian, hash for the database). 31^8 codes, single
+    use, minutes to live."""
+    code = "".join(secrets.choice(_PAIRING_ALPHABET) for _ in range(PAIRING_CODE_LENGTH))
+    return code, hash_pairing_code(code)
+
+
+def hash_pairing_code(code: str) -> str:
+    normalized = "".join(ch for ch in code.upper() if ch.isalnum())
+    return hashlib.sha256(f"pairing:{normalized}".encode()).hexdigest()
+
+
+def new_device_token() -> tuple[str, str]:
+    """Returns (token kept on the phone, hash for the database)."""
+    token = DEVICE_TOKEN_PREFIX + secrets.token_urlsafe(32)
+    return token, hash_device_token(token)
+
+
+def hash_device_token(token: str) -> str:
+    return hashlib.sha256(f"device:{token}".encode()).hexdigest()

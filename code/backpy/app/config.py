@@ -61,6 +61,12 @@ class Settings(BaseSettings):
     evidence_enc_key: str = ""
     replay_mode: bool = False
 
+    pairing_code_minutes: int = 10
+    # Only messages the phone flagged reach the server, so a normal day is far below this.
+    device_messages_per_minute: int = 30
+    sse_heartbeat_seconds: float = 15.0
+    sse_max_seconds: float = 300.0
+
     def endpoints(self, pool: Pool) -> list[Endpoint]:
         raw = self.reasoning_endpoints if pool == "reasoning" else self.screening_endpoints
         names = [n.strip() for n in raw.split(",") if n.strip()]

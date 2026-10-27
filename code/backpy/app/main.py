@@ -8,6 +8,7 @@ from fastapi import FastAPI
 
 from app.api.auth import router as auth_router
 from app.api.children import router as children_router
+from app.api.devices import device_router, guardian_router
 from app.api.health import router as health_router
 from app.api.messages import router as messages_router
 from app.config import get_settings
@@ -30,6 +31,9 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
+        queued = getattr(app.state, "worker", None)
+        if queued is not None:
+            await queued.idle()  # finish messages already accepted before closing clients
         await http.aclose()
 
 
@@ -38,3 +42,5 @@ app.include_router(health_router, prefix="/v1")
 app.include_router(auth_router, prefix="/v1")
 app.include_router(children_router, prefix="/v1")
 app.include_router(messages_router, prefix="/v1")
+app.include_router(guardian_router, prefix="/v1")
+app.include_router(device_router, prefix="/v1")

@@ -10,6 +10,8 @@
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
 
+**Direction:** dcAI Guardian, an Android app a parent installs on the child's phone (ages 10 to 17), as a second layer next to Google Family Link: Family Link for limits, dcAI for understanding. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud. Decision record: [docs/proposals/0002-arah-c-dcai-guardian.md](docs/proposals/0002-arah-c-dcai-guardian.md).
+
 ## Table of Contents
 
 - [What it is](#what-it-is)
@@ -40,12 +42,15 @@ Parental control apps either block or show parents everything. dcAI does neither
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
-- **Delete all of a child's data** with one call.
+- **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
+- **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
+- **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
+- **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
 - **50 synthetic scenarios** (543 messages, six groups), with a locked 34/16 dev/test split.
 
 ### Not built yet
 
-Parent dashboard with live updates, keyboard nudge (Android IME or web fallback), conversation simulator with replay mode, `make eval` report, homepage.
+In build order: parent dashboard (Next.js) with Ask dcAI, the Android app (Kotlin: accessibility text, on-phone masking, nudge overlay), a synthetic chat app and scenario player, visual protection, distillation to a smaller Llama, flagged domains, voice notes, the final evaluation.
 
 ## How it works
 
@@ -84,7 +89,8 @@ uv run python -m app.scenarios.split --check           # check the locked split
 
 ```
 code/backpy/   FastAPI: llm (provider pool), privacy (masking), risk (stage 1, floor, stage 2,
-               pipeline), consent, auth, api (/v1), migrations (Alembic), tests
+               pipeline), coach, analysis (per-conversation queue), live (SSE broker), consent,
+               auth, api (/v1, /v1/device), migrations (Alembic), tests
 data/          scenarios (synthetic JSON, split.json), privacy (masking test cases)
 eval/          measurement output (ids and labels only, no text)
 docs/          ADRs and daily log
@@ -93,7 +99,9 @@ docs/          ADRs and daily log
 - **No column can hold conversation text.** A test inspects the migrated database. The conversation window lives in memory only.
 - **Message text never reaches a log.** Every model call path is tested with a sentinel string, including providers that echo the request in their error.
 - **Consent is append-only.** A database trigger refuses UPDATE on SQLite and PostgreSQL.
-- **A guardian reaches only their own children.** Another guardian's child or conversation answers 404.
+- **A guardian reaches only their own children.** Another guardian's child, conversation or device answers 404.
+- **The phone knows only what the child may see:** its configuration, the level of its own conversations and nudges. A test checks responses and live updates for parent insight.
+- **One process for live updates.** The SSE broker and the queues live in memory; several workers would need a shared bus (PostgreSQL LISTEN/NOTIFY).
 - **Model IDs and prices come from the environment**, never from code.
 
 ## Running locally
@@ -122,6 +130,8 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 | `<NAME>_JSON_MODE`, `<NAME>_REASONING_EFFORT` | per endpoint: `json_schema`, `json_object` or `none`; reasoning effort |
 | `DATABASE_URL` | SQLite or PostgreSQL |
 | `SECRET_KEY` | signs 15-minute access tokens; refresh tokens rotate |
+| `PAIRING_CODE_MINUTES`, `DEVICE_MESSAGES_PER_MINUTE` | pairing code lifetime; per-phone message limit |
+| `SSE_HEARTBEAT_SECONDS`, `SSE_MAX_SECONDS` | stream heartbeat; streams close after this and clients reconnect |
 
 `.env.example` lists every variable.
 
@@ -131,8 +141,8 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 246 passed |
-| The database tests again on PostgreSQL 18 | 27 passed |
+| Unit and API tests on SQLite | 286 passed |
+| The database tests again on PostgreSQL 18 | 59 passed |
 
 ### Full pipeline on the dev split
 
@@ -148,12 +158,25 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 | Messages without a complete analysis | 0 of 366 | |
 | Stage 2 latency per call | p50 6.1 s, p95 15.3 s | p95 under 5 s per message |
 
-- **Stage 2 latency misses the target.** It runs only on messages that bring new evidence (96 of 366), but each of those calls takes several seconds. The next step is to answer with stage 1 and the floor at once, and push the stage 2 update afterwards.
+- **Stage 2 latency misses the target.** It runs only on messages that bring new evidence (96 of 366), but each of those calls takes several seconds. The phone path therefore no longer waits for it: see the next section.
 - **One bullying case is missed.** Exclusion from a class group (`perundungan-001`) stays `aman`.
 - **Two ordinary chats end at `perhatian`.** One is a teacher asking for a parent's phone number, where the child's reply sets the personal data rule.
 - A first run with a 1500-token cap for stage 2 had 52 of 208 calls cut while the model was still reasoning. The cap is now 3000.
 
 Full tables are in `eval/pipeline/dev.md`.
+
+### Phone path, one live run
+
+Four synthetic messages from a stranger in a game chat, sent at once through `/v1/device/messages`, live models, one run (not a benchmark):
+
+| Moment | Time after the first message |
+|---|---|
+| Each message accepted (`202`) | 10 to 21 ms |
+| Level `perhatian` with a template nudge on the phone stream | 2.0 s |
+| Level `mendesak` with a template nudge | 5.9 s |
+| The model's nudge for `mendesak` | 15.6 s |
+
+Model calls: 4 stage 1, 1 stage 2, 1 Coach. Before the queue merged them, the same run made 2 Coach calls and reached `mendesak` later, because a Coach for the out-of-date `perhatian` level held the queue.
 
 ### Citizenship Coach
 

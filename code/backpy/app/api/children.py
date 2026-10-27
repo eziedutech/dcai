@@ -4,16 +4,17 @@ import uuid
 from datetime import datetime
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel, Field, StringConstraints
 from sqlalchemy import delete, select
 
 from app import audit
+from app.age import AgeRange
 from app.api.deps import DbDep, GuardianDep, owned_child
+from app.api.devices import notify_config_changed, notify_devices_revoked
 from app.consent.service import active_scopes
 from app.consent.texts import CURRENT, VERSIONS, Scope
 from app.db.models import ChildProfile, ConsentRecord
-from app.scenarios.schema import AgeRange
 
 router = APIRouter(tags=["children", "consent"])
 
@@ -100,17 +101,25 @@ def list_children(db: DbDep, guardian: GuardianDep) -> list[ChildOut]:
 @router.get("/consents/text")
 def consent_text() -> ConsentTextOut:
     """The current consent text. Public, so it can be read before signing up."""
-    return ConsentTextOut(version=CURRENT.version, id=CURRENT.id, en=CURRENT.en, scopes=list(Scope))
+    return ConsentTextOut(
+        version=CURRENT.version, id=CURRENT.id, en=CURRENT.en, scopes=list(CURRENT.scopes)
+    )
 
 
 @router.post("/consents", status_code=status.HTTP_201_CREATED)
-def record_consent(body: ConsentIn, db: DbDep, guardian: GuardianDep) -> ConsentOut:
+def record_consent(
+    body: ConsentIn, request: Request, db: DbDep, guardian: GuardianDep
+) -> ConsentOut:
     child = owned_child(db, guardian, body.child_id)
     if body.text_version not in VERSIONS:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown consent text version")
     if body.action == "grant" and body.text_version != CURRENT.version:
         raise HTTPException(
             status.HTTP_409_CONFLICT, "consent must be given to the current text version"
+        )
+    if body.action == "grant" and not set(body.scopes) <= set(CURRENT.scopes):
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "scope not covered by the consent text"
         )
     record = ConsentRecord(
         guardian_id=guardian.id,
@@ -124,6 +133,7 @@ def record_consent(body: ConsentIn, db: DbDep, guardian: GuardianDep) -> Consent
     db.flush()
     audit.record(db, audit.guardian_actor(guardian.id), f"consent_{body.action}", child.id)
     db.commit()
+    notify_config_changed(request.app.state, db, child.id)
     return _consent_out(record)
 
 
@@ -139,10 +149,14 @@ def consent_history(child_id: uuid.UUID, db: DbDep, guardian: GuardianDep) -> li
 
 
 @router.delete("/children/{child_id}/data", status_code=status.HTTP_204_NO_CONTENT)
-def delete_child_data(child_id: uuid.UUID, db: DbDep, guardian: GuardianDep) -> None:
+def delete_child_data(
+    child_id: uuid.UUID, request: Request, db: DbDep, guardian: GuardianDep
+) -> None:
     """Erase the child and everything linked to it (cascade). The audit entry keeps only
-    the child's id, so the erasure itself stays provable."""
+    the child's id, so the erasure itself stays provable. Paired phones are told first, and
+    their tokens end with the device rows."""
     child = owned_child(db, guardian, child_id)
+    notify_devices_revoked(request.app.state, db, child.id)
     db.execute(delete(ChildProfile).where(ChildProfile.id == child.id))
     audit.record(db, audit.guardian_actor(guardian.id), "child_data_deleted", child.id)
     db.commit()

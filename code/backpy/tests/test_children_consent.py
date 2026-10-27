@@ -4,7 +4,7 @@ from app.consent.texts import CURRENT
 from tests.conftest import auth, register
 
 
-def add_child(api, tokens, nickname="Kit", age_range="11-13"):
+def add_child(api, tokens, nickname="Kit", age_range="10-12"):
     resp = api.post(
         "/v1/children", json={"nickname": nickname, "age_range": age_range}, headers=auth(tokens)
     )
@@ -35,7 +35,7 @@ def test_demo_path_register_add_child_consent(api, db_url):
     assert resp.status_code == 201
     record = resp.json()
     assert record["text_version"] == CURRENT.version
-    assert record["age_range"] == "11-13"
+    assert record["age_range"] == "10-12"
 
     listed = api.get("/v1/children", headers=auth(tokens)).json()
     assert listed[0]["consent_scopes"] == ["keyboard", "percakapan"]
@@ -72,9 +72,27 @@ def test_consent_text_is_public(api):
     assert resp.status_code == 200
     body = resp.json()
     assert body["version"] == CURRENT.version
-    assert set(body["scopes"]) == {"percakapan", "keyboard"}
-    for word in ("memonitor", "memantau", "mengawasi", "memata-matai"):
+    assert set(body["scopes"]) == {"percakapan", "keyboard", "gambar", "domain", "suara"}
+    for word in ("memonitor", "memantau", "mengawasi", "memata-matai", "spyware"):
         assert word not in body["id"].lower()
+    # The phone-wide text says what a child always sees and what never leaves the phone.
+    assert "notifikasi tetap" in body["id"] and "tidak pernah dikirim" in body["id"]
+
+
+def test_old_text_version_can_be_revoked_but_not_granted(api):
+    from app.consent.texts import V1
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    assert consent(api, tokens, child["id"], version=V1.version).status_code == 409
+    granted = consent(api, tokens, child["id"], scopes=["percakapan", "gambar"])
+    assert granted.status_code == 201
+    revoked = consent(
+        api, tokens, child["id"], scopes=["gambar"], action="revoke", version=V1.version
+    )
+    assert revoked.status_code == 201
+    listed = api.get("/v1/children", headers=auth(tokens)).json()
+    assert listed[0]["consent_scopes"] == ["percakapan"]
 
 
 def test_guardian_cannot_touch_another_guardians_child(api):

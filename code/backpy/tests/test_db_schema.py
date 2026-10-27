@@ -58,7 +58,7 @@ def test_consent_record_refuses_update_but_allows_erasure(db_url):
         conn.execute(
             text(
                 "INSERT INTO child_profile (id, guardian_id, nickname, age_range, created_at) "
-                "VALUES (:c, :g, 'Kit', '8-10', '2026-10-26 00:00:00')"
+                "VALUES (:c, :g, 'Kit', '10-12', '2026-10-26 00:00:00')"
             ),
             {"c": cid, "g": gid},
         )
@@ -66,7 +66,7 @@ def test_consent_record_refuses_update_but_allows_erasure(db_url):
             text(
                 "INSERT INTO consent_record (id, guardian_id, child_id, text_version, action, "
                 "scopes, age_range, created_at) VALUES (:r, :g, :c, 'v', 'grant', "
-                "'[\"percakapan\"]', '8-10', '2026-10-26 00:00:00')"
+                "'[\"percakapan\"]', '10-12', '2026-10-26 00:00:00')"
             ),
             {"r": rid, "g": gid, "c": cid},
         )

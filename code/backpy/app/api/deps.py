@@ -1,4 +1,5 @@
-"""Request dependencies: database session, the signed-in guardian, owned children."""
+"""Request dependencies: database session, the signed-in guardian, owned children, and
+the paired phone."""
 
 import uuid
 from collections.abc import Iterator
@@ -6,12 +7,13 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.auth.security import read_access_token
+from app.auth.security import DEVICE_TOKEN_PREFIX, hash_device_token, read_access_token
 from app.config import Settings
-from app.db.base import session_factory
-from app.db.models import ChildProfile, Guardian
+from app.db.base import session_factory, utcnow
+from app.db.models import ChildProfile, Device, Guardian
 
 _bearer = HTTPBearer(auto_error=False)
 
@@ -55,3 +57,25 @@ def owned_child(db: Session, guardian: Guardian, child_id: uuid.UUID) -> ChildPr
     if child is None or child.guardian_id != guardian.id:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "child not found")
     return child
+
+
+def current_device(
+    db: DbDep, creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)]
+) -> Device:
+    token = creds.credentials if creds else ""
+    device = (
+        db.scalar(select(Device).where(Device.token_hash == hash_device_token(token)))
+        if token.startswith(DEVICE_TOKEN_PREFIX)
+        else None
+    )
+    if device is None or device.revoked_at is not None:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            "device not paired or revoked",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    device.last_seen_at = utcnow()
+    return device
+
+
+DeviceDep = Annotated[Device, Depends(current_device)]

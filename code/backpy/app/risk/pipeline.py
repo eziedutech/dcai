@@ -15,7 +15,8 @@ from app.llm import LLMClient
 from app.risk.floor import Floor, Seen, rule_floor
 from app.risk.schemas import Confidence, Level, Pattern, level_for
 from app.risk.stage1 import Stage1Result, label_message
-from app.risk.stage2 import WINDOW, WindowMessage, assess
+from app.risk.stage2 import WINDOW, WindowMessage
+from app.risk.stage2 import assess as run_stage2
 
 # Stage 2 runs when the new message brings evidence: a label or this much signal. A message
 # without new evidence keeps the last assessment; the rule floor is still recomputed.
@@ -82,12 +83,17 @@ class ConversationAnalyzer:
     seen: Seen = field(default_factory=Seen)
     window: list[WindowMessage] = field(default_factory=list)
     steps: list[Step] = field(default_factory=list)
+    # Evidence from messages added with assess=False, waiting for the next stage 2 call.
+    pending_evidence: bool = False
 
     @property
     def score(self) -> int:
         return self.steps[-1].score if self.steps else 0
 
-    async def add(self, sender: str, text: str) -> Step:
+    async def add(self, sender: str, text: str, *, assess: bool = True) -> Step:
+        """Label the message and update the score. With assess=False stage 2 is skipped and
+        any evidence is carried to the next call: a queue of messages that arrived together
+        then costs one stage 2 call on the last of them, which sees the whole window."""
         index = len(self.steps) + 1
         s1 = await label_message(self.screening, sender, text, self.known_names)  # type: ignore[arg-type]
         self.seen.add(sender, s1.labels, s1.status == "ok")
@@ -103,11 +109,17 @@ class ConversationAnalyzer:
         prev_level = prev.level if prev else level_for(self.base_score)
 
         newest = self.window[-1]
-        triggered = bool(newest.labels) or (newest.signal or 0) >= SIGNAL_TRIGGER
+        evidence = bool(newest.labels) or (newest.signal or 0) >= SIGNAL_TRIGGER
+        if not assess:
+            self.pending_evidence = self.pending_evidence or evidence
+            triggered = False
+        else:
+            triggered = evidence or self.pending_evidence
+            self.pending_evidence = False
         model = None
         model_version = "rules"
         if triggered:
-            s2 = await assess(
+            s2 = await run_stage2(
                 self.reasoning,
                 self.window,
                 contact_known=self.contact_known,

@@ -9,7 +9,16 @@ only, with an expiry.
 import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON, ForeignKey, Index, Integer, LargeBinary, String, Uuid
+from sqlalchemy import (
+    JSON,
+    ForeignKey,
+    Index,
+    Integer,
+    LargeBinary,
+    String,
+    UniqueConstraint,
+    Uuid,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, UTCDateTime, utcnow
@@ -87,14 +96,61 @@ class ConsentRecord(Base):
     created_at: Mapped[datetime] = _created()
 
 
+class PairingCode(Base):
+    """A short code the guardian reads off the dashboard and types on the child's phone.
+    Stored as a hash, single use, expires in minutes."""
+
+    __tablename__ = "pairing_code"
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    code_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(UTCDateTime, nullable=False)
+    used_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    created_at: Mapped[datetime] = _created()
+
+
+class Device(Base):
+    """The child's phone running dcAI Guardian. Authenticates with an opaque token stored
+    only as a SHA-256 hash; revoking or erasing the child ends it."""
+
+    __tablename__ = "device"
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(40), nullable=False)
+    platform: Mapped[str] = mapped_column(String(10), nullable=False)
+    app_version: Mapped[str] = mapped_column(String(20), nullable=False)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    # Last reported state of each protection service, e.g. {"accessibility": true}.
+    services: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    paired_at: Mapped[datetime] = _created()
+    last_seen_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    revoked_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+
+
 class Conversation(Base):
     __tablename__ = "conversation"
+    __table_args__ = (
+        UniqueConstraint("device_id", "thread_key", name="uq_conversation_device_thread"),
+    )
 
     id: Mapped[uuid.UUID] = _id()
     child_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
     )
     channel: Mapped[str] = mapped_column(String(20), nullable=False)
+    # Set for conversations reported by a phone. thread_key is an opaque hash made on the
+    # phone (the chat title never leaves it); app is the package name, e.g. com.whatsapp.
+    device_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("device.id", ondelete="SET NULL", name="fk_conversation_device_id")
+    )
+    thread_key: Mapped[str | None] = mapped_column(String(64))
+    app: Mapped[str | None] = mapped_column(String(100))
     started_at: Mapped[datetime] = _created()
 
 
@@ -153,6 +209,47 @@ class EvidenceExcerpt(Base):
     # Masked excerpt, encrypted with EVIDENCE_ENC_KEY. Only for level mendesak.
     ciphertext: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
     expires_at: Mapped[datetime] = mapped_column(UTCDateTime, nullable=False, index=True)
+    created_at: Mapped[datetime] = _created()
+
+
+class ImageSignal(Base):
+    """The label of an image judged on the phone (or later in the cloud). Never pixels."""
+
+    __tablename__ = "image_signal"
+    __table_args__ = (Index("ix_image_signal_child_created", "child_id", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False
+    )
+    device_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("device.id", ondelete="SET NULL")
+    )
+    conversation_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("conversation.id", ondelete="SET NULL")
+    )
+    trigger: Mapped[str] = mapped_column(String(12), nullable=False)
+    sender: Mapped[str | None] = mapped_column(String(8))
+    category: Mapped[str] = mapped_column(String(20), nullable=False)
+    action: Mapped[str] = mapped_column(String(12), nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    model_version: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = _created()
+
+
+class DetectionFeedback(Base):
+    """A detection a parent confirmed as wrong, on the child's phone. Only the signal
+    (kind, category, score, model version) arrives: no image, no text, and no child or
+    device id, so it serves model improvement without being about a person."""
+
+    __tablename__ = "detection_feedback"
+
+    id: Mapped[uuid.UUID] = _id()
+    kind: Mapped[str] = mapped_column(String(10), nullable=False)
+    category: Mapped[str] = mapped_column(String(20), nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    model_version: Mapped[str] = mapped_column(String(120), nullable=False)
+    verdict: Mapped[str] = mapped_column(String(20), nullable=False)
     created_at: Mapped[datetime] = _created()
 
 
