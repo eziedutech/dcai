@@ -1,0 +1,3 @@
+-keepattributes *Annotation*, InnerClasses
+-keep,includedescriptorclasses class dev.eziedutech.dcai.guardian.**$$serializer { *; }
+-keepclassmembers class dev.eziedutech.dcai.guardian.** { *** Companion; }
