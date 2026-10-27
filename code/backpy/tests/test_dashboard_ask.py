@@ -69,10 +69,8 @@ def test_protection_off_shows_on_the_dashboard(api):
     tokens, child, dev, _ = paired(api)
     on = {"app_version": "0.1.0", "services": {"notification": True, "keyboard": True}}
     api.post("/v1/device/heartbeat", json=on, headers=dev)
-    assert (
-        api.get(f"/v1/children/{child['id']}/protection", headers=auth(tokens)).json()[0]["protection_on"]
-        is True
-    )
+    rows = api.get(f"/v1/children/{child['id']}/protection", headers=auth(tokens)).json()
+    assert rows[0]["protection_on"] is True
     # The child turned dcAI off: the persistent notification is gone, so protection is off.
     off = {"app_version": "0.1.0", "services": {"notification": False, "keyboard": True}}
     api.post("/v1/device/heartbeat", json=off, headers=dev)
