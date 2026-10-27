@@ -165,9 +165,30 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 | Dashboard: type check, lint, production build | passing |
 | Android: unit tests (masking parity), lint, debug APK | passing |
 
+### Full pipeline on the locked test split (final)
+
+16 held-out scenarios, 177 messages, played message by message through stage 1 (Llama 3.3 70B), the rule floor and stage 2 (Muse Spark). The prompt was never tuned on these, so this is the honest measure. Expected levels are dataset drafts.
+
+| Measure | Result | Spec target |
+|---|---|---|
+| Risky approaches reaching `waspada` or higher | 4 of 4 | at least 0.9 |
+| Ordinary and hard cases reaching `waspada` or higher | 1 of 7 | at most 0.1 |
+| Truly ordinary chats staying `aman` | 5 of 5 | |
+| Detection delay, median | 2 messages (n=11) | at most 2 |
+| Final level exactly as expected | 12 of 16 | |
+| Self-harm flagged for a support response | 1 of 1 | |
+| Score never decreased | 16 of 16 | |
+| Messages without a complete analysis | 0 of 177 | |
+| Cost of the whole run | USD 0.32 (0 calls unpriced) | |
+
+- **One hard case over-escalates.** A benign look-alike (`kasus_sulit-008`) reaches `waspada`, the single false alarm; all five ordinary chats stayed `aman`. This is the `0.14` above the `0.1` target.
+- **Detection delay sits at the target,** median 2 messages: the staged approaches are caught, a couple of messages after the dataset marks the start.
+
+Full tables are in `eval/pipeline/test.md`. Run it with `make eval-test`.
+
 ### Full pipeline on the dev split
 
-34 synthetic scenarios played message by message: Llama 3.3 70B for stage 1, Muse Spark on the Meta Model API and Fireworks for stage 2, and the rule floor. Expected levels are dataset drafts. These are development numbers; the test split is kept for the final evaluation.
+34 synthetic scenarios played message by message, used to tune the prompt. Expected levels are dataset drafts.
 
 | Measure | Result | Spec target |
 |---|---|---|

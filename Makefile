@@ -3,7 +3,7 @@ WEB := code/frontnext
 DROID := code/android
 UV := uv --directory $(BACK)
 
-.PHONY: setup dev test lint fmt probe models web-setup web-dev web-lint web-build android-test android-build eval seed replay-record
+.PHONY: setup dev test lint fmt probe models web-setup web-dev web-lint web-build android-test android-build eval eval-test seed replay-record
 
 setup:
 	$(UV) sync
@@ -50,5 +50,13 @@ android-test:
 android-build:
 	cd $(DROID) && ./gradlew :app:assembleDebug :sample:assembleDebug
 
-eval seed replay-record:
-	@echo "$@: not built yet (spec section 12, day 2 to day 8)" && exit 1
+# Whole scenarios through the live pipeline, scored. Dev by default; test is the locked
+# held-out split for the final evaluation. Both spend a little model credit.
+eval:
+	$(UV) run python -m app.risk.pipeline_eval --split dev
+
+eval-test:
+	$(UV) run python -m app.risk.pipeline_eval --split test
+
+seed replay-record:
+	@echo "$@: not built yet" && exit 1
