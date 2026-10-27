@@ -39,11 +39,11 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Built today
 
-- **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on W&B Inference. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
+- **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on an open-weights inference provider. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
-- **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on W&B Serverless Training (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost, and it is the default (`SCREENING_ENDPOINTS=wb_student`). Details in `eval/distill/report.md`.
+- **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost, and it is the default stage 1 screener. Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
@@ -88,7 +88,7 @@ Real model calls (these spend a little credit):
 ```bash
 cd code/backpy
 uv run python -m app.llm.probe call                    # one call per configured endpoint
-uv run python -m app.risk.stage1_eval wb_llama70b      # stage 1 on the dev split
+uv run python -m app.risk.stage1_eval <endpoint>       # stage 1 on the dev split
 uv run python -m app.scenarios.validate                # check the scenario files
 uv run python -m app.scenarios.split --check           # check the locked split
 ```
@@ -104,7 +104,8 @@ eval/          measurement output (ids and labels only, no text)
 code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
-code/distill/  OpenPipe ART + W&B: fine-tunes the stage 1 student (code/distill/train.py).
+code/distill/  OpenPipe ART: fine-tunes the stage 1 student on a serverless training service
+               (code/distill/train.py).
 code/android/  Kotlin: dcAI Guardian (pairing, foreground service, nudges, on-phone masking,
                dcAI keyboard) and a sample chat app, built with Gradle. Masking parity is
                tested against data/privacy.
@@ -148,7 +149,7 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 | `REASONING_ENDPOINTS`, `SCREENING_ENDPOINTS` | endpoint names in each pool; calls rotate across them |
 | `META_API_KEY`, `META_API_BASE`, `MUSE_MODEL`, `META_REASONING_EFFORT` | Meta Model API endpoint `meta` (model ID from `GET /v1/models`) |
 | `FIREWORKS_BASE`, `FIREWORKS_API_KEY`, `FW_MUSE_*` | Muse Spark on Fireworks |
-| `WANDB_BASE`, `WANDB_API_KEY`, `WB_LLAMA70B_*`, `WB_LLAMA8B_*` | Llama on W&B Inference |
+| `<NAME>_BASE`, `<NAME>_API_KEY`, `<NAME>_MODEL`, `<NAME>_PROVIDER` | any other OpenAI-compatible endpoint, such as the Llama models and the distilled student |
 | `<NAME>_PRICE_IN_PER_MTOK`, `_CACHED_`, `_OUT_` | prices for cost logs; without them the cost is logged as `unknown` |
 | `<NAME>_JSON_MODE`, `<NAME>_REASONING_EFFORT` | per endpoint: `json_schema`, `json_object` or `none`; reasoning effort |
 | `DATABASE_URL` | SQLite or PostgreSQL |
@@ -263,7 +264,7 @@ Found and fixed on the way: Fireworks timed out at 20 s on every coach call (the
 
 ### Distillation: Muse Spark teacher, Llama 3.1 8B student
 
-The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on W&B, trained on the exact production stage 1 input. Measured on the locked test split.
+The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on a serverless training service, trained on the exact production stage 1 input. Measured on the locked test split.
 
 | Stage 1 on the test split | Recall | Precision | Ordinary messages labelled | Self-harm caught | Cost |
 |---|---|---|---|---|---|
@@ -310,7 +311,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 
 ## Credits and licenses
 
-- **Meta Muse Spark** through the Meta Model API and Fireworks; **Meta Llama 3.3 70B and 3.1 8B** through W&B Inference (Llama 3.x Community License).
+- **Meta Muse Spark** through the Meta Model API and Fireworks; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider (Llama 3.x Community License).
 - **Google ML Kit** face detection and text recognition, bundled on-device models (ML Kit terms).
 - **FastAPI**, **uvicorn**, **pydantic**, **httpx**, **SQLAlchemy**, **Alembic**, **psycopg**, **argon2-cffi**, **PyJWT**, **pytest**, **respx**, **ruff**, **PostgreSQL**: their respective open source licenses.
 
