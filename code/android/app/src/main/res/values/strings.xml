@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">dcAI Guardian</string>
+
+    <string name="channel_status">Status dcAI</string>
+    <string name="channel_status_desc">Menandakan dcAI sedang aktif di ponsel ini.</string>
+    <string name="channel_nudge">Pengingat untuk anak</string>
+    <string name="channel_nudge_desc">Pesan singkat untuk anak saat ada obrolan berisiko.</string>
+
+    <string name="status_active">dcAI aktif di ponsel ini.</string>
+    <string name="status_active_for">dcAI aktif, mendampingi %1$s.</string>
+    <string name="nudge_title">Sebentar ya</string>
+
+    <string name="setup_title">Sambungkan ponsel ini</string>
+    <string name="setup_lead">Orang tua membuat kode di dasbor dcAI, lalu memasukkannya di sini. Anak akan selalu tahu dcAI aktif.</string>
+    <string name="setup_server">Alamat server</string>
+    <string name="setup_code">Kode pasangan</string>
+    <string name="setup_pair">Sambungkan</string>
+    <string name="setup_pairing">Menyambungkan…</string>
+    <string name="setup_error">Kode tidak cocok atau sudah kedaluwarsa. Minta kode baru di dasbor.</string>
+    <string name="setup_neterror">Tidak bisa menghubungi server. Periksa alamat dan koneksi.</string>
+
+    <string name="home_active_for">dcAI aktif, mendampingi %1$s</string>
+    <string name="home_active">dcAI aktif di ponsel ini</string>
+    <string name="home_what_title">Yang dilakukan dcAI</string>
+    <string name="home_scopes_title">Yang kamu dan orang tuamu setujui</string>
+    <string name="home_transparency">dcAI tidak bekerja diam-diam. Notifikasi di atas selalu tampil selama dcAI aktif. Orang tua menerima pola dan saran, tidak membaca isi pesanmu.</string>
+    <string name="home_keyboard_title">Papan ketik dcAI</string>
+    <string name="home_keyboard_on">Papan ketik dcAI aktif.</string>
+    <string name="home_keyboard_off">Aktifkan papan ketik dcAI agar pesan yang kamu ketik ikut didampingi.</string>
+    <string name="home_keyboard_enable">Atur papan ketik</string>
+    <string name="home_keyboard_choose">Pilih papan ketik dcAI</string>
+
+    <string name="scope_percakapan">Percakapan</string>
+    <string name="scope_gambar">Gambar</string>
+    <string name="scope_domain">Situs</string>
+    <string name="scope_suara">Pesan suara</string>
+    <string name="scope_keyboard">Papan ketik</string>
+
+    <string name="how_1">Pesan dinilai untuk mengenali pola berisiko. Data pribadi disamarkan di ponsel sebelum pesan dikirim.</string>
+    <string name="how_2">Isi pesan tidak disimpan. Yang disimpan hanya pola, level, dan saran.</string>
+    <string name="how_3">Kamu mendapat pengingat singkat saat ada obrolan berisiko.</string>
+
+    <string name="keyboard_label">Papan ketik dcAI</string>
+    <string name="keyboard_check">Periksa</string>
+</resources>

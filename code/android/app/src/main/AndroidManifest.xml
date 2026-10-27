@@ -1,4 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:label="dcAI Guardian" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <!-- Only an app signed with the same key may hand messages to dcAI (the sample chat app). -->
+    <permission
+        android:name="dev.eziedutech.dcai.guardian.permission.INGEST"
+        android:protectionLevel="signature" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DcaiGuardian">
+
+        <!-- Google Play requires monitoring apps to declare this. dcAI is a parental-control
+             app for a parent to keep their child safe, so the value is child_monitoring.
+             (support.google.com/googleplay/android-developer/answer/12955211) -->
+        <meta-data android:name="isMonitoringTool" android:value="child_monitoring" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.DcaiGuardian">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".service.GuardianService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Parental-control guardian that keeps a persistent, visible notification while active" />
+        </service>
+
+        <service
+            android:name=".ingest.DcaiKeyboardService"
+            android:exported="true"
+            android:label="@string/keyboard_label"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+        </service>
+
+        <receiver
+            android:name=".ingest.ChatIngestReceiver"
+            android:exported="true"
+            android:permission="dev.eziedutech.dcai.guardian.permission.INGEST">
+            <intent-filter>
+                <action android:name="dev.eziedutech.dcai.guardian.INGEST_MESSAGE" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

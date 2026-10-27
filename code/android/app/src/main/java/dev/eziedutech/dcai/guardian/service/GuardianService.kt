@@ -1,0 +1,142 @@
+package dev.eziedutech.dcai.guardian.service
+
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Build
+import android.os.IBinder
+import android.util.Log
+import dev.eziedutech.dcai.guardian.BuildConfig
+import dev.eziedutech.dcai.guardian.ServiceLocator
+import dev.eziedutech.dcai.guardian.net.BackendClient
+import dev.eziedutech.dcai.guardian.net.DeviceRevokedException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.json.jsonPrimitive
+import okhttp3.sse.EventSource
+import kotlin.coroutines.resume
+
+/**
+ * Keeps dcAI active and visible. While it runs, the child sees a persistent notification.
+ * It follows the live stream for nudges, sends a heartbeat so the parent's dashboard knows
+ * the phone is protected, and stops itself if the parent revokes the device.
+ *
+ * There is no hidden mode: the only way the notification goes away is the service stopping.
+ */
+class GuardianService : Service() {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    override fun onBind(intent: Intent?): IBinder? = null
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val store = ServiceLocator.store(this)
+        if (!store.isPaired) {
+            stopSelf()
+            return START_NOT_STICKY
+        }
+        Notifications.ensureChannels(this)
+        startForegroundCompat()
+        if (!started) {
+            started = true
+            scope.launch { streamLoop() }
+            scope.launch { heartbeatLoop() }
+        }
+        return START_STICKY
+    }
+
+    private var started = false
+
+    private fun startForegroundCompat() {
+        val nickname = ServiceLocator.store(this).config?.childNickname
+        val notification = Notifications.statusNotification(this, nickname)
+        if (Build.VERSION.SDK_INT >= 34) {
+            startForeground(Notifications.STATUS_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else {
+            startForeground(Notifications.STATUS_ID, notification)
+        }
+    }
+
+    private suspend fun streamLoop() {
+        val client = ServiceLocator.client(this) ?: return
+        while (scope.isActive) {
+            val closeCode = awaitStream(client)
+            if (closeCode == 401) {
+                onRevoked()
+                return
+            }
+            delay(3000) // the backend closes streams periodically on purpose; reconnect
+        }
+    }
+
+    /** Opens one stream and suspends until it closes; returns the HTTP code of a failure. */
+    private suspend fun awaitStream(client: BackendClient): Int? = suspendCancellableCoroutine { cont ->
+        var source: EventSource? = null
+        source = client.openStream(
+            lastEventId = null,
+            onEvent = { event -> scope.launch { handle(event.event, event.data) } },
+            onClosed = { code -> if (cont.isActive) cont.resume(code) },
+        )
+        cont.invokeOnCancellation { source?.cancel() }
+    }
+
+    private fun handle(event: String, data: kotlinx.serialization.json.JsonObject) {
+        when (event) {
+            "nudge" -> data["child_nudge"]?.jsonPrimitive?.content?.let { Notifications.showNudge(this, it) }
+            "config" -> runCatching { scope.launch { refreshConfig() } }
+            "revoked" -> onRevoked()
+            // "level" updates the chat UI through the sample app; nothing to show here.
+        }
+    }
+
+    private suspend fun refreshConfig() {
+        val client = ServiceLocator.client(this) ?: return
+        runCatching { ServiceLocator.store(this).config = client.config() }
+    }
+
+    private suspend fun heartbeatLoop() {
+        val client = ServiceLocator.client(this) ?: return
+        while (scope.isActive) {
+            try {
+                val config = client.heartbeat(BuildConfig.VERSION_NAME, DeviceState.services(this))
+                ServiceLocator.store(this).config = config
+            } catch (_: DeviceRevokedException) {
+                onRevoked()
+                return
+            } catch (e: Exception) {
+                Log.d(TAG, "heartbeat failed: ${e.javaClass.simpleName}")
+            }
+            delay(60_000)
+        }
+    }
+
+    private fun onRevoked() {
+        ServiceLocator.store(this).clear()
+        ServiceLocator.reset()
+        stopSelf()
+    }
+
+    override fun onDestroy() {
+        scope.cancel()
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val TAG = "dcai.service"
+
+        fun start(context: Context) {
+            val intent = Intent(context, GuardianService::class.java)
+            context.startForegroundService(intent)
+        }
+
+        fun stop(context: Context) {
+            context.stopService(Intent(context, GuardianService::class.java))
+        }
+    }
+}
