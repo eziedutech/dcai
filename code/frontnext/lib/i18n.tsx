@@ -14,7 +14,7 @@ const id = {
 
   "home.title": "Anak dibimbing saat itu juga. Orang tua paham tanpa membaca obrolannya.",
   "home.lead":
-    "dcAI Guardian dipasang orang tua di ponsel Android anak usia 10 sampai 17 tahun. Saat obrolan mulai mengikuti pola berisiko, anak mendapat pengingat singkat dengan alasannya. Orang tua menerima pola yang terlihat dan cara membicarakannya, bukan isi pesan.",
+    "dcAI Guardian dipasang orang tua di ponsel Android anak usia 10 sampai 17 tahun. Saat obrolan mulai mengikuti pola berisiko, anak mendapat pengingat singkat dengan alasannya. Orang tua menerima pola yang terlihat dan cara membicarakannya.",
   "home.cta": "Buka dasbor",
   "home.cta2": "Lihat apa yang disimpan",
   "home.demo.child": "Yang dilihat anak",
@@ -55,7 +55,7 @@ const id = {
     "Pesan yang terlihat berisiko dikirim dalam bentuk tersamarkan. Llama memberi label perilaku per pesan, aturan tetap menjaga batas bawah.",
   "home.step3.t": "Dinilai sebagai pola",
   "home.step3.b":
-    "Muse Spark menilai rangkaian pesan, bukan satu kalimat. Skor tidak pernah turun di bawah aturan keselamatan.",
+    "Muse Spark menilai pola di seluruh rangkaian pesan. Skor tidak pernah turun di bawah aturan keselamatan.",
   "home.step4.t": "Membimbing",
   "home.step4.b":
     "Anak mendapat pengingat paling banyak dua kalimat. Orang tua mendapat apa yang terlihat, mengapa penting, dan tiga pembuka percakapan.",
@@ -247,7 +247,7 @@ const en: Record<Key, string> = {
 
   "home.title": "Children get guidance in the moment. Parents understand without reading the chat.",
   "home.lead":
-    "A parent installs dcAI Guardian on their child's Android phone, for ages 10 to 17. When a chat starts to follow a risky pattern, the child gets a short reminder with the reason. The parent receives the pattern and how to talk about it, never the messages.",
+    "A parent installs dcAI Guardian on their child's Android phone, for ages 10 to 17. When a chat starts to follow a risky pattern, the child gets a short reminder with the reason. The parent receives the pattern and how to talk about it.",
   "home.cta": "Open the dashboard",
   "home.cta2": "See what is stored",
   "home.demo.child": "What the child sees",
@@ -288,7 +288,7 @@ const en: Record<Key, string> = {
     "Messages that look risky are sent masked. Llama labels behaviour per message, and fixed rules keep a floor under the score.",
   "home.step3.t": "Assessed as a pattern",
   "home.step3.b":
-    "Muse Spark assesses the sequence of messages, not one sentence. The score never drops below the safety rules.",
+    "Muse Spark assesses the pattern across the whole sequence of messages. The score never drops below the safety rules.",
   "home.step4.t": "Guidance",
   "home.step4.b":
     "The child gets a reminder of at most two sentences. The parent gets what was seen, why it matters and three conversation starters.",

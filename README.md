@@ -1,6 +1,6 @@
 # Digital Safe dcAI
 
-> An AI companion that helps children make safe choices online at the moment it matters, and gives parents insight and conversation starters instead of their child's conversations. When a chat starts to follow a risky pattern, the child gets a short, friendly reminder with the reason; the parent learns what kind of pattern appeared and how to talk about it, never what was written.
+> An AI companion that helps children make safe choices online at the moment it matters, and gives parents insight and conversation starters. When a chat starts to follow a risky pattern, the child gets a short, friendly reminder with the reason; the parent learns what kind of pattern appeared and how to talk about it. Message text is never shared.
 
 ![Python 3.14](https://img.shields.io/badge/Python-3.14-3776AB)
 ![FastAPI 0.162](https://img.shields.io/badge/FastAPI-0.162-009688)
@@ -30,7 +30,7 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 
 ## What it is
 
-Parental control apps either block or show parents everything. dcAI does neither: the child is guided first, and the parent receives a summary.
+Parental control apps tend to either block or show parents everything. dcAI guides the child first, then gives the parent a summary.
 
 1. **Mask.** Names, phone numbers, emails, card numbers, addresses and schools are replaced by markers before any model sees a message.
 2. **Label.** Llama labels each message with behaviour patterns: building closeness fast, asking for secrecy, moving to a private app, asking for personal data or photos, offering gifts, testing limits, pressure, bullying, distress.

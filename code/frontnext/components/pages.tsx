@@ -39,7 +39,7 @@ function Prose({ title, lead, sections }: { title: string; lead: string; section
 const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Section[] }> = {
   id: {
     title: "Privasi",
-    lead: "dcAI dirancang agar orang tua menerima pemahaman, bukan isi percakapan. Halaman ini menjelaskan apa yang diproses, di mana, dan berapa lama.",
+    lead: "dcAI memberi orang tua pemahaman tentang pola percakapan anak. Isi percakapan tidak dibagikan. Halaman ini menjelaskan apa yang diproses, di mana, dan berapa lama.",
     sections: [
       {
         h: "Di ponsel anak",
@@ -87,7 +87,7 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
   },
   en: {
     title: "Privacy",
-    lead: "dcAI is designed so parents receive understanding, not conversations. This page explains what is processed, where, and for how long.",
+    lead: "dcAI gives parents understanding of their child's conversation patterns. The conversations themselves are not shared. This page explains what is processed, where, and for how long.",
     sections: [
       {
         h: "On the child's phone",
@@ -154,9 +154,9 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
       {
         h: "Yang dibantu AI",
         list: [
-          "Mengenali pola, bukan kata. Satu pesan jarang cukup; yang dinilai adalah rangkaian, misalnya pujian berlebihan, lalu hadiah, lalu permintaan rahasia.",
+          "Mengenali pola lintas pesan. Satu pesan jarang cukup; yang dinilai adalah rangkaian, misalnya pujian berlebihan, lalu hadiah, lalu permintaan rahasia.",
           "Mengingatkan anak dengan kalimat singkat yang tidak menyalahkan, dan memberi satu langkah yang jelas.",
-          "Memberi orang tua penjelasan dan pembuka percakapan, bukan perintah untuk menghukum.",
+          "Memberi orang tua penjelasan dan pembuka percakapan.",
         ],
       },
       {
@@ -190,9 +190,9 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
       {
         h: "What the AI helps with",
         list: [
-          "Recognising patterns, not words. One message is rarely enough; what counts is the sequence, such as heavy praise, then gifts, then a request for secrecy.",
+          "Recognising patterns across messages. One message is rarely enough; what counts is the sequence, such as heavy praise, then gifts, then a request for secrecy.",
           "Reminding the child in short sentences that never blame, with one clear step.",
-          "Giving parents an explanation and conversation starters, never instructions to punish.",
+          "Giving parents an explanation and conversation starters.",
         ],
       },
       {
