@@ -47,6 +47,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
+- **Voice notes.** In a chat that is already risky, a voice note is transcribed by Muse Voice Transcribe, the transcript is masked and assessed like any message, and the audio is processed in memory and never stored. Proven end to end on real audio. Unlike text, the audio does reach Meta's transcription service; the consent text and the "what it does not claim" section say so.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
@@ -102,6 +103,7 @@ eval/          measurement output (ids and labels only, no text)
 code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
+code/distill/  OpenPipe ART + W&B: fine-tunes the stage 1 student (code/distill/train.py).
 code/android/  Kotlin: dcAI Guardian (pairing, foreground service, nudges, on-phone masking,
                dcAI keyboard) and a sample chat app, built with Gradle. Masking parity is
                tested against data/privacy.
@@ -284,7 +286,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Every assessment is an estimate and can be wrong.** The interface says so.
 - **Masking does not catch everything.** It misses names the system does not know and that are not introduced with a phrase such as "namaku", a class without a school, and places described in words ("near the blue shop").
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
-- **Not everything is processed on the device.** Masked messages go to model providers.
+- **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.
 - The consent text has not had legal review.
 
 ## Credits and licenses

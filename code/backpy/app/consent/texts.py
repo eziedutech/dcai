@@ -61,7 +61,7 @@ Yang dilakukan dcAI, per ruang lingkup:
 - Percakapan: teks di layar ponsel anak diproses di ponsel itu. Hanya pesan yang ditandai berisiko yang dikirim ke server, setelah nama, nomor, alamat, dan data pribadi lain disamarkan. Server menilai polanya; teks diproses di memori dan tidak disimpan. Yang disimpan adalah skor, level, jenis pola, nama aplikasi tempat percakapan terjadi, dan insight.
 - Gambar: gambar dinilai di ponsel. Gambar yang terdeteksi sensitif dikaburkan penuh dan tidak pernah dikirim. Gambar lain yang perlu dinilai lebih jauh dikirim dalam ukuran kecil setelah wajah dan teks pribadi dikaburkan. Yang disimpan hanya labelnya.
 - Situs: situs yang dibuka dicocokkan dengan daftar di ponsel. Yang dikirim hanya kategori situs yang ditandai, bukan riwayat penjelajahan.
-- Suara: pesan suara di percakapan berisiko diubah menjadi teks, disamarkan, lalu dinilai seperti pesan lain. Rekaman suara tidak disimpan.
+- Suara: pesan suara di percakapan yang sudah berisiko dikirim ke layanan transkripsi Meta untuk diubah menjadi teks, lalu teksnya disamarkan dan dinilai seperti pesan lain. Rekaman suara diproses di memori dan tidak disimpan.
 - Papan ketik (opsional): nada teks yang diketik diperiksa setelah disamarkan.
 
 Penilaian memakai model AI dari Meta yang dijalankan oleh penyedia inferensi. Yang dikirim ke model selalu sudah disamarkan.
@@ -81,7 +81,7 @@ What dcAI does, per scope:
 - Conversations: text on the child's screen is processed on the phone. Only messages flagged as risky are sent to the server, after names, numbers, addresses and other personal data are masked. The server assesses the pattern; text is processed in memory and not stored. What is stored is the score, level, pattern types, the name of the app where the chat happened, and insight.
 - Images: images are judged on the phone. An image detected as sensitive is fully blurred and never sent. Other images that need a closer look are sent at a small size after faces and personal text are blurred. Only the label is stored.
 - Sites: sites that are opened are matched against a list on the phone. Only the category of a flagged site is sent, not the browsing history.
-- Voice: voice notes in risky chats are turned into text, masked, then assessed like other messages. Recordings are not stored.
+- Voice: a voice note in a chat that is already risky is sent to Meta's transcription service to be turned into text; the text is then masked and assessed like other messages. Recordings are processed in memory and not stored.
 - Keyboard (optional): the tone of typed text is checked after masking.
 
 Assessments use AI models from Meta run by inference providers. What is sent to a model is always masked first.

@@ -67,6 +67,14 @@ class Settings(BaseSettings):
     sse_heartbeat_seconds: float = 15.0
     sse_max_seconds: float = 300.0
 
+    # Muse Voice Transcribe: a voice note in a risky chat is transcribed, the transcript is
+    # masked, then assessed like any message. The audio reaches Meta's ASR for transcription
+    # and is never stored. Empty voice_endpoint disables the voice route.
+    voice_endpoint: str = "meta"
+    voice_model: str = "muse-voice-transcribe-1.0"
+    voice_price_per_hour: float | None = None
+    voice_max_seconds: int = 120
+
     def endpoints(self, pool: Pool) -> list[Endpoint]:
         raw = self.reasoning_endpoints if pool == "reasoning" else self.screening_endpoints
         names = [n.strip() for n in raw.split(",") if n.strip()]

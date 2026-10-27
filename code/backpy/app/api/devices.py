@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from enum import StrEnum
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, File, Form, HTTPException, Request, Response, UploadFile, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from sqlalchemy import select
@@ -47,6 +47,7 @@ from app.db.models import (
     PairingCode,
 )
 from app.live.broker import child_key, device_key, sse_stream
+from app.llm.base import LLMError
 from app.ratelimit import RateLimiter
 from app.scenarios.schema import Channel
 
@@ -335,11 +336,13 @@ class DeviceMessageOut(BaseModel):
     nudge: DeviceNudge | None = None
 
 
-def _conversation(db: Session, device: Device, body: DeviceMessageIn) -> Conversation:
+def _conversation(
+    db: Session, device: Device, thread_key: str, app: str, channel: str
+) -> Conversation:
     def find():
         return db.scalar(
             select(Conversation).where(
-                Conversation.device_id == device.id, Conversation.thread_key == body.thread_key
+                Conversation.device_id == device.id, Conversation.thread_key == thread_key
             )
         )
 
@@ -347,10 +350,10 @@ def _conversation(db: Session, device: Device, body: DeviceMessageIn) -> Convers
     if conversation is None:
         conversation = Conversation(
             child_id=device.child_id,
-            channel=body.channel.value,
+            channel=channel,
             device_id=device.id,
-            thread_key=body.thread_key,
-            app=body.app,
+            thread_key=thread_key,
+            app=app,
         )
         db.add(conversation)
         try:
@@ -389,18 +392,51 @@ async def device_message(
     child = db.get(ChildProfile, device.child_id)
     guardian = db.get(Guardian, child.guardian_id) if child else None
     assert child is not None and guardian is not None
-    conversation = _conversation(db, device, body)
+    conversation = _conversation(db, device, body.thread_key, body.app, body.channel.value)
     db.commit()
+    return await _analyze(
+        request,
+        response,
+        device,
+        child,
+        guardian,
+        conversation,
+        contact_known=body.contact_known,
+        channel=body.channel.value,
+        sender=body.sender,
+        text=body.text,
+        contact_name=body.contact_name,
+        wait=wait,
+    )
+
+
+async def _analyze(
+    request: Request,
+    response: Response,
+    device: Device,
+    child: ChildProfile,
+    guardian: Guardian,
+    conversation: Conversation,
+    *,
+    contact_known: bool,
+    channel: str,
+    sender: str,
+    text: str,
+    contact_name: str | None,
+    wait: bool,
+) -> DeviceMessageOut:
+    """Queue one message (typed or transcribed) and shape the phone's reply. The text is
+    masked inside the pipeline before any model sees it."""
     fut = worker(request.app.state).submit(
         Job(
             conversation_id=conversation.id,
             child_id=child.id,
             language=guardian.language,
-            contact_known=body.contact_known,
-            channel=body.channel.value,
-            sender=body.sender,
-            text=body.text,
-            contact_name=body.contact_name,
+            contact_known=contact_known,
+            channel=channel,
+            sender=sender,
+            text=text,
+            contact_name=contact_name,
             device_id=device.id,
         ),
         wait=wait,
@@ -430,6 +466,77 @@ async def device_message(
         level=result.step.level.value,
         raised=result.step.raised,
         nudge=nudge,
+    )
+
+
+VOICE_MAX_BYTES = 16 * 1024 * 1024  # the ASR API caps the body at 32 MB; half is plenty
+
+
+@device_router.post("/voice", status_code=status.HTTP_202_ACCEPTED)
+async def device_voice(
+    request: Request,
+    response: Response,
+    db: DbDep,
+    device: DeviceDep,
+    settings: SettingsDep,
+    audio: Annotated[UploadFile, File()],
+    thread_key: Annotated[str, Form(pattern=r"^[A-Za-z0-9_-]{16,64}$")],
+    app: Annotated[str, Form(pattern=r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$", max_length=100)],
+    channel: Annotated[Channel, Form()],
+    contact_known: Annotated[bool, Form()],
+    sender: Annotated[Literal["child", "contact"], Form()],
+    contact_name: Annotated[str | None, Form(max_length=40)] = None,
+    wait: bool = False,
+) -> DeviceMessageOut:
+    """A voice note in a risky chat. The audio is transcribed by Muse Voice, the transcript
+    is masked in the pipeline, then assessed like any message. The audio is read into memory,
+    never written to the database or a log, and dropped when this returns."""
+    _require(db, device, Scope.SUARA)
+    voice = getattr(request.app.state, "voice", None)
+    if voice is None:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE, "voice transcription not configured"
+        )
+    limiter = state_item(
+        request.app.state,
+        "device_limiter",
+        lambda: RateLimiter(settings.device_messages_per_minute),
+    )
+    if not limiter.allow(device.id):
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS, "too many messages", headers={"Retry-After": "60"}
+        )
+    audio_bytes = await audio.read(VOICE_MAX_BYTES + 1)
+    if len(audio_bytes) > VOICE_MAX_BYTES:
+        raise HTTPException(status.HTTP_413_CONTENT_TOO_LARGE, "voice note too large")
+    try:
+        transcript = await voice.transcribe(
+            audio_bytes, timeout=float(settings.llm_timeout_seconds * 3)
+        )
+    except LLMError as exc:
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, "transcription unavailable") from exc
+
+    child = db.get(ChildProfile, device.child_id)
+    guardian = db.get(Guardian, child.guardian_id) if child else None
+    assert child is not None and guardian is not None
+    conversation = _conversation(db, device, thread_key, app, channel.value)
+    db.commit()
+    if not transcript.text.strip():
+        # Silence or no speech: nothing to assess, and no audio is kept.
+        return DeviceMessageOut(conversation_id=str(conversation.id), queued=True)
+    return await _analyze(
+        request,
+        response,
+        device,
+        child,
+        guardian,
+        conversation,
+        contact_known=contact_known,
+        channel=channel.value,
+        sender=sender,
+        text=transcript.text,
+        contact_name=contact_name,
+        wait=wait,
     )
 
 
