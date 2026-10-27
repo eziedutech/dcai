@@ -40,7 +40,8 @@ class MessageIngest(
     ): DeviceMessageResponse? {
         if (store.config?.has("percakapan") != true) return null
         val knownNames = listOfNotNull(store.config?.childNickname, contactName).filter { it.isNotBlank() }
-        val maskedText = Mask.mask(rawText, knownNames).text
+        // The backend takes up to 1000 characters; text from an image can be longer.
+        val maskedText = Mask.mask(rawText, knownNames).text.take(1000)
         if (maskedText.isBlank()) return null
 
         val request = DeviceMessageRequest(
@@ -55,10 +56,11 @@ class MessageIngest(
         )
         return client.sendMessage(request, wait = wait)
     }
+}
 
-    private fun threadKey(appPackage: String, threadId: String): String {
-        val digest = MessageDigest.getInstance("SHA-256").digest("$appPackage:$threadId".toByteArray())
-        // URL-safe base64, no padding: matches the backend's [A-Za-z0-9_-]{16,64} rule.
-        return Base64.encodeToString(digest, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP).take(43)
-    }
+/** The conversation's key as the server sees it: a hash made on the phone, never the title. */
+fun threadKey(appPackage: String, threadId: String): String {
+    val digest = MessageDigest.getInstance("SHA-256").digest("$appPackage:$threadId".toByteArray())
+    // URL-safe base64, no padding: matches the backend's [A-Za-z0-9_-]{16,64} rule.
+    return Base64.encodeToString(digest, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP).take(43)
 }

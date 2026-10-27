@@ -95,6 +95,19 @@ def test_old_text_version_can_be_revoked_but_not_granted(api):
     assert listed[0]["consent_scopes"] == ["percakapan"]
 
 
+def test_current_text_matches_the_build_for_images_and_text_sources():
+    """V2 promised to send some images at a small size and to read screen text; the build
+    does neither, so V3 replaced it and V2 can only be revoked."""
+    from app.consent.texts import V2
+
+    assert CURRENT.version != V2.version
+    for body in (CURRENT.id, CURRENT.en):
+        assert "ukuran kecil" not in body and "small size" not in body
+        assert "di layar" not in body and "on the child's screen" not in body
+    assert "gambar dinilai di ponsel dan tidak pernah dikirim" in CURRENT.id
+    assert "images are judged on the phone and never sent" in CURRENT.en
+
+
 def test_guardian_cannot_touch_another_guardians_child(api):
     alice = register(api, email="a@example.com")
     bob = register(api, email="b@example.com")

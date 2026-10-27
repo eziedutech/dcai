@@ -101,5 +101,23 @@ V1 = ConsentText(
     en=_V1_EN,
     scopes=(Scope.PERCAKAPAN, Scope.KEYBOARD),
 )
-CURRENT = ConsentText(version="2026-10-28.1", id=_V2_ID, en=_V2_EN, scopes=tuple(Scope))
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, CURRENT)}
+V2 = ConsentText(version="2026-10-28.1", id=_V2_ID, en=_V2_EN, scopes=tuple(Scope))
+
+# V3 states what the build does: text comes from chat apps with the dcAI SDK and from the
+# dcAI keyboard, and images never leave the phone.
+_V3_ID = _V2_ID.replace(
+    "- Percakapan: teks di layar ponsel anak diproses di ponsel itu.",
+    "- Percakapan: pesan di aplikasi chat yang memasang dcAI dan teks yang diketik dengan papan ketik dcAI diproses di ponsel anak.",
+).replace(
+    "- Gambar: gambar dinilai di ponsel. Gambar yang terdeteksi sensitif dikaburkan penuh dan tidak pernah dikirim. Gambar lain yang perlu dinilai lebih jauh dikirim dalam ukuran kecil setelah wajah dan teks pribadi dikaburkan. Yang disimpan hanya labelnya.",
+    "- Gambar: gambar dinilai di ponsel dan tidak pernah dikirim. Gambar sensitif dikaburkan penuh. Wajah dan data pribadi pada gambar yang akan dibagikan anak dikaburkan. Teks pada gambar yang diterima di percakapan berisiko disamarkan lalu dinilai seperti pesan. Yang disimpan hanya labelnya. Bila dcAI salah mengaburkan, orang tua meninjaunya di ponsel anak dengan PIN; yang dikirim hanya catatan salah deteksi tanpa gambar.",
+)
+_V3_EN = _V2_EN.replace(
+    "- Conversations: text on the child's screen is processed on the phone.",
+    "- Conversations: messages in chat apps that integrate dcAI and text typed with the dcAI keyboard are processed on the child's phone.",
+).replace(
+    "- Images: images are judged on the phone. An image detected as sensitive is fully blurred and never sent. Other images that need a closer look are sent at a small size after faces and personal text are blurred. Only the label is stored.",
+    "- Images: images are judged on the phone and never sent. A sensitive image is fully blurred. Faces and personal data in an image the child is about to share are blurred. Text in an image received in a risky chat is masked, then assessed like a message. Only the label is stored. If dcAI blurs by mistake, the parent reviews it on the child's phone with a PIN; only a note of the false detection is sent, without the image.",
+)
+CURRENT = ConsentText(version="2026-10-28.2", id=_V3_ID, en=_V3_EN, scopes=tuple(Scope))
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, CURRENT)}

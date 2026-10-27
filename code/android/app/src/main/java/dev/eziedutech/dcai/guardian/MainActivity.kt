@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.eziedutech.dcai.guardian.data.GuardianStore
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.DeviceConfig
+import dev.eziedutech.dcai.guardian.privacy.Pin
 import dev.eziedutech.dcai.guardian.service.DeviceState
 import dev.eziedutech.dcai.guardian.service.GuardianService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -99,6 +100,7 @@ private fun SetupScreen(onPaired: () -> Unit) {
     val scope = rememberCoroutineScope()
     var server by remember { mutableStateOf(BuildConfig.DEFAULT_SERVER) }
     var code by remember { mutableStateOf("") }
+    var pin by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
 
@@ -120,18 +122,26 @@ private fun SetupScreen(onPaired: () -> Unit) {
             singleLine = true, modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
         )
+        OutlinedTextField(
+            value = pin, onValueChange = { pin = it.filter(Char::isDigit).take(8) },
+            label = { Text(stringResource(R.string.setup_pin)) },
+            supportingText = { Text(stringResource(R.string.setup_pin_hint)) },
+            singleLine = true, modifier = Modifier.fillMaxWidth(),
+            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        )
         error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
         Button(
             onClick = {
                 error = null
                 busy = true
                 scope.launch {
-                    val result = pair(context.applicationContext as android.content.Context, server.trim(), code.trim())
+                    val result = pair(context.applicationContext as android.content.Context, server.trim(), code.trim(), pin)
                     busy = false
                     result.fold(onSuccess = { onPaired() }, onFailure = { error = it.message })
                 }
             },
-            enabled = !busy && code.isNotBlank() && server.isNotBlank(),
+            enabled = !busy && code.isNotBlank() && server.isNotBlank() && Pin.valid(pin),
             modifier = Modifier.fillMaxWidth(),
         ) {
             if (busy) CircularProgressIndicator(Modifier.padding(end = 8.dp), strokeWidth = 2.dp)
@@ -140,7 +150,7 @@ private fun SetupScreen(onPaired: () -> Unit) {
     }
 }
 
-private suspend fun pair(context: android.content.Context, server: String, code: String): Result<Unit> {
+private suspend fun pair(context: android.content.Context, server: String, code: String, pin: String): Result<Unit> {
     val store = GuardianStore(context)
     val client = BackendClient(server) { null }
     return runCatching {
@@ -148,6 +158,7 @@ private suspend fun pair(context: android.content.Context, server: String, code:
         store.serverUrl = server
         store.deviceToken = response.deviceToken
         store.config = response.config
+        store.setPin(pin)
         ServiceLocator.reset()
     }.recoverCatching { e ->
         throw IllegalStateException(
@@ -188,6 +199,17 @@ private fun HomeScreen(store: GuardianStore, onUnpaired: () -> Unit) {
         SectionCard(stringResource(R.string.home_scopes_title)) {
             config.scopes.forEach { scope ->
                 Text("•  " + scopeLabel(scope), color = Ink)
+            }
+        }
+
+        if (config.has("gambar")) {
+            SectionCard(stringResource(R.string.home_images_title)) {
+                Text(stringResource(R.string.home_images_on), color = Ink)
+                Text(
+                    stringResource(if (ServiceLocator.sensitiveModel.installed) R.string.home_images_model_on else R.string.home_images_model_off),
+                    color = Ink,
+                )
+                Text(stringResource(R.string.home_images_review), color = Ink)
             }
         }
 

@@ -48,6 +48,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
 - **Voice notes.** In a chat that is already risky, a voice note is transcribed by Muse Voice Transcribe, the transcript is masked and assessed like any message, and the audio is processed in memory and never stored. Proven end to end on real audio. Unlike text, the audio does reach Meta's transcription service; the consent text and the "what it does not claim" section say so.
+- **Images, judged on the phone.** An app with the dcAI SDK asks dcAI Guardian about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2).
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
@@ -57,7 +58,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Not built yet
 
-In build order: visual protection (image labels feeding the score, blur on the phone), a small on-phone classifier (ExecuTorch) distilled from the same teacher, flagged domains, voice notes.
+In build order: a sensitive-image classifier (sexual content, violence) in the slot that exists on the phone, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, flagged domains, voice recording in the Android app (the backend route and transcription are done).
 
 ## How it works
 
@@ -163,10 +164,10 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 301 passed |
-| The database tests again on PostgreSQL 18 | 74 passed |
+| Unit and API tests on SQLite | 309 passed |
+| The database tests again on PostgreSQL 18 | 81 passed |
 | Dashboard: type check, lint, production build | passing |
-| Android: unit tests (masking parity), lint, debug APK | passing |
+| Android: unit tests (masking parity, image rules, PIN), lint, debug APK | 20 passed |
 
 ### Full pipeline on the locked test split (final)
 
@@ -219,6 +220,23 @@ backend reached level `waspada` with patterns `meminta_data_pribadi` and `pindah
 and the nudge arrived on the child's phone as a notification. Running it surfaced four
 Android-specific fixes (regex engine, input-method check, cleartext config, notification
 permission), now in the code.
+
+### Images on the emulator, one live run
+
+Same emulator, sample chat app, synthetic pictures drawn on the phone (every name, number
+and address invented):
+
+| Image | What dcAI did |
+|---|---|
+| A student card the child is about to share | School, name, address and phone blurred; label `teks_pribadi` sent; parent event `gambar_data_pribadi` |
+| A landscape | Left as it is; nothing sent |
+| The same card, after the parent marked it a false detection with the PIN | Left as it is (perceptual hash match); feedback stored as a label and score |
+| A screenshot from the stranger saying "move to another app", in a chat already at `mendesak` | Text recognised and sent masked as a message for the assessment |
+
+Running it found two defects, both fixed: the decoder treated every image as unreadable,
+and OCR read "Jl." as "JI.", which hid the address from the masking rules. In the last
+image, OCR did not yield the account handle as personal data, so that image was not
+blurred; its text still went through masking.
 
 ### Phone path, one live run
 
@@ -287,11 +305,13 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Masking does not catch everything.** It misses names the system does not know and that are not introduced with a phrase such as "namaku", a class without a school, and places described in words ("near the blue shop").
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
 - **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.
+- **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
 - The consent text has not had legal review.
 
 ## Credits and licenses
 
 - **Meta Muse Spark** through the Meta Model API and Fireworks; **Meta Llama 3.3 70B and 3.1 8B** through W&B Inference (Llama 3.x Community License).
+- **Google ML Kit** face detection and text recognition, bundled on-device models (ML Kit terms).
 - **FastAPI**, **uvicorn**, **pydantic**, **httpx**, **SQLAlchemy**, **Alembic**, **psycopg**, **argon2-cffi**, **PyJWT**, **pytest**, **respx**, **ruff**, **PostgreSQL**: their respective open source licenses.
 
 ## How this was built

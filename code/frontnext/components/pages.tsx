@@ -44,9 +44,9 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
       {
         h: "Di ponsel anak",
         list: [
-          "Teks di layar dibaca dan disamarkan di ponsel. Nama, nomor telepon, email, nomor kartu, alamat, dan sekolah diganti penanda sebelum apa pun dikirim.",
+          "Pesan di aplikasi chat yang memasang dcAI dan teks dari papan ketik dcAI disamarkan di ponsel. Nama, nomor telepon, email, nomor kartu, alamat, dan sekolah diganti penanda sebelum apa pun dikirim.",
           "Hanya pesan yang ditandai berisiko yang dikirim ke server, dalam bentuk tersamarkan.",
-          "Gambar dinilai di ponsel. Gambar yang terdeteksi sensitif dikaburkan penuh dan tidak pernah dikirim.",
+          "Gambar dinilai di ponsel dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan dibagikan dikaburkan. Gambar sensitif dikaburkan penuh bila model deteksinya terpasang; model itu belum ada di versi ini.",
           "Anak selalu melihat notifikasi tetap selama dcAI aktif. Tidak ada mode tersembunyi.",
         ],
       },
@@ -92,9 +92,9 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
       {
         h: "On the child's phone",
         list: [
-          "Screen text is read and masked on the phone. Names, phone numbers, emails, card numbers, addresses and schools become markers before anything is sent.",
+          "Messages in chat apps that integrate dcAI and text from the dcAI keyboard are masked on the phone. Names, phone numbers, emails, card numbers, addresses and schools become markers before anything is sent.",
           "Only messages flagged as risky are sent to the server, masked.",
-          "Images are judged on the phone. An image detected as sensitive is fully blurred and never sent.",
+          "Images are judged on the phone and never sent. Faces and personal data in an image about to be shared are blurred. Sensitive images are fully blurred once a detection model is installed; this version has none yet.",
           "The child always sees a persistent notification while dcAI is on. There is no hidden mode.",
         ],
       },

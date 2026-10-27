@@ -11,6 +11,7 @@ import dev.eziedutech.dcai.guardian.BuildConfig
 import dev.eziedutech.dcai.guardian.ServiceLocator
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.DeviceRevokedException
+import dev.eziedutech.dcai.guardian.vision.ThreadLevels
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -91,7 +92,12 @@ class GuardianService : Service() {
             "nudge" -> data["child_nudge"]?.jsonPrimitive?.content?.let { Notifications.showNudge(this, it) }
             "config" -> runCatching { scope.launch { refreshConfig() } }
             "revoked" -> onRevoked()
-            // "level" updates the chat UI through the sample app; nothing to show here.
+            // A received image is only looked at in a conversation at perhatian or above.
+            "level" -> {
+                val key = data["thread_key"]?.jsonPrimitive?.content
+                val level = data["level"]?.jsonPrimitive?.content
+                if (key != null && level != null) ThreadLevels.update(key, level)
+            }
         }
     }
 
@@ -119,6 +125,7 @@ class GuardianService : Service() {
     private fun onRevoked() {
         ServiceLocator.store(this).clear()
         ServiceLocator.reset()
+        ThreadLevels.clear()
         stopSelf()
     }
 

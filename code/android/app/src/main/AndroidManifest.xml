@@ -66,5 +66,18 @@
                 <action android:name="dev.eziedutech.dcai.guardian.INGEST_MESSAGE" />
             </intent-filter>
         </receiver>
+
+        <!-- Apps with the dcAI SDK ask here whether to blur an image. Same signature
+             permission as message ingest. -->
+        <service
+            android:name=".ingest.ImageCheckService"
+            android:exported="true"
+            android:permission="dev.eziedutech.dcai.guardian.permission.INGEST" />
+
+        <activity
+            android:name=".vision.ReviewActivity"
+            android:exported="true"
+            android:permission="dev.eziedutech.dcai.guardian.permission.INGEST"
+            android:theme="@style/Theme.DcaiGuardian" />
     </application>
 </manifest>

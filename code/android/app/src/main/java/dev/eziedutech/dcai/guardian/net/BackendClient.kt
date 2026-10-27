@@ -82,11 +82,16 @@ class BackendClient(
         }
 
     suspend fun sendImageSignal(signal: ImageSignalRequest): Unit = withContext(Dispatchers.IO) {
-        val req = authed(Request.Builder().url(url("/v1/device/images"))).post(body(signal)).build()
-        client.newCall(req).execute().use { resp ->
-            if (resp.code == 401) throw DeviceRevokedException()
-            if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")
-        }
+        executeNoBody(authed(Request.Builder().url(url("/v1/device/images"))).post(body(signal)).build())
+    }
+
+    suspend fun sendDetectionFeedback(feedback: DetectionFeedbackRequest): Unit = withContext(Dispatchers.IO) {
+        executeNoBody(authed(Request.Builder().url(url("/v1/device/detection-feedback"))).post(body(feedback)).build())
+    }
+
+    private fun executeNoBody(request: Request) = client.newCall(request).execute().use { resp ->
+        if (resp.code == 401) throw DeviceRevokedException()
+        if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")
     }
 
     /** Opens the live stream. onEvent runs on OkHttp's thread; hop to your own scope. */

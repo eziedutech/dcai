@@ -36,7 +36,7 @@ const id = {
 
   "home.layer.title": "Family Link untuk batas. dcAI untuk pemahaman.",
   "home.layer.lead":
-    "Google Family Link mengatur aplikasi, waktu layar, pembelian, dan lokasi. dcAI bekerja di sampingnya: memahami apa yang terjadi di layar, lalu membimbing anak dan orang tua.",
+    "Google Family Link mengatur aplikasi, waktu layar, pembelian, dan lokasi. dcAI bekerja di sampingnya: memahami apa yang terjadi di obrolan, lalu membimbing anak dan orang tua.",
   "home.layer.fl": "Family Link",
   "home.layer.dc": "dcAI Guardian",
   "home.layer.r1": "Menyetujui dan memblokir aplikasi",
@@ -46,10 +46,10 @@ const id = {
   "home.layer.r5": "Mengaburkan gambar sensitif di ponsel",
   "home.layer.r6": "Insight dan pembuka percakapan untuk orang tua",
 
-  "home.steps.title": "Dari layar anak sampai saran untuk orang tua",
+  "home.steps.title": "Dari ponsel anak sampai saran untuk orang tua",
   "home.step1.t": "Di ponsel",
   "home.step1.b":
-    "Teks di layar dibaca dan disamarkan di ponsel. Nama, nomor, alamat, dan sekolah diganti penanda. Gambar sensitif dikaburkan dan tidak pernah dikirim.",
+    "Pesan di aplikasi chat yang memasang dcAI dan teks dari papan ketik dcAI disamarkan di ponsel. Nama, nomor, alamat, dan sekolah diganti penanda. Gambar dinilai di ponsel dan tidak pernah dikirim.",
   "home.step2.t": "Hanya yang ditandai",
   "home.step2.b":
     "Pesan yang terlihat berisiko dikirim dalam bentuk tersamarkan. Llama memberi label perilaku per pesan, aturan tetap menjaga batas bawah.",
@@ -208,7 +208,7 @@ const id = {
   "event.perlindungan_dimatikan": "Perlindungan dimatikan di ponsel",
   "event.perlindungan_aktif": "Perlindungan aktif kembali",
   "event.gambar_sensitif": "Gambar sensitif dikaburkan",
-  "event.gambar_data_pribadi": "Gambar berisi data pribadi ditahan",
+  "event.gambar_data_pribadi": "Data pribadi di gambar dikaburkan",
 
   "scope.percakapan": "Percakapan",
   "scope.gambar": "Gambar",
@@ -216,7 +216,7 @@ const id = {
   "scope.suara": "Pesan suara",
   "scope.keyboard": "Papan ketik",
   "scopeHint.percakapan": "Pesan yang ditandai di ponsel dinilai polanya setelah disamarkan.",
-  "scopeHint.gambar": "Gambar dinilai di ponsel; yang sensitif dikaburkan dan tidak dikirim.",
+  "scopeHint.gambar": "Gambar dinilai di ponsel dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan dibagikan dikaburkan.",
   "scopeHint.domain": "Situs dicocokkan dengan daftar di ponsel; hanya kategorinya dikirim.",
   "scopeHint.suara": "Pesan suara di obrolan berisiko diubah jadi teks, lalu disamarkan.",
   "scopeHint.keyboard": "Nada teks yang diketik diperiksa setelah disamarkan. Opsional.",
@@ -269,7 +269,7 @@ const en: Record<Key, string> = {
 
   "home.layer.title": "Family Link for limits. dcAI for understanding.",
   "home.layer.lead":
-    "Google Family Link manages apps, screen time, purchases and location. dcAI works next to it: it understands what happens on screen, then guides the child and the parent.",
+    "Google Family Link manages apps, screen time, purchases and location. dcAI works next to it: it understands what happens in chats, then guides the child and the parent.",
   "home.layer.fl": "Family Link",
   "home.layer.dc": "dcAI Guardian",
   "home.layer.r1": "Approve and block apps",
@@ -279,10 +279,10 @@ const en: Record<Key, string> = {
   "home.layer.r5": "Blur sensitive images on the phone",
   "home.layer.r6": "Insight and conversation starters for parents",
 
-  "home.steps.title": "From the child's screen to advice for the parent",
+  "home.steps.title": "From the child's phone to advice for the parent",
   "home.step1.t": "On the phone",
   "home.step1.b":
-    "Screen text is read and masked on the phone. Names, numbers, addresses and schools become markers. Sensitive images are blurred and never sent.",
+    "Messages in chat apps that integrate dcAI and text from the dcAI keyboard are masked on the phone. Names, numbers, addresses and schools become markers. Images are judged on the phone and never sent.",
   "home.step2.t": "Only what is flagged",
   "home.step2.b":
     "Messages that look risky are sent masked. Llama labels behaviour per message, and fixed rules keep a floor under the score.",
@@ -438,7 +438,7 @@ const en: Record<Key, string> = {
   "event.perlindungan_dimatikan": "Protection turned off on the phone",
   "event.perlindungan_aktif": "Protection back on",
   "event.gambar_sensitif": "Sensitive image blurred",
-  "event.gambar_data_pribadi": "Image with personal data held back",
+  "event.gambar_data_pribadi": "Personal data in an image blurred",
 
   "scope.percakapan": "Conversations",
   "scope.gambar": "Images",
@@ -446,7 +446,7 @@ const en: Record<Key, string> = {
   "scope.suara": "Voice notes",
   "scope.keyboard": "Keyboard",
   "scopeHint.percakapan": "Messages flagged on the phone are assessed as patterns after masking.",
-  "scopeHint.gambar": "Images are judged on the phone; sensitive ones are blurred and never sent.",
+  "scopeHint.gambar": "Images are judged on the phone and never sent. Faces and personal data in an image about to be shared are blurred.",
   "scopeHint.domain": "Sites are matched against a list on the phone; only the category is sent.",
   "scopeHint.suara": "Voice notes in risky chats become text, then are masked.",
   "scopeHint.keyboard": "The tone of typed text is checked after masking. Optional.",

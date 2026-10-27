@@ -81,5 +81,16 @@ data class ImageSignalRequest(
     @SerialName("model_version") val modelVersion: String,
 )
 
+/** A false detection the parent confirmed on the child's phone, without the image. */
+@Serializable
+data class DetectionFeedbackRequest(
+    val kind: String = "gambar",
+    val category: String,
+    val score: Int,
+    @SerialName("model_version") val modelVersion: String,
+    val verdict: String = "salah_deteksi",
+    @SerialName("confirmed_by_guardian") val confirmedByGuardian: Boolean = true,
+)
+
 /** A live update on the device stream: event name plus already-parsed JSON object. */
 data class LiveEvent(val event: String, val data: kotlinx.serialization.json.JsonObject)

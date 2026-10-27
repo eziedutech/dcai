@@ -41,6 +41,27 @@
     <string name="how_2">Isi pesan tidak disimpan. Yang disimpan hanya pola, level, dan saran.</string>
     <string name="how_3">Kamu mendapat pengingat singkat saat ada obrolan berisiko.</string>
 
+    <string name="setup_pin">PIN orang tua (4 sampai 8 angka)</string>
+    <string name="setup_pin_hint">Dipakai saat orang tua meninjau gambar yang dikaburkan di ponsel ini.</string>
+
+    <string name="home_images_title">Gambar</string>
+    <string name="home_images_on">Gambar dinilai di ponsel ini dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan kamu bagikan dikaburkan. Teks pada gambar di obrolan berisiko ikut dinilai setelah disamarkan.</string>
+    <string name="home_images_model_off">Deteksi gambar sensitif belum aktif: model untuk itu belum dipasang di ponsel ini.</string>
+    <string name="home_images_model_on">Deteksi gambar sensitif aktif di ponsel ini.</string>
+    <string name="home_images_review">Bila dcAI salah mengaburkan, tunjukkan ke orang tuamu. Mereka meninjaunya di ponsel ini dengan PIN.</string>
+
+    <string name="review_title">Tinjau bersama orang tua</string>
+    <string name="review_lead">dcAI mengaburkan gambar ini. Orang tua memasukkan PIN untuk melihatnya dan memutuskan.</string>
+    <string name="review_pin">PIN orang tua</string>
+    <string name="review_open">Buka gambar</string>
+    <string name="review_close">Tutup</string>
+    <string name="review_no_pin">PIN orang tua belum diatur di ponsel ini. Gambar tetap dikaburkan.</string>
+    <string name="review_wrong_pin">PIN tidak cocok.</string>
+    <string name="review_unreadable">Gambar tidak bisa dibuka.</string>
+    <string name="review_decide">Apakah gambar ini memang perlu dikaburkan?</string>
+    <string name="review_keep">Ya, tetap dikaburkan</string>
+    <string name="review_false">Salah deteksi, tampilkan</string>
+
     <string name="keyboard_label">Papan ketik dcAI</string>
     <string name="keyboard_check">Periksa</string>
 </resources>

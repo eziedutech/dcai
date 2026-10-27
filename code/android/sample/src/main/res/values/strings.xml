@@ -10,4 +10,13 @@
     <string name="linked">Terhubung ke dcAI Guardian</string>
     <string name="not_linked">dcAI Guardian belum terpasang di ponsel ini</string>
     <string name="done">Skenario selesai</string>
+    <string name="contact_image">Lawan bicara mengirim gambar</string>
+    <string name="share_card">Bagikan kartu pelajar</string>
+    <string name="share_landscape">Bagikan foto pemandangan</string>
+    <string name="checking">dcAI memeriksa gambar…</string>
+    <string name="blurred_all">dcAI mengaburkan gambar ini.</string>
+    <string name="blurred_private">dcAI mengaburkan data pribadi di gambar ini.</string>
+    <string name="blurred_shared">Data pribadi dikaburkan sebelum dikirim.</string>
+    <string name="ask_review">Tunjukkan ke orang tua</string>
+    <string name="reviewed">Orang tua menandai ini salah deteksi.</string>
 </resources>

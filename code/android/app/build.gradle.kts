@@ -12,7 +12,6 @@ android {
 
     defaultConfig {
         applicationId = "dev.eziedutech.dcai.guardian"
-        // AccessibilityService.takeScreenshot (visual protection, stage 5) needs API 30.
         minSdk = 30
         targetSdk = 36
         versionCode = 1
@@ -54,6 +53,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
+    // Bundled on-device models: no download at runtime, nothing leaves the phone.
+    implementation(libs.mlkit.face)
+    implementation(libs.mlkit.text)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
