@@ -28,8 +28,10 @@ from app.db.models import (
 from app.risk.schemas import Level
 
 _RANK = {lvl.value: i for i, lvl in enumerate(Level)}
-# Services the phone needs for protection to be on. The others are optional.
-REQUIRED_SERVICES = ("accessibility", "notification")
+# Protection is on when dcAI is running and reporting in from the phone. The persistent
+# notification is shown the whole time the service runs, so it stands for "dcAI is active";
+# other services (keyboard, accessibility) are additional and shown per device.
+REQUIRED_SERVICES = ("notification",)
 
 
 class ConversationSummary(BaseModel):
