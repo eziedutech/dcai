@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, EmailStr, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -152,4 +152,24 @@ def logout(body: RefreshIn, db: DbDep, guardian: GuardianDep) -> None:
 
 @router.get("/me")
 def me(guardian: GuardianDep) -> GuardianOut:
+    return _guardian_out(guardian)
+
+
+class MeIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: (
+        Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=80)] | None
+    ) = None
+    language: Literal["id", "en"] | None = None
+
+
+@router.patch("/me")
+def update_me(body: MeIn, db: DbDep, guardian: GuardianDep) -> GuardianOut:
+    """Name and language. The language also sets the Coach and the phone's language."""
+    if body.name is not None:
+        guardian.name = body.name
+    if body.language is not None:
+        guardian.language = body.language
+    db.commit()
     return _guardian_out(guardian)

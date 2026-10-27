@@ -7,6 +7,7 @@
 ![Muse Spark 1.3](https://img.shields.io/badge/Muse%20Spark-1.3-0866FF)
 ![Llama 3.3 70B](https://img.shields.io/badge/Llama-3.3%2070B-0866FF)
 ![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-336791)
+![Next.js 16](https://img.shields.io/badge/Next.js-16-000000)
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
 
@@ -45,12 +46,14 @@ Parental control apps either block or show parents everything. dcAI does neither
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
+- **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
+- **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
 - **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
 - **50 synthetic scenarios** (543 messages, six groups), with a locked 34/16 dev/test split.
 
 ### Not built yet
 
-In build order: parent dashboard (Next.js) with Ask dcAI, the Android app (Kotlin: accessibility text, on-phone masking, nudge overlay), a synthetic chat app and scenario player, visual protection, distillation to a smaller Llama, flagged domains, voice notes, the final evaluation.
+In build order: the Android app (Kotlin: accessibility text, on-phone masking, nudge overlay), a synthetic chat app and scenario player, visual protection, distillation to a smaller Llama, flagged domains, voice notes, the final evaluation.
 
 ## How it works
 
@@ -93,6 +96,9 @@ code/backpy/   FastAPI: llm (provider pool), privacy (masking), risk (stage 1, f
                auth, api (/v1, /v1/device), migrations (Alembic), tests
 data/          scenarios (synthetic JSON, split.json), privacy (masking test cases)
 eval/          measurement output (ids and labels only, no text)
+code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
+               Its server holds the session in httpOnly cookies and forwards an allowlist of
+               /v1 paths to the backend; the phone's API is not reachable from the browser.
 docs/          ADRs and daily log
 ```
 
@@ -118,6 +124,14 @@ uv run uvicorn app.main:app --reload --port 8000     # GET /v1/health
 
 With `make` available, `make setup`, `make test`, `make lint` and `make dev` do the same.
 
+The dashboard (Node.js 25):
+
+```bash
+cd code/frontnext
+npm ci
+npm run dev -- --port 3100      # http://localhost:3100, expects the backend on :8000
+```
+
 ## Configuration
 
 | Variable | Purpose |
@@ -141,8 +155,9 @@ With `make` available, `make setup`, `make test`, `make lint` and `make dev` do 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 286 passed |
-| The database tests again on PostgreSQL 18 | 59 passed |
+| Unit and API tests on SQLite | 301 passed |
+| The database tests again on PostgreSQL 18 | 74 passed |
+| Dashboard: type check, lint, production build | passing |
 
 ### Full pipeline on the dev split
 
@@ -177,6 +192,10 @@ Four synthetic messages from a stranger in a game chat, sent at once through `/v
 | The model's nudge for `mendesak` | 15.6 s |
 
 Model calls: 4 stage 1, 1 stage 2, 1 Coach. Before the queue merged them, the same run made 2 Coach calls and reached `mendesak` later, because a Coach for the out-of-date `perhatian` level held the queue.
+
+### Ask dcAI, one live question
+
+"Apa yang terjadi minggu ini?" on the synthetic run above: 3 Muse Spark turns (two tool calls, then the answer), about 10 s, about USD 0.012. The answer used only dashboard data, named the child after the alias was put back, and said that message text is not stored.
 
 ### Citizenship Coach
 

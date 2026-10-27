@@ -9,9 +9,7 @@ What a phone may receive is limited to what the child may see: its configuration
 of its own conversations and Coach nudges. Parent insight never goes to the phone.
 """
 
-import time
 import uuid
-from collections import deque
 from datetime import datetime, timedelta
 from enum import StrEnum
 from typing import Annotated, Literal
@@ -49,6 +47,7 @@ from app.db.models import (
     PairingCode,
 )
 from app.live.broker import child_key, device_key, sse_stream
+from app.ratelimit import RateLimiter
 from app.scenarios.schema import Channel
 
 guardian_router = APIRouter(tags=["devices"])
@@ -305,25 +304,6 @@ def _require(db: Session, device: Device, scope: Scope) -> None:
         raise HTTPException(status.HTTP_403_FORBIDDEN, f"consent for {scope.value} required")
 
 
-class RateLimiter:
-    """Per-device sliding window. Only messages the phone flagged come here, so hitting it
-    means something is wrong on the phone, not a busy child."""
-
-    def __init__(self, per_minute: int):
-        self.per_minute = per_minute
-        self._hits: dict[uuid.UUID, deque[float]] = {}
-
-    def allow(self, key: uuid.UUID) -> bool:
-        now = time.monotonic()
-        hits = self._hits.setdefault(key, deque())
-        while hits and now - hits[0] > 60:
-            hits.popleft()
-        if len(hits) >= self.per_minute:
-            return False
-        hits.append(now)
-        return True
-
-
 class DeviceMessageIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -392,8 +372,10 @@ async def device_message(
     settings: SettingsDep,
     wait: bool = False,
 ) -> DeviceMessageOut:
-    """A flagged message, masked on the phone. Answers at once; the level and any nudge
-    arrive on the live stream. wait=true answers after analysis (simulator and tests)."""
+    """A flagged message, masked on the phone. Only flagged messages come here, so the rate
+    limit is hit when something is wrong on the phone, not by a busy child. Answers at
+    once; the level and any nudge arrive on the live stream. wait=true answers after
+    analysis (simulator and tests)."""
     _require(db, device, Scope.PERCAKAPAN)
     limiter = state_item(
         request.app.state,

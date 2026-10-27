@@ -26,6 +26,8 @@ class RawCompletion:
     # Thinking tokens are part of tokens_out and of max_tokens; logged to explain cost.
     tokens_reasoning: int = 0
     finish_reason: str | None = None
+    # Function calls as sent by the model: {"id", "type", "function": {"name", "arguments"}}.
+    tool_calls: tuple[dict, ...] = ()
 
 
 def response_format(endpoint: Endpoint, schema_name: str, schema: dict[str, Any]) -> dict | None:
@@ -42,11 +44,12 @@ def response_format(endpoint: Endpoint, schema_name: str, schema: dict[str, Any]
 async def call_chat(
     http: httpx.AsyncClient,
     endpoint: Endpoint,
-    messages: list[dict[str, str]],
+    messages: list[dict[str, Any]],
     *,
     max_tokens: int,
     fmt: dict | None,
     timeout: float,
+    tools: list[dict] | None = None,
 ) -> RawCompletion:
     body: dict[str, Any] = {
         "model": endpoint.model,
@@ -55,6 +58,8 @@ async def call_chat(
     }
     if fmt is not None:
         body["response_format"] = fmt
+    if tools:
+        body["tools"] = tools
     if endpoint.reasoning_effort:
         body["reasoning_effort"] = endpoint.reasoning_effort
 
@@ -85,6 +90,7 @@ async def call_chat(
         data = resp.json()
         choice = data["choices"][0]
         content = choice["message"].get("content")
+        tool_calls = tuple(choice["message"].get("tool_calls") or ())
     except (ValueError, KeyError, IndexError, TypeError) as exc:
         raise TransientLLMError("response is not a chat completion") from exc
 
@@ -99,6 +105,7 @@ async def call_chat(
         latency_ms=latency_ms,
         tokens_reasoning=int(out_details.get("reasoning_tokens") or 0),
         finish_reason=choice.get("finish_reason"),
+        tool_calls=tool_calls,
     )
 
 

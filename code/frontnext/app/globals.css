@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* Palette from Indonesian school uniforms: shirt white, SMP navy, SMA grey. SD red is kept
+   for the urgent level only, so red always means something. */
+@theme {
+  --color-paper: #fbfcfd;
+  --color-mist: #eef2f6;
+  --color-line: #d8dfe6;
+  --color-slate: #566373;
+  --color-navy: #1f3a5f;
+  --color-ink: #14233a;
+
+  --color-aman: #2f6b4f;
+  --color-aman-soft: #e6f1eb;
+  --color-perhatian: #855700;
+  --color-perhatian-soft: #f7efdc;
+  --color-waspada: #ab4611;
+  --color-waspada-soft: #f9e9df;
+  --color-mendesak: #9e2b25;
+  --color-mendesak-soft: #f7e3e1;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-panel: 10px;
+  --radius-phone: 30px;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-navy);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: #c9d7ea;
+}
+
+/* Numbers in counts and times line up. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The hero's one orchestrated moment: messages arrive, then the nudge rises. */
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.arrive {
+  opacity: 0;
+  animation: arrive 420ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrive {
+    opacity: 1;
+    animation: none;
+  }
+}

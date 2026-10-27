@@ -103,7 +103,7 @@ async def coach(
     language: str,
 ) -> CoachResult:
     sit = situation(contact_labels, child_labels, support_needed)
-    channels = _channels(level, sit, language)
+    channels = help_channels(level, sit, language)
     payload = json.dumps(
         {
             "level": level.value,
@@ -151,11 +151,12 @@ def instant(
 
     sit = situation(contact_labels, child_labels, support_needed)
     return CoachResult(
-        template(sit, level, language), sit, "template", _channels(level, sit, language), None
+        template(sit, level, language), sit, "template", help_channels(level, sit, language), None
     )
 
 
-def _channels(level: Level, sit: Situation, language: str) -> tuple[str, ...]:
+def help_channels(level: Level, sit: Situation, language: str) -> tuple[str, ...]:
+    """Verified help lines for this moment, from configuration; empty below waspada."""
     if sit == Situation.DISTRESS or level in (Level.WASPADA, Level.MENDESAK):
         return tuple(load_channels().lines(language, distress=sit == Situation.DISTRESS))
     return ()

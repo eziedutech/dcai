@@ -6,8 +6,10 @@ from contextlib import asynccontextmanager
 import httpx
 from fastapi import FastAPI
 
+from app.api.ask import router as ask_router
 from app.api.auth import router as auth_router
 from app.api.children import router as children_router
+from app.api.dashboard import router as dashboard_router
 from app.api.devices import device_router, guardian_router
 from app.api.health import router as health_router
 from app.api.messages import router as messages_router
@@ -44,3 +46,5 @@ app.include_router(children_router, prefix="/v1")
 app.include_router(messages_router, prefix="/v1")
 app.include_router(guardian_router, prefix="/v1")
 app.include_router(device_router, prefix="/v1")
+app.include_router(dashboard_router, prefix="/v1")
+app.include_router(ask_router, prefix="/v1")

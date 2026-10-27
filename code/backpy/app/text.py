@@ -41,7 +41,7 @@ def _clean_and_check(text: str) -> str:
     return text
 
 
-def _no_contacts(text: str) -> str:
+def no_contacts(text: str) -> str:
     # Help lines and sites come from verified configuration, never from the model.
     if _URL.search(text):
         raise ValueError("model text must not contain links")
@@ -51,4 +51,4 @@ def _no_contacts(text: str) -> str:
 
 
 ModelText = Annotated[str, AfterValidator(_clean_and_check)]
-CoachText = Annotated[str, AfterValidator(_clean_and_check), AfterValidator(_no_contacts)]
+CoachText = Annotated[str, AfterValidator(_clean_and_check), AfterValidator(no_contacts)]

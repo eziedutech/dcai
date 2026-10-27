@@ -257,7 +257,7 @@ def test_message_without_wait_is_queued_and_analysed_in_background(api, db_url):
 
 
 def test_too_many_messages_from_one_phone(api):
-    from app.api.devices import RateLimiter
+    from app.ratelimit import RateLimiter
 
     _tokens, _child, dev, _ = paired(api)
     api.app.state.device_limiter = RateLimiter(per_minute=2)

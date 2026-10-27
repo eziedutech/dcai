@@ -131,8 +131,36 @@ class PooledClient:
         )
         raise LLMOutputInvalid(f"{purpose}: invalid output after one repair ({problem})")
 
+    async def chat_tools(
+        self,
+        *,
+        purpose: str,
+        messages: list[dict[str, Any]],
+        tools: list[dict],
+        max_tokens: int = 1500,
+        timeout: float | None = None,
+    ) -> tuple[RawCompletion, Usage]:
+        """One Chat Completions turn with function tools, with the same rotation, failover
+        and metadata-only logging. The caller runs the tool loop and validates both the
+        arguments and the final text: neither is trusted as it comes."""
+        if not self.endpoints:
+            raise NoEndpointConfigured(f"no {self.family} endpoint configured")
+        attempts: list[Usage] = []
+        _, raw = await self._call_with_failover(
+            purpose, messages, max_tokens, None, None, attempts, timeout, tools
+        )
+        return raw, attempts[-1]
+
     async def _call_with_failover(
-        self, purpose, messages, max_tokens, name, json_schema, attempts, timeout=None
+        self,
+        purpose,
+        messages,
+        max_tokens,
+        name,
+        json_schema,
+        attempts,
+        timeout=None,
+        tools=None,
     ) -> tuple[Endpoint, RawCompletion]:
         order = self._rotation_order()
         last: TransientLLMError | None = None
@@ -161,7 +189,15 @@ class PooledClient:
                 )
             try:
                 raw = await self._call_once(
-                    purpose, endpoint, messages, max_tokens, name, json_schema, attempts, timeout
+                    purpose,
+                    endpoint,
+                    messages,
+                    max_tokens,
+                    name,
+                    json_schema,
+                    attempts,
+                    timeout,
+                    tools,
                 )
                 return endpoint, raw
             except TransientLLMError as exc:
@@ -174,7 +210,16 @@ class PooledClient:
         raise last
 
     async def _call_once(
-        self, purpose, endpoint, messages, max_tokens, name, json_schema, attempts, timeout=None
+        self,
+        purpose,
+        endpoint,
+        messages,
+        max_tokens,
+        name,
+        json_schema,
+        attempts,
+        timeout=None,
+        tools=None,
     ) -> RawCompletion:
         try:
             raw = await call_chat(
@@ -182,8 +227,9 @@ class PooledClient:
                 endpoint,
                 messages,
                 max_tokens=max_tokens,
-                fmt=response_format(endpoint, name, json_schema),
+                fmt=None if json_schema is None else response_format(endpoint, name, json_schema),
                 timeout=timeout or self._timeout,
+                tools=tools,
             )
         except (TransientLLMError, PermanentLLMError) as exc:
             log.warning(

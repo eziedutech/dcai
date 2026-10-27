@@ -259,6 +259,8 @@ async def process(state, job: Job, *, assess: bool = True, coach_due: bool = Fal
                     child_nudge=out.child_nudge,
                     parent_insight=out.parent_insight.model_dump(),
                     micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
+                    situation=coach_result.situation.value,
+                    source=coach_result.source,
                 )
             )
             db.commit()

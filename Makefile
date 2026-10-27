@@ -1,7 +1,8 @@
 BACK := code/backpy
+WEB := code/frontnext
 UV := uv --directory $(BACK)
 
-.PHONY: setup dev test lint fmt probe models eval seed replay-record
+.PHONY: setup dev test lint fmt probe models web-setup web-dev web-lint web-build eval seed replay-record
 
 setup:
 	$(UV) sync
@@ -27,6 +28,19 @@ probe:
 # List model IDs, for example: make models P=fireworks F=muse
 models:
 	$(UV) run python -m app.llm.probe models $(P) $(F)
+
+# Parent dashboard and homepage (Next.js). Talks to the backend at DCAI_API_URL.
+web-setup:
+	npm --prefix $(WEB) ci
+
+web-dev:
+	npm --prefix $(WEB) run dev
+
+web-lint:
+	cd $(WEB) && npx next typegen && npx tsc --noEmit && npm run lint
+
+web-build:
+	npm --prefix $(WEB) run build
 
 eval seed replay-record:
 	@echo "$@: not built yet (spec section 12, day 2 to day 8)" && exit 1
