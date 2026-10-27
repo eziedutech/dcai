@@ -1,8 +1,9 @@
 BACK := code/backpy
 WEB := code/frontnext
+DROID := code/android
 UV := uv --directory $(BACK)
 
-.PHONY: setup dev test lint fmt probe models web-setup web-dev web-lint web-build eval seed replay-record
+.PHONY: setup dev test lint fmt probe models web-setup web-dev web-lint web-build android-test android-build eval seed replay-record
 
 setup:
 	$(UV) sync
@@ -41,6 +42,13 @@ web-lint:
 
 web-build:
 	npm --prefix $(WEB) run build
+
+# dcAI Guardian (Android app) and the sample chat app.
+android-test:
+	cd $(DROID) && ./gradlew :app:testDebugUnitTest :app:lintDebug
+
+android-build:
+	cd $(DROID) && ./gradlew :app:assembleDebug :sample:assembleDebug
 
 eval seed replay-record:
 	@echo "$@: not built yet (spec section 12, day 2 to day 8)" && exit 1

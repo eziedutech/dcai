@@ -53,6 +53,22 @@ jobs:
       - run: npm run lint
       - run: npm run build
 
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: code/android
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-java@v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v4.0.4
+      - run: yes | sdkmanager "platforms;android-37.2" "build-tools;37.0.0" >/dev/null
+      - uses: gradle/actions/setup-gradle@v6.4.0
+      - run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :sample:assembleDebug
+
   secrets:
     runs-on: ubuntu-latest
     env:

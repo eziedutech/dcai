@@ -8,6 +8,7 @@
 ![Llama 3.3 70B](https://img.shields.io/badge/Llama-3.3%2070B-0866FF)
 ![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-336791)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000000)
+![Android API 30+](https://img.shields.io/badge/Android-API%2030%2B-3DDC84)
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
 
@@ -44,6 +45,7 @@ Parental control apps either block or show parents everything. dcAI does neither
 - **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
+- **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
@@ -53,7 +55,7 @@ Parental control apps either block or show parents everything. dcAI does neither
 
 ### Not built yet
 
-In build order: the Android app (Kotlin: accessibility text, on-phone masking, nudge overlay), a synthetic chat app and scenario player, visual protection, distillation to a smaller Llama, flagged domains, voice notes, the final evaluation.
+In build order: visual protection (image labels feeding the score, blur on the phone), distillation to a smaller on-phone Llama, flagged domains, voice notes, the final evaluation.
 
 ## How it works
 
@@ -99,6 +101,9 @@ eval/          measurement output (ids and labels only, no text)
 code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
+code/android/  Kotlin: dcAI Guardian (pairing, foreground service, nudges, on-phone masking,
+               dcAI keyboard) and a sample chat app, built with Gradle. Masking parity is
+               tested against data/privacy.
 docs/          architecture decision records
 ```
 
@@ -158,6 +163,7 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 | Unit and API tests on SQLite | 301 passed |
 | The database tests again on PostgreSQL 18 | 74 passed |
 | Dashboard: type check, lint, production build | passing |
+| Android: unit tests (masking parity), lint, debug APK | passing |
 
 ### Full pipeline on the dev split
 
@@ -179,6 +185,16 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 - A first run with a 1500-token cap for stage 2 had 52 of 208 calls cut while the model was still reasoning. The cap is now 3000.
 
 Full tables are in `eval/pipeline/dev.md`.
+
+### dcAI Guardian on an emulator, one live run
+
+On an Android 16 (API 36) emulator, with the backend and real models: a parent paired the
+phone with a code; the persistent "dcAI aktif" notification appeared; the sample chat app
+played a staged-approach scenario; each message was masked on the phone and sent; the
+backend reached level `waspada` with patterns `meminta_data_pribadi` and `pindah_kanal`;
+and the nudge arrived on the child's phone as a notification. Running it surfaced four
+Android-specific fixes (regex engine, input-method check, cleartext config, notification
+permission), now in the code.
 
 ### Phone path, one live run
 
