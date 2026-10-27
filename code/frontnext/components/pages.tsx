@@ -54,7 +54,7 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         h: "Di server dan model AI",
         list: [
           "Pesan tersamarkan diproses di memori untuk menilai pola, lalu dibuang. Isi pesan tidak disimpan di database atau di log.",
-          "Model yang dipakai: Muse Spark dari Meta (lewat Meta Model API dan Fireworks) dan Llama dari Meta (lewat W&B Inference). Yang dikirim ke model selalu sudah disamarkan.",
+          "Model yang dipakai: Muse Spark dari Meta (lewat Meta Model API dan Fireworks) dan Llama dari Meta (lewat penyedia inferensi model terbuka). Yang dikirim ke model selalu sudah disamarkan.",
           "Tanya dcAI mengirim data dasbor anak Anda ke Muse Spark dengan nama anak diganti alias. Pertanyaan dan jawaban tidak disimpan.",
         ],
       },
@@ -102,7 +102,7 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         h: "On the server and in AI models",
         list: [
           "Masked messages are processed in memory to assess patterns, then dropped. Message text is not stored in the database or in logs.",
-          "Models used: Muse Spark by Meta (through the Meta Model API and Fireworks) and Llama by Meta (through W&B Inference). What reaches a model is always masked first.",
+          "Models used: Muse Spark by Meta (through the Meta Model API and Fireworks) and Llama by Meta (through an open-weights inference provider). What reaches a model is always masked first.",
           "Ask dcAI sends your child's dashboard data to Muse Spark with the child's name replaced by an alias. Questions and answers are not stored.",
         ],
       },
