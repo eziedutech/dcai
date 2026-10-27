@@ -43,6 +43,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
+- **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on W&B Serverless Training (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost, and it is the default (`SCREENING_ENDPOINTS=wb_student`). Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
@@ -55,7 +56,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Not built yet
 
-In build order: visual protection (image labels feeding the score, blur on the phone), distillation to a smaller on-phone Llama, flagged domains, voice notes, the final evaluation.
+In build order: visual protection (image labels feeding the score, blur on the phone), a small on-phone classifier (ExecuTorch) distilled from the same teacher, flagged domains, voice notes.
 
 ## How it works
 
@@ -239,6 +240,28 @@ Model calls: 4 stage 1, 1 stage 2, 1 Coach. Before the queue merged them, the sa
 9 cases covering every situation (approach, child bullied, child bullying, shared data, distress, general) at `perhatian`, `waspada` and `mendesak`, in Indonesian and English. All 9 were answered by the model and passed the schema and tone rules. Latency was 4 to 8 s on the Meta Model API and 18 to 27 s on Fireworks. The tone review by a person (spec rubric, target 4 of 5) is pending.
 
 Found and fixed on the way: Fireworks timed out at 20 s on every coach call (the coach now gets 45 s); English output mixed in Indonesian words (now rejected and replaced by a template); and Indonesian reduplication lost its hyphen ("hati hati", now repaired in code).
+
+### Distillation: Muse Spark teacher, Llama 3.1 8B student
+
+The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on W&B, trained on the exact production stage 1 input. Measured on the locked test split.
+
+| Stage 1 on the test split | Recall | Precision | Ordinary messages labelled | Self-harm caught | Cost |
+|---|---|---|---|---|---|
+| Llama 3.3 70B (previous default) | 0.84 | 0.72 | 0 of 41 | 3 of 3 | USD 0.106 |
+| Llama 3.1 8B, base | 0.89 | 0.52 | 5 of 41 | 2 of 3 | USD 0.033 |
+| Student v1 | 0.73 | 0.84 | 0 of 41 | 0 of 3 | USD 0.033 |
+| **Student v2 (default)** | **0.81** | **0.91** | **0 of 41** | **2 of 3** | **USD 0.033** |
+
+| Full pipeline on the test split | 70B screening | Student v2 |
+|---|---|---|
+| Risky approaches reaching `waspada` or higher | 4 of 4 | 4 of 4 |
+| Ordinary and hard cases reaching `waspada` or higher | 1 of 7 | 1 of 7 |
+| Detection delay, median | 2 messages | 0 messages |
+| Self-harm flagged for support | 1 of 1 | 1 of 1 |
+| Cost of the run | USD 0.32 | USD 0.17 |
+
+- **v1 never labelled self-harm.** Trained on the data as is, where 79% of messages carry no label and self-harm appears 6 times, it learned that "no label" is almost always right. v2 rebalances the classes from the training data's own counts.
+- **The test split was used twice for the student** (v1 found the regression, v2 is the fix), so v2's test numbers are not from an untouched split.
 
 ### Stage 1 on the dev split
 
