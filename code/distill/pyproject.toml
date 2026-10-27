@@ -1,0 +1,13 @@
+[project]
+name = "dcai-distill"
+version = "0.1.0"
+description = "Fine-tune the stage 1 student on W&B Serverless SFT (OpenPipe ART)."
+requires-python = ">=3.12"
+dependencies = [
+    "openpipe-art==0.5.23",
+    # ART's serverless backend imports wandb but does not declare it.
+    "wandb==0.31.0",
+]
+
+[tool.uv]
+package = false

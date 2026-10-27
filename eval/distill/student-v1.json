@@ -1,0 +1,8 @@
+{
+ "base_model": "meta-llama/Llama-3.1-8B-Instruct",
+ "examples": 365,
+ "epochs": 3,
+ "step": 1,
+ "inference_model": "wandb-artifact:///unismuh/dcai-distill/stage1-student-8b-run:step1",
+ "inference_base_url": "https://forge.coreweave.com/api/training/v1"
+}

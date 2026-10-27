@@ -1,6 +1,6 @@
 """Run whole scenarios through the live pipeline and score them (spec section 11 metrics).
 
-    python -m app.risk.pipeline_eval [--split dev|test] [--concurrency 4]
+    python -m app.risk.pipeline_eval [--split dev|test] [--concurrency 4] [--tag NAME]
 
 Uses the configured pools (SCREENING_ENDPOINTS, REASONING_ENDPOINTS). Dev split by default;
 the test split is for the final evaluation only. Writes eval/pipeline/<split>.md and .json
@@ -72,7 +72,8 @@ async def run_one(s: Scenario, screening, reasoning) -> dict:
     }
 
 
-async def run(split: str, concurrency: int) -> int:
+async def run(split: str, concurrency: int, tag: str = "") -> int:
+    stem = f"{split}-{tag}" if tag else split
     settings = get_settings()
     ids = set(load_split()[split])
     scenarios = [s for s in load(DEFAULT_DIR)[0] if s.id in ids]
@@ -120,12 +121,12 @@ async def run(split: str, concurrency: int) -> int:
         lat_by_purpose.setdefault(purpose, []).append(u.latency_ms)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    (OUT_DIR / f"{split}.json").write_text(
+    (OUT_DIR / f"{stem}.json").write_text(
         json.dumps({"rows": rows}, indent=1) + "\n", encoding="utf-8", newline="\n"
     )
     levels = [lv.value for lv in Level]
     lines = [
-        f"# Pipeline on the {split} split",
+        f"# Pipeline on the {split} split" + (f" ({tag})" if tag else ""),
         "",
         f"{len(rows)} synthetic scenarios, {sum(len(r['scores']) for r in rows)} messages, "
         f"each played message by message through stage 1, the rule floor and stage 2. "
@@ -184,7 +185,7 @@ async def run(split: str, concurrency: int) -> int:
             f"{' '.join(map(str, r['scores']))} |"
         )
     lines.append("")
-    (OUT_DIR / f"{split}.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    (OUT_DIR / f"{stem}.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
     print("\n".join(lines[:26]))
     return 0
 
@@ -206,8 +207,11 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--split", choices=["dev", "test"], default="dev")
     parser.add_argument("--concurrency", type=int, default=4)
+    # Names the output (eval/pipeline/<split>-<tag>.md) so a comparison run, such as a
+    # different screening model, does not overwrite the main result.
+    parser.add_argument("--tag", default="")
     args = parser.parse_args(argv)
-    return asyncio.run(run(args.split, args.concurrency))
+    return asyncio.run(run(args.split, args.concurrency, args.tag))
 
 
 if __name__ == "__main__":

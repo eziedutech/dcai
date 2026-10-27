@@ -74,11 +74,10 @@ class PooledClient:
             raise NoEndpointConfigured(f"no {self.family} endpoint configured")
 
         json_schema = schema.model_json_schema()
-        system_full = (
-            f"{system}\n\nRespond with ONLY one JSON object that matches this JSON Schema. "
-            f"No prose, no code fences.\n{json.dumps(json_schema, separators=(',', ':'))}"
-        )
-        messages = [{"role": "system", "content": system_full}, {"role": "user", "content": user}]
+        messages = [
+            {"role": "system", "content": json_system(system, schema)},
+            {"role": "user", "content": user},
+        ]
         attempts: list[Usage] = []
 
         endpoint, raw = await self._call_with_failover(
@@ -278,6 +277,17 @@ class PooledClient:
 
     async def aclose(self) -> None:
         await self._http.aclose()
+
+
+def json_system(system: str, schema: type[BaseModel]) -> str:
+    """The system prompt as the model receives it: the task, then the JSON instruction and
+    schema. Distillation builds its training data with this, so a fine-tuned model is
+    trained on exactly what it sees in production."""
+    json_schema = schema.model_json_schema()
+    return (
+        f"{system}\n\nRespond with ONLY one JSON object that matches this JSON Schema. "
+        f"No prose, no code fences.\n{json.dumps(json_schema, separators=(',', ':'))}"
+    )
 
 
 def _parse[T: BaseModel](content: str | None, schema: type[T]) -> tuple[T | None, str]:

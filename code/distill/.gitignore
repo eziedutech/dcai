@@ -1,0 +1,4 @@
+.venv/
+.art/
+wandb/
+__pycache__/

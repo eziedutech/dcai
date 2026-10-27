@@ -1,0 +1,1746 @@
+{
+ "endpoint": "wb_student",
+ "model": "wandb-artifact:///unismuh/dcai-distill/stage1-student-8b-run:step1",
+ "rows": [
+  {
+   "scenario": "data_pribadi-002",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 4,
+   "sender": "contact",
+   "gold": [],
+   "pred": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 5,
+   "sender": "child",
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "pred": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 6,
+   "sender": "child",
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "pred": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-002",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 4,
+   "sender": "child",
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "pred": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 7,
+   "sender": "child",
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "pred": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 25,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 8,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "data_pribadi-005",
+   "message": 9,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 3,
+   "sender": "contact",
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-004",
+   "message": 11,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 3,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "pred": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 15,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 6,
+   "sender": "contact",
+   "gold": [
+    "pindah_kanal"
+   ],
+   "pred": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 7,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 8,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 9,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 10,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-008",
+   "message": 11,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 3,
+   "sender": "contact",
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "pred": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 20,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "kasus_sulit-009",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [
+    "perundungan"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 3,
+   "sender": "child",
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 4,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 5,
+   "sender": "child",
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 6,
+   "sender": "child",
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 8,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 9,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 10,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "menyakiti_diri-001",
+   "message": 11,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 5,
+   "sender": "contact",
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "pred": [
+    "membangun_kedekatan"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 7,
+   "sender": "contact",
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "pred": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 9,
+   "sender": "contact",
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "pred": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 11,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "pred": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "signal": 65,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 12,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 13,
+   "sender": "contact",
+   "gold": [
+    "meminta_kerahasiaan",
+    "menekan_mengancam"
+   ],
+   "pred": [
+    "meminta_kerahasiaan",
+    "menawarkan_hadiah",
+    "menekan_mengancam"
+   ],
+   "signal": 50,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-001",
+   "message": 14,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 5,
+   "sender": "contact",
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "pred": [
+    "membangun_kedekatan"
+   ],
+   "signal": 45,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 7,
+   "sender": "contact",
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "pred": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 9,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "pred": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 11,
+   "sender": "contact",
+   "gold": [
+    "menguji_batas"
+   ],
+   "pred": [
+    "menguji_batas"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 12,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-002",
+   "message": 13,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 7,
+   "sender": "contact",
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "pred": [
+    "membangun_kedekatan"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 9,
+   "sender": "contact",
+   "gold": [
+    "pindah_kanal"
+   ],
+   "pred": [
+    "pindah_kanal"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 11,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "pred": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 45,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 12,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 13,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "pred": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-008",
+   "message": 14,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 8,
+   "sender": "contact",
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "pred": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 9,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 10,
+   "sender": "contact",
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "pred": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 65,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 11,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 12,
+   "sender": "contact",
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "pred": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "pendekatan_berisiko-012",
+   "message": 13,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [
+    "perundungan"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 4,
+   "sender": "child",
+   "gold": [
+    "kata_kasar",
+    "perundungan"
+   ],
+   "pred": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 6,
+   "sender": "child",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [
+    "perundungan"
+   ],
+   "signal": 30,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 8,
+   "sender": "child",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [
+    "perundungan"
+   ],
+   "signal": 25,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-006",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 2,
+   "sender": "contact",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 3,
+   "sender": "contact",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 35,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 5,
+   "sender": "contact",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 6,
+   "sender": "contact",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 7,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 8,
+   "sender": "contact",
+   "gold": [
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 9,
+   "sender": "contact",
+   "gold": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "perundungan-007",
+   "message": 11,
+   "sender": "contact",
+   "gold": [
+    "kata_kasar"
+   ],
+   "pred": [
+    "perundungan"
+   ],
+   "signal": 40,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-002",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-003",
+   "message": 11,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-007",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 1,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 2,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 3,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 4,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 5,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 6,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 7,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 8,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 9,
+   "sender": "contact",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  },
+  {
+   "scenario": "wajar-010",
+   "message": 10,
+   "sender": "child",
+   "gold": [],
+   "pred": [],
+   "signal": 0,
+   "status": "ok"
+  }
+ ]
+}

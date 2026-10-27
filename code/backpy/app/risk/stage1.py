@@ -89,9 +89,24 @@ class Stage1Result:
 Sender = Literal["child", "contact"]
 
 
-def _user_payload(sender: Sender, masked_text: str) -> str:
+def user_payload(sender: Sender, masked_text: str) -> str:
     who = "child" if sender == "child" else "contact"
     return json.dumps({"sender": who, "text": masked_text}, ensure_ascii=False)
+
+
+def apply_rules(sender: Sender, model_labels, findings) -> set[Label]:
+    """The deterministic part of stage 1, applied to whatever the model returned.
+
+    A child's own message with personal data gets berbagi_data_pribadi from the masking
+    rules. Approach patterns describe what the contact does to the child; on the child's
+    own message they are noise. A threat stays: a child can threaten a peer.
+    """
+    labels: set[Label] = set(model_labels)
+    if sender == "child" and findings:
+        labels.add(ChildLabel.BERBAGI_DATA_PRIBADI)
+    if sender == "child":
+        labels -= set(Pattern) - {Pattern.MENEKAN_MENGANCAM}
+    return labels
 
 
 async def label_message(
@@ -109,7 +124,7 @@ async def label_message(
         result = await client.complete_json(
             purpose="stage1",
             system=SYSTEM,
-            user=_user_payload(sender, masked.text),
+            user=user_payload(sender, masked.text),
             schema=Stage1Output,
             max_tokens=200,
         )
@@ -123,13 +138,8 @@ async def label_message(
             masked_kinds=frozenset(masked.kinds),
         )
 
-    labels = set(result.value.labels) | rule_labels
-    # Approach patterns describe what the contact does to the child; on the child's own
-    # message they are noise. A threat stays: a child can threaten a peer.
-    if sender == "child":
-        labels -= set(Pattern) - {Pattern.MENEKAN_MENGANCAM}
     return Stage1Result(
-        labels=frozenset(labels),
+        labels=frozenset(apply_rules(sender, result.value.labels, masked.findings)),
         signal=result.value.signal,
         status="ok",
         masked_text=masked.text,
