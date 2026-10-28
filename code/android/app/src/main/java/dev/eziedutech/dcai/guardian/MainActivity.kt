@@ -48,6 +48,7 @@ import dev.eziedutech.dcai.guardian.ui.FeatureDetailScreen
 import dev.eziedutech.dcai.guardian.ui.HomeTab
 import dev.eziedutech.dcai.guardian.ui.IntroScreen
 import dev.eziedutech.dcai.guardian.ui.LocalizedActivity
+import dev.eziedutech.dcai.guardian.ui.AboutScreen
 import dev.eziedutech.dcai.guardian.ui.MainBottomBar
 import dev.eziedutech.dcai.guardian.ui.PermissionsScreen
 import dev.eziedutech.dcai.guardian.ui.PinDialog
@@ -77,6 +78,7 @@ private sealed interface Route {
     data object Transparency : Route
     data object ConsentText : Route
     data object Licenses : Route
+    data object About : Route
 }
 
 class MainActivity : LocalizedActivity() {
@@ -250,6 +252,7 @@ class MainActivity : LocalizedActivity() {
                                 onTransparency = { go(Route.Transparency) },
                                 onConsent = { go(Route.ConsentText) },
                                 onLicenses = { go(Route.Licenses) },
+                                onAbout = { go(Route.About) },
                                 onUnpair = { dialog = "unpair" },
                             )
                         }
@@ -288,6 +291,7 @@ class MainActivity : LocalizedActivity() {
                         onBack = { back() },
                     )
                 }
+                Route.About -> AboutScreen(onBack = { back() })
                 Route.Licenses -> TextPage(
                     stringResource(R.string.set_licenses), null,
                     listOf(R.string.lic_p1, R.string.lic_p2, R.string.lic_p3, R.string.lic_p4).map { stringResource(it) },

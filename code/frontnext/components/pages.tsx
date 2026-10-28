@@ -10,11 +10,11 @@ function Prose({ title, lead, sections }: { title: string; lead: string; section
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 pt-10 sm:px-8">
-        <h1 className="text-[2.2rem] font-extrabold leading-tight tracking-[-0.025em]">{title}</h1>
-        <p className="mt-4 max-w-[62ch] text-lg text-slate">{lead}</p>
+      <main className="mx-auto max-w-3xl px-5 pt-14 sm:px-8">
+        <h1 className="text-[2.4rem] font-extrabold leading-tight tracking-[-0.03em]">{title}</h1>
+        <p className="mb-10 mt-4 max-w-[62ch] text-lg text-ink/75">{lead}</p>
         {sections.map((s) => (
-          <section key={s.h} className="mt-12">
+          <section key={s.h} className="glass mt-6 rounded-3xl p-7 sm:p-8">
             <h2 className="text-[1.3rem] font-bold">{s.h}</h2>
             {s.p?.map((para) => (
               <p key={para} className="mt-3 max-w-[66ch]">
@@ -221,12 +221,12 @@ export function HowPage() {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 pt-10 sm:px-8">
-        <h1 className="text-[2.2rem] font-extrabold leading-tight tracking-[-0.025em]">{c.title}</h1>
-        <p className="mt-4 max-w-[62ch] text-lg text-slate">{c.lead}</p>
-        <dl className="mt-10 divide-y divide-line border-y border-line">
+      <main className="mx-auto max-w-3xl px-5 pt-14 sm:px-8">
+        <h1 className="text-[2.4rem] font-extrabold leading-tight tracking-[-0.03em]">{c.title}</h1>
+        <p className="mt-4 max-w-[62ch] text-lg text-ink/75">{c.lead}</p>
+        <dl className="glass mt-10 divide-y divide-ink/[0.07] rounded-3xl px-7">
           {(Object.keys(c.levels) as Level[]).map((l) => (
-            <div key={l} className="grid gap-2 py-4 sm:grid-cols-[12rem_1fr]">
+            <div key={l} className="grid gap-2 py-5 sm:grid-cols-[12rem_1fr]">
               <dt>
                 <LevelBadge level={l} />
               </dt>
@@ -235,7 +235,7 @@ export function HowPage() {
           ))}
         </dl>
         {c.sections.map((s) => (
-          <section key={s.h} className="mt-12">
+          <section key={s.h} className="glass mt-6 rounded-3xl p-7 sm:p-8">
             <h2 className="text-[1.3rem] font-bold">{s.h}</h2>
             {s.p?.map((para) => (
               <p key={para} className="mt-3 max-w-[66ch]">{para}</p>

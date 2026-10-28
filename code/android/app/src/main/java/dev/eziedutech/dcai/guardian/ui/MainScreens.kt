@@ -1,6 +1,7 @@
 package dev.eziedutech.dcai.guardian.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.Dns
@@ -52,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -75,7 +78,7 @@ enum class Tab(val icon: androidx.compose.ui.graphics.vector.ImageVector, val la
 
 @Composable
 fun MainBottomBar(tab: Tab, onTab: (Tab) -> Unit) {
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f), tonalElevation = 0.dp) {
         Tab.entries.forEach { t ->
             NavigationBarItem(selected = t == tab, onClick = { onTab(t) }, icon = { Icon(t.icon, null) }, label = { Text(stringResource(t.label)) })
         }
@@ -84,11 +87,13 @@ fun MainBottomBar(tab: Tab, onTab: (Tab) -> Unit) {
 
 @Composable
 private fun TabColumn(padding: PaddingValues, content: @Composable () -> Unit) {
-    Column(
-        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(padding)
-            .verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) { content() }
+    val scroll = rememberScrollState()
+    GlassScene(scroll, Modifier.padding(padding)) {
+        Column(
+            Modifier.fillMaxSize().verticalScroll(scroll).padding(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) { content() }
+    }
 }
 
 // ------------------------------------------------------------------ home
@@ -138,9 +143,14 @@ fun HomeTab(
 @Composable
 private fun HeroCard(nickname: String, issues: Int, onFix: () -> Unit) {
     val ok = issues == 0
+    val scroll = LocalScroll.current
+    val shape = RoundedCornerShape(28.dp)
+    val glow = if (ok) BrandLeaf else Color(0xFFFFC76E)
     Box(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
-            .background(Brush.linearGradient(if (ok) listOf(BrandBlue, Color(0xFF2B63D1), BrandLeaf) else listOf(Color(0xFF9A5B00), Color(0xFFE29A2E))))
+        Modifier.fillMaxWidth().clip(shape)
+            .background(Brush.linearGradient(if (ok) listOf(Color(0xFF173A8A), BrandBlue) else listOf(Color(0xFF7A4A06), Color(0xFFA9680F))))
+            .background(Brush.radialGradient(listOf(glow.copy(alpha = 0.42f), Color.Transparent), center = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY), radius = 720f))
+            .border(1.dp, Color.White.copy(alpha = 0.16f), shape)
             .clickable(enabled = !ok, onClick = onFix).padding(20.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -158,7 +168,7 @@ private fun HeroCard(nickname: String, issues: Int, onFix: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.9f),
                 )
             }
-            Illustration(if (ok) Art.SHIELD else Art.SHIELD_WARN, Modifier.size(112.dp))
+            Illustration(if (ok) Art.SHIELD else Art.SHIELD_WARN, Modifier.size(112.dp).parallax(scroll, 0.12f))
         }
     }
 }
@@ -209,15 +219,13 @@ private fun hm(minutes: Int): String {
 
 @Composable
 private fun FeatureTile(feature: Feature, status: Status, modifier: Modifier, onClick: () -> Unit) {
-    Card(
-        modifier.clickable(onClick = onClick), shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    Column(
+        modifier.glass(RoundedCornerShape(22.dp)).clickable(onClick = onClick).padding(14.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            IconBubble(feature.icon)
-            Text(stringResource(feature.title), style = MaterialTheme.typography.titleMedium)
-            StatusPill(status)
-        }
+        IconBubble(feature.icon)
+        Text(stringResource(feature.title), style = MaterialTheme.typography.titleMedium)
+        StatusPill(status)
     }
 }
 
@@ -250,14 +258,14 @@ private fun TipCard() {
     val tips = listOf(R.string.tip1, R.string.tip2, R.string.tip3, R.string.tip4, R.string.tip5, R.string.tip6)
     val tip = tips[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % tips.size]
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiaryContainer).padding(16.dp),
+        Modifier.fillMaxWidth().glass(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.35f)).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Illustration(Art.TIP, Modifier.size(64.dp))
         Spacer(Modifier.width(12.dp))
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(stringResource(R.string.home_tip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onTertiaryContainer)
-            Text(stringResource(tip), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Text(stringResource(R.string.home_tip), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.tertiary)
+            Text(stringResource(tip), style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -265,15 +273,15 @@ private fun TipCard() {
 @Composable
 private fun InfoBanner(art: Art, title: String, body: String, onClick: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primaryContainer)
+        Modifier.fillMaxWidth().glass(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             .clickable(onClick = onClick).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Illustration(art, Modifier.size(64.dp))
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
-            Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -361,6 +369,7 @@ fun SettingsTab(
     onConsent: () -> Unit,
     onLicenses: () -> Unit,
     onUnpair: () -> Unit,
+    onAbout: () -> Unit = {},
 ) {
     TabColumn(padding) {
         Text(stringResource(R.string.tab_settings), style = MaterialTheme.typography.headlineMedium)
@@ -388,6 +397,7 @@ fun SettingsTab(
             SettingRow(Icons.Rounded.Visibility, stringResource(R.string.home_transparency_title), null, onTransparency)
             SettingRow(Icons.AutoMirrored.Rounded.MenuBook, stringResource(R.string.set_consent_text), null, onConsent)
             SettingRow(Icons.Rounded.Gavel, stringResource(R.string.set_licenses), null, onLicenses)
+            SettingRow(Icons.Rounded.Apps, stringResource(R.string.about_title), null, onAbout)
         }
 
         GroupCard {
@@ -409,23 +419,27 @@ fun BackHeader(title: String, onBack: () -> Unit) {
 
 @Composable
 fun FeatureDetailScreen(feature: Feature, status: Status, granted: Boolean, action: Pair<String, () -> Unit>?, onBack: () -> Unit) {
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
-        BackHeader(stringResource(feature.title), onBack)
-        Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Illustration(feature.art, Modifier.fillMaxWidth(0.6f).align(Alignment.CenterHorizontally))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(feature.short), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                StatusPill(status)
+    val scroll = rememberScrollState()
+    GlassScene(scroll) {
+        Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+            BackHeader(stringResource(feature.title), onBack)
+            Column(
+                Modifier.weight(1f).verticalScroll(scroll).padding(horizontal = 20.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                // The picture drifts slower than the text.
+                Illustration(feature.art, Modifier.fillMaxWidth(0.6f).align(Alignment.CenterHorizontally).parallax(LocalScroll.current, 0.35f))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(feature.short), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    StatusPill(status)
+                }
+                DetailBlock(stringResource(R.string.detail_what), stringResource(feature.what))
+                DetailBlock(stringResource(R.string.detail_stays), stringResource(feature.stays))
+                DetailBlock(stringResource(R.string.detail_sent), stringResource(feature.sent))
+                if (!granted) DetailBlock(stringResource(R.string.detail_not_granted_title), stringResource(R.string.detail_not_granted))
+                action?.let { (label, run) -> PrimaryButton(label, run) }
+                Spacer(Modifier.height(12.dp))
             }
-            DetailBlock(stringResource(R.string.detail_what), stringResource(feature.what))
-            DetailBlock(stringResource(R.string.detail_stays), stringResource(feature.stays))
-            DetailBlock(stringResource(R.string.detail_sent), stringResource(feature.sent))
-            if (!granted) DetailBlock(stringResource(R.string.detail_not_granted_title), stringResource(R.string.detail_not_granted))
-            action?.let { (label, run) -> PrimaryButton(label, run) }
-            Spacer(Modifier.height(12.dp))
         }
     }
 }
@@ -443,16 +457,68 @@ private fun DetailBlock(title: String, body: String) {
 /** A long text (transparency, consent, licenses), with an illustration on top. */
 @Composable
 fun TextPage(title: String, art: Art?, paragraphs: List<String>, onBack: () -> Unit) {
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
-        BackHeader(title, onBack)
-        Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            if (art != null) Illustration(art, Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally))
-            paragraphs.forEach { Text(it, style = MaterialTheme.typography.bodyLarge) }
-            Spacer(Modifier.height(16.dp))
+    val scroll = rememberScrollState()
+    GlassScene(scroll) {
+        Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+            BackHeader(title, onBack)
+            Column(
+                Modifier.weight(1f).verticalScroll(scroll).padding(horizontal = 20.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                if (art != null) Illustration(art, Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally).parallax(LocalScroll.current, 0.35f))
+                Column(Modifier.fillMaxWidth().glass().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    paragraphs.forEach { Text(it, style = MaterialTheme.typography.bodyLarge) }
+                }
+                Spacer(Modifier.height(16.dp))
+            }
         }
+    }
+}
+
+/** Who makes dcAI and the platforms beside it. */
+@Composable
+fun AboutScreen(onBack: () -> Unit) {
+    val scroll = rememberScrollState()
+    GlassScene(scroll) {
+        Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+            BackHeader(stringResource(R.string.about_title), onBack)
+            Column(
+                Modifier.weight(1f).verticalScroll(scroll).padding(horizontal = 20.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                LogoBadge(84.dp, Modifier.align(Alignment.CenterHorizontally).parallax(LocalScroll.current, 0.3f))
+                Text(
+                    "\u201C" + stringResource(R.string.about_tagline) + "\u201D",
+                    style = MaterialTheme.typography.titleMedium, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Text(stringResource(R.string.about_lead), style = MaterialTheme.typography.bodyLarge)
+                SectionTitle(stringResource(R.string.about_eco))
+                Platform("dcAI", stringResource(R.string.brand_title) + ", " + stringResource(R.string.brand_subtitle), stringResource(R.string.about_dcai), stringResource(R.string.about_here))
+                Platform("C.I.T.R.A.", "Core Integrity & Trustworthy Research Assistant", stringResource(R.string.about_citra))
+                Platform("Belajar Z", null, stringResource(R.string.about_bz))
+                Platform("Numeria Arena", null, stringResource(R.string.about_numeria))
+                Spacer(Modifier.height(12.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun Platform(name: String, full: String?, body: String, badge: String? = null) {
+    Column(Modifier.fillMaxWidth().glass(RoundedCornerShape(22.dp)).padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            if (badge != null) {
+                Text(
+                    badge, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.clip(RoundedCornerShape(50)).background(MaterialTheme.colorScheme.primary).padding(horizontal = 10.dp, vertical = 3.dp),
+                )
+            }
+        }
+        if (full != null) Text(full, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(body, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp))
     }
 }
 

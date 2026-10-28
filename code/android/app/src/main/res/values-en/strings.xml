@@ -253,4 +253,14 @@
     <string name="time_request_waiting">Waiting for your parent</string>
     <string name="time_request_waiting_sub">You will be told as soon as they answer.</string>
     <string name="time_minutes">%1$d min</string>
+
+    <string name="about_title">About dcAI</string>
+    <string name="about_tagline">While the industry works on making technology ever smarter, our job is to make sure our children stay safe using it.</string>
+    <string name="about_lead">dcAI is one of the main pillars of digitalsafe.app, a startup dedicated to building an ecosystem for digital education, ethics and safety.</string>
+    <string name="about_eco">Our platform ecosystem</string>
+    <string name="about_here">This app</string>
+    <string name="about_dcai">A digital safety and ethics platform for school-age children and their families.</string>
+    <string name="about_citra">An AI research assistant that puts academic integrity first, for students, researchers and academics.</string>
+    <string name="about_bz">An agentic AI LMS that helps teachers manage and run learning in a way that is ethical, accountable and transparent.</string>
+    <string name="about_numeria">Safe and friendly mathematics games and learning that bring a real, interactive and measurable experience through Extended Reality (XR/VR) and Artificial Intelligence.</string>
 </resources>

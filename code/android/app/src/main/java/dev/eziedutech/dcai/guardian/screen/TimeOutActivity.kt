@@ -48,6 +48,10 @@ import dev.eziedutech.dcai.guardian.net.TimeRequestContext
 import dev.eziedutech.dcai.guardian.privacy.Mask
 import dev.eziedutech.dcai.guardian.service.Notifications
 import dev.eziedutech.dcai.guardian.ui.CenteredText
+import dev.eziedutech.dcai.guardian.ui.GlassScene
+import dev.eziedutech.dcai.guardian.ui.LocalScroll
+import dev.eziedutech.dcai.guardian.ui.glass
+import dev.eziedutech.dcai.guardian.ui.parallax
 import dev.eziedutech.dcai.guardian.ui.LocalizedActivity
 import dev.eziedutech.dcai.guardian.ui.PrimaryButton
 import dev.eziedutech.dcai.guardian.ui.UiPrefs
@@ -138,70 +142,73 @@ private fun TimeOutScreen(reason: BlockReason?, category: String?, until: Long, 
         null -> Art.CLOCK to stringResource(R.string.time_request_title)
     }
 
-    Column(
-        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding().imePadding()
-            .verticalScroll(rememberScrollState()).padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Illustration(art, Modifier.fillMaxWidth(0.55f))
-        Text(title, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-        if (reason != null) CenteredText(stringResource(Notifications.timeOutText(reason)))
-        if (reason == BlockReason.SESSION && until > now) {
-            val left = ((until - now) / 1000).toInt()
-            Text("%d:%02d".format(left / 60, left % 60), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.primary)
-        }
-
+    val scroll = rememberScrollState()
+    GlassScene(scroll) {
         Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.surface).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            Modifier.fillMaxSize().safeDrawingPadding().imePadding()
+                .verticalScroll(scroll).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (pending) {
-                Text(stringResource(R.string.time_request_waiting), style = MaterialTheme.typography.titleMedium)
-                Text(stringResource(R.string.time_request_waiting_sub), color = MaterialTheme.colorScheme.onSurfaceVariant)
-            } else {
-                Text(stringResource(R.string.time_request_ask), style = MaterialTheme.typography.titleMedium)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf(15, 30, 60).forEach { m ->
-                        FilterChip(selected = minutes == m, onClick = { minutes = m }, label = { Text(stringResource(R.string.time_minutes, m)) })
-                    }
-                }
-                OutlinedTextField(
-                    value = note, onValueChange = { note = it.take(200) },
-                    label = { Text(stringResource(R.string.time_request_reason)) },
-                    modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
-                )
-                if (error) Text(stringResource(R.string.setup_neterror), color = MaterialTheme.colorScheme.error)
-                PrimaryButton(stringResource(R.string.time_request_send), onClick = {
-                    scope.launch {
-                        val client = ServiceLocator.client(context) ?: return@launch
-                        val config = store.config
-                        val policy = config?.screenPolicy
-                        val today = ScreenGuard.today
-                        // Masked here; the server masks again.
-                        val names = listOfNotNull(config?.childNickname).filter { it.isNotBlank() }
-                        val body = TimeRequestBody(
-                            minutes = minutes,
-                            reason = Mask.mask(note, names).text.take(200),
-                            context = TimeRequestContext(
-                                usedToday = today?.usedMinutes ?: 0,
-                                limitToday = today?.limitMinutes,
-                                category = category,
-                                minutesToBedtime = policy?.let { TimeRules.minutesToBedtime(it, LocalDateTime.now()) },
-                            ),
-                        )
-                        runCatching { client.requestTime(body) }
-                            .onSuccess { store.pendingTimeRequest = it.id; pending = true; error = false }
-                            .onFailure { error = true }
-                    }
-                })
+            Illustration(art, Modifier.fillMaxWidth(0.55f).parallax(LocalScroll.current, 0.35f))
+            Text(title, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+            if (reason != null) CenteredText(stringResource(Notifications.timeOutText(reason)))
+            if (reason == BlockReason.SESSION && until > now) {
+                val left = ((until - now) / 1000).toInt()
+                Text("%d:%02d".format(left / 60, left % 60), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.primary)
             }
-        }
-        OutlinedButton(onClick = if (reason == null) onClose else onHome, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(if (reason == null) R.string.action_close else R.string.timeout_home))
+
+            Column(
+                Modifier.fillMaxWidth().glass(RoundedCornerShape(22.dp), strong = true).padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                if (pending) {
+                    Text(stringResource(R.string.time_request_waiting), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.time_request_waiting_sub), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else {
+                    Text(stringResource(R.string.time_request_ask), style = MaterialTheme.typography.titleMedium)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf(15, 30, 60).forEach { m ->
+                            FilterChip(selected = minutes == m, onClick = { minutes = m }, label = { Text(stringResource(R.string.time_minutes, m)) })
+                        }
+                    }
+                    OutlinedTextField(
+                        value = note, onValueChange = { note = it.take(200) },
+                        label = { Text(stringResource(R.string.time_request_reason)) },
+                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
+                    )
+                    if (error) Text(stringResource(R.string.setup_neterror), color = MaterialTheme.colorScheme.error)
+                    PrimaryButton(stringResource(R.string.time_request_send), onClick = {
+                        scope.launch {
+                            val client = ServiceLocator.client(context) ?: return@launch
+                            val config = store.config
+                            val policy = config?.screenPolicy
+                            val today = ScreenGuard.today
+                            // Masked here; the server masks again.
+                            val names = listOfNotNull(config?.childNickname).filter { it.isNotBlank() }
+                            val body = TimeRequestBody(
+                                minutes = minutes,
+                                reason = Mask.mask(note, names).text.take(200),
+                                context = TimeRequestContext(
+                                    usedToday = today?.usedMinutes ?: 0,
+                                    limitToday = today?.limitMinutes,
+                                    category = category,
+                                    minutesToBedtime = policy?.let { TimeRules.minutesToBedtime(it, LocalDateTime.now()) },
+                                ),
+                            )
+                            runCatching { client.requestTime(body) }
+                                .onSuccess { store.pendingTimeRequest = it.id; pending = true; error = false }
+                                .onFailure { error = true }
+                        }
+                    })
+                }
+            }
+            OutlinedButton(onClick = if (reason == null) onClose else onHome, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(if (reason == null) R.string.action_close else R.string.timeout_home))
+            }
         }
     }
 }

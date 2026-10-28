@@ -26,6 +26,7 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 - [What it does not claim](#what-it-does-not-claim)
 - [Credits and licenses](#credits-and-licenses)
 - [How this was built](#how-this-was-built)
+- [About digitalsafe.app](#about-digitalsafeapp)
 - [License](#license)
 
 ## What it is
@@ -56,7 +57,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
 - **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
 - **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
-- **50 synthetic scenarios** (543 messages, six groups), with a locked 34/16 dev/test split.
+- **58 synthetic scenarios** (621 messages, seven groups, including invitations to fights, drugs, alcohol or weapons for ages 10 to 17), with a locked 40/18 dev/test split. New scenarios join the split by the same hash, so no earlier id moved.
 
 ### Not built yet
 
@@ -343,6 +344,15 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 ## How this was built
 
 A Code Assistant was used to accelerate development and debugging. Design decisions, measurements and claims were checked against real runs.
+
+## About digitalsafe.app
+
+dcAI is one of the main pillars of digitalsafe.app, a startup building an ecosystem for digital education, ethics and safety, with an AI platform for each group of users:
+
+- **dcAI** (this repository): digital safety and ethics for school-age children and their families.
+- **C.I.T.R.A.** (Core Integrity & Trustworthy Research Assistant): an AI research assistant that puts academic integrity first, for students, researchers and academics.
+- **Belajar Z**: an agentic AI LMS that helps teachers run learning in a way that is ethical, accountable and transparent.
+- **Numeria Arena**: safe, friendly mathematics games and learning through Extended Reality (XR/VR) and AI.
 
 ## License
 

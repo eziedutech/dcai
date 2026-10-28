@@ -21,8 +21,6 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -105,7 +103,7 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun IconBubble(icon: ImageVector, tint: Color = MaterialTheme.colorScheme.primary, bg: Color = MaterialTheme.colorScheme.primaryContainer) {
-    Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(bg), contentAlignment = Alignment.Center) {
+    Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(bg.copy(alpha = 0.7f)), contentAlignment = Alignment.Center) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(22.dp))
     }
 }
@@ -159,12 +157,7 @@ fun SwitchRow(icon: ImageVector, title: String, subtitle: String, status: Status
 
 @Composable
 fun GroupCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Card(
-        modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) { Column(Modifier.padding(vertical = 4.dp)) { content() } }
+    Column(modifier.fillMaxWidth().glass(MaterialTheme.shapes.large).padding(vertical = 4.dp)) { content() }
 }
 
 @Composable

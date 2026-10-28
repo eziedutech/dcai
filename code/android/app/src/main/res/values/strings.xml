@@ -275,4 +275,15 @@
     <string name="time_request_waiting">Menunggu jawaban orang tua</string>
     <string name="time_request_waiting_sub">Kamu diberi tahu begitu orang tua menjawab.</string>
     <string name="time_minutes">%1$d menit</string>
+
+    <!-- About -->
+    <string name="about_title">Tentang dcAI</string>
+    <string name="about_tagline">Ketika industri berfokus membuat teknologi makin pintar, kita bertugas memastikan anak-anak kita tetap aman menggunakannya.</string>
+    <string name="about_lead">dcAI merupakan salah satu pilar utama dari digitalsafe.app, sebuah startup yang berdedikasi pada pengembangan ekosistem pendidikan, etika, dan keselamatan digital.</string>
+    <string name="about_eco">Ekosistem platform kami</string>
+    <string name="about_here">Aplikasi ini</string>
+    <string name="about_dcai">Platform keselamatan dan etika digital yang diperuntukkan bagi anak usia sekolah dan keluarga.</string>
+    <string name="about_citra">Platform asisten riset berbasis AI yang mengedepankan integritas akademik bagi mahasiswa, peneliti, dan akademisi.</string>
+    <string name="about_bz">Platform Agentic AI LMS yang membantu pengajar mengelola dan menjalankan proses pembelajaran secara beretika, akuntabel, dan transparan.</string>
+    <string name="about_numeria">Game dan pembelajaran matematika yang aman dan bersahabat, menghadirkan pengalaman belajar nyata, interaktif, dan terukur melalui teknologi Extended Reality (XR/VR) serta Kecerdasan Artifisial.</string>
 </resources>

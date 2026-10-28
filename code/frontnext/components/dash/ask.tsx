@@ -90,7 +90,7 @@ export function AskPanel() {
                 <button
                   type="button"
                   onClick={() => send(s)}
-                  className="rounded-full border border-line bg-white px-4 py-2 text-[0.95rem] font-medium hover:border-navy"
+                  className="glass-fill rounded-full px-4 py-2 text-[0.95rem] font-medium hover:border-navy/50"
                 >
                   {s}
                 </button>
@@ -105,7 +105,7 @@ export function AskPanel() {
             </p>
           ) : (
             <div key={i} className="max-w-[90%]">
-              <div className="rounded-2xl rounded-bl-md border border-line bg-white px-5 py-4 text-[1.02rem]">
+              <div className="glass-fill rounded-3xl rounded-bl-md bg-white/80 px-5 py-4 text-[1.02rem]">
                 <Answer text={turn.content} />
               </div>
               {turn.meta && (
@@ -159,7 +159,7 @@ export function AskPanel() {
             rows={2}
             maxLength={800}
             placeholder={t("ask.placeholder")}
-            className="min-h-[3.25rem] flex-1 resize-none rounded-lg border border-line bg-white px-3.5 py-2.5 outline-none focus:border-navy focus:ring-2 focus:ring-navy/20"
+            className="min-h-[3.25rem] flex-1 resize-none rounded-xl border border-ink/10 bg-white/75 px-3.5 py-2.5 outline-none focus:border-navy focus:ring-2 focus:ring-navy/20"
           />
           <Button type="submit" disabled={busy || !question.trim()} className="self-end">
             {t("ask.send")}

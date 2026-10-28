@@ -37,7 +37,7 @@ export function AddChild() {
           );
         })}
       </ol>
-      <div className="mt-8">
+      <div className="glass mt-8 rounded-3xl p-6 sm:p-8">
         {step === 1 && (
           <ProfileStep
             onDone={async (c) => {
@@ -91,7 +91,7 @@ function ProfileStep({ onDone }: { onDone: (c: Child) => Promise<void> }) {
             <label
               key={a}
               className={`cursor-pointer rounded-lg border px-4 py-2.5 font-medium tabular has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-navy ${
-                age === a ? "border-navy bg-navy text-paper" : "border-line bg-white hover:border-navy"
+                age === a ? "border-navy bg-navy text-paper" : "border-ink/10 bg-white/60 hover:border-navy/50"
               }`}
             >
               <input type="radio" name="age" value={a} className="sr-only" checked={age === a} onChange={() => setAge(a)} />
@@ -136,13 +136,13 @@ function ConsentStep({ child, onDone }: { child: Child; onDone: () => Promise<vo
       }}
     >
       <p className="max-w-[62ch] text-slate">{t("add.consentLead")}</p>
-      <div className="mt-4 max-h-80 overflow-y-auto rounded-[var(--radius-panel)] border border-line bg-white px-5 py-4 text-[0.95rem] whitespace-pre-line" tabIndex={0}>
+      <div className="mt-4 max-h-80 overflow-y-auto glass-fill rounded-2xl px-5 py-4 text-[0.95rem] whitespace-pre-line" tabIndex={0}>
         {lang === "id" ? text.id : text.en}
       </div>
       <p className="mt-2 text-sm text-slate tabular">v{text.version}</p>
       <fieldset className="mt-6 space-y-3">
         {text.scopes.map((s) => (
-          <label key={s} className="flex cursor-pointer gap-3 rounded-lg border border-line bg-white px-4 py-3 has-[:checked]:border-navy">
+          <label key={s} className="glass-fill flex cursor-pointer gap-3 rounded-xl px-4 py-3 has-[:checked]:border-navy">
             <input
               type="checkbox"
               className="mt-1 h-4 w-4 accent-[#1f3a5f]"
@@ -208,7 +208,7 @@ function PairStep({ child }: { child: Child }) {
       <p className="max-w-[56ch] text-slate">{t("add.pairLead")}</p>
       {error && <p role="alert" className="mt-4 text-mendesak">{t("common.error")}</p>}
       {code && (
-        <div className="mt-6 rounded-[var(--radius-panel)] border border-line bg-white px-6 py-8 text-center">
+        <div className="glass-fill mt-6 rounded-2xl px-6 py-8 text-center">
           <p className="font-mono text-[2.6rem] font-bold tracking-[0.18em] text-navy tabular" aria-live="polite">
             {code.code}
           </p>

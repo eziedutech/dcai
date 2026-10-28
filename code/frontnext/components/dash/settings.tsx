@@ -28,7 +28,7 @@ export function SettingsView() {
     <div className="mx-auto max-w-3xl">
       <h1 className="text-[1.75rem] font-bold tracking-[-0.02em]">{t("set.title")}</h1>
 
-      <section className="mt-8" aria-labelledby="lang-h">
+      <section className="glass mt-8 rounded-3xl p-6 sm:p-7" aria-labelledby="lang-h">
         <h2 id="lang-h" className="text-lg font-bold">{t("set.language")}</h2>
         <p className="mt-1 text-sm text-slate">{t("set.languageHint")}</p>
         <div className="mt-3 flex items-center gap-2">
@@ -39,7 +39,7 @@ export function SettingsView() {
               aria-pressed={guardian.language === l}
               onClick={() => changeLang(l)}
               className={`rounded-lg border px-4 py-2 font-medium ${
-                guardian.language === l ? "border-navy bg-navy text-paper" : "border-line bg-white hover:border-navy"
+                guardian.language === l ? "border-navy bg-navy text-paper" : "border-ink/10 bg-white/60 hover:border-navy/50"
               }`}
             >
               {l === "id" ? "Bahasa Indonesia" : "English"}
@@ -95,13 +95,13 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
   }
 
   return (
-    <section className="mt-12 border-t border-line pt-8" aria-labelledby={`c-${child.id}`}>
+    <section className="glass mt-6 rounded-3xl p-6 sm:p-7" aria-labelledby={`c-${child.id}`}>
       <h2 id={`c-${child.id}`} className="text-[1.35rem] font-bold">
         {child.nickname} <span className="font-normal text-slate">{child.age_range} {t("common.age")}</span>
       </h2>
 
       <h3 className="mt-6 font-bold">{t("set.consent")}</h3>
-      <ul className="mt-3 divide-y divide-line border-y border-line">
+      <ul className="mt-3 divide-y divide-ink/[0.07] border-y border-ink/[0.07]">
         {(text?.scopes ?? []).map((s) => {
           const on = child.consent_scopes.includes(s);
           return (
@@ -122,7 +122,7 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
       {devices.length === 0 ? (
         <p className="mt-2 text-slate">{t("dash.noDevice")}</p>
       ) : (
-        <ul className="mt-3 divide-y divide-line border-y border-line">
+        <ul className="mt-3 divide-y divide-ink/[0.07] border-y border-ink/[0.07]">
           {devices.map((d) => (
             <li key={d.id} className="flex items-center justify-between gap-4 py-3">
               <span>
@@ -141,7 +141,7 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
         </ul>
       )}
 
-      <div className="mt-8 rounded-[var(--radius-panel)] border border-mendesak/40 px-5 py-5">
+      <div className="mt-8 rounded-2xl border border-mendesak/30 bg-mendesak-soft/40 px-5 py-5">
         <h3 className="font-bold text-mendesak">{t("set.delete")}</h3>
         <p className="mt-1 max-w-[60ch] text-sm text-slate">{t("set.deleteHint")}</p>
         <label className="mt-4 block text-sm font-semibold" htmlFor={`del-${child.id}`}>
@@ -153,7 +153,7 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             autoComplete="off"
-            className="rounded-lg border border-line bg-white px-3 py-2 outline-none focus:border-mendesak"
+            className="rounded-xl border border-ink/10 bg-white/75 px-3 py-2 outline-none focus:border-mendesak"
           />
           <Button variant="danger" disabled={busy || confirm !== child.nickname} onClick={erase}>
             {t("set.deleteButton")}

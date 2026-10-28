@@ -43,12 +43,12 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col px-5 py-8">
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-10 px-5 py-8">
       <div className="flex items-center justify-between">
         <Logo />
         <LangToggle />
       </div>
-      <main className="my-auto py-12">
+      <main className="glass my-auto rounded-3xl p-7 sm:p-9">
         <h1 className="text-[1.75rem] font-bold tracking-[-0.02em]">
           {mode === "login" ? t("auth.signinTitle") : t("auth.signupTitle")}
         </h1>

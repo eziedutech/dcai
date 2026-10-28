@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 import { follow } from "@/lib/sse";
 import type { Conversation, EventRow, Insight, Level, Overview } from "@/lib/types";
-import { LEVEL_STYLE, LevelBadge, appLabel, formatWhen } from "../ui";
+import { LEVEL_STYLE, LevelBadge, Skeleton, appLabel, formatWhen } from "../ui";
 
 type Data = { overview: Overview; events: EventRow[]; conversations: Conversation[] };
 
@@ -47,7 +47,7 @@ export function ChildView({ childId }: { childId: string }) {
   }, [childId, load]);
 
   if (error && !data) return <p className="text-slate">{t("common.error")}</p>;
-  if (!data) return <p role="status" className="text-slate">{t("common.loading")}</p>;
+  if (!data) return <Skeleton label={t("common.loading")} />;
   const { overview: ov, events, conversations } = data;
 
   return (
@@ -67,8 +67,8 @@ export function ChildView({ childId }: { childId: string }) {
 
       <LevelStrip ov={ov} />
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-        <section aria-labelledby="insight-h">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <section aria-labelledby="insight-h" className="glass rounded-3xl p-6 sm:p-7">
           <h2 id="insight-h" className="text-lg font-bold">{t("dash.latestInsight")}</h2>
           {ov.latest_insight ? (
             <InsightBlock insight={ov.latest_insight} />
@@ -76,14 +76,14 @@ export function ChildView({ childId }: { childId: string }) {
             <p className="mt-3 max-w-[56ch] text-slate">{t("dash.noInsight")}</p>
           )}
         </section>
-        <div className="space-y-10">
+        <div className="space-y-6">
           <Protection ov={ov} childId={childId} />
-          <section aria-labelledby="events-h">
+          <section aria-labelledby="events-h" className="glass rounded-3xl p-6">
             <h2 id="events-h" className="text-lg font-bold">{t("dash.events")}</h2>
             {events.length === 0 ? (
               <p className="mt-3 text-slate">{t("dash.noEvents")}</p>
             ) : (
-              <ol className="mt-3 border-l-2 border-line">
+              <ol className="mt-3 ml-1 border-l-2 border-ink/10">
                 {events.map((e) => (
                   <li key={e.id} className="relative py-2 pl-5">
                     <span
@@ -100,13 +100,13 @@ export function ChildView({ childId }: { childId: string }) {
         </div>
       </div>
 
-      <section className="mt-12" aria-labelledby="conv-h">
+      <section className="glass mt-6 rounded-3xl p-6 sm:p-7" aria-labelledby="conv-h">
         <h2 id="conv-h" className="text-lg font-bold">{t("dash.conversations")}</h2>
         <p className="mt-1 text-sm text-slate">{t("dash.textNotStored")}</p>
         {conversations.length === 0 ? (
           <p className="mt-3 text-slate">{t("dash.noConversations")}</p>
         ) : (
-          <ul className="mt-4 divide-y divide-line border-y border-line">
+          <ul className="mt-4 divide-y divide-ink/[0.07] border-t border-ink/[0.07]">
             {conversations.map((c) => (
               <ConversationRow key={c.conversation_id} c={c} />
             ))}
@@ -126,8 +126,9 @@ function LevelStrip({ ov }: { ov: Overview }) {
     [ov.sensitive_images_blurred, t("dash.blurred")],
   ];
   return (
-    <section className={`mt-8 rounded-[var(--radius-panel)] ${s.bg} px-6 py-6`} aria-labelledby="level-h">
-      <div className="flex flex-wrap items-start justify-between gap-6">
+    <section className="glass relative mt-8 overflow-hidden rounded-3xl px-7 py-7" aria-labelledby="level-h">
+      <div aria-hidden className={`absolute inset-0 ${s.bg} opacity-45`} />
+      <div className="relative flex flex-wrap items-start justify-between gap-6">
         <div className="max-w-[46ch]">
           <h2 id="level-h" className="text-sm font-semibold text-slate">
             {t("dash.levelNow")}, {t("dash.window").toLowerCase()}
@@ -187,7 +188,7 @@ export function InsightBlock({ insight }: { insight: Insight }) {
       <h3 className="mt-6 text-sm font-semibold text-slate">{t("dash.starters")}</h3>
       <ul className="mt-2 space-y-2">
         {pi.conversation_starters.map((s) => (
-          <li key={s} className="rounded-lg border-l-4 border-navy bg-white px-4 py-2.5 text-[1.02rem] font-medium shadow-[0_1px_0_#d8dfe6]">
+          <li key={s} className="glass-fill rounded-xl border-l-4 !border-l-navy px-4 py-2.5 text-[1.02rem] font-medium">
             &ldquo;{s}&rdquo;
           </li>
         ))}
@@ -210,7 +211,7 @@ export function InsightBlock({ insight }: { insight: Insight }) {
           </ul>
         </div>
       </div>
-      <div className="mt-6 rounded-[var(--radius-panel)] border border-line px-4 py-3">
+      <div className="glass-fill mt-6 rounded-xl px-4 py-3">
         <p className="text-sm font-semibold text-slate">{t("dash.childWasTold")}</p>
         <p className="mt-1">{insight.child_nudge}</p>
         {insight.source === "template" && <p className="mt-1 text-sm text-slate">{t("dash.template")}</p>}
@@ -239,7 +240,7 @@ export function InsightBlock({ insight }: { insight: Insight }) {
 function Protection({ ov, childId }: { ov: Overview; childId: string }) {
   const { t, tx, lang } = useT();
   return (
-    <section aria-labelledby="prot-h">
+    <section aria-labelledby="prot-h" className="glass rounded-3xl p-6">
       <h2 id="prot-h" className="text-lg font-bold">{t("dash.protection")}</h2>
       {ov.devices.length === 0 ? (
         <div className="mt-3">

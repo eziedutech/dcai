@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { api, me, session } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 import type { Child, Guardian } from "@/lib/types";
-import { LangToggle, Logo } from "../ui";
+import { LangToggle, Logo, Skeleton } from "../ui";
 
 type Dash = {
   guardian: Guardian;
@@ -69,9 +69,9 @@ export function DashShell({ children }: { children: React.ReactNode }) {
   }
   if (!guardian || !kids) {
     return (
-      <p className="p-8 text-slate" role="status">
-        {t("common.loading")}
-      </p>
+      <div className="px-5 py-10 sm:px-10 lg:pl-[18rem]">
+        <Skeleton label={t("common.loading")} />
+      </div>
     );
   }
 
@@ -82,8 +82,8 @@ export function DashShell({ children }: { children: React.ReactNode }) {
         key={href}
         href={href}
         aria-current={active ? "page" : undefined}
-        className={`block rounded-lg px-3 py-2 text-[0.95rem] ${
-          active ? "bg-navy font-semibold text-paper" : "font-medium text-ink hover:bg-mist"
+        className={`block rounded-xl px-3 py-2 text-[0.95rem] ${
+          active ? "bg-navy font-semibold text-paper shadow-[0_8px_20px_-12px_rgba(31,58,95,0.9)]" : "font-medium text-ink hover:bg-white/70"
         }`}
       >
         {label}
@@ -94,12 +94,12 @@ export function DashShell({ children }: { children: React.ReactNode }) {
   return (
     <DashContext.Provider value={{ guardian, kids, reload, setGuardian }}>
       <div className="min-h-dvh lg:grid lg:grid-cols-[16rem_1fr]">
-        <aside className="border-b border-line bg-white lg:sticky lg:top-0 lg:h-dvh lg:border-r lg:border-b-0">
+        <aside className="glass-bar sticky top-0 z-30 lg:h-dvh lg:border-r lg:border-b-0 lg:border-ink/[0.07]">
           <div className="flex items-center justify-between px-5 py-4 lg:py-5">
             <Logo href="/dasbor" />
             <button
               type="button"
-              className="rounded-lg border border-line px-3 py-1.5 text-sm font-semibold lg:hidden"
+              className="rounded-xl border border-ink/10 bg-white/60 px-3 py-1.5 text-sm font-semibold lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="dash-nav"
               onClick={() => setMenuOpen((v) => !v)}
@@ -120,11 +120,11 @@ export function DashShell({ children }: { children: React.ReactNode }) {
               {kids.map((k) => link(`/dasbor/anak/${k.id}`, k.nickname))}
               {link("/dasbor/tambah", `+ ${t("dash.addChild")}`)}
             </div>
-            <div className="mt-5 space-y-0.5 border-t border-line pt-4">
+            <div className="mt-5 space-y-0.5 border-t border-ink/[0.07] pt-4">
               {link("/dasbor/tanya", t("dash.ask"))}
               {link("/dasbor/pengaturan", t("dash.settings"))}
             </div>
-            <div className="mt-5 flex items-center justify-between border-t border-line px-1 pt-4">
+            <div className="mt-5 flex items-center justify-between border-t border-ink/[0.07] px-1 pt-4">
               <button type="button" onClick={signOut} className="rounded-md px-2 py-1 text-sm font-medium text-slate hover:text-ink">
                 {t("dash.signout")}
               </button>

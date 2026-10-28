@@ -67,33 +67,39 @@ private const val SETUP_STEPS = 4
 
 @Composable
 private fun OnboardingScaffold(step: Int?, onBack: (() -> Unit)?, content: @Composable ColumnScope.() -> Unit, bottom: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
-        Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (onBack != null) TextButton(onClick = onBack) { Text(stringResource(R.string.action_back)) } else Spacer(Modifier.width(8.dp))
-            Spacer(Modifier.weight(1f))
-            if (step != null) {
-                Text(stringResource(R.string.step_of, step, SETUP_STEPS), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    val scroll = rememberScrollState()
+    GlassScene(scroll) {
+        Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+            Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (onBack != null) TextButton(onClick = onBack) { Text(stringResource(R.string.action_back)) } else Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.weight(1f))
+                if (step != null) {
+                    Text(stringResource(R.string.step_of, step, SETUP_STEPS), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Spacer(Modifier.width(12.dp))
             }
-            Spacer(Modifier.width(12.dp))
+            if (step != null) {
+                LinearProgressIndicator(
+                    progress = { step / SETUP_STEPS.toFloat() },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(6.dp).clip(RoundedCornerShape(3.dp)),
+                )
+            }
+            Column(
+                Modifier.weight(1f).verticalScroll(scroll).padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) { content() }
+            Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { bottom() }
         }
-        if (step != null) {
-            LinearProgressIndicator(
-                progress = { step / SETUP_STEPS.toFloat() },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(6.dp).clip(RoundedCornerShape(3.dp)),
-            )
-        }
-        Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) { content() }
-        Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { bottom() }
     }
 }
 
 @Composable
 fun WelcomeScreen(onLanguage: () -> Unit, onStart: () -> Unit) {
     Box(
-        Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(BrandBlue, Color(0xFF2B63D1), BrandLeaf))).safeDrawingPadding(),
+        Modifier.fillMaxSize()
+            .background(Brush.verticalGradient(listOf(Color(0xFF0F2A66), BrandBlue)))
+            .background(Brush.radialGradient(listOf(BrandLeaf.copy(alpha = 0.38f), Color.Transparent), center = androidx.compose.ui.geometry.Offset(0f, Float.POSITIVE_INFINITY), radius = 1400f))
+            .safeDrawingPadding(),
     ) {
         Box(
             Modifier.align(Alignment.TopEnd).padding(16.dp).size(44.dp).clip(CircleShape)
@@ -246,7 +252,7 @@ fun ConsentScreen(config: DeviceConfig, onReadFull: () -> Unit, onAccepted: () -
 @Composable
 private fun CheckRow(checked: Boolean, onChange: (Boolean) -> Unit, text: String) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.surface)
+        Modifier.fillMaxWidth().glass(RoundedCornerShape(16.dp))
             .clickable { onChange(!checked) }.padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -315,12 +321,12 @@ fun PermissionsScreen(
             }
         }
         Row(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.secondaryContainer).padding(16.dp),
+            Modifier.fillMaxWidth().glass(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.35f)).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(Icons.Rounded.Info, null, tint = BrandLeaf)
             Spacer(Modifier.width(12.dp))
-            Text(stringResource(R.string.perm_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+            Text(stringResource(R.string.perm_note), style = MaterialTheme.typography.bodySmall)
         }
     }, bottom = {
         PrimaryButton(stringResource(R.string.perm_done), onClick = onDone, enabled = snapshot.notificationsOn)

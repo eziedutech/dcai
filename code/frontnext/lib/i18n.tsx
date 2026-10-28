@@ -8,15 +8,19 @@ import type { Lang } from "./types";
 const id = {
   "nav.how": "Cara kerja",
   "nav.privacy": "Privasi",
+  "nav.about": "Tentang Kami",
   "nav.signin": "Masuk",
   "nav.dashboard": "Dasbor",
   "nav.lang": "English",
 
-  "home.title": "Anak dibimbing saat itu juga. Orang tua paham tanpa membaca obrolannya.",
+  "home.tagline":
+    "Ketika industri berfokus membuat teknologi makin pintar, kita bertugas memastikan anak-anak kita tetap aman menggunakannya.",
+  "home.title": "Melindungi Generasi Digital dengan Kecerdasan Artifisial",
   "home.lead":
-    "dcAI dipasang orang tua di ponsel Android anak usia 10 sampai 17 tahun. Saat obrolan mulai mengikuti pola berisiko, anak mendapat pengingat singkat dengan alasannya. Orang tua menerima pola yang terlihat dan cara membicarakannya.",
+    "Di tengah pesatnya perkembangan teknologi, menjaga anak-anak dari ancaman dunia digital adalah prioritas utama. dcAI hadir membantu orang tua membentengi anak dari penggunaan perangkat digital yang tidak sehat melalui pendekatan Digital Citizenship.",
   "home.cta": "Buka dasbor",
   "home.cta2": "Lihat apa yang disimpan",
+  "home.demo.eyebrow": "Contoh dengan data sintetis",
   "home.demo.child": "Yang dilihat anak",
   "home.demo.parent": "Yang dilihat orang tua",
   "home.demo.msg1": "kamu jago banget mainnya, beda dari yang lain",
@@ -34,19 +38,35 @@ const id = {
   "home.demo.starterText": "Ada teman baru di game yang bikin kamu bingung akhir-akhir ini?",
   "home.demo.noText": "Isi pesan tidak dikirim ke orang tua dan tidak disimpan.",
 
-  "home.layer.title": "Keselamatan dan kebiasaan sehat dalam satu pendamping.",
-  "home.layer.lead":
-    "dcAI memahami apa yang terjadi di obrolan, gambar, dan situs, lalu membantu keluarga mengatur waktu online dan jam tidur. Orang tua mengatur dari dasbor; anak selalu tahu apa yang aktif.",
-  "home.layer.safe": "Keselamatan",
-  "home.layer.habit": "Kebiasaan sehat",
-  "home.layer.r1": "Waktu online harian per kategori",
-  "home.layer.r2": "Jam tidur dengan pengingat bersiap tidur",
-  "home.layer.r3": "Mengenali pola pendekatan berisiko dalam obrolan",
-  "home.layer.r4": "Pengingat untuk anak pada saat itu juga",
-  "home.layer.r5": "Mengaburkan data pribadi di gambar dan menahan situs berisiko",
-  "home.layer.r6": "Insight dan pembuka percakapan untuk orang tua",
-  "home.layer.r7": "Istirahat dari video pendek yang tak berhenti",
-  "home.layer.r8": "Minta tambahan waktu, orang tua yang memutuskan",
+  "home.feat.eyebrow": "Fitur & Perlindungan Utama",
+  "home.feat.title": "Solusi Komprehensif untuk Ekosistem Digital yang Sehat",
+  "home.feat.lead": "dcAI aktif memproteksi anak usia sekolah dari berbagai risiko dunia maya, antara lain:",
+  "home.feat.c1.t": "Keamanan & Konten",
+  "home.feat.c1.b":
+    "Mencegah paparan situs pornografi dan judi online, ajakan kenakalan remaja seperti tawuran dan narkoba, serta provokasi dan ujaran kebencian.",
+  "home.feat.c1.i1": "Situs dewasa, judi, narkoba, dan kebencian ditahan di ponsel",
+  "home.feat.c1.i2": "Ajakan berbahaya di obrolan dikenali sebagai pola",
+  "home.feat.c1.i3": "Orang tua bisa mengizinkan situs yang keliru ditahan",
+  "home.feat.c2.t": "Kesejahteraan Mental",
+  "home.feat.c2.b":
+    "Menjaga anak dari perundungan siber (cyberbullying), manipulasi psikologis (grooming), dan kebiasaan doomscrolling.",
+  "home.feat.c2.i1": "Pola pendekatan berisiko dikenali lintas pesan",
+  "home.feat.c2.i2": "Pengingat untuk anak pada saat itu juga",
+  "home.feat.c2.i3": "Jeda setelah lama menonton video pendek",
+  "home.feat.c3.t": "Privasi & Kebiasaan Digital",
+  "home.feat.c3.b":
+    "Mencegah kebocoran data pribadi secara tidak sengaja (self-doxing), membantu membatasi waktu bermain gim, serta membantu pembatasan durasi layar (screen time).",
+  "home.feat.c3.i1": "Wajah dan data pribadi di gambar dikaburkan di ponsel",
+  "home.feat.c3.i2": "Batas harian per kategori dan jam tidur",
+  "home.feat.c3.i3": "Anak bisa minta tambahan waktu, orang tua yang memutuskan",
+
+  "home.control.eyebrow": "Kontrol Orang Tua & Transparansi",
+  "home.control.title": "Pendampingan Orang Tua yang Terintegrasi",
+  "home.control.lead":
+    "Setiap modul keselamatan di dcAI beroperasi atas persetujuan orang tua. Melalui dashboard terpadu berbasis AI, orang tua dapat mengatur batas akses, menganalisis pola aktivitas, dan menerima pemberitahuan secara real-time.",
+  "home.control.i1": "Persetujuan per modul, bisa ditarik kapan saja",
+  "home.control.i2": "Insight, pembuka percakapan, dan ringkasan mingguan",
+  "home.control.i3": "Tanya dcAI menjawab pertanyaan dari data dasbor",
 
   "home.steps.title": "Dari ponsel anak sampai saran untuk orang tua",
   "home.step1.t": "Di ponsel",
@@ -81,6 +101,24 @@ const id = {
   "home.meta.muse": "Muse Spark menilai pola percakapan, menulis bimbingan, dan menjawab pertanyaan orang tua lewat Tanya dcAI.",
   "home.meta.llama": "Llama memberi label perilaku per pesan sebagai penyaring awal.",
   "home.meta.next": "Rencana berikutnya: model Llama yang lebih kecil hasil distilasi, berjalan di ponsel.",
+  "home.about.eyebrow": "Tentang Kami",
+  "home.about.title": "Tentang dcAI",
+  "home.about.lead":
+    "dcAI merupakan salah satu pilar utama dari digitalsafe.app, sebuah startup yang berdedikasi pada pengembangan ekosistem pendidikan, etika, dan keselamatan digital.",
+  "home.eco.title": "Ekosistem Platform Kami",
+  "home.eco.lead": "Kami menghadirkan solusi berbasis AI yang dirancang spesifik untuk setiap jenjang pengguna:",
+  "home.eco.here": "Anda di sini",
+  "home.eco.dcai.tag": "Anak sekolah dan keluarga",
+  "home.eco.dcai.b": "Platform keselamatan dan etika digital yang diperuntukkan bagi anak usia sekolah dan keluarga.",
+  "home.eco.citra.tag": "Mahasiswa, peneliti, akademisi",
+  "home.eco.citra.b":
+    "Platform asisten riset berbasis AI yang mengedepankan integritas akademik bagi mahasiswa, peneliti, dan akademisi.",
+  "home.eco.bz.tag": "Pengajar",
+  "home.eco.bz.b":
+    "Platform Agentic AI LMS yang membantu pengajar mengelola dan menjalankan proses pembelajaran secara beretika, akuntabel, dan transparan.",
+  "home.eco.numeria.tag": "Matematika, XR/VR",
+  "home.eco.numeria.b":
+    "Game dan pembelajaran matematika yang aman dan bersahabat, menghadirkan pengalaman belajar nyata, interaktif, dan terukur melalui teknologi Extended Reality (XR/VR) serta Kecerdasan Artifisial.",
   "home.foot": "Prototipe untuk Meta Global AI Developer Hackathon 2026. Semua data contoh adalah sintetis.",
 
   "auth.signin": "Masuk",
@@ -250,15 +288,19 @@ type Key = keyof typeof id;
 const en: Record<Key, string> = {
   "nav.how": "How it works",
   "nav.privacy": "Privacy",
+  "nav.about": "About us",
   "nav.signin": "Sign in",
   "nav.dashboard": "Dashboard",
   "nav.lang": "Bahasa Indonesia",
 
-  "home.title": "Children get guidance in the moment. Parents understand without reading the chat.",
+  "home.tagline":
+    "While the industry works on making technology ever smarter, our job is to make sure our children stay safe using it.",
+  "home.title": "Protecting the Digital Generation with Artificial Intelligence",
   "home.lead":
-    "A parent installs dcAI on their child's Android phone, for ages 10 to 17. When a chat starts to follow a risky pattern, the child gets a short reminder with the reason. The parent receives the pattern and how to talk about it.",
+    "As technology moves fast, keeping children safe from the threats of the digital world comes first. dcAI helps parents shield their children from unhealthy use of digital devices through a Digital Citizenship approach.",
   "home.cta": "Open the dashboard",
   "home.cta2": "See what is stored",
+  "home.demo.eyebrow": "An example with synthetic data",
   "home.demo.child": "What the child sees",
   "home.demo.parent": "What the parent sees",
   "home.demo.msg1": "you're really good at this game, not like the others",
@@ -276,19 +318,35 @@ const en: Record<Key, string> = {
   "home.demo.starterText": "Has a new friend in a game made you feel unsure lately?",
   "home.demo.noText": "Message text is not sent to the parent and is not stored.",
 
-  "home.layer.title": "Safety and healthy habits in one companion.",
-  "home.layer.lead":
-    "dcAI understands what happens in chats, images and sites, then helps the family manage time online and bedtime. Parents set it up on the dashboard; the child always knows what is on.",
-  "home.layer.safe": "Safety",
-  "home.layer.habit": "Healthy habits",
-  "home.layer.r1": "Daily time online, per category",
-  "home.layer.r2": "Bedtime with a wind-down reminder",
-  "home.layer.r3": "Recognise risky approach patterns in chats",
-  "home.layer.r4": "A reminder for the child in the moment",
-  "home.layer.r5": "Blur personal data in images and hold risky sites",
-  "home.layer.r6": "Insight and conversation starters for parents",
-  "home.layer.r7": "Breaks from endless short video",
-  "home.layer.r8": "Ask for more time; the parent decides",
+  "home.feat.eyebrow": "Key Features & Protection",
+  "home.feat.title": "A Complete Answer for a Healthy Digital Ecosystem",
+  "home.feat.lead": "dcAI actively protects school-age children from the risks of the online world, including:",
+  "home.feat.c1.t": "Safety & Content",
+  "home.feat.c1.b":
+    "Preventing exposure to pornography and online gambling sites, invitations to delinquency such as street fights and drugs, and provocation and hate speech.",
+  "home.feat.c1.i1": "Adult, gambling, drug and hate sites are held on the phone",
+  "home.feat.c1.i2": "Dangerous invitations in chats are recognised as a pattern",
+  "home.feat.c1.i3": "Parents can allow a site that was held by mistake",
+  "home.feat.c2.t": "Mental Wellbeing",
+  "home.feat.c2.b":
+    "Keeping children safe from cyberbullying, psychological manipulation (grooming) and doomscrolling.",
+  "home.feat.c2.i1": "Risky approach patterns are recognised across messages",
+  "home.feat.c2.i2": "A reminder for the child in the moment",
+  "home.feat.c2.i3": "A break after watching short video for a long time",
+  "home.feat.c3.t": "Privacy & Digital Habits",
+  "home.feat.c3.b":
+    "Preventing accidental leaks of personal data (self-doxing), helping limit time spent on games, and helping limit screen time.",
+  "home.feat.c3.i1": "Faces and personal data in images are blurred on the phone",
+  "home.feat.c3.i2": "Daily limits per category, and bedtime",
+  "home.feat.c3.i3": "The child can ask for more time; the parent decides",
+
+  "home.control.eyebrow": "Parental Control & Transparency",
+  "home.control.title": "Integrated Guidance for Parents",
+  "home.control.lead":
+    "Every safety module in dcAI runs with a parent's consent. Through one AI-powered dashboard, parents set access limits, analyse activity patterns and get notified in real time.",
+  "home.control.i1": "Consent per module, withdrawable at any time",
+  "home.control.i2": "Insight, conversation starters and a weekly digest",
+  "home.control.i3": "Ask dcAI answers questions from the dashboard data",
 
   "home.steps.title": "From the child's phone to advice for the parent",
   "home.step1.t": "On the phone",
@@ -323,6 +381,24 @@ const en: Record<Key, string> = {
   "home.meta.muse": "Muse Spark assesses chat patterns, writes the guidance and answers parents through Ask dcAI.",
   "home.meta.llama": "Llama labels behaviour per message as the first filter.",
   "home.meta.next": "Next: a smaller distilled Llama model that runs on the phone.",
+  "home.about.eyebrow": "About Us",
+  "home.about.title": "About dcAI",
+  "home.about.lead":
+    "dcAI is one of the main pillars of digitalsafe.app, a startup dedicated to building an ecosystem for digital education, ethics and safety.",
+  "home.eco.title": "Our Platform Ecosystem",
+  "home.eco.lead": "We build AI solutions designed for each group of users:",
+  "home.eco.here": "You are here",
+  "home.eco.dcai.tag": "School children and families",
+  "home.eco.dcai.b": "A digital safety and ethics platform for school-age children and their families.",
+  "home.eco.citra.tag": "Students, researchers, academics",
+  "home.eco.citra.b":
+    "An AI research assistant that puts academic integrity first, for students, researchers and academics.",
+  "home.eco.bz.tag": "Teachers",
+  "home.eco.bz.b":
+    "An agentic AI LMS that helps teachers manage and run learning in a way that is ethical, accountable and transparent.",
+  "home.eco.numeria.tag": "Mathematics, XR/VR",
+  "home.eco.numeria.b":
+    "Safe and friendly mathematics games and learning that bring a real, interactive and measurable experience through Extended Reality (XR/VR) and Artificial Intelligence.",
   "home.foot": "Prototype for the Meta Global AI Developer Hackathon 2026. All example data is synthetic.",
 
   "auth.signin": "Sign in",

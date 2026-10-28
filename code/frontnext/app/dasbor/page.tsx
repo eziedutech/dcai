@@ -15,10 +15,10 @@ export default function Page() {
   }, [kids, router]);
   if (kids.length > 0) return null;
   return (
-    <div className="mx-auto max-w-xl py-16">
+    <div className="glass mx-auto mt-10 max-w-xl rounded-3xl p-8 sm:p-10">
       <h1 className="text-[1.75rem] font-bold tracking-[-0.02em]">{t("dash.empty.title")}</h1>
       <p className="mt-3 text-slate">{t("dash.empty.body")}</p>
-      <Link href="/dasbor/tambah" className="mt-6 inline-block rounded-lg bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
+      <Link href="/dasbor/tambah" className="mt-6 inline-block rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
         {t("dash.addChild")}
       </Link>
     </div>

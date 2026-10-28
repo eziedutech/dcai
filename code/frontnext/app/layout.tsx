@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { Scene } from "@/components/motion";
 import { LangProvider } from "@/lib/i18n";
 import "./globals.css";
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id" className={jakarta.variable}>
       <body className="min-h-dvh">
+        <Scene />
         <LangProvider>{children}</LangProvider>
       </body>
     </html>
