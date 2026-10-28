@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GameChat (contoh)</string>
-    <string name="subtitle">Aplikasi chat sintetis untuk menguji dcAI</string>
-    <string name="contact">Teman baru di game</string>
-    <string name="play_next">Kirim pesan berikutnya dari lawan bicara</string>
-    <string name="restart">Ulang dari awal</string>
-    <string name="type_hint">Tulis balasan anak…</string>
-    <string name="send">Kirim</string>
-    <string name="linked">Terhubung ke dcAI</string>
+    <string name="app_name">Messenger Z</string>
+    <string name="linked">Dilindungi dcAI</string>
     <string name="not_linked">dcAI belum terpasang di ponsel ini</string>
-    <string name="done">Skenario selesai</string>
-    <string name="contact_image">Lawan bicara mengirim gambar</string>
-    <string name="share_card">Bagikan kartu pelajar</string>
-    <string name="share_landscape">Bagikan foto pemandangan</string>
+    <string name="synthetic_note">Aplikasi contoh dengan dcAI SDK. Semua nama, pesan, dan gambar di sini sintetis.</string>
+    <string name="you_prefix">"Kamu: "</string>
+    <string name="photo">Foto</string>
+    <string name="typing">sedang mengetik…</string>
+    <string name="online">online</string>
+    <string name="group_members">Dinda, Raka, Kamu</string>
+    <string name="today">Hari ini</string>
+    <string name="type_hint">Pesan</string>
+    <string name="attach">Lampirkan</string>
+    <string name="send">Kirim</string>
+    <string name="gallery">Galeri</string>
+    <string name="demo_next">Demo: pesan berikutnya</string>
+    <string name="demo_image">Demo: lawan bicara kirim gambar</string>
+    <string name="restart">Ulang percakapan</string>
+    <string name="share_card">Kartu pelajar</string>
+    <string name="share_landscape">Pemandangan</string>
     <string name="checking">dcAI memeriksa gambar…</string>
     <string name="blurred_all">dcAI mengaburkan gambar ini.</string>
     <string name="blurred_private">dcAI mengaburkan data pribadi di gambar ini.</string>

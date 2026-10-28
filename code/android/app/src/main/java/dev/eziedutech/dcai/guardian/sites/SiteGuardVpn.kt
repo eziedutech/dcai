@@ -35,6 +35,10 @@ import java.util.concurrent.Executors
  * time, and the child can see the protection on dcAI's screen.
  */
 class SiteGuardVpn : VpnService() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(dev.eziedutech.dcai.guardian.ui.localizedService(newBase))
+    }
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var tun: ParcelFileDescriptor? = null
     @Volatile private var matcher: SiteMatcher? = null

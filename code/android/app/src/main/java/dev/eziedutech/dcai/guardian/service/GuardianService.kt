@@ -36,6 +36,10 @@ import kotlin.coroutines.resume
  * There is no hidden mode: the only way the notification goes away is the service stopping.
  */
 class GuardianService : Service() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(dev.eziedutech.dcai.guardian.ui.localizedService(newBase))
+    }
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     override fun onBind(intent: Intent?): IBinder? = null

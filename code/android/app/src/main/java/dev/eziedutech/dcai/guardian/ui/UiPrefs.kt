@@ -66,6 +66,19 @@ object AppLocale {
     }
 }
 
+/**
+ * A service's text (notification titles) in the app's language. Android 13 and later apply
+ * the per-app language to activities; a long-running service keeps the phone's language
+ * otherwise, so the nudge title came out in English next to an Indonesian nudge.
+ */
+fun localizedService(base: Context): Context {
+    val language = AppLocale.current(base)
+    if (language == UiPrefs.SYSTEM) return base
+    val config = Configuration(base.resources.configuration)
+    config.setLocale(Locale.forLanguageTag(language))
+    return base.createConfigurationContext(config)
+}
+
 /** Every dcAI screen: applies the chosen language on phones older than Android 13. */
 open class LocalizedActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
