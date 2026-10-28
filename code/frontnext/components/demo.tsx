@@ -112,7 +112,7 @@ function Typing({ side }: { side: "contact" | "child" }) {
 function Bridge({ packet, frame }: { packet: string[] | null; frame: number }) {
   const { t } = useT();
   return (
-    <div className="relative flex items-center justify-center py-2 lg:w-28 lg:py-0" aria-hidden>
+    <div className="relative flex items-center justify-center py-2 lg:mt-[9.5rem] lg:w-28 lg:self-start lg:py-0" aria-hidden>
       {/* the track: vertical when stacked, horizontal beside */}
       <div className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-navy/25 to-transparent lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto lg:translate-x-0 lg:-translate-y-1/2 lg:bg-gradient-to-r" />
       <div className="relative z-10 flex flex-col items-center gap-2">
@@ -154,22 +154,22 @@ const STATS = [
 function Stats() {
   const { t } = useT();
   return (
-    <section className="mt-4" aria-labelledby="stats-h">
+    <section className="mt-5" aria-labelledby="stats-h">
       <h3 id="stats-h" className="eyebrow">{t("home.stats.title")}</h3>
-      <ul className="glass-fill mt-3 divide-y divide-ink/[0.07] rounded-2xl">
+      <ul className="mt-2 divide-y divide-ink/[0.06] rounded-xl border border-ink/[0.06] bg-white/35">
         {STATS.map(({ n, href }) => (
-          <li key={n} className="grid grid-cols-[5.6rem_1fr] items-baseline gap-3 px-4 py-3">
-            <p className="text-[1.35rem] font-extrabold leading-none tracking-tight text-navy tabular">{t(`home.stats.${n}.v`)}</p>
-            <p className="text-[0.86rem] leading-snug text-ink/80">
+          <li key={n} className="grid grid-cols-[4.4rem_1fr] items-baseline gap-2.5 px-3.5 py-2">
+            <p className="text-[0.98rem] font-bold leading-tight tracking-tight text-navy/80 tabular">{t(`home.stats.${n}.v`)}</p>
+            <p className="text-[0.78rem] leading-snug text-slate">
               {t(`home.stats.${n}.b`)}{" "}
-              <a href={href} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap text-xs font-semibold text-slate underline-offset-4 hover:text-navy hover:underline">
+              <a href={href} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap text-[0.7rem] font-semibold text-slate/80 underline-offset-4 hover:text-navy hover:underline">
                 {t(`home.stats.${n}.src`)}
               </a>
             </p>
           </li>
         ))}
       </ul>
-      <Link href="/fakta" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-navy underline-offset-4 hover:underline">
+      <Link href="/fakta" className="mt-2 inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-navy underline-offset-4 hover:underline">
         {t("home.stats.more")}
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
           <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
