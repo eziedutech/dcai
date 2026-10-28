@@ -87,6 +87,9 @@ export function SiteHeader() {
           <Link href="/privasi" className={nav}>
             {t("nav.privacy")}
           </Link>
+          <Link href="/fakta" className={nav}>
+            {t("nav.facts")}
+          </Link>
           <Link href="/#tentang" className={nav}>
             {t("nav.about")}
           </Link>
@@ -109,6 +112,7 @@ export function SiteFooter() {
         <div className="flex gap-4">
           <Link href="/cara-kerja" className="hover:text-ink">{t("nav.how")}</Link>
           <Link href="/privasi" className="hover:text-ink">{t("nav.privacy")}</Link>
+          <Link href="/fakta" className="hover:text-ink">{t("nav.facts")}</Link>
           <Link href="/#tentang" className="hover:text-ink">{t("nav.about")}</Link>
         </div>
       </div>

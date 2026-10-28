@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useT } from "@/lib/i18n";
 import type { Level } from "@/lib/types";
@@ -140,6 +141,44 @@ function Bridge({ packet, frame }: { packet: string[] | null; frame: number }) {
   );
 }
 
+// Published figures, quoted as their sources state them; each tile links to its source.
+const UNICEF = "https://www.unicef.org/press-releases/1-5-children-across-21-countries-have-experienced-tech-facilitated-sexual";
+const LANCET = "https://doi.org/10.1016/S2352-4642(24)00329-8";
+const STATS = [
+  { n: "s1", href: UNICEF },
+  { n: "s3", href: UNICEF },
+  { n: "s4", href: LANCET },
+] as const;
+
+/** Why the pattern matters: a few research figures beside the parent's view. */
+function Stats() {
+  const { t } = useT();
+  return (
+    <section className="mt-4" aria-labelledby="stats-h">
+      <h3 id="stats-h" className="eyebrow">{t("home.stats.title")}</h3>
+      <ul className="glass-fill mt-3 divide-y divide-ink/[0.07] rounded-2xl">
+        {STATS.map(({ n, href }) => (
+          <li key={n} className="grid grid-cols-[5.6rem_1fr] items-baseline gap-3 px-4 py-3">
+            <p className="text-[1.35rem] font-extrabold leading-none tracking-tight text-navy tabular">{t(`home.stats.${n}.v`)}</p>
+            <p className="text-[0.86rem] leading-snug text-ink/80">
+              {t(`home.stats.${n}.b`)}{" "}
+              <a href={href} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap text-xs font-semibold text-slate underline-offset-4 hover:text-navy hover:underline">
+                {t(`home.stats.${n}.src`)}
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+      <Link href="/fakta" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-navy underline-offset-4 hover:underline">
+        {t("home.stats.more")}
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Link>
+    </section>
+  );
+}
+
 export function LiveDemo() {
   const { t } = useT();
   const { ref, f, frame } = useDemoClock();
@@ -234,6 +273,7 @@ export function LiveDemo() {
             {t("home.demo.noText")}
           </p>
         </div>
+        <Stats />
       </figure>
     </div>
   );
