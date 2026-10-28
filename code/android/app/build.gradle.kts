@@ -22,6 +22,8 @@ android {
 
     buildTypes {
         release {
+            // The public deployment; debug builds keep the emulator's host machine.
+            buildConfigField("String", "DEFAULT_SERVER", "\"https://dcai.digitalsafe.app\"")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }

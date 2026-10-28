@@ -12,6 +12,8 @@
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
 
+**Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app) (homepage and parent dashboard; the phone's API is under `/v1`). Please use synthetic data only: free model credits allow the provider to use request content.
+
 **Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video), and guidance for the parent. It is one pillar of digitalsafe.app. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud.
 
 ## Table of Contents
@@ -151,6 +153,10 @@ cd code/frontnext
 npm ci
 npm run dev -- --port 3100      # http://localhost:3100, expects the backend on :8000
 ```
+
+### Deploying
+
+`code/docker-compose.prod.yml` runs PostgreSQL, the API and the web app; on Dokploy it is a Compose service from this repository with the model variables, `DB_PASSWORD` and `SECRET_KEY` in its environment, and two domains on one host: `/` to `web:3000` and `/v1` to `api:8000`. The API migrates on start and builds the site lists from UT1 into a volume the first time (about five minutes). Release builds of the Android app point at the public host; debug builds at the emulator's host machine.
 
 ## Configuration
 
