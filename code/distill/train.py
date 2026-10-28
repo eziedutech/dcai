@@ -125,7 +125,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     # Balancing repeats labelled examples, so fewer passes avoid memorising them.
     p.add_argument("--epochs", type=int, default=2)
-    p.add_argument("--name", default="stage1-student-8b-v2")
+    p.add_argument("--name", default="stage1-student-8b-v3")
     a = p.parse_args()
     load_key()
     asyncio.run(main(a.epochs, a.name))

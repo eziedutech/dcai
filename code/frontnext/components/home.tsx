@@ -255,21 +255,18 @@ function Models() {
   );
 }
 
-/** Marks for the sister platforms: a monogram on a tinted tile. dcAI uses its logo. */
-function Mark({ text, tint }: { text: string; tint: string }) {
-  return (
-    <span aria-hidden className={`grid h-11 w-11 place-items-center rounded-xl text-[0.82rem] font-extrabold tracking-tight ring-1 ${tint}`}>
-      {text}
-    </span>
-  );
+/** A platform's logo, the same size for every card. */
+function Mark({ src }: { src: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt="" width={44} height={52} className="h-[52px] w-auto self-start" />;
 }
 
 function About() {
   const { t } = useT();
   const products = [
-    { key: "citra", name: "C.I.T.R.A.", full: "Core Integrity & Trustworthy Research Assistant", mark: <Mark text="C" tint="bg-[#3c7a86]/10 text-[#2d5f69] ring-[#3c7a86]/20" /> },
-    { key: "bz", name: "Belajar Z", full: null, mark: <Mark text="BZ" tint="bg-[#7a6a4f]/10 text-[#5c4f39] ring-[#7a6a4f]/20" /> },
-    { key: "numeria", name: "Numeria Arena", full: null, mark: <Mark text="N" tint="bg-[#5b5f8f]/10 text-[#45486f] ring-[#5b5f8f]/20" /> },
+    { key: "citra", name: "C.I.T.R.A.", full: "Core Integrity & Trustworthy Research Assistant", mark: <Mark src="/eco/citra.png" /> },
+    { key: "bz", name: "Belajar Z", full: null, mark: <Mark src="/eco/belajarz.png" /> },
+    { key: "numeria", name: "Numeria Arena", full: null, mark: <Mark src="/eco/numeria.png" /> },
   ] as const;
   return (
     <section id="tentang" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="about-h">
@@ -287,8 +284,7 @@ function About() {
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         <article className="glass flex flex-col rounded-3xl p-7 ring-1 ring-navy/20">
           <div className="flex items-center justify-between gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/dcai-logo.png" alt="" width={38} height={44} className="h-11 w-auto" />
+            <Mark src="/eco/dcai.png" />
             <span className="rounded-full bg-navy px-2.5 py-0.5 text-xs font-semibold text-paper">{t("home.eco.here")}</span>
           </div>
           <p className="mt-4 text-lg font-bold">dcAI</p>
@@ -310,6 +306,33 @@ function About() {
   );
 }
 
+/** A phone frame around a real screenshot of the app. */
+function Phone({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+  return (
+    <div className={`rounded-[2.2rem] bg-ink p-[7px] shadow-[0_40px_80px_-36px_rgba(20,35,58,0.65)] ring-1 ring-white/10 ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} width={540} height={1200} className="block h-auto w-full rounded-[1.75rem]" />
+    </div>
+  );
+}
+
+/** The child's app, home and protections, as it runs on the phone (screenshots from the
+ * Android emulator). The back phone drifts slower than the front one. */
+function AppShots() {
+  const { t, lang } = useT();
+  return (
+    <figure className="relative mx-auto aspect-[100/140] w-full max-w-[26rem]">
+      <Parallax speed={0.05} className="absolute top-10 right-0 w-[56%]">
+        <Phone src={`/app/${lang}-tiles.webp`} alt={t("home.shots.tiles")} className="opacity-95" />
+      </Parallax>
+      <Parallax speed={-0.04} className="absolute top-0 left-0 w-[60%]">
+        <Phone src={`/app/${lang}-home.webp`} alt={t("home.shots.home")} />
+      </Parallax>
+      <figcaption className="sr-only">{t("home.shots.caption")}</figcaption>
+    </figure>
+  );
+}
+
 export function HomePage() {
   const { t } = useT();
   return (
@@ -317,23 +340,26 @@ export function HomePage() {
       <SiteHeader />
       <main>
         <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 sm:pt-20">
-          <Parallax speed={0.08}>
-            <blockquote className="max-w-[58ch] border-l-2 border-navy/40 pl-4 text-[1.02rem] leading-relaxed text-slate italic">
-              &ldquo;{t("home.tagline")}&rdquo;
-            </blockquote>
-            <h1 className="mt-8 max-w-[18ch] text-[2.5rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-ink sm:text-[3.6rem]">
-              {t("home.title")}
-            </h1>
-            <p className="mt-6 max-w-[60ch] text-lg text-ink/75">{t("home.lead")}</p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/dasbor" className="rounded-xl bg-navy px-5 py-3 font-semibold text-paper shadow-[0_10px_24px_-14px_rgba(31,58,95,0.9)] hover:bg-ink">
-                {t("home.cta")}
-              </Link>
-              <Link href="/#privasi" className="glass-fill rounded-xl px-5 py-3 font-semibold hover:border-navy/40">
-                {t("home.cta2")}
-              </Link>
-            </div>
-          </Parallax>
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <Parallax speed={0.08}>
+              <blockquote className="max-w-[58ch] border-l-2 border-navy/40 pl-4 text-[1.02rem] leading-relaxed text-slate italic">
+                &ldquo;{t("home.tagline")}&rdquo;
+              </blockquote>
+              <h1 className="mt-8 max-w-[18ch] text-[2.5rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-ink sm:text-[3.6rem] lg:text-[3.25rem]">
+                {t("home.title")}
+              </h1>
+              <p className="mt-6 max-w-[60ch] text-lg text-ink/75">{t("home.lead")}</p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link href="/dasbor" className="rounded-xl bg-navy px-5 py-3 font-semibold text-paper shadow-[0_10px_24px_-14px_rgba(31,58,95,0.9)] hover:bg-ink">
+                  {t("home.cta")}
+                </Link>
+                <Link href="/#privasi" className="glass-fill rounded-xl px-5 py-3 font-semibold hover:border-navy/40">
+                  {t("home.cta2")}
+                </Link>
+              </div>
+            </Parallax>
+            <AppShots />
+          </div>
           <div className="glass relative z-10 mt-16 rounded-[2rem] p-5 sm:p-8">
             <p className="eyebrow mb-5">{t("home.demo.eyebrow")}</p>
             <SplitDemo />

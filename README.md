@@ -46,7 +46,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Citizenship Guide** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/guide/channels.json`, where only manually verified entries carry a number.
-- **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost, and it is the default stage 1 screener. Details in `eval/distill/report.md`.
+- **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost. v2 is the default stage 1 screener. Student v3, retrained with the invitation label, was evaluated and not adopted: it removes a false alarm but misses more risk (below). Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
@@ -289,20 +289,27 @@ Model calls: 4 stage 1, 1 stage 2, 1 Guide. Before the queue merged them, the sa
 
 ### Invitations to delinquency, a new label
 
-`ajakan_berbahaya` covers invitations to fights (tawuran), offering drugs, pills or alcohol, and carrying sharp weapons, from either side of the chat. One label sets the floor at `waspada`. Six new `kenakalan` scenarios and two look-alike hard cases (silat sparring, an anti-drug poster project), run through the full pipeline with the production screener (`eval/pipeline/dev-kenakalan.md`, `test-kenakalan.md`):
+`ajakan_berbahaya` covers invitations to fights (tawuran), offering drugs, pills or alcohol, and carrying sharp weapons, from either side of the chat. One label sets the floor at `waspada`. Six new `kenakalan` scenarios and two look-alike hard cases (silat sparring, an anti-drug poster project), run through the full pipeline with student v2, trained before the label existed (`eval/pipeline/dev-kenakalan.md`, `test-kenakalan.md`), and with student v3, retrained with it (`dev-student-v3.md`, `test-student-v3.md`):
 
-| Scenario | Split | Expected | Final |
-| --- | --- | --- | --- |
-| kenakalan-001 | dev | waspada | waspada |
-| kenakalan-002 | dev | waspada | waspada |
-| kenakalan-003 | dev | mendesak | mendesak |
-| kenakalan-004 | dev | waspada | mendesak |
-| kasus_sulit-010 (silat) | dev | aman | aman |
-| kasus_sulit-011 (poster) | dev | aman | waspada |
-| kenakalan-005 | test | waspada | waspada |
-| kenakalan-006 | test | waspada | mendesak |
+| Scenario | Split | Expected | v2 (default) | v3 |
+| --- | --- | --- | --- | --- |
+| kenakalan-001 | dev | waspada | waspada | mendesak |
+| kenakalan-002 | dev | waspada | waspada | mendesak |
+| kenakalan-003 | dev | mendesak | mendesak | mendesak |
+| kenakalan-004 | dev | waspada | mendesak | mendesak |
+| kasus_sulit-010 (silat) | dev | aman | aman | aman |
+| kasus_sulit-011 (poster) | dev | aman | waspada | aman |
+| kenakalan-005 | test | waspada | waspada | mendesak |
+| kenakalan-006 | test | waspada | mendesak | mendesak |
 
-All six reach `waspada` or higher. The poster project is a false alarm: the distilled stage 1 student was trained before this label existed, so it sometimes misses the label and sometimes puts it on harmless messages, and one label is enough for the floor. Stage 1 for this label: precision 0.67 and recall 0.55 on dev (11 messages), 0.75 and 1.00 on test (3 messages). Retraining the student with the label is the next step.
+With both students all six reach `waspada` or higher. With v2 the poster project was a false alarm; v3 keeps both look-alike cases at `aman`, and ends all five scenarios expected at `waspada` one level higher, at `mendesak`. Stage 1 for this label:
+
+| Student | Dev (11 messages) | Test (3 messages) |
+| --- | --- | --- |
+| v2 | precision 0.67, recall 0.55 | precision 0.75, recall 1.00 |
+| v3 | precision 1.00, recall 0.55 | precision 1.00, recall 0.33 |
+
+v3 no longer puts the label on harmless messages, and still misses about half of the invitations; the rest of each conversation brings it to `waspada`.
 
 ### Citizenship Guide
 
@@ -319,7 +326,7 @@ The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on
 | Llama 3.3 70B (previous default) | 0.84 | 0.72 | 0 of 41 | 3 of 3 | USD 0.106 |
 | Llama 3.1 8B, base | 0.89 | 0.52 | 5 of 41 | 2 of 3 | USD 0.033 |
 | Student v1 | 0.73 | 0.84 | 0 of 41 | 0 of 3 | USD 0.033 |
-| **Student v2 (default)** | **0.81** | **0.91** | **0 of 41** | **2 of 3** | **USD 0.033** |
+| **Student v2** | **0.81** | **0.91** | **0 of 41** | **2 of 3** | **USD 0.033** |
 
 | Full pipeline on the test split | 70B screening | Student v2 |
 |---|---|---|
@@ -331,6 +338,7 @@ The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on
 
 - **v1 never labelled self-harm.** Trained on the data as is, where 79% of messages carry no label and self-harm appears 6 times, it learned that "no label" is almost always right. v2 rebalances the classes from the training data's own counts.
 - **The test split was used twice for the student** (v1 found the regression, v2 is the fix), so v2's test numbers are not from an untouched split.
+- **Student v3 was evaluated and not adopted.** Retrained the same way on the 40-scenario dev split, which now holds the invitation scenarios (teacher USD 0.69, 670 training examples after balancing). On the 18-scenario test split its pipeline matches v2: risky approaches 4 of 4 at `waspada` or higher, ordinary and hard cases 1 of 7, self-harm flagged 1 of 1, score never decreased 18 of 18, USD 0.23 against 0.22. Final levels exactly as expected drop from 14 to 11 of 18, and on dev one risky approach ends at `perhatian` (7 of 8). The test split was used a third time, for this decision. Missing a risky approach weighs more than a false alarm, so v2 stays the default.
 
 ### Stage 1 on the dev split
 
@@ -356,7 +364,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.
 - **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
 - **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible about once in 200,000 checks. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
-- **The invitation label is new and screened by a model trained before it existed.** It raises false alarms (one of two look-alike hard cases on dev) until the student is retrained; see Results.
+- **The invitation label is new, and the screener was trained before it existed.** Student v2 finds 6 of 11 invitations on dev with precision 0.67, so it raises false alarms (one of two look-alike hard cases on dev) and can miss a single invitation in an otherwise ordinary chat. A retrained v3 removed the false alarm but missed more risk and was not adopted. See Results.
 - The consent text has not had legal review.
 
 ## Credits and licenses

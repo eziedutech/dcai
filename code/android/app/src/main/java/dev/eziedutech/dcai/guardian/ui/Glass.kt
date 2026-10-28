@@ -78,8 +78,8 @@ fun GlassScene(scroll: ScrollState? = null, modifier: Modifier = Modifier, conte
 @Composable
 fun Modifier.glass(shape: Shape = RoundedCornerShape(24.dp), strong: Boolean = false): Modifier {
     val dark = Dark
-    val fill = if (dark) MaterialTheme.colorScheme.surface.copy(alpha = if (strong) 0.82f else 0.62f)
-    else Color.White.copy(alpha = if (strong) 0.82f else 0.64f)
+    val fill = if (dark) MaterialTheme.colorScheme.surface.copy(alpha = if (strong) 0.72f else 0.5f)
+    else Color.White.copy(alpha = if (strong) 0.7f else 0.46f)
     val edge = if (dark) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.85f)
     return clip(shape).background(fill).border(1.dp, edge, shape)
 }

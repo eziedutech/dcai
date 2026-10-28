@@ -1,18 +1,18 @@
 {
  "base_model": "meta-llama/Llama-3.1-8B-Instruct",
- "examples_unique": 365,
- "examples_balanced": 579,
+ "examples_unique": 424,
+ "examples_balanced": 670,
  "rare_labels": {
+  "ajakan_berbahaya": 6,
   "kata_kasar": 1,
-  "membangun_kedekatan": 5,
+  "membangun_kedekatan": 6,
   "menguji_batas": 4,
-  "menyakiti_diri": 6,
-  "pindah_kanal": 4
+  "pindah_kanal": 5
  },
  "labelled_repeat": 3,
  "rare_repeat": 6,
  "epochs": 2,
  "step": 1,
- "inference_model": "wandb-artifact:///unismuh/dcai-distill/stage1-student-8b-v2-run:step1",
+ "inference_model": "wandb-artifact:///unismuh/dcai-distill/stage1-student-8b-v3-run:step1",
  "inference_base_url": "https://forge.coreweave.com/api/training/v1"
 }

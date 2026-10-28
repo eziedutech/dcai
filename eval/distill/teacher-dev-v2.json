@@ -1,0 +1,2904 @@
+{
+ "rows": [
+  {
+   "scenario": "data_pribadi-001",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 80
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 6,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 45
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-001",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 6,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 15
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 7,
+   "gold": [],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-003",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 3,
+   "gold": [],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 45
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 5,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 20
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 7,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-004",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 3,
+   "gold": [],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 6,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 8,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 20
+  },
+  {
+   "scenario": "data_pribadi-006",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 3,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 15
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 20
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-001",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 3,
+   "gold": [
+    "pindah_kanal"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-002",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 3,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 15
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 4,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [
+    "berbagi_data_pribadi"
+   ],
+   "signal": 10
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-003",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 3,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 15
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-005",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 3,
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 20
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-006",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 3,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "kasus_sulit-007",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 2,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 4,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 5,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 7,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 45
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-002",
+   "message": 12,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 3,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 5,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 6,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-003",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 3,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 5,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 6,
+   "gold": [
+    "menyakiti_diri"
+   ],
+   "teacher": [
+    "menyakiti_diri"
+   ],
+   "signal": 65
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "menyakiti_diri-004",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 4,
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 6,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 8,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 45
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 10,
+   "gold": [
+    "meminta_kerahasiaan",
+    "pindah_kanal"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan",
+    "menawarkan_hadiah",
+    "pindah_kanal"
+   ],
+   "signal": 80
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 12,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 13,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-003",
+   "message": 14,
+   "gold": [
+    "meminta_kerahasiaan",
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan",
+    "menekan_mengancam"
+   ],
+   "signal": 75
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 6,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [
+    "membangun_kedekatan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 8,
+   "gold": [
+    "menguji_batas"
+   ],
+   "teacher": [
+    "menguji_batas"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 12,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "pendekatan_berisiko-004",
+   "message": 13,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 5,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [
+    "membangun_kedekatan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 7,
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 9,
+   "gold": [
+    "menguji_batas"
+   ],
+   "teacher": [
+    "menguji_batas"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 11,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-005",
+   "message": 12,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 3,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [
+    "membangun_kedekatan"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 6,
+   "gold": [
+    "pindah_kanal"
+   ],
+   "teacher": [
+    "pindah_kanal"
+   ],
+   "signal": 50
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 8,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 10,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "signal": 55
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 12,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "signal": 80
+  },
+  {
+   "scenario": "pendekatan_berisiko-006",
+   "message": 13,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 6,
+   "gold": [
+    "membangun_kedekatan",
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 8,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 9,
+   "gold": [
+    "berbagi_data_pribadi"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 10,
+   "gold": [],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 12,
+   "gold": [
+    "menguji_batas"
+   ],
+   "teacher": [
+    "menguji_batas"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-007",
+   "message": 13,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 5,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 7,
+   "gold": [
+    "meminta_data_pribadi",
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "meminta_data_pribadi",
+    "menawarkan_hadiah"
+   ],
+   "signal": 75
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 9,
+   "gold": [
+    "menguji_batas"
+   ],
+   "teacher": [
+    "menguji_batas"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 11,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 12,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 13,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam"
+   ],
+   "signal": 70
+  },
+  {
+   "scenario": "pendekatan_berisiko-009",
+   "message": 14,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 4,
+   "gold": [
+    "membangun_kedekatan",
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 6,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [
+    "membangun_kedekatan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 8,
+   "gold": [
+    "meminta_data_pribadi"
+   ],
+   "teacher": [
+    "meminta_data_pribadi"
+   ],
+   "signal": 85
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 10,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 45
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-010",
+   "message": 12,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 6,
+   "gold": [
+    "membangun_kedekatan"
+   ],
+   "teacher": [
+    "membangun_kedekatan"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 8,
+   "gold": [
+    "menawarkan_hadiah"
+   ],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 10,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan"
+   ],
+   "signal": 65
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 12,
+   "gold": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "teacher": [
+    "meminta_data_pribadi",
+    "pindah_kanal"
+   ],
+   "signal": 70
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 13,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "pendekatan_berisiko-011",
+   "message": 14,
+   "gold": [
+    "meminta_kerahasiaan"
+   ],
+   "teacher": [
+    "meminta_kerahasiaan",
+    "menekan_mengancam"
+   ],
+   "signal": 55
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 4,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 6,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 28
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 8,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-001",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 3,
+   "gold": [
+    "kata_kasar",
+    "perundungan"
+   ],
+   "teacher": [
+    "kata_kasar",
+    "perundungan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 5,
+   "gold": [
+    "kata_kasar",
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 6,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 40
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 8,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 10,
+   "gold": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "teacher": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "signal": 60
+  },
+  {
+   "scenario": "perundungan-002",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 3,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 5,
+   "gold": [
+    "kata_kasar",
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 7,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-003",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 3,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 5,
+   "gold": [
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 7,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 8,
+   "gold": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 35
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 10,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "perundungan-004",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 4,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam"
+   ],
+   "signal": 55
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 6,
+   "gold": [
+    "menekan_mengancam"
+   ],
+   "teacher": [
+    "menekan_mengancam"
+   ],
+   "signal": 70
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 7,
+   "gold": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "teacher": [
+    "menekan_mengancam",
+    "perundungan"
+   ],
+   "signal": 70
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 9,
+   "gold": [
+    "kata_kasar"
+   ],
+   "teacher": [
+    "perundungan"
+   ],
+   "signal": 30
+  },
+  {
+   "scenario": "perundungan-005",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-001",
+   "message": 11,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-004",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 7,
+   "gold": [],
+   "teacher": [
+    "menawarkan_hadiah"
+   ],
+   "signal": 25
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-005",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-006",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-008",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-009",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-011",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 1,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 2,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 3,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 4,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 5,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 6,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 7,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 8,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 9,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  },
+  {
+   "scenario": "wajar-012",
+   "message": 10,
+   "gold": [],
+   "teacher": [],
+   "signal": 0
+  }
+ ]
+}

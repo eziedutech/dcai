@@ -47,12 +47,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -66,6 +72,7 @@ import dev.eziedutech.dcai.guardian.ui.art.Art
 import dev.eziedutech.dcai.guardian.ui.art.Illustration
 import dev.eziedutech.dcai.guardian.ui.theme.BrandBlue
 import dev.eziedutech.dcai.guardian.ui.theme.BrandLeaf
+import dev.eziedutech.dcai.guardian.ui.theme.LocalStatusColors
 import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
@@ -124,12 +131,7 @@ fun HomeTab(
         if (snapshot.granted(Feature.WAKTU)) TodayCard(snapshot.today, onAskTime)
 
         SectionTitle(stringResource(R.string.home_features))
-        Feature.entries.chunked(2).forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                row.forEach { f -> FeatureTile(f, snapshot.status(f), Modifier.weight(1f)) { onFeature(f) } }
-                if (row.size == 1) Spacer(Modifier.weight(1f))
-            }
-        }
+        Feature.entries.forEach { f -> FeatureTile(f, snapshot.status(f), Modifier.fillMaxWidth()) { onFeature(f) } }
 
         SectionTitle(stringResource(R.string.home_nudges))
         NudgeCard(nudges)
@@ -219,14 +221,56 @@ private fun hm(minutes: Int): String {
 
 @Composable
 private fun FeatureTile(feature: Feature, status: Status, modifier: Modifier, onClick: () -> Unit) {
+    val label = statusLabel(status)
     Column(
-        modifier.glass(RoundedCornerShape(22.dp)).clickable(onClick = onClick).padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier.glass(RoundedCornerShape(24.dp)).clickable(onClick = onClick)
+            .semantics(mergeDescendants = true) { stateDescription = label }
+            .padding(start = 14.dp, top = 14.dp, end = 16.dp, bottom = 10.dp),
     ) {
-        IconBubble(feature.icon)
-        Text(stringResource(feature.title), style = MaterialTheme.typography.titleMedium)
-        StatusPill(status)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Illustration(feature.art, Modifier.size(60.dp))
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(stringResource(feature.title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(feature.short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.weight(1f))
+            StatusSwitch(status, label)
+        }
     }
+}
+
+/**
+ * The state of a protection drawn as a switch, with its word beside it so colour is never
+ * the only cue. It shows the state; changing it happens on the protection's page, behind
+ * the parent PIN where needed.
+ */
+@Composable
+private fun StatusSwitch(status: Status, label: String) {
+    val c = LocalStatusColors.current
+    val on = status == Status.ON
+    val tone = when (status) {
+        Status.ON -> c.on
+        Status.NEEDS_SETUP -> c.warn
+        else -> c.off
+    }
+    Text(label, style = MaterialTheme.typography.labelMedium, color = tone, fontWeight = FontWeight.SemiBold)
+    Spacer(Modifier.width(10.dp))
+    Switch(
+        checked = on,
+        onCheckedChange = null,
+        modifier = Modifier.scale(1.12f).clearAndSetSemantics { },
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = Color.White,
+            checkedTrackColor = c.on,
+            checkedBorderColor = c.on,
+            uncheckedThumbColor = tone,
+            uncheckedTrackColor = if (status == Status.NEEDS_SETUP) c.warnSoft else c.offSoft,
+            uncheckedBorderColor = tone.copy(alpha = 0.6f),
+        ),
+    )
 }
 
 @Composable
