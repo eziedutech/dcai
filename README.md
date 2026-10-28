@@ -359,6 +359,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 
 - **It is not tested with real children or families**, and it has not been reviewed by child-protection experts. The evaluation uses synthetic scenarios written for this project. Expert review and a consented pilot come next.
 - **Every assessment is an estimate and can be wrong.** The interface says so.
+- **It gives no medical or psychological advice and makes no diagnosis.** When a child's messages show distress, the child is encouraged to talk to a trusted adult today, the parent is asked to be with the child, and both see help channels from a manually verified list. Nothing in dcAI assesses or treats a child's health.
 - **Masking does not catch everything.** It misses names the system does not know and that are not introduced with a phrase such as "namaku", a class without a school, and places described in words ("near the blue shop").
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
 - **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.

@@ -50,7 +50,7 @@ class Digest(BaseModel):
 
 
 DIGEST_SYSTEM = (
-    "Role: a family digital wellbeing guide for parents of children aged 10 to 17. Input: "
+    "Role: a family guide to healthy digital habits for parents of children aged 10 to 17. Input: "
     "one week of aggregate numbers for one child: safety events by kind, the highest risk "
     "level per day, minutes online per category per day, minutes online during bedtime, "
     "the longest continuous session and time requests. Task: a short weekly summary for "

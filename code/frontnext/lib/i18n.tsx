@@ -57,9 +57,9 @@ const id = {
   "home.feat.c1.i1": "Situs dewasa, judi, narkoba, dan kebencian ditahan di ponsel",
   "home.feat.c1.i2": "Ajakan berbahaya di obrolan dikenali sebagai pola",
   "home.feat.c1.i3": "Orang tua bisa mengizinkan situs yang keliru ditahan",
-  "home.feat.c2.t": "Kesejahteraan Mental",
+  "home.feat.c2.t": "Pergaulan Digital Aman",
   "home.feat.c2.b":
-    "Menjaga anak dari perundungan siber (cyberbullying), manipulasi psikologis (grooming), dan kebiasaan doomscrolling.",
+    "Menjaga anak dari perundungan siber (cyberbullying), bujuk rayu orang asing (grooming), dan kebiasaan doomscrolling.",
   "home.feat.c2.i1": "Pola pendekatan berisiko dikenali lintas pesan",
   "home.feat.c2.i2": "Pengingat untuk anak pada saat itu juga",
   "home.feat.c2.i3": "Jeda setelah lama menonton video pendek",
@@ -419,9 +419,9 @@ const en: Record<Key, string> = {
   "home.feat.c1.i1": "Adult, gambling, drug and hate sites are held on the phone",
   "home.feat.c1.i2": "Dangerous invitations in chats are recognised as a pattern",
   "home.feat.c1.i3": "Parents can allow a site that was held by mistake",
-  "home.feat.c2.t": "Mental Wellbeing",
+  "home.feat.c2.t": "Safe Online Interactions",
   "home.feat.c2.b":
-    "Keeping children safe from cyberbullying, psychological manipulation (grooming) and doomscrolling.",
+    "Keeping children safe from cyberbullying, grooming by strangers and doomscrolling.",
   "home.feat.c2.i1": "Risky approach patterns are recognised across messages",
   "home.feat.c2.i2": "A reminder for the child in the moment",
   "home.feat.c2.i3": "A break after watching short video for a long time",

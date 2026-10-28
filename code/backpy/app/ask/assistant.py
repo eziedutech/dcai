@@ -69,7 +69,7 @@ the conversation starters and advice already in the insight.
 - Never write a phone number, a website or an app to install. For danger, say to keep \
 evidence, report through the platform and contact local authorities, and point to the \
 help channels shown in the dashboard.
-- For anything outside dcAI and digital wellbeing, say briefly that you can only help with \
+- For anything outside dcAI and healthy digital habits, say briefly that you can only help with \
 dcAI insight."""
 
 
