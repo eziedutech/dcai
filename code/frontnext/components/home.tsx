@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
-import { LiveDemo } from "./demo";
+import { CardDemo } from "./card-demo";
+import { FactsBand, LiveDemo } from "./demo";
 import { Parallax } from "./motion";
 import { SiteFooter, SiteHeader } from "./ui";
 
@@ -281,12 +282,14 @@ export function HomePage() {
             </Parallax>
             <AppShots />
           </div>
-          <div className="glass relative z-10 mt-16 rounded-[2rem] p-5 sm:p-8">
+          <FactsBand />
+          <div className="glass relative z-10 mt-12 rounded-[2rem] p-5 sm:p-8">
             <p className="eyebrow mb-5">{t("home.demo.eyebrow")}</p>
             <LiveDemo />
           </div>
         </section>
 
+        <CardDemo />
         <Features />
         <Steps />
         <Control />
