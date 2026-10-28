@@ -1,4 +1,4 @@
-"""Citizenship Coach: turns an assessment into a nudge for the child, insight for the
+"""Citizenship Guide: turns an assessment into a nudge for the child, insight for the
 parent and an optional one-minute lesson (spec section 8.3).
 
 Input is the level, the patterns, which side showed them, the age range and the language.
@@ -13,19 +13,22 @@ import re
 from dataclasses import dataclass
 from enum import StrEnum
 
-from app.coach.channels import load_channels
-from app.coach.schemas import CoachOutput
+from app.guide.channels import load_channels
+from app.guide.schemas import GuideOutput
 from app.llm import LLMClient, LLMError, LLMOutputInvalid, Usage
 from app.risk.schemas import Level, Pattern
 from app.scenarios.schema import ChildLabel
 
-log = logging.getLogger("dcai.coach")
+log = logging.getLogger("dcai.guide")
 
 _MIXED_EN = re.compile(r"\b(kamu|anak|ya|dong|nggak)\b", re.I)
 
 
 class Situation(StrEnum):
     APPROACH = "approach"  # a contact shows approach patterns toward the child
+    # An invitation to a fight, drugs, alcohol or a weapon, from either side. The value
+    # fits the insight.situation column (12 characters).
+    DANGEROUS_INVITE = "dangerous"
     BULLIED = "bullied"  # the child is the target of bullying or threats
     BULLYING = "bullying"  # the child's own messages are hurtful
     SHARED_DATA = "shared_data"  # the child gave away personal data
@@ -43,6 +46,8 @@ def situation(contact_labels: set[str], child_labels: set[str], support_needed: 
     approach = contact_labels & {str(p) for p in Pattern if p != Pattern.MENEKAN_MENGANCAM}
     if approach:
         return Situation.APPROACH
+    if ChildLabel.AJAKAN_BERBAHAYA in contact_labels | child_labels:
+        return Situation.DANGEROUS_INVITE
     if contact_labels & {str(x) for x in _PEER_HARM}:
         return Situation.BULLIED
     if child_labels & {str(x) for x in _PEER_HARM}:
@@ -75,6 +80,10 @@ bantuan di bawah" / "the help channels below"; the app shows verified channels i
 spelling needs them, as in "hati-hati", "akhir-akhir ini", "tiba-tiba". Plain sentences.
 - Situation "distress": support first. Warm words, encourage talking to a trusted adult \
 today, no analysis of the child, never mention methods or details of harm.
+- Situation "dangerous": someone invited the child, or the child invited others, to a \
+fight, drugs, alcohol or carrying a weapon. Help the child say no and step away safely, \
+with an easy excuse and a trusted adult to tell; no blame, no lecture. Give the parent \
+calm conversation starters about friends and pressure, never punishment or interrogation.
 - Situation "bullying": the child wrote hurtful messages. Guide toward empathy and repair, \
 still without shaming.
 - Level "mendesak": tell the parent to keep evidence (screenshots), not to confront the \
@@ -83,15 +92,15 @@ other person directly, and to report through the platform and local authorities.
 
 
 @dataclass(frozen=True)
-class CoachResult:
-    output: CoachOutput
+class GuideResult:
+    output: GuideOutput
     situation: Situation
     source: str  # model | template
     help_channels: tuple[str, ...]
     usage: Usage | None
 
 
-async def coach(
+async def guide(
     client: LLMClient,
     *,
     level: Level,
@@ -101,7 +110,7 @@ async def coach(
     support_needed: bool,
     age_range: str,
     language: str,
-) -> CoachResult:
+) -> GuideResult:
     sit = situation(contact_labels, child_labels, support_needed)
     channels = help_channels(level, sit, language)
     payload = json.dumps(
@@ -116,25 +125,25 @@ async def coach(
     )
     try:
         result = await client.complete_json(
-            purpose="coach",
+            purpose="guide",
             system=SYSTEM,
             user=payload,
-            schema=CoachOutput,
+            schema=GuideOutput,
             max_tokens=3000,
-            # Coach output is long; Fireworks timed out at 20 s on every coach call.
+            # Guide output is long; Fireworks timed out at 20 s on every guide call.
             timeout=45.0,
         )
         out = result.value
         if language == "en" and _MIXED_EN.search(out.model_dump_json()):
-            raise LLMOutputInvalid("coach: English output mixed with Indonesian")
+            raise LLMOutputInvalid("guide: English output mixed with Indonesian")
         if level == Level.AMAN:
             out = out.model_copy(update={"micro_lesson": None})
-        return CoachResult(out, sit, "model", channels, result.usage)
+        return GuideResult(out, sit, "model", channels, result.usage)
     except LLMError as exc:
-        log.warning("coach_unavailable error=%s situation=%s", type(exc).__name__, sit.value)
-        from app.coach.templates import template
+        log.warning("guide_unavailable error=%s situation=%s", type(exc).__name__, sit.value)
+        from app.guide.templates import template
 
-        return CoachResult(template(sit, level, language), sit, "template", channels, None)
+        return GuideResult(template(sit, level, language), sit, "template", channels, None)
 
 
 def instant(
@@ -144,13 +153,13 @@ def instant(
     child_labels: set[str],
     support_needed: bool,
     language: str,
-) -> CoachResult:
+) -> GuideResult:
     """The reviewed template for this situation, at once and without a model. Sent to the
-    phone with the new level so the child is guided while the model's Coach is written."""
-    from app.coach.templates import template
+    phone with the new level so the child is guided while the model's Guide is written."""
+    from app.guide.templates import template
 
     sit = situation(contact_labels, child_labels, support_needed)
-    return CoachResult(
+    return GuideResult(
         template(sit, level, language), sit, "template", help_channels(level, sit, language), None
     )
 

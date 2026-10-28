@@ -1,11 +1,11 @@
-"""Citizenship Coach output (spec section 8.3)."""
+"""Citizenship Guide output (spec section 8.3)."""
 
 import re
 from typing import Annotated
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, StringConstraints
 
-from app.text import CoachText, sentence_count
+from app.text import GuideText, sentence_count
 
 
 def _max_two_sentences(text: str) -> str:
@@ -39,7 +39,7 @@ def _no_punishment(text: str) -> str:
     return text
 
 
-Line = Annotated[CoachText, StringConstraints(max_length=240)]
+Line = Annotated[GuideText, StringConstraints(max_length=240)]
 # Starters and the "do" list are what a parent acts on: no punishment there. The "dont" list
 # may name punishment, because that is where "do not punish" belongs.
 ActLine = Annotated[Line, AfterValidator(_no_punishment)]
@@ -48,8 +48,8 @@ ActLine = Annotated[Line, AfterValidator(_no_punishment)]
 class ParentInsight(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    what_we_see: Annotated[CoachText, StringConstraints(max_length=400)]
-    why_it_matters: Annotated[CoachText, StringConstraints(max_length=400)]
+    what_we_see: Annotated[GuideText, StringConstraints(max_length=400)]
+    why_it_matters: Annotated[GuideText, StringConstraints(max_length=400)]
     conversation_starters: list[ActLine] = Field(min_length=3, max_length=3)
     do: list[ActLine] = Field(min_length=1, max_length=4)
     dont: list[Line] = Field(min_length=1, max_length=4)
@@ -58,15 +58,15 @@ class ParentInsight(BaseModel):
 class MicroLesson(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    title: Annotated[CoachText, StringConstraints(max_length=80)]
-    body: Annotated[CoachText, StringConstraints(max_length=600), AfterValidator(_no_blame)]
+    title: Annotated[GuideText, StringConstraints(max_length=80)]
+    body: Annotated[GuideText, StringConstraints(max_length=600), AfterValidator(_no_blame)]
 
 
-class CoachOutput(BaseModel):
+class GuideOutput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     child_nudge: Annotated[
-        CoachText,
+        GuideText,
         StringConstraints(max_length=280),
         AfterValidator(_max_two_sentences),
         AfterValidator(_no_blame),

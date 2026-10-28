@@ -34,16 +34,16 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 Parental control apps tend to either block or show parents everything. dcAI guides the child first, then gives the parent a summary.
 
 1. **Mask.** Names, phone numbers, emails, card numbers, addresses and schools are replaced by markers before any model sees a message.
-2. **Label.** Llama labels each message with behaviour patterns: building closeness fast, asking for secrecy, moving to a private app, asking for personal data or photos, offering gifts, testing limits, pressure, bullying, distress.
+2. **Label.** Llama labels each message with behaviour patterns: building closeness fast, asking for secrecy, moving to a private app, asking for personal data or photos, offering gifts, testing limits, pressure, bullying, invitations to fights, drugs, alcohol or weapons, distress.
 3. **Assess.** When the recent messages show a signal, Muse Spark assesses the conversation window. A deterministic rule floor sits under the model: the score is the highest of the model, the rules and the previous score.
-4. **Guide.** When the level rises, or a child first shows distress, the Citizenship Coach gives the child a nudge of at most two sentences, the parent insight with three conversation starters and what to do and avoid, and a one-minute lesson.
+4. **Guide.** When the level rises, or a child first shows distress, the Citizenship Guide gives the child a nudge of at most two sentences, the parent insight with three conversation starters and what to do and avoid, and a one-minute lesson.
 
 ### Built today
 
 - **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on an open-weights inference provider. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
-- **Citizenship Coach** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/coach/channels.json`, where only manually verified entries carry a number.
+- **Citizenship Guide** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/guide/channels.json`, where only manually verified entries carry a number.
 - **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost, and it is the default stage 1 screener. Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
@@ -53,9 +53,10 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Images, judged on the phone.** An app with the dcAI SDK asks dcAI about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2).
 - **Sites, matched on the phone.** A DNS-only VPN: the phone's DNS server is an address inside the VPN and only that address is routed into it, so app traffic never passes through dcAI. Each looked-up name and its parent domains are matched on the phone against category lists built from UT1 Blacklists (CC BY-SA 4.0): adult, gambling, scams, malware, dating, drugs and hate, about 5.1 million domains in 26 MB of 40-bit hashes, so the phone holds no readable list. A listed site gets "no such domain" and the child a notification saying which category and why; any other name goes to the network's own resolver. The server receives the category, at most once per category in 30 minutes, never the site's name or a lookup history. The child can show a held site to the parent, who allows it on the phone with the PIN; the server gets a false-detection note with the category only. The VPN key icon shows the whole time, and switching the VPN off is an event for the parent.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
-- **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
+- **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Guide call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
 - **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
+- **Time online.** The parent sets daily limits for school days and weekends, limits per category (video, games, social, other), bedtime with a wind-down reminder, breaks after long short-video sessions, and apps that are always allowed. The phone counts foreground time from Android's usage access (app names and minutes, never what is inside an app), reminds the child before time runs out, and shows a break screen at a limit or at bedtime. The child can ask for more time with a short reason, masked on the phone and again on the server; Muse Spark suggests allow, allow part or not now, and the parent decides on the dashboard, which reaches the phone over the live stream. The server keeps minutes per category per day, bedtime minutes and the longest session. Muse Spark also writes a weekly summary for the parent from aggregate numbers and can propose limits, which change nothing until the parent saves them.
 - **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
 - **58 synthetic scenarios** (621 messages, seven groups, including invitations to fights, drugs, alcohol or weapons for ages 10 to 17), with a locked 40/18 dev/test split. New scenarios join the split by the same hash, so no earlier id moved.
 
@@ -100,7 +101,7 @@ uv run python -m app.scenarios.split --check           # check the locked split
 
 ```
 code/backpy/   FastAPI: llm (provider pool), privacy (masking), risk (stage 1, floor, stage 2,
-               pipeline), coach, analysis (per-conversation queue), live (SSE broker), consent,
+               pipeline), guide, analysis (per-conversation queue), live (SSE broker), consent,
                auth, api (/v1, /v1/device), migrations (Alembic), tests
 data/          scenarios (synthetic JSON, split.json), privacy (masking test cases)
 eval/          measurement output (ids and labels only, no text)
@@ -175,10 +176,10 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 316 passed |
+| Unit and API tests on SQLite | 360 passed |
 | The database tests again on PostgreSQL 18 | 86 passed |
 | Dashboard: type check, lint, production build | passing |
-| Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets), lint, debug APK | 26 passed |
+| Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets, time rules), lint, debug APK | 35 passed |
 
 ### Full pipeline on the locked test split (final)
 
@@ -274,17 +275,34 @@ Four synthetic messages from a stranger in a game chat, sent at once through `/v
 | Level `mendesak` with a template nudge | 5.9 s |
 | The model's nudge for `mendesak` | 15.6 s |
 
-Model calls: 4 stage 1, 1 stage 2, 1 Coach. Before the queue merged them, the same run made 2 Coach calls and reached `mendesak` later, because a Coach for the out-of-date `perhatian` level held the queue.
+Model calls: 4 stage 1, 1 stage 2, 1 Guide. Before the queue merged them, the same run made 2 Guide calls and reached `mendesak` later, because a Guide for the out-of-date `perhatian` level held the queue.
 
 ### Ask dcAI, one live question
 
 "Apa yang terjadi minggu ini?" on the synthetic run above: 3 Muse Spark turns (two tool calls, then the answer), about 10 s, about USD 0.012. The answer used only dashboard data, named the child after the alias was put back, and said that message text is not stored.
 
-### Citizenship Coach
+### Invitations to delinquency, a new label
+
+`ajakan_berbahaya` covers invitations to fights (tawuran), offering drugs, pills or alcohol, and carrying sharp weapons, from either side of the chat. One label sets the floor at `waspada`. Six new `kenakalan` scenarios and two look-alike hard cases (silat sparring, an anti-drug poster project), run through the full pipeline with the production screener (`eval/pipeline/dev-kenakalan.md`, `test-kenakalan.md`):
+
+| Scenario | Split | Expected | Final |
+| --- | --- | --- | --- |
+| kenakalan-001 | dev | waspada | waspada |
+| kenakalan-002 | dev | waspada | waspada |
+| kenakalan-003 | dev | mendesak | mendesak |
+| kenakalan-004 | dev | waspada | mendesak |
+| kasus_sulit-010 (silat) | dev | aman | aman |
+| kasus_sulit-011 (poster) | dev | aman | waspada |
+| kenakalan-005 | test | waspada | waspada |
+| kenakalan-006 | test | waspada | mendesak |
+
+All six reach `waspada` or higher. The poster project is a false alarm: the distilled stage 1 student was trained before this label existed, so it sometimes misses the label and sometimes puts it on harmless messages, and one label is enough for the floor. Stage 1 for this label: precision 0.67 and recall 0.55 on dev (11 messages), 0.75 and 1.00 on test (3 messages). Retraining the student with the label is the next step.
+
+### Citizenship Guide
 
 9 cases covering every situation (approach, child bullied, child bullying, shared data, distress, general) at `perhatian`, `waspada` and `mendesak`, in Indonesian and English. All 9 were answered by the model and passed the schema and tone rules. Latency was 4 to 8 s on the Meta Model API and 18 to 27 s on Fireworks. The tone review by a person (spec rubric, target 4 of 5) is pending.
 
-Found and fixed on the way: Fireworks timed out at 20 s on every coach call (the coach now gets 45 s); English output mixed in Indonesian words (now rejected and replaced by a template); and Indonesian reduplication lost its hyphen ("hati hati", now repaired in code).
+Found and fixed on the way: Fireworks timed out at 20 s on every guide call (the guide now gets 45 s); English output mixed in Indonesian words (now rejected and replaced by a template); and Indonesian reduplication lost its hyphen ("hati hati", now repaired in code).
 
 ### Distillation: Muse Spark teacher, Llama 3.1 8B student
 
@@ -332,6 +350,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.
 - **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
 - **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible about once in 200,000 checks. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
+- **The invitation label is new and screened by a model trained before it existed.** It raises false alarms (one of two look-alike hard cases on dev) until the student is retrained; see Results.
 - The consent text has not had legal review.
 
 ## Credits and licenses

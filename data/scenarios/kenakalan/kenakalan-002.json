@@ -1,0 +1,79 @@
+{
+  "id": "kenakalan-002",
+  "group": "kenakalan",
+  "title": "Teman mabar menawarkan pil biar kuat begadang",
+  "channel": "game_chat",
+  "contact_role": "teman_online_lama",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "gg tadi, rank kita naik lagi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "mantap bang, besok push lagi ya",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "besok turnamen online sampe subuh, kuat ga lo begadang",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "wah gatau bang, biasanya jam 12 udah ngantuk",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "gw ada pil biar melek, temen gw jual. cobain satu aja, aman kok",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "pil apaan bang? obat dokter?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "bukan, pil yg biasa dipake anak tongkrongan. gratis buat lo yg pertama",
+      "labels": [
+        "ajakan_berbahaya",
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku takut bang, nanti kenapa2",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "elah dikit doang. nanti gw kirim lewat ojol ke rumah lo ya",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "nanti aku pikir dulu deh",
+      "labels": []
+    }
+  ],
+  "notes": "Teman main game yang sudah lama dikenal menawarkan pil tidak resmi agar kuat begadang, gratis untuk pertama kali. Mulai berisiko di pesan 5.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

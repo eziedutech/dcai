@@ -1,0 +1,78 @@
+{
+  "id": "kenakalan-004",
+  "group": "kenakalan",
+  "title": "Anak mengajak teman membawa senjata tajam",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 5,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "eh tadi si Bima dipalak lagi sama anak sekolah sebelah",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "serius? di mana?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "di halte depan, hpnya hampir diambil",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "parah. kita gabisa diem aja",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "besok kita samperin mereka. bawa sajam aja buat jaga2",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "waduh jangan bro, bahaya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kalo ga bawa kita yg kalah. aku bawa celurit punya kakek",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "mending lapor wali kelas aja deh",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "lapor mah ga ngaruh. pokoknya besok kumpul jam 3",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "aku ga ikut ya",
+      "labels": []
+    }
+  ],
+  "notes": "Anak sendiri yang mengajak teman membawa senjata tajam untuk membalas perlakuan sekolah lain, sementara temannya menyarankan melapor. Mulai berisiko di pesan 5.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

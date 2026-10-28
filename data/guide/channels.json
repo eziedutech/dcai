@@ -1,5 +1,5 @@
 {
-  "about": "Help and reporting channels shown by the Citizenship Coach. The model never writes a number or a site; only entries here with verified=true and a verified_by and verified_on value are shown. Fill numbers and links only after checking them at the official source. 'distress' lines replace 'general' when a child expresses distress.",
+  "about": "Help and reporting channels shown by the Citizenship Guide. The model never writes a number or a site; only entries here with verified=true and a verified_by and verified_on value are shown. Fill numbers and links only after checking them at the official source. 'distress' lines replace 'general' when a child expresses distress.",
   "general": {
     "id": [
       "Ceritakan ke orang dewasa yang kamu percaya, misalnya orang tua, kakak, atau guru.",

@@ -22,6 +22,7 @@ class KeywordScreening:
         "foto": "meminta_data_pribadi",
         "koin": "menawarkan_hadiah",
         "sedih": "menyakiti_diri",
+        "tawuran": "ajakan_berbahaya",
     }
 
     def __init__(self, fail_on: str | None = None):
@@ -59,14 +60,14 @@ class ScriptedReasoning:
         self.calls = 0
 
     async def complete_json(self, **kw):
-        if self.fail and kw.get("purpose") == "coach":
+        if self.fail and kw.get("purpose") == "guide":
             raise TransientLLMError("HTTP 503", status=503)
-        if kw.get("purpose") == "coach":
-            # The coach shares the reasoning pool; answer it without spending a score.
-            from app.coach.coach import Situation
-            from app.coach.templates import template
+        if kw.get("purpose") == "guide":
+            # The guide shares the reasoning pool; answer it without spending a score.
+            from app.guide.guide import Situation
+            from app.guide.templates import template
 
-            self.coach_calls = getattr(self, "coach_calls", 0) + 1
+            self.guide_calls = getattr(self, "guide_calls", 0) + 1
             out = template(Situation.APPROACH, Level.WASPADA, "id")
             return LLMResult(value=out, usage=USAGE, attempts=(USAGE,))
         self.calls += 1
@@ -112,11 +113,25 @@ def seen_with(contact=(), child=(), unavailable=0) -> Seen:
         ((), ("berbagi_data_pribadi",), True, 0, Level.PERHATIAN),
         ((), ("menyakiti_diri",), True, 0, Level.PERHATIAN),
         ((), (), True, 1, Level.PERHATIAN),
+        (("ajakan_berbahaya",), (), True, 0, Level.WASPADA),
+        ((), ("ajakan_berbahaya",), True, 0, Level.WASPADA),
+        (("ajakan_berbahaya",), (), False, 0, Level.WASPADA),
     ],
 )
 def test_rule_floor(contact, child, known, unavailable, level):
     floor = rule_floor(seen_with(contact, child, unavailable), contact_known=known)
     assert floor.level == level
+
+
+def test_dangerous_invite_reason_and_parent_text():
+    from app.risk.pipeline import _PRIORITY, _RULE_RATIONALE, ConversationAnalyzer
+
+    floor = rule_floor(seen_with(child=("ajakan_berbahaya",)), True)
+    assert "dangerous_invite" in floor.reasons
+    assert not floor.support_needed
+    assert "dangerous_invite" in _PRIORITY
+    assert set(_PRIORITY) == set(_RULE_RATIONALE)
+    assert ConversationAnalyzer._floor_text(floor) == _RULE_RATIONALE["dangerous_invite"]
 
 
 def test_distress_sets_support_flag():
@@ -154,6 +169,15 @@ async def test_floor_overrides_a_lower_model_score_and_explains_itself():
     assert step.level == Level.MENDESAK
     assert step.source == "rules"
     assert "merahasiakan" in step.rationale
+
+
+async def test_dangerous_invite_from_a_known_peer_reaches_waspada():
+    a = analyzer(reasoning=ScriptedReasoning([40]), contact_known=True)
+    await a.add("contact", "halo")
+    step = await a.add("contact", "ikut tawuran ntar sore")
+    assert step.level == Level.WASPADA
+    assert step.source == "rules"
+    assert "berbahaya" in step.rationale
 
 
 async def test_model_outage_falls_back_to_floor_with_low_confidence():

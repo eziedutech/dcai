@@ -16,6 +16,7 @@ class Group(StrEnum):
     DATA_PRIBADI = "data_pribadi"  # the child shares personal data
     PENDEKATAN_BERISIKO = "pendekatan_berisiko"  # staged risky approach by a stranger
     MENYAKITI_DIRI = "menyakiti_diri"  # non-explicit self-harm topic: support response
+    KENAKALAN = "kenakalan"  # invitations to fights, drugs, alcohol or weapons
 
 
 class ChildLabel(StrEnum):
@@ -25,6 +26,9 @@ class ChildLabel(StrEnum):
     KATA_KASAR = "kata_kasar"
     BERBAGI_DATA_PRIBADI = "berbagi_data_pribadi"
     MENYAKITI_DIRI = "menyakiti_diri"
+    # Invites or pushes someone toward a fight (tawuran), drugs, illegal pills, alcohol or
+    # carrying a sharp weapon. Either side: a child can also invite others.
+    AJAKAN_BERBAHAYA = "ajakan_berbahaya"
 
 
 Label = Pattern | ChildLabel
@@ -95,6 +99,7 @@ _GROUP_LEVELS: dict[Group, set[Level]] = {
     Group.DATA_PRIBADI: {Level.PERHATIAN},
     Group.PENDEKATAN_BERISIKO: {Level.WASPADA, Level.MENDESAK},
     Group.MENYAKITI_DIRI: {Level.AMAN, Level.PERHATIAN, Level.WASPADA, Level.MENDESAK},
+    Group.KENAKALAN: {Level.WASPADA, Level.MENDESAK},
 }
 
 

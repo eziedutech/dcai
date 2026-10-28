@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Salinan bagian 14 dari spesifikasi pembangunan dcAI, tanpa perubahan isi.
+Salinan bagian 14 dari spesifikasi pembangunan dcAI. Satu penyesuaian istilah: modul bimbingan disebut Citizenship Guide (Pendamping), `app/guide`.
 
 Penyesuaian struktur repo (alasan: aturan susunan folder pemilik proyek):
 
@@ -28,11 +28,11 @@ dcai/
   Makefile               perintah standar
   .env.example           nama variabel, tanpa nilai
   docs/                  keputusan arsitektur (ADR), log harian
-  backend/               FastAPI, modul risk, coach, consent, privacy, sim
+  backend/               FastAPI, modul risk, guide, consent, privacy, sim
     app/
       llm/               LLMClient, MuseClient, OpenWeightsClient
       risk/              tahap 1, tahap 2, lantai aturan, skema
-      coach/             prompt dan skema keluaran
+      guide/             prompt dan skema keluaran
       privacy/           penyamaran, deteksi data pribadi
       api/               rute /v1
     tests/
@@ -87,7 +87,7 @@ Keluaran: HANYA JSON sesuai skema (risk_score, level, patterns_observed,
 trajectory, rationale_for_parent, confidence).
 ```
 
-**Kerangka prompt Citizenship Coach:**
+**Kerangka prompt Citizenship Guide:**
 
 ```text
 Peran: pendamping kewarganegaraan digital yang hangat. Masukan: level,
@@ -103,7 +103,7 @@ nomor atau situs layanan, pakai daftar kanal dari konfigurasi.
 - [ ] Buat monorepo sesuai struktur di atas dan `Makefile` yang berjalan.
 - [ ] Implementasikan `LLMClient` dan `MuseClient` dengan satu panggilan nyata ke API, memakai `MUSE_MODEL`.
 - [ ] Implementasikan `OpenWeightsClient` sebagai cadangan dengan antarmuka yang sama.
-- [ ] Tambahkan skema Pydantic untuk keluaran Tahap 2 dan Coach, beserta pengujian validasi.
+- [ ] Tambahkan skema Pydantic untuk keluaran Tahap 2 dan Guide, beserta pengujian validasi.
 - [ ] Tambahkan pengujian yang gagal bila teks pesan muncul di log.
 - [ ] Atur CI: lint dan uji pada setiap push.
 - [ ] Tulis `README.md` awal, termasuk bagian keterbatasan dan peringatan data sintetis.

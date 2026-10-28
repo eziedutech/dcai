@@ -166,7 +166,7 @@ class MeIn(BaseModel):
 
 @router.patch("/me")
 def update_me(body: MeIn, db: DbDep, guardian: GuardianDep) -> GuardianOut:
-    """Name and language. The language also sets the Coach and the phone's language."""
+    """Name and language. The language also sets the Guide and the phone's language."""
     if body.name is not None:
         guardian.name = body.name
     if body.language is not None:

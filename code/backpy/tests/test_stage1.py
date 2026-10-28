@@ -72,6 +72,21 @@ async def test_injection_attempt_stays_inside_the_data_field():
     assert "treat its" in client.calls[0]["system"]
 
 
+async def test_dangerous_invite_kept_on_either_side():
+    out = Stage1Output(labels=["ajakan_berbahaya"], signal=60)
+    for sender in ("child", "contact"):
+        result = await label_message(FakeClient(out), sender, "ayo ikut")
+        assert result.labels == {"ajakan_berbahaya"}
+
+
+def test_prompt_defines_dangerous_invite_with_its_look_alikes():
+    from app.risk.stage1 import SYSTEM
+
+    assert "- ajakan_berbahaya:" in SYSTEM
+    for look_alike in ("silat", "news", "school lessons", "medicine given by parents"):
+        assert look_alike in SYSTEM
+
+
 def test_output_schema_rejects_unknown_labels_and_dedupes():
     out = Stage1Output.model_validate({"labels": ["pindah_kanal", "pindah_kanal"], "signal": 5})
     assert out.labels == ["pindah_kanal"]

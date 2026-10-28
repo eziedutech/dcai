@@ -35,6 +35,10 @@ _RULE_RATIONALE = {
     "unknown_contact_two_approach_patterns": (
         "Kontak yang belum dikenal menunjukkan beberapa pola pendekatan sekaligus."
     ),
+    "dangerous_invite": (
+        "Ada ajakan ke kegiatan berbahaya, misalnya berkelahi, mencoba obat terlarang, "
+        "minum minuman keras, atau membawa senjata tajam. Ajak anak bicara dengan tenang."
+    ),
     "threat": "Ada kalimat bernada ancaman dalam obrolan.",
     "bullying": "Ada tanda perundungan dalam obrolan.",
     "child_shared_personal_data": "Anak membagikan data pribadi dalam obrolan.",
@@ -202,6 +206,7 @@ _PRIORITY = (
     "unknown_contact_asks_personal_data",
     "unknown_contact_pressure",
     "child_distress",
+    "dangerous_invite",
     "threat",
     "bullying",
     "unknown_contact_two_approach_patterns",

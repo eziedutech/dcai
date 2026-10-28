@@ -6,7 +6,7 @@ Status: accepted, 27 Oct 2026
 
 dcAI Guardian runs on the child's phone. The phone sends only
 flagged, masked messages, image labels and confirmed false detections. Stage 2 measured
-p50 6.1 s and p95 15.3 s on the dev split, and the Coach adds 4 to 10 s, so a phone that
+p50 6.1 s and p95 15.3 s on the dev split, and the Guide adds 4 to 10 s, so a phone that
 waits for the full analysis would hold a connection for up to 25 s per message, and a
 child about to answer "send me your photo" would get no guidance in that time.
 
@@ -18,10 +18,10 @@ child about to answer "send me your photo" would get no guidance in that time.
   token. Pairing needs an active consent.
 - **One queue per conversation, in process.** `POST /v1/device/messages` answers `202` at
   once. A worker per conversation handles messages in order. When several are waiting,
-  stage 2 and the Coach run only for the last of them, with the debt carried forward, so
-  an out-of-date level is never coached. Consent is checked again when a message leaves the
+  stage 2 and the Guide run only for the last of them, with the debt carried forward, so
+  an out-of-date level is never guided. Consent is checked again when a message leaves the
   queue. The simulator endpoint `/v1/messages/analyze` goes through the same queue and waits.
-- **Level first, Coach after.** The level is stored and published as soon as stage 2
+- **Level first, Guide after.** The level is stored and published as soon as stage 2
   returns, with the reviewed template nudge for the situation; the model's nudge follows.
 - **SSE with replay.** One in-memory broker with keys `device:<id>` and `child:<id>`, the
   last 100 events per key, `Last-Event-ID` replay, a heartbeat and a maximum stream length

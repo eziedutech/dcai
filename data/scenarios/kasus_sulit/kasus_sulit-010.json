@@ -1,0 +1,67 @@
+{
+  "id": "kasus_sulit-010",
+  "group": "kasus_sulit",
+  "title": "Jadwal latihan sparring silat",
+  "channel": "dm",
+  "contact_role": "pelatih",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "assalamualaikum, latihan silat minggu ini pindah ke hari sabtu ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "waalaikumsalam, iya pelatih. jam berapa?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "jam 7 pagi di aula sekolah. sabtu ada latihan sparring buat persiapan kejuaraan",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "sparring lawan siapa pelatih?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sesama anggota yang beratnya sama. jangan lupa bawa pelindung badan sama pelindung gigi",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "siap. aku boleh ajak adik nonton?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh, orang tua juga boleh nonton di pinggir",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke pelatih, nanti aku bilang ibu",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sip. ingat ya, jurus cuma dipakai di matras, bukan buat berantem di luar",
+      "labels": []
+    }
+  ],
+  "notes": "Pelatih silat mengabarkan jadwal sparring resmi dengan pelindung dan orang tua boleh menonton. Kata sparring dan jurus mirip ajakan berkelahi, padahal ini latihan olahraga yang diawasi.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

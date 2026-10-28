@@ -60,6 +60,8 @@ def rule_floor(seen: Seen, contact_known: bool) -> Floor:
         at_least(Level.WASPADA, "unknown_contact_pressure")
     if not contact_known and len(c & _APPROACH) >= 2:
         at_least(Level.PERHATIAN, "unknown_contact_two_approach_patterns")
+    if ChildLabel.AJAKAN_BERBAHAYA in c or ChildLabel.AJAKAN_BERBAHAYA in seen.child:
+        at_least(Level.WASPADA, "dangerous_invite")
     if Pattern.MENEKAN_MENGANCAM in c or Pattern.MENEKAN_MENGANCAM in seen.child:
         at_least(Level.PERHATIAN, "threat")
     if ChildLabel.PERUNDUNGAN in c or ChildLabel.PERUNDUNGAN in seen.child:

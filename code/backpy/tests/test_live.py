@@ -164,10 +164,10 @@ async def test_messages_arriving_together_share_one_stage2_call(state):
     assert [r.step.stage2_called for r in results] == [False, False, True]
     assert state.muse.calls == 1
     assert results[-1].step.level.value == "mendesak"
-    # The second message already raised the level, but its Coach would be out of date by
-    # the time it ran: one Coach call, for the final level, on the last message.
-    assert results[1].step.raised and results[1].coach is None
-    assert results[-1].coach is not None and state.muse.coach_calls == 1
+    # The second message already raised the level, but its Guide would be out of date by
+    # the time it ran: one Guide call, for the final level, on the last message.
+    assert results[1].step.raised and results[1].guide is None
+    assert results[-1].guide is not None and state.muse.guide_calls == 1
     assert not w.busy()
 
 

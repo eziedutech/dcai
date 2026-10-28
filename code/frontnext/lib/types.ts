@@ -2,7 +2,7 @@
 
 export type Lang = "id" | "en";
 export type Level = "aman" | "perhatian" | "waspada" | "mendesak";
-export type Scope = "percakapan" | "gambar" | "domain" | "suara" | "keyboard";
+export type Scope = "percakapan" | "gambar" | "domain" | "suara" | "keyboard" | "waktu";
 
 export type Guardian = { id: string; email: string; name: string; language: Lang };
 
@@ -97,4 +97,59 @@ export type AskOut = {
   source: "model" | "fallback";
   tools_used: string[];
   is_estimate: boolean;
+};
+
+// Time online (code/backpy/app/api/family.py).
+
+export type Category = "video" | "game" | "sosial" | "lain";
+export type Bedtime = { enabled: boolean; start: string; end: string };
+export type ScreenPolicy = {
+  enabled: boolean;
+  school_days: number[];
+  daily_limit_school: number | null;
+  daily_limit_weekend: number | null;
+  category_limits: Record<Category, number | null>;
+  bedtime_school: Bedtime;
+  bedtime_weekend: Bedtime;
+  wind_down_minutes: number;
+  session: { enabled: boolean; nudge_minutes: number; limit_minutes: number; break_minutes: number };
+  always_allowed: string[];
+};
+export type PolicyOut = { policy: ScreenPolicy; is_default: boolean };
+export type Suggestion = { policy: ScreenPolicy; rationale: string; source: "model" | "template" };
+
+export type UsageDay = {
+  day: string;
+  weekend: boolean;
+  minutes: Record<Category, number>;
+  total: number;
+  bedtime_minutes: number;
+  longest_session: number;
+  session_limits: number;
+};
+
+export type TimeAdvice = {
+  summary_for_parent: string;
+  recommendation: "izinkan" | "sebagian" | "tunda";
+  suggested_minutes: number;
+  rationale: string;
+  source?: string;
+};
+export type TimeRequest = {
+  id: string;
+  minutes: number;
+  reason: string;
+  status: "menunggu" | "diizinkan" | "ditolak" | "kedaluwarsa";
+  granted_minutes: number;
+  advice: TimeAdvice | null;
+  context: { used_today?: number; limit_today?: number | null; category?: Category | null; minutes_to_bedtime?: number | null };
+  created_at: string;
+  decided_at: string | null;
+};
+
+export type Digest = {
+  week_start: string;
+  output: { headline: string; summary: string; highlights: string[]; conversation_starters: string[]; suggestion: string };
+  source: string;
+  created_at: string;
 };

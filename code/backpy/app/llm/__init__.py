@@ -17,7 +17,7 @@ from app.llm.pool import PooledClient
 
 
 class MuseClient(PooledClient):
-    """Muse Spark for stage 2 and the Citizenship Coach. Endpoints may be the Meta Model
+    """Muse Spark for stage 2 and the Citizenship Guide. Endpoints may be the Meta Model
     API and other hosts of the same model; calls are spread across them."""
 
     family = "reasoning"

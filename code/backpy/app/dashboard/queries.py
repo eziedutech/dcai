@@ -13,7 +13,6 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.coach.coach import Situation, help_channels
 from app.consent.service import active_scopes
 from app.db.base import utcnow
 from app.db.models import (
@@ -25,6 +24,7 @@ from app.db.models import (
     Insight,
     RiskAssessment,
 )
+from app.guide.guide import Situation, help_channels
 from app.risk.schemas import Level
 
 _RANK = {lvl.value: i for i, lvl in enumerate(Level)}

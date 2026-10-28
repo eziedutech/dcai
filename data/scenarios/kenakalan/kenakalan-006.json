@@ -1,0 +1,80 @@
+{
+  "id": "kenakalan-006",
+  "group": "kenakalan",
+  "title": "Lawan main game menantang duel di dunia nyata",
+  "channel": "game_chat",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "11-13",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "noob banget lu main",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yee tadi lagnya parah",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "alasan aja bocah bodoh",
+      "labels": [
+        "kata_kasar"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "terserah deh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "berani ga ketemuan? kita duel beneran, bawa temen lu",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "ngapain duel, cuma game",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sekolah lu di mana? biar gw samperin",
+      "labels": [
+        "meminta_data_pribadi"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "gak mau kasih tau",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "awas lu, gw cari sampe ketemu",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku keluar aja deh",
+      "labels": []
+    }
+  ],
+  "notes": "Pemain tak dikenal mengejek, menantang berkelahi langsung, menanyakan sekolah, lalu mengancam. Mulai berisiko di pesan 3 dengan hinaan.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

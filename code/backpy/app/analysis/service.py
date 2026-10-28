@@ -2,7 +2,7 @@
 
 Every message goes through one queue per conversation, in order. The worker labels each
 message (stage 1), runs stage 2 only for the last message waiting in that queue, stores
-the assessment, runs the Coach when the level rises or distress first shows, records
+the assessment, runs the Guide when the level rises or distress first shows, records
 events and publishes live updates. Text lives only in the job and the in-memory window;
 it is never written to the database, a log or a live update.
 """
@@ -16,11 +16,11 @@ from dataclasses import dataclass, field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.coach.coach import CoachResult, coach, instant
 from app.consent.service import has_consent
 from app.consent.texts import Scope
 from app.db.base import session_factory
 from app.db.models import ChildProfile, Conversation, Event, Insight, RiskAssessment
+from app.guide.guide import GuideResult, guide, instant
 from app.live.broker import Broker, child_key, device_key
 from app.risk.pipeline import ConversationAnalyzer, Step
 from app.risk.schemas import Level
@@ -56,10 +56,10 @@ class Job:
 class Result:
     conversation_id: uuid.UUID
     step: Step
-    coach: CoachResult | None
+    guide: GuideResult | None
     events: tuple[str, ...]
-    # The Coach was due but left to a later message waiting in the same queue.
-    coach_deferred: bool = False
+    # The Guide was due but left to a later message waiting in the same queue.
+    guide_deferred: bool = False
 
 
 class Analyzers:
@@ -124,18 +124,18 @@ class Worker:
 
     async def _drain(self, cid: uuid.UUID) -> None:
         queue = self._queues[cid]
-        coach_due = False
+        guide_due = False
         try:
             while queue:
                 job, fut = queue.popleft()
                 try:
-                    result = await process(self.state, job, assess=not queue, coach_due=coach_due)
+                    result = await process(self.state, job, assess=not queue, guide_due=guide_due)
                 except Exception as exc:  # one failed message must not stop the queue
                     log.warning("analysis_failed error=%s", type(exc).__name__)
                     if fut is not None and not fut.done():
                         fut.set_exception(exc)
                     continue
-                coach_due = result.coach_deferred
+                guide_due = result.guide_deferred
                 if fut is not None and not fut.done():
                     fut.set_result(result)
         finally:
@@ -169,12 +169,12 @@ def _analyzer(state, db: Session, conversation: Conversation, child: ChildProfil
     return analyzer
 
 
-async def process(state, job: Job, *, assess: bool = True, coach_due: bool = False) -> Result:
-    """Analyse one message. The level goes out as soon as it is known; the Coach follows.
+async def process(state, job: Job, *, assess: bool = True, guide_due: bool = False) -> Result:
+    """Analyse one message. The level goes out as soon as it is known; the Guide follows.
 
     With assess=False more messages of this conversation are waiting: stage 2 and the
-    Coach are left to the last of them (coach_due carries the debt), so a level that is
-    already out of date is never coached."""
+    Guide are left to the last of them (guide_due carries the debt), so a level that is
+    already out of date is never guided."""
     bus = broker(state)
     with session_factory(state.settings.database_url)() as db:
         child = db.get(ChildProfile, job.child_id)
@@ -191,10 +191,10 @@ async def process(state, job: Job, *, assess: bool = True, coach_due: bool = Fal
         first_support = step.support_needed and not any(
             s.support_needed for s in analyzer.steps[:-1]
         )
-        due = coach_due or (step.raised and step.level != Level.AMAN) or first_support
-        run_coach = due and assess
+        due = guide_due or (step.raised and step.level != Level.AMAN) or first_support
+        run_guide = due and assess
         assessment = None
-        if step.raised or step.source == "model" or step.index == 1 or run_coach:
+        if step.raised or step.source == "model" or step.index == 1 or run_guide:
             assessment = RiskAssessment(
                 conversation_id=conversation.id,
                 score=step.score,
@@ -239,9 +239,9 @@ async def process(state, job: Job, *, assess: bool = True, coach_due: bool = Fal
             quick,
         )
 
-        coach_result = None
-        if run_coach:
-            coach_result = await coach(
+        guide_result = None
+        if run_guide:
+            guide_result = await guide(
                 state.muse,
                 level=step.level,
                 patterns=list(step.patterns),
@@ -251,7 +251,7 @@ async def process(state, job: Job, *, assess: bool = True, coach_due: bool = Fal
                 age_range=child.age_range,
                 language=job.language,
             )
-            out = coach_result.output
+            out = guide_result.output
             assert assessment is not None
             db.add(
                 Insight(
@@ -259,14 +259,14 @@ async def process(state, job: Job, *, assess: bool = True, coach_due: bool = Fal
                     child_nudge=out.child_nudge,
                     parent_insight=out.parent_insight.model_dump(),
                     micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
-                    situation=coach_result.situation.value,
-                    source=coach_result.source,
+                    situation=guide_result.situation.value,
+                    source=guide_result.source,
                 )
             )
             db.commit()
-            _publish_coach(bus, job, step, conversation.id, coach_result, thread_key)
+            _publish_guide(bus, job, step, conversation.id, guide_result, thread_key)
 
-    return Result(conversation.id, step, coach_result, tuple(events), due and not assess)
+    return Result(conversation.id, step, guide_result, tuple(events), due and not assess)
 
 
 def _publish_step(
@@ -278,7 +278,7 @@ def _publish_step(
     stored: bool,
     thread_key,
     app_name,
-    quick: CoachResult | None,
+    quick: GuideResult | None,
 ) -> None:
     cid = str(conversation_id)
     guardian = child_key(job.child_id)
@@ -327,8 +327,8 @@ def _publish_step(
         )
 
 
-def _publish_coach(
-    bus: Broker, job: Job, step: Step, conversation_id, r: CoachResult, thread_key
+def _publish_guide(
+    bus: Broker, job: Job, step: Step, conversation_id, r: GuideResult, thread_key
 ) -> None:
     cid, out = str(conversation_id), r.output
     lesson = out.micro_lesson.model_dump() if out.micro_lesson else None

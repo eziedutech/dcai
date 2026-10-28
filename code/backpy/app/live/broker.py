@@ -2,7 +2,7 @@
 
 Keys are "device:<id>" (the child's phone: nudges, conversation levels, config changes)
 and "child:<id>" (the guardian's dashboard: events and assessments). Payloads carry
-levels, labels and Coach output, never message text.
+levels, labels and Guide output, never message text.
 
 Each key keeps its last events in memory, so a client that reconnects with Last-Event-ID
 gets what it missed. One process only: with several workers this needs a shared bus

@@ -56,3 +56,28 @@ def test_split_is_locked_and_matches_dataset():
     from app.scenarios.split import main
 
     assert main(["--check"]) == 0
+
+
+def test_kenakalan_group_and_dangerous_invite_label():
+    path = next(DEFAULT_DIR.glob("kenakalan/*.json"))
+    data = json.loads(path.read_text(encoding="utf-8"))
+    s = Scenario.model_validate(data)
+    assert any("ajakan_berbahaya" in m.labels for m in s.messages)
+    for change in (
+        lambda d: d.update(expected_final_level="perhatian"),
+        lambda d: [m.update(labels=[]) for m in d["messages"]],
+    ):
+        bad = copy.deepcopy(data)
+        change(bad)
+        with pytest.raises(ValidationError):
+            Scenario.model_validate(bad)
+
+
+def test_split_keeps_earlier_ids_in_place():
+    """Adding the kenakalan scenarios must not move any id that was already split."""
+    from app.scenarios.split import load_split
+
+    split = load_split()
+    assert {"kenakalan-005", "kenakalan-006"} <= set(split["test"])
+    assert {"kasus_sulit-004", "kasus_sulit-008", "kasus_sulit-009"} <= set(split["test"])
+    assert {"kasus_sulit-010", "kasus_sulit-011"} <= set(split["dev"])

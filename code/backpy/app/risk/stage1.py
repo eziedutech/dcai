@@ -52,6 +52,11 @@ Labels for either side:
 - berbagi_data_pribadi: the message gives away personal data (markers count)
 - menyakiti_diri: the writer expresses hopelessness, being a burden, or wanting to \
 disappear
+- ajakan_berbahaya: invites, pushes or dares someone to join a fight or tawuran, to try \
+or buy drugs, illegal pills or alcohol (miras), or to bring a sharp weapon \
+("ikut tawuran ntar malem", "cobain pil ini", "bawa sajam buat jaga-jaga"). Talk about \
+sports such as silat or boxing practice, news, school lessons or projects warning about \
+the dangers of drugs, or medicine given by parents is not this label.
 
 signal: 0 for ordinary chat, up to 100 for a message that alone is clearly risky. \
 A single mild label is usually 20 to 50.

@@ -51,4 +51,4 @@ def no_contacts(text: str) -> str:
 
 
 ModelText = Annotated[str, AfterValidator(_clean_and_check)]
-CoachText = Annotated[str, AfterValidator(_clean_and_check), AfterValidator(no_contacts)]
+GuideText = Annotated[str, AfterValidator(_clean_and_check), AfterValidator(no_contacts)]

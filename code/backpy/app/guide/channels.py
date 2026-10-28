@@ -1,4 +1,4 @@
-"""Help channels from data/coach/channels.json. Only manually verified entries carry a
+"""Help channels from data/guide/channels.json. Only manually verified entries carry a
 number or a link; the model never writes one (spec section 8.3)."""
 
 import json
@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-CHANNELS_FILE = Path(__file__).resolve().parents[4] / "data" / "coach" / "channels.json"
+CHANNELS_FILE = Path(__file__).resolve().parents[4] / "data" / "guide" / "channels.json"
 
 
 @dataclass(frozen=True)

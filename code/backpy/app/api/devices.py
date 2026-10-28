@@ -6,7 +6,7 @@ messages (already masked on the phone, masked again here), image labels and conf
 false detections, and follow its own live updates.
 
 What a phone may receive is limited to what the child may see: its configuration, levels
-of its own conversations and Coach nudges. Parent insight never goes to the phone.
+of its own conversations and Guide nudges. Parent insight never goes to the phone.
 """
 
 import uuid
@@ -460,13 +460,13 @@ async def _analyze(
         raise HTTPException(status.HTTP_404_NOT_FOUND, "conversation not found") from exc
     response.status_code = status.HTTP_200_OK
     nudge = None
-    if result.coach is not None:
-        out = result.coach.output
+    if result.guide is not None:
+        out = result.guide.output
         nudge = DeviceNudge(
-            situation=result.coach.situation.value,
+            situation=result.guide.situation.value,
             child_nudge=out.child_nudge,
             micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
-            help_channels=list(result.coach.help_channels),
+            help_channels=list(result.guide.help_channels),
         )
     return DeviceMessageOut(
         conversation_id=str(conversation.id),

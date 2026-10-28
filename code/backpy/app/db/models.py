@@ -197,7 +197,7 @@ class Insight(Base):
     child_nudge: Mapped[str] = mapped_column(String(280), nullable=False)
     parent_insight: Mapped[dict] = mapped_column(JSON, nullable=False)
     micro_lesson: Mapped[dict | None] = mapped_column(JSON)
-    # approach | bullied | bullying | shared_data | distress | general
+    # approach | dangerous | bullied | bullying | shared_data | distress | general
     situation: Mapped[str | None] = mapped_column(String(12))
     source: Mapped[str | None] = mapped_column(String(8))  # model | template
     created_at: Mapped[datetime] = _created()

@@ -2,7 +2,7 @@
 
 Model endpoints are grouped in two pools:
 
-- reasoning: stage 2 risk assessment and Citizenship Coach (Muse Spark)
+- reasoning: stage 2 risk assessment and Citizenship Guide (Muse Spark)
 - screening: stage 1 per-message labels (small open-weights model)
 
 Each pool lists endpoint names, for example REASONING_ENDPOINTS=meta,fw_muse.

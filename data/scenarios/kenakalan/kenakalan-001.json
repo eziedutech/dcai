@@ -1,0 +1,80 @@
+{
+  "id": "kenakalan-001",
+  "group": "kenakalan",
+  "title": "Diajak ikut tawuran sepulang sekolah",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "woy pada liat story anak sebelah ga",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "yg mana? aku blm buka ig",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "mereka nantangin sekolah kita. ntar pulang sekolah kita kumpul di belakang pasar, ikut tawuran ya",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hah serius? aku ada les jam 4",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "les mah bolos aja sekali. semua anak kelas 11 ikut",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku gak mau ah, takut ketauan",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "jangan cupu lah, kalo ga ikut ntar dicap pengecut sama anak2",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "yaudah nanti aku liat dulu deh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "bawa helm sama sabuk ya buat jaga2",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm oke",
+      "labels": []
+    }
+  ],
+  "notes": "Teman sekelas mengajak ikut tawuran dan mendesak anak membolos les. Mulai berisiko di pesan 3 saat ajakan tawuran muncul, lalu ada tekanan sosial agar ikut.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

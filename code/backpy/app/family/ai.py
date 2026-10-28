@@ -13,15 +13,15 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
-from app.coach.schemas import ActLine
 from app.family.policy import ScreenPolicy, Session, defaults_for_age
+from app.guide.schemas import ActLine
 from app.llm.base import LLMClient, LLMError
-from app.text import CoachText
+from app.text import GuideText
 
 log = logging.getLogger("dcai.family")
 
-Short = Annotated[CoachText, StringConstraints(max_length=240)]
-Long = Annotated[CoachText, StringConstraints(max_length=700)]
+Short = Annotated[GuideText, StringConstraints(max_length=240)]
+Long = Annotated[GuideText, StringConstraints(max_length=700)]
 Clock = Annotated[str, StringConstraints(pattern=r"^([01]\d|2[0-3]):[0-5]\d$")]
 
 _RULES = (
@@ -42,7 +42,7 @@ def _language(code: str) -> str:
 class Digest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    headline: Annotated[CoachText, StringConstraints(max_length=120)]
+    headline: Annotated[GuideText, StringConstraints(max_length=120)]
     summary: Long
     highlights: list[Short] = Field(min_length=2, max_length=4)
     conversation_starters: list[ActLine] = Field(min_length=3, max_length=3)

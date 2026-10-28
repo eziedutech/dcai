@@ -33,7 +33,7 @@ class AnalyzeIn(BaseModel):
     contact_name: Annotated[str, StringConstraints(max_length=40)] | None = None
 
 
-class CoachOut(BaseModel):
+class GuideOut(BaseModel):
     situation: str
     source: str  # model | template
     child_nudge: str
@@ -61,7 +61,7 @@ class AnalyzeOut(BaseModel):
     masked_kinds: list[str] = Field(description="kinds of personal data found, no values")
     # Present when this message raised the level to perhatian or above, or first showed
     # distress: the moment the child is guided and the parent informed.
-    coach: CoachOut | None = None
+    guide: GuideOut | None = None
 
 
 @router.post("/messages/analyze")
@@ -107,16 +107,16 @@ async def analyze(
 
 def analyze_out(result: Result) -> AnalyzeOut:
     step = result.step
-    coach_out = None
-    if result.coach is not None:
-        out = result.coach.output
-        coach_out = CoachOut(
-            situation=result.coach.situation.value,
-            source=result.coach.source,
+    guide_out = None
+    if result.guide is not None:
+        out = result.guide.output
+        guide_out = GuideOut(
+            situation=result.guide.situation.value,
+            source=result.guide.source,
             child_nudge=out.child_nudge,
             parent_insight=out.parent_insight.model_dump(),
             micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
-            help_channels=list(result.coach.help_channels),
+            help_channels=list(result.guide.help_channels),
         )
     return AnalyzeOut(
         conversation_id=str(result.conversation_id),
@@ -133,5 +133,5 @@ def analyze_out(result: Result) -> AnalyzeOut:
         support_needed=step.support_needed,
         source=step.source,
         masked_kinds=sorted(k.value for k in step.stage1.masked_kinds),
-        coach=coach_out,
+        guide=guide_out,
     )

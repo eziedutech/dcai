@@ -1,7 +1,7 @@
 [project]
 name = "dcai-backend"
 version = "0.1.0"
-description = "Digital Safe dcAI backend: risk pattern analysis, Citizenship Coach, consent"
+description = "Digital Safe dcAI backend: risk pattern analysis, Citizenship Guide, consent"
 requires-python = ">=3.14"
 license = "MIT"
 # Versions pinned exactly (latest stable on PyPI, checked 26 Oct 2026).
@@ -52,4 +52,4 @@ ignore = ["S101"]
 "tests/**" = ["S105", "S106", "S107", "S608"]
 # Consent paragraphs are kept one per line so a text change shows as one diff line.
 "app/consent/texts.py" = ["E501"]
-"app/coach/templates.py" = ["E501"]
+"app/guide/templates.py" = ["E501"]

@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.coach.schemas import CoachOutput
+from app.guide.schemas import GuideOutput
 from app.risk.schemas import Level, RiskAssessment, level_for
 
 
@@ -18,7 +18,7 @@ def risk(**over):
     return base
 
 
-def coach(**over):
+def guide(**over):
     base = {
         "child_nudge": "Obrolan ini tidak perlu dirahasiakan. Ceritakan ke orang tuamu.",
         "parent_insight": {
@@ -90,8 +90,8 @@ def test_surveillance_wording_rejected():
         RiskAssessment.model_validate(risk(rationale_for_parent="Terus memonitor anak."))
 
 
-def test_valid_coach():
-    out = CoachOutput.model_validate(coach())
+def test_valid_guidance():
+    out = GuideOutput.model_validate(guide())
     assert out.micro_lesson is None
     assert len(out.parent_insight.conversation_starters) == 3
 
@@ -107,30 +107,30 @@ def test_valid_coach():
 )
 def test_invalid_child_nudge(nudge):
     with pytest.raises(ValidationError):
-        CoachOutput.model_validate(coach(child_nudge=nudge))
+        GuideOutput.model_validate(guide(child_nudge=nudge))
 
 
 def test_three_starters_exactly():
-    data = coach()
+    data = guide()
     data["parent_insight"]["conversation_starters"] = ["a?", "b?"]
     with pytest.raises(ValidationError):
-        CoachOutput.model_validate(data)
+        GuideOutput.model_validate(data)
 
 
 def test_micro_lesson_is_required_but_nullable():
-    data = coach()
+    data = guide()
     del data["micro_lesson"]
     with pytest.raises(ValidationError):
-        CoachOutput.model_validate(data)
+        GuideOutput.model_validate(data)
     data["micro_lesson"] = {
         "title": "Rahasia yang baik",
         "body": "Rahasia yang membuatmu tidak nyaman boleh diceritakan.",
     }
-    assert CoachOutput.model_validate(data).micro_lesson is not None
+    assert GuideOutput.model_validate(data).micro_lesson is not None
 
 
 def test_schemas_export_json_schema():
-    for model in (RiskAssessment, CoachOutput):
+    for model in (RiskAssessment, GuideOutput):
         schema = model.model_json_schema()
         assert schema["additionalProperties"] is False
 

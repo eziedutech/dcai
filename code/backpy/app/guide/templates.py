@@ -1,10 +1,10 @@
-"""Fixed Coach texts, used when the model is unavailable or breaks a rule. Every
+"""Fixed Guide texts, used when the model is unavailable or breaks a rule. Every
 situation, level and language combination is validated by the same schema as model output
-(tests/test_coach.py), so a fallback can never show something the model would not be
+(tests/test_guide.py), so a fallback can never show something the model would not be
 allowed to show."""
 
-from app.coach.coach import Situation
-from app.coach.schemas import CoachOutput
+from app.guide.guide import Situation
+from app.guide.schemas import GuideOutput
 from app.risk.schemas import Level
 
 _T: dict[str, dict[Situation, dict]] = {
@@ -29,6 +29,29 @@ _T: dict[str, dict[Situation, dict]] = {
             "lesson": (
                 "Rahasia baik dan rahasia buruk",
                 "Rahasia baik, seperti kejutan ulang tahun, akan segera dibuka dan membuat orang senang. Rahasia buruk membuatmu tidak nyaman atau takut. Rahasia buruk selalu boleh kamu ceritakan ke orang dewasa yang kamu percaya, dan kamu tidak akan disalahkan.",
+            ),
+        },
+        Situation.DANGEROUS_INVITE: {
+            "child_nudge": "Ajakan berkelahi, mencoba obat atau minuman keras, dan membawa senjata tajam selalu boleh kamu tolak, cukup bilang kamu sudah ditunggu di rumah lalu menjauh. Ceritakan ke orang dewasa yang kamu percaya, kamu tidak akan disalahkan.",
+            "what_we_see": "Ada ajakan ke kegiatan berbahaya dalam obrolan, misalnya ikut berkelahi atau tawuran, mencoba obat terlarang atau minuman keras, atau membawa senjata tajam.",
+            "why_it_matters": "Di usia ini tekanan dari teman terasa kuat dan menolak bisa terasa sulit. Anak yang tahu cara menolak dan tahu bisa bercerita ke orang tua lebih mudah menjauh dari bahaya.",
+            "starters": [
+                "Akhir-akhir ini teman-temanmu lagi sering ngajak ke mana aja?",
+                "Kalau ada yang ngajak hal yang bikin kamu nggak enak hati, biasanya kamu jawab apa?",
+                "Kamu boleh pakai alasan Ibu atau Ayah buat menolak, misalnya bilang sudah dijemput. Mau kita latih bareng?",
+            ],
+            "do": [
+                "Dengarkan dengan tenang dan hargai kejujuran anak.",
+                "Sepakati kalimat menolak dan kode singkat agar anak bisa minta dijemput kapan saja.",
+                "Kenali teman-teman anak dan kegiatan mereka dengan rasa ingin tahu yang hangat.",
+            ],
+            "dont": [
+                "Jangan langsung menghukum atau menyita ponsel, karena anak bisa berhenti bercerita.",
+                "Jangan menginterogasi atau menuduh anak sebelum mendengar ceritanya.",
+            ],
+            "lesson": (
+                "Berani bilang tidak",
+                "Teman yang baik tidak memaksamu ikut berkelahi, mencoba obat, minum minuman keras, atau membawa senjata. Kamu boleh menolak dengan singkat, memakai alasan orang tuamu, lalu menjauh. Setelah itu ceritakan ke orang dewasa yang kamu percaya.",
             ),
         },
         Situation.BULLIED: {
@@ -156,6 +179,29 @@ _T: dict[str, dict[Situation, dict]] = {
                 "Good secrets, like a birthday surprise, end soon and make people happy. Bad secrets make you feel uncomfortable or scared. You can always tell a trusted adult about a bad secret, and you will not be blamed.",
             ),
         },
+        Situation.DANGEROUS_INVITE: {
+            "child_nudge": "You can always say no to fights, drugs, alcohol or carrying a weapon; just say you are expected at home and walk away. Tell an adult you trust; you will not be blamed.",
+            "what_we_see": "The chat contains an invitation to something dangerous, such as joining a fight, trying drugs or alcohol, or carrying a sharp weapon.",
+            "why_it_matters": "At this age pressure from friends feels strong and saying no can be hard. A child who knows how to refuse and knows they can tell a parent finds it easier to stay away from harm.",
+            "starters": [
+                "What have your friends been inviting you to lately?",
+                "When someone asks you to do something that feels wrong, what do you usually say?",
+                "You can always use me as your excuse, for example by saying I am picking you up. Shall we practise it together?",
+            ],
+            "do": [
+                "Listen calmly and value your child's honesty.",
+                "Agree on a way to say no and a short code word your child can send to be picked up at any time.",
+                "Get to know your child's friends and their activities with warm curiosity.",
+            ],
+            "dont": [
+                "Do not punish or take the phone away straight away; your child may stop telling you things.",
+                "Do not interrogate or accuse your child before hearing their story.",
+            ],
+            "lesson": (
+                "Brave enough to say no",
+                "A good friend does not push you to fight, try drugs, drink alcohol or carry a weapon. You can say no in a few words, use your parent as the excuse, and walk away. Then tell an adult you trust.",
+            ),
+        },
         Situation.BULLIED: {
             "child_nudge": "You do not deserve those words, and it is not your fault. Save a screenshot and tell an adult you trust.",
             "what_we_see": "There are signs of bullying or threats aimed at your child in the chat.",
@@ -270,7 +316,7 @@ _URGENT_DONT = {
 }
 
 
-def template(sit: Situation, level: Level, language: str) -> CoachOutput:
+def template(sit: Situation, level: Level, language: str) -> GuideOutput:
     lang = language if language in _T else "id"
     t = _T[lang][sit]
     do = list(t["do"])
@@ -279,7 +325,7 @@ def template(sit: Situation, level: Level, language: str) -> CoachOutput:
         do = [_URGENT_DO[lang], *do][:4]
         dont = [_URGENT_DONT[lang], *dont][:4]
     lesson = None if level == Level.AMAN else {"title": t["lesson"][0], "body": t["lesson"][1]}
-    return CoachOutput.model_validate(
+    return GuideOutput.model_validate(
         {
             "child_nudge": t["child_nudge"],
             "parent_insight": {

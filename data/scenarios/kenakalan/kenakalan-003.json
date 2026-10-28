@@ -1,0 +1,83 @@
+{
+  "id": "kenakalan-003",
+  "group": "kenakalan",
+  "title": "Tawaran kerja antar paket pil dari orang asing",
+  "channel": "dm",
+  "contact_role": "tak_dikenal",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "mendesak",
+  "risk_starts_at": 2,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "halo, km yg posting cari kerja sampingan di grup jual beli kan?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "ada kerjaan gampang, antar paket kecil ke beberapa alamat. sekali antar dapet 100rb",
+      "labels": [
+        "menawarkan_hadiah"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "paket apa kak?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "isinya pil, buat pelanggan tetap. km cukup antar aja, ga usah dibuka",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "pil apa ya kak? obat apotek?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "udah ga usah banyak tanya. yg penting jangan bilang siapa2 termasuk ortu",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "contact",
+      "text": "biar aman kita lanjut di aplikasi lain aja, chat ini suka dipantau",
+      "labels": [
+        "pindah_kanal"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku takut kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "tenang, banyak anak sekolah yg udah ikut. besok paket pertama siap ya",
+      "labels": [
+        "ajakan_berbahaya",
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku pikir dulu",
+      "labels": []
+    }
+  ],
+  "notes": "Orang tak dikenal menawarkan upah untuk mengantar paket berisi pil, meminta kerahasiaan dari orang tua, lalu mengajak pindah aplikasi. Mulai berisiko di pesan 2 dengan tawaran uang.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

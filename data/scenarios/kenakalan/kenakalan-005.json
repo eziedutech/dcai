@@ -1,0 +1,80 @@
+{
+  "id": "kenakalan-005",
+  "group": "kenakalan",
+  "title": "Kakak kelas mengajak patungan miras",
+  "channel": "dm",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "waspada",
+  "risk_starts_at": 3,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "dek sabtu malem ada acara di rumah Raka, dateng ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "acara apa kak?",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "nongkrong aja, kita patungan beli miras. 20rb per orang",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "aku gak minum kak",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "cobain dikit doang, biar ga kaku. semua anak basket dateng",
+      "labels": [
+        "ajakan_berbahaya"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "ortu aku pasti gak bolehin",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "bilang aja kerja kelompok, ortu lo ga bakal tau",
+      "labels": [
+        "meminta_kerahasiaan"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "hmm",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "kalo ga dateng ya jangan harap diajak main lagi",
+      "labels": [
+        "menekan_mengancam"
+      ]
+    },
+    {
+      "from": "child",
+      "text": "nanti aku kabarin kak",
+      "labels": []
+    }
+  ],
+  "notes": "Kakak kelas mengajak patungan minuman keras, menyarankan berbohong kepada orang tua, lalu menekan dengan ancaman dikucilkan. Mulai berisiko di pesan 3.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}

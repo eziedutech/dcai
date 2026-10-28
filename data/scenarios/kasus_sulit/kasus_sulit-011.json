@@ -1,0 +1,67 @@
+{
+  "id": "kasus_sulit-011",
+  "group": "kasus_sulit",
+  "title": "Proyek poster bahaya narkoba",
+  "channel": "grup_sekolah",
+  "contact_role": "teman_sekolah",
+  "child_age_range": "14-17",
+  "language": "id",
+  "expected_final_level": "aman",
+  "risk_starts_at": null,
+  "expects_support_response": false,
+  "messages": [
+    {
+      "from": "contact",
+      "text": "guys tugas PKn poster anti narkoba dikumpul jumat ya",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "kita bagi aja. aku cari data bahaya narkoba dari buku paket",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "oke, aku bagian gambar. temanya pil koplo sama miras bikin masa depan rusak",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "tambahin juga soal tawuran, kan bu guru bilang boleh",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "boleh. judulnya Berani Bilang Tidak gimana?",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "bagus! nanti aku tulis cara menolak ajakan teman",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "sip. besok kerjain di perpus ya pulang sekolah",
+      "labels": []
+    },
+    {
+      "from": "child",
+      "text": "oke, aku bawa spidol sama karton",
+      "labels": []
+    },
+    {
+      "from": "contact",
+      "text": "jangan lupa minta tanda tangan bu guru buat lembar kerjanya",
+      "labels": []
+    }
+  ],
+  "notes": "Kerja kelompok membuat poster bahaya narkoba, miras, dan tawuran untuk pelajaran PKn. Kata kuncinya sama dengan ajakan berbahaya, tetapi isinya pelajaran sekolah.",
+  "synthetic": true,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "reviewed_at": null,
+    "note": null
+  }
+}
