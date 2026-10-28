@@ -89,6 +89,24 @@ class BackendClient(
         executeNoBody(authed(Request.Builder().url(url("/v1/device/detection-feedback"))).post(body(feedback)).build())
     }
 
+    suspend fun siteManifest(): SiteManifest = withContext(Dispatchers.IO) {
+        execute<SiteManifest>(authed(Request.Builder().url(url("/v1/device/sites"))).get().build())
+    }
+
+    /** Streams one category list into [target]. The caller checks the hash. */
+    suspend fun downloadSiteList(name: String, target: java.io.File): Unit = withContext(Dispatchers.IO) {
+        val req = authed(Request.Builder().url(url("/v1/device/sites/$name"))).get().build()
+        client.newCall(req).execute().use { resp ->
+            if (resp.code == 401) throw DeviceRevokedException()
+            if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")
+            target.outputStream().use { out -> resp.body.byteStream().copyTo(out) }
+        }
+    }
+
+    suspend fun sendSiteSignal(signal: SiteSignalRequest): Unit = withContext(Dispatchers.IO) {
+        executeNoBody(authed(Request.Builder().url(url("/v1/device/sites/signals"))).post(body(signal)).build())
+    }
+
     private fun executeNoBody(request: Request) = client.newCall(request).execute().use { resp ->
         if (resp.code == 401) throw DeviceRevokedException()
         if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")

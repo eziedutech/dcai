@@ -75,6 +75,11 @@ class Settings(BaseSettings):
     voice_price_per_hour: float | None = None
     voice_max_seconds: int = 120
 
+    # Site lists built by app.blocklist.build; empty means data/blocklist in the repo.
+    site_lists_dir: str = ""
+    # A repeat of the same site category within this window is not a new parent event.
+    site_event_minutes: int = 30
+
     def endpoints(self, pool: Pool) -> list[Endpoint]:
         raw = self.reasoning_endpoints if pool == "reasoning" else self.screening_endpoints
         names = [n.strip() for n in raw.split(",") if n.strip()]

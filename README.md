@@ -49,6 +49,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **dcAI Guardian, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
 - **Voice notes.** In a chat that is already risky, a voice note is transcribed by Muse Voice Transcribe, the transcript is masked and assessed like any message, and the audio is processed in memory and never stored. Proven end to end on real audio. Unlike text, the audio does reach Meta's transcription service; the consent text and the "what it does not claim" section say so.
 - **Images, judged on the phone.** An app with the dcAI SDK asks dcAI Guardian about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2).
+- **Sites, matched on the phone.** A DNS-only VPN: the phone's DNS server is an address inside the VPN and only that address is routed into it, so app traffic never passes through dcAI. Each looked-up name and its parent domains are matched on the phone against category lists built from UT1 Blacklists (CC BY-SA 4.0): adult, gambling, scams, malware, dating, drugs and hate, about 5.1 million domains in 26 MB of 40-bit hashes, so the phone holds no readable list. A listed site gets "no such domain" and the child a notification saying which category and why; any other name goes to the network's own resolver. The server receives the category, at most once per category in 30 minutes, never the site's name or a lookup history. The child can show a held site to the parent, who allows it on the phone with the PIN; the server gets a false-detection note with the category only. The VPN key icon shows the whole time, and switching the VPN off is an event for the parent.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Coach call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
@@ -58,7 +59,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Not built yet
 
-In build order: a sensitive-image classifier (sexual content, violence) in the slot that exists on the phone, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, flagged domains, voice recording in the Android app (the backend route and transcription are done).
+In build order: a sensitive-image classifier (sexual content, violence) in the slot that exists on the phone, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, per-category site settings for the parent, voice recording in the Android app (the backend route and transcription are done).
 
 ## How it works
 
@@ -107,7 +108,7 @@ code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, 
 code/distill/  OpenPipe ART: fine-tunes the stage 1 student on a serverless training service
                (code/distill/train.py).
 code/android/  Kotlin: dcAI Guardian (pairing, foreground service, nudges, on-phone masking,
-               dcAI keyboard) and a sample chat app, built with Gradle. Masking parity is
+               dcAI keyboard, image checks, DNS-only site VPN) and a sample chat app, built with Gradle. Masking parity is
                tested against data/privacy.
 docs/          architecture decision records
 ```
@@ -134,6 +135,12 @@ uv run uvicorn app.main:app --reload --port 8000     # GET /v1/health
 
 With `make` available, `make setup`, `make test`, `make lint` and `make dev` do the same.
 
+The site lists for the phone are built from UT1 Blacklists (about a minute, 150 MB download, 26 MB output in `data/blocklist/`, not committed):
+
+```bash
+uv run python -m app.blocklist.build
+```
+
 The dashboard (Node.js 25):
 
 ```bash
@@ -156,6 +163,7 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 | `SECRET_KEY` | signs 15-minute access tokens; refresh tokens rotate |
 | `PAIRING_CODE_MINUTES`, `DEVICE_MESSAGES_PER_MINUTE` | pairing code lifetime; per-phone message limit |
 | `SSE_HEARTBEAT_SECONDS`, `SSE_MAX_SECONDS` | stream heartbeat; streams close after this and clients reconnect |
+| `SITE_LISTS_DIR`, `SITE_EVENT_MINUTES` | where the built site lists are (default `data/blocklist`); one parent event per site category in this window |
 
 `.env.example` lists every variable.
 
@@ -165,10 +173,10 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 309 passed |
-| The database tests again on PostgreSQL 18 | 81 passed |
+| Unit and API tests on SQLite | 316 passed |
+| The database tests again on PostgreSQL 18 | 86 passed |
 | Dashboard: type check, lint, production build | passing |
-| Android: unit tests (masking parity, image rules, PIN), lint, debug APK | 20 passed |
+| Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets), lint, debug APK | 26 passed |
 
 ### Full pipeline on the locked test split (final)
 
@@ -221,6 +229,20 @@ backend reached level `waspada` with patterns `meminta_data_pribadi` and `pindah
 and the nudge arrived on the child's phone as a notification. Running it surfaced four
 Android-specific fixes (regex engine, input-method check, cleartext config, notification
 permission), now in the code.
+
+### Sites on the emulator, one live run
+
+Same emulator, real lists built from UT1 (5.1 million domains):
+
+| Step | Result |
+|---|---|
+| The phone downloads the seven lists and checks each SHA-256 | 26 MB on the phone |
+| `example.com`, `www.google.com` | resolved as usual through the network's resolver |
+| `0-xbets.net`, from UT1's gambling list | "unknown host"; the child got "dcAI menahan situs berkategori judi"; the parent event `situs_judi` |
+| The parent allowed it with the PIN | resolved again; feedback stored as `domain`, `judi` |
+| The site's name in the database or the server log | absent |
+
+Running it found one defect, fixed: the adult list (23 MB), sent in one write, was cut off on the emulator's network; the list is now streamed in chunks and the phone retries once.
 
 ### Images on the emulator, one live run
 
@@ -307,11 +329,13 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
 - **Not everything is processed on the device.** Masked messages go to model providers, and a voice note's audio reaches Meta's transcription service before its transcript is masked.
 - **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
+- **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible about once in 200,000 checks. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
 - The consent text has not had legal review.
 
 ## Credits and licenses
 
 - **Meta Muse Spark** through the Meta Model API and Fireworks; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider (Llama 3.x Community License).
+- **UT1 Blacklists**, Universite Toulouse Capitole, CC BY-SA 4.0: the site lists on the phone are hashed adaptations under the same license.
 - **Google ML Kit** face detection and text recognition, bundled on-device models (ML Kit terms).
 - **FastAPI**, **uvicorn**, **pydantic**, **httpx**, **SQLAlchemy**, **Alembic**, **psycopg**, **argon2-cffi**, **PyJWT**, **pytest**, **respx**, **ruff**, **PostgreSQL**: their respective open source licenses.
 

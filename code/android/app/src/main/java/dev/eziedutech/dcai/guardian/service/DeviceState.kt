@@ -9,6 +9,7 @@ object DeviceState {
         // The persistent notification is shown the whole time the service runs.
         "notification" to true,
         "keyboard" to isKeyboardEnabled(context),
+        "vpn" to dev.eziedutech.dcai.guardian.sites.SiteGuardVpn.running,
     )
 
     /** Whether the dcAI keyboard is enabled. InputMethodManager needs no special read

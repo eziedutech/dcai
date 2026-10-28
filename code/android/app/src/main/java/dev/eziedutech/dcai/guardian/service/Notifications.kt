@@ -9,6 +9,8 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import dev.eziedutech.dcai.guardian.MainActivity
 import dev.eziedutech.dcai.guardian.R
+import dev.eziedutech.dcai.guardian.sites.SiteMatch
+import dev.eziedutech.dcai.guardian.sites.SiteReviewActivity
 
 /**
  * Two channels: a quiet, ongoing one that keeps "dcAI aktif" on screen the whole time the
@@ -20,6 +22,7 @@ object Notifications {
     const val NUDGE_CHANNEL = "dcai_nudge"
     const val STATUS_ID = 1
     private var nextNudgeId = 1000
+    private const val SITE_ID_BASE = 5000
 
     fun ensureChannels(context: Context) {
         val manager = context.getSystemService(NotificationManager::class.java)
@@ -57,6 +60,42 @@ object Notifications {
             .setCategory(NotificationCompat.CATEGORY_STATUS)
             .build()
     }
+
+    /** A site was held. The site's name stays on the phone: it is shown here and in review. */
+    fun showSiteHeld(context: Context, match: SiteMatch) {
+        val manager = context.getSystemService(NotificationManager::class.java)
+        val text = context.getString(R.string.site_held_text, siteCategoryLabel(context, match.category))
+        val review = Intent(context, SiteReviewActivity::class.java)
+            .putExtra(SiteReviewActivity.EXTRA_SITE, match.listed)
+            .putExtra(SiteReviewActivity.EXTRA_CATEGORY, match.category)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val pending = PendingIntent.getActivity(
+            context, match.listed.hashCode(), review, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+        val notification = NotificationCompat.Builder(context, NUDGE_CHANNEL)
+            .setSmallIcon(R.drawable.ic_shield)
+            .setContentTitle(context.getString(R.string.site_held_title))
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .setContentIntent(pending)
+            .build()
+        manager.notify(SITE_ID_BASE + (match.listed.hashCode() and 0xfff), notification)
+    }
+
+    fun siteCategoryLabel(context: Context, category: String): String = context.getString(
+        when (category) {
+            "dewasa" -> R.string.site_cat_dewasa
+            "judi" -> R.string.site_cat_judi
+            "penipuan" -> R.string.site_cat_penipuan
+            "berbahaya" -> R.string.site_cat_berbahaya
+            "kencan" -> R.string.site_cat_kencan
+            "narkoba" -> R.string.site_cat_narkoba
+            "kebencian" -> R.string.site_cat_kebencian
+            else -> R.string.site_cat_lain
+        },
+    )
 
     /** A friendly reminder for the child. */
     fun showNudge(context: Context, nudge: String) {

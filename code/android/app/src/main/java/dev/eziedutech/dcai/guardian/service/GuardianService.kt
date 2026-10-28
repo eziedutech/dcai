@@ -11,7 +11,10 @@ import dev.eziedutech.dcai.guardian.BuildConfig
 import dev.eziedutech.dcai.guardian.ServiceLocator
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.DeviceRevokedException
+import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
+import dev.eziedutech.dcai.guardian.sites.SiteLists
 import dev.eziedutech.dcai.guardian.vision.ThreadLevels
+import android.net.VpnService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -104,6 +107,19 @@ class GuardianService : Service() {
     private suspend fun refreshConfig() {
         val client = ServiceLocator.client(this) ?: return
         runCatching { ServiceLocator.store(this).config = client.config() }
+        applySites()
+    }
+
+    /** Site protection follows consent: it stops when the parent withdraws the scope, and
+     * comes back after a restart if it was on and the VPN permission is still granted. */
+    private fun applySites() {
+        val store = ServiceLocator.store(this)
+        val allowed = store.config?.has("domain") == true
+        when {
+            !allowed && SiteGuardVpn.running -> SiteGuardVpn.stop(this)
+            allowed && store.sitesEnabled && !SiteGuardVpn.running && VpnService.prepare(this) == null ->
+                SiteGuardVpn.start(this)
+        }
     }
 
     private suspend fun heartbeatLoop() {
@@ -112,6 +128,7 @@ class GuardianService : Service() {
             try {
                 val config = client.heartbeat(BuildConfig.VERSION_NAME, DeviceState.services(this))
                 ServiceLocator.store(this).config = config
+                applySites()
             } catch (_: DeviceRevokedException) {
                 onRevoked()
                 return
@@ -123,6 +140,8 @@ class GuardianService : Service() {
     }
 
     private fun onRevoked() {
+        SiteGuardVpn.stop(this)
+        ServiceLocator.client(this)?.let { SiteLists(this, it).clear() }
         ServiceLocator.store(this).clear()
         ServiceLocator.reset()
         ThreadLevels.clear()

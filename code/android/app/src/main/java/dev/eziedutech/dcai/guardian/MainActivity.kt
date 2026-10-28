@@ -43,6 +43,8 @@ import dev.eziedutech.dcai.guardian.data.GuardianStore
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.DeviceConfig
 import dev.eziedutech.dcai.guardian.privacy.Pin
+import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
+import dev.eziedutech.dcai.guardian.sites.SiteLists
 import dev.eziedutech.dcai.guardian.service.DeviceState
 import dev.eziedutech.dcai.guardian.service.GuardianService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -213,6 +215,10 @@ private fun HomeScreen(store: GuardianStore, onUnpaired: () -> Unit) {
             }
         }
 
+        if (config.has("domain")) {
+            SitesCard(store)
+        }
+
         SectionCard(stringResource(R.string.home_keyboard_title)) {
             Text(
                 if (keyboardOn.value) stringResource(R.string.home_keyboard_on) else stringResource(R.string.home_keyboard_off),
@@ -222,6 +228,39 @@ private fun HomeScreen(store: GuardianStore, onUnpaired: () -> Unit) {
                 context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }) { Text(stringResource(R.string.home_keyboard_enable)) }
         }
+    }
+}
+
+@Composable
+private fun SitesCard(store: GuardianStore) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var on by remember { mutableStateOf(SiteGuardVpn.running) }
+    val manifest = remember(on) { ServiceLocator.client(context)?.let { SiteLists(context, it).manifest() } }
+    val askVpn = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            store.sitesEnabled = true
+            SiteGuardVpn.start(context)
+            on = true
+        }
+    }
+    SectionCard(stringResource(R.string.home_sites_title)) {
+        Text(stringResource(R.string.home_sites_body), color = Ink)
+        Text(stringResource(if (on) R.string.home_sites_on else R.string.home_sites_off), color = Ink)
+        if (!on) {
+            OutlinedButton(onClick = {
+                val prepare = android.net.VpnService.prepare(context)
+                if (prepare == null) {
+                    store.sitesEnabled = true
+                    SiteGuardVpn.start(context)
+                    on = true
+                } else {
+                    askVpn.launch(prepare)
+                }
+            }) { Text(stringResource(R.string.home_sites_enable)) }
+        }
+        manifest?.let { Text(stringResource(R.string.home_sites_source, it.source, it.license), color = Ink, fontSize = 12.sp) }
     }
 }
 

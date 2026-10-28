@@ -49,3 +49,6 @@ Thumbs.db
 /docs/log/
 /docs/proposals/
 /data/distill/
+
+# Site lists built from UT1 (large, refreshed from the source)
+/data/blocklist/

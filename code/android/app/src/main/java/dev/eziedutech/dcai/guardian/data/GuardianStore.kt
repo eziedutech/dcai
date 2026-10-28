@@ -79,6 +79,18 @@ class GuardianStore(context: Context) {
         }
     }
 
+    /** Hashes (hex) of sites the parent allowed with the PIN, on this phone only. */
+    val allowedSites: Set<String> get() = prefs.getStringSet(KEY_ALLOWED_SITES, emptySet()).orEmpty()
+
+    fun allowSite(hashHex: String) = prefs.edit {
+        putStringSet(KEY_ALLOWED_SITES, allowedSites + hashHex)
+    }
+
+    /** Whether site protection is on: turned on with the phone's VPN permission. */
+    var sitesEnabled: Boolean
+        get() = prefs.getBoolean(KEY_SITES_ON, false)
+        set(value) = prefs.edit { putBoolean(KEY_SITES_ON, value) }
+
     /** Pairing ended (revoked by the parent, or the child's data was erased). The PIN and
      * the local image tuning go with it. */
     fun clear() = prefs.edit { clear() }
@@ -92,6 +104,8 @@ class GuardianStore(context: Context) {
         const val KEY_CONFIRMED = "vision_confirmed_false"
         const val KEY_THRESHOLD = "vision_threshold_"
         const val MAX_CONFIRMED = 200
+        const val KEY_ALLOWED_SITES = "sites_allowed"
+        const val KEY_SITES_ON = "sites_on"
 
         fun b64(bytes: ByteArray): String = Base64.encodeToString(bytes, Base64.NO_WRAP)
         fun unb64(text: String): ByteArray = Base64.decode(text, Base64.NO_WRAP)

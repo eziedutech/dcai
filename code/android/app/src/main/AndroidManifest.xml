@@ -79,5 +79,20 @@
             android:exported="true"
             android:permission="dev.eziedutech.dcai.guardian.permission.INGEST"
             android:theme="@style/Theme.DcaiGuardian" />
+
+        <!-- Site protection: a DNS-only VPN. Only DNS lookups enter it. -->
+        <service
+            android:name=".sites.SiteGuardVpn"
+            android:exported="false"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".sites.SiteReviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DcaiGuardian" />
     </application>
 </manifest>

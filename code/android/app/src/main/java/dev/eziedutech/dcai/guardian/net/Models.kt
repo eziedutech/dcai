@@ -81,9 +81,28 @@ data class ImageSignalRequest(
     @SerialName("model_version") val modelVersion: String,
 )
 
+@Serializable
+data class SiteListEntry(val name: String, val count: Int, val bytes: Long, val sha256: String)
+
+@Serializable
+data class SiteManifest(
+    val version: String,
+    val source: String,
+    val license: String,
+    val categories: List<SiteListEntry>,
+)
+
+/** A site held on the phone: the category only. There is no field for the site's name. */
+@Serializable
+data class SiteSignalRequest(
+    val category: String,
+    @SerialName("list_version") val listVersion: String,
+)
+
 /** A false detection the parent confirmed on the child's phone, without the image. */
 @Serializable
 data class DetectionFeedbackRequest(
+    /** gambar or domain. */
     val kind: String = "gambar",
     val category: String,
     val score: Int,
