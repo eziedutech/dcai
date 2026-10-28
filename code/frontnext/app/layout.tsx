@@ -11,9 +11,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: "dcAI Guardian", template: "%s | dcAI Guardian" },
+  title: { default: "dcAI · Digital Citizenship AI", template: "%s | dcAI" },
   description:
-    "Guidance for children aged 10 to 17 in the moment, and insight for parents instead of their child's conversations.",
+    "Digital Citizenship AI, Family Safety Guardian: guidance for children aged 10 to 17 in the moment, and insight for parents.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

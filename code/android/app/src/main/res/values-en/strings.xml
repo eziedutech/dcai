@@ -74,13 +74,15 @@
     <string name="tab_protection">Protection</string>
     <string name="tab_settings">Settings</string>
 
-    <string name="home_subtitle">Digital companion</string>
     <string name="home_hello">Hi, %1$s</string>
     <string name="home_hello_plain">Hi</string>
     <string name="home_protected">You are protected</string>
     <string name="home_protected_sub">All protections are on.</string>
     <string name="home_attention">Needs attention</string>
-    <string name="home_attention_sub">%1$d protections are not on yet. Tap to set them up.</string>
+    <plurals name="home_attention_sub">
+        <item quantity="one">%1$d protection is not on yet. Tap to set it up.</item>
+        <item quantity="other">%1$d protections are not on yet. Tap to set them up.</item>
+    </plurals>
     <string name="home_features">What dcAI helps with</string>
     <string name="home_nudges">Latest reminders</string>
     <string name="home_nudges_empty">No reminders yet. Keep your chats safe.</string>

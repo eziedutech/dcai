@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="id">
-    <string name="app_name" translatable="false">dcAI Guardian</string>
+    <string name="app_name" translatable="false">dcAI</string>
+    <string name="brand_title" translatable="false">Digital Citizenship AI</string>
+    <string name="brand_subtitle" translatable="false">Family Safety Guardian</string>
 
     <!-- Actions -->
     <string name="action_back">Kembali</string>
@@ -86,13 +88,15 @@
     <string name="tab_settings">Pengaturan</string>
 
     <!-- Home -->
-    <string name="home_subtitle">Pendamping digital</string>
     <string name="home_hello">Halo, %1$s</string>
     <string name="home_hello_plain">Halo</string>
     <string name="home_protected">Kamu terlindungi</string>
     <string name="home_protected_sub">Semua perlindungan aktif.</string>
     <string name="home_attention">Perlu perhatian</string>
-    <string name="home_attention_sub">%1$d perlindungan belum aktif. Ketuk untuk mengatur.</string>
+    <plurals name="home_attention_sub">
+        <item quantity="one">%1$d perlindungan belum aktif. Ketuk untuk mengatur.</item>
+        <item quantity="other">%1$d perlindungan belum aktif. Ketuk untuk mengatur.</item>
+    </plurals>
     <string name="home_features">Yang didampingi dcAI</string>
     <string name="home_nudges">Pengingat terakhir</string>
     <string name="home_nudges_empty">Belum ada pengingat. Tetap jaga obrolanmu, ya.</string>

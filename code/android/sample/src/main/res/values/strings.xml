@@ -7,8 +7,8 @@
     <string name="restart">Ulang dari awal</string>
     <string name="type_hint">Tulis balasan anak…</string>
     <string name="send">Kirim</string>
-    <string name="linked">Terhubung ke dcAI Guardian</string>
-    <string name="not_linked">dcAI Guardian belum terpasang di ponsel ini</string>
+    <string name="linked">Terhubung ke dcAI</string>
+    <string name="not_linked">dcAI belum terpasang di ponsel ini</string>
     <string name="done">Skenario selesai</string>
     <string name="contact_image">Lawan bicara mengirim gambar</string>
     <string name="share_card">Bagikan kartu pelajar</string>

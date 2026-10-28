@@ -164,7 +164,7 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
         list: [
           "Tidak mengirim isi pesan ke orang tua.",
           "Tidak menyimpan gambar, rekaman suara, atau riwayat penjelajahan.",
-          "Tidak memblokir aplikasi atau mengatur waktu layar. Itu tugas Family Link.",
+          "Tidak membaca isi aplikasi lain. Untuk waktu online, yang dihitung hanya durasi per kategori.",
           "Tidak bekerja diam-diam. Anak selalu tahu dcAI aktif.",
         ],
       },
@@ -200,7 +200,7 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
         list: [
           "It does not send message text to parents.",
           "It does not store images, voice recordings or browsing history.",
-          "It does not block apps or set screen time. That is Family Link's job.",
+          "It does not read other apps. For time online, only the duration per category is counted.",
           "It does not work in secret. The child always knows dcAI is on.",
         ],
       },

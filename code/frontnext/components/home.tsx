@@ -88,46 +88,29 @@ function SplitDemo() {
 }
 
 function LayerTable() {
-  const { t, lang } = useT();
-  const rows: [string, boolean, boolean][] = [
-    [t("home.layer.r1"), true, false],
-    [t("home.layer.r2"), true, false],
-    [t("home.layer.r3"), false, true],
-    [t("home.layer.r4"), false, true],
-    [t("home.layer.r5"), false, true],
-    [t("home.layer.r6"), false, true],
+  const { t } = useT();
+  const groups: [string, string[]][] = [
+    [t("home.layer.safe"), [t("home.layer.r3"), t("home.layer.r4"), t("home.layer.r5"), t("home.layer.r6")]],
+    [t("home.layer.habit"), [t("home.layer.r1"), t("home.layer.r2"), t("home.layer.r7"), t("home.layer.r8")]],
   ];
-  const mark = (on: boolean) =>
-    on ? (
-      <svg width="18" height="18" viewBox="0 0 18 18" role="img" aria-label={lang === "id" ? "ya" : "yes"}>
-        <path d="M3.5 9.5 L7.5 13 L14.5 5" fill="none" stroke="#1f3a5f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ) : (
-      <svg width="14" height="18" viewBox="0 0 14 18" role="img" aria-label={lang === "id" ? "tidak" : "no"}>
-        <path d="M3 9 H11" stroke="#d8dfe6" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    );
   return (
-    <table className="w-full text-left text-[0.95rem]">
-      <thead>
-        <tr className="border-b border-ink/80">
-          <th className="py-2.5 pr-4 font-semibold" scope="col">
-            <span className="sr-only">{lang === "id" ? "Fitur" : "Feature"}</span>
-          </th>
-          <th className="w-32 py-2.5 text-center font-semibold" scope="col">{t("home.layer.fl")}</th>
-          <th className="w-32 py-2.5 text-center font-semibold" scope="col">{t("home.layer.dc")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map(([label, fl, dc]) => (
-          <tr key={label} className="border-b border-line">
-            <th scope="row" className="py-3 pr-4 font-normal">{label}</th>
-            <td className="py-3 text-center">{mark(fl)}</td>
-            <td className="py-3 text-center">{mark(dc)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="grid gap-8 sm:grid-cols-2">
+      {groups.map(([title, items]) => (
+        <div key={title}>
+          <h3 className="border-b border-ink/80 pb-2.5 font-semibold">{title}</h3>
+          <ul>
+            {items.map((item) => (
+              <li key={item} className="flex gap-3 border-b border-line py-3 text-[0.95rem]">
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden className="mt-0.5 shrink-0">
+                  <path d="M3.5 9.5 L7.5 13 L14.5 5" fill="none" stroke="#1f3a5f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }
 

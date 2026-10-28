@@ -128,6 +128,14 @@ class MainActivity : LocalizedActivity() {
         fun replaceAll(route: Route) { stack.clear(); stack.add(route) }
         fun back() { if (stack.size > 1) stack.removeAt(stack.lastIndex) else finish() }
 
+        // Services start and stop on their own (the VPN after a restart, a permission changed
+        // in settings); read the state again every few seconds while the app is open.
+        LaunchedEffect(Unit) {
+            while (true) {
+                delay(3000)
+                settle++
+            }
+        }
         LaunchedEffect(refresh) {
             // The VPN's state settles a moment after starting or stopping it.
             if (refresh > 0) {

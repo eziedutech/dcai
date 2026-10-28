@@ -117,8 +117,9 @@ fun WelcomeScreen(onLanguage: () -> Unit, onStart: () -> Unit) {
         ) {
             LogoBadge(132.dp)
             Spacer(Modifier.height(28.dp))
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineLarge, color = Color.White)
-            Spacer(Modifier.height(8.dp))
+            Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.headlineMedium, color = Color.White, textAlign = TextAlign.Center)
+            Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.titleLarge, color = Color.White.copy(alpha = 0.95f), textAlign = TextAlign.Center)
+            Spacer(Modifier.height(16.dp))
             Text(stringResource(R.string.welcome_tagline), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.92f), textAlign = TextAlign.Center)
             Spacer(Modifier.height(48.dp))
         }

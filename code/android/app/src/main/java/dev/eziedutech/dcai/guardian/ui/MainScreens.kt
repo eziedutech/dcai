@@ -52,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -106,10 +107,9 @@ fun HomeTab(
             LogoBadge(44.dp)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
-                Text(stringResource(R.string.home_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.brand_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
+                Text(stringResource(R.string.brand_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            StatusPill(if (snapshot.issues == 0) Status.ON else Status.NEEDS_SETUP)
         }
 
         HeroCard(nickname, snapshot.issues, onFix)
@@ -150,7 +150,7 @@ private fun HeroCard(nickname: String, issues: Int, onFix: () -> Unit) {
                     style = MaterialTheme.typography.headlineSmall, color = Color.White,
                 )
                 Text(
-                    if (ok) stringResource(R.string.home_protected_sub) else stringResource(R.string.home_attention_sub, issues),
+                    if (ok) stringResource(R.string.home_protected_sub) else pluralStringResource(R.plurals.home_attention_sub, issues, issues),
                     style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.9f),
                 )
             }

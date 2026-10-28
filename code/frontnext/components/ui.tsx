@@ -42,13 +42,13 @@ export function LevelBadge({ level, size = "sm" }: { level: Level; size?: "sm" |
 
 export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <Link href={href} className="inline-flex items-center gap-2.5 font-extrabold tracking-tight text-ink">
-      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden>
-        {/* Two shapes, one inside the other's reach: the child, and the adult beside them. */}
-        <rect x="1" y="5" width="18" height="22" rx="5" fill="#1f3a5f" />
-        <rect x="11" y="1" width="16" height="16" rx="8" fill="#fbfcfd" stroke="#1f3a5f" strokeWidth="2.5" />
-      </svg>
-      <span className="text-[1.15rem]">dcAI Guardian</span>
+    <Link href={href} className="inline-flex items-center gap-2.5 text-ink">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/dcai-logo.png" alt="dcAI" width={30} height={35} className="h-9 w-auto" />
+      <span className="flex flex-col leading-tight">
+        <span className="text-[1.02rem] font-extrabold tracking-tight">Digital Citizenship AI</span>
+        <span className="text-[0.78rem] font-semibold text-slate">Family Safety Guardian</span>
+      </span>
     </Link>
   );
 }
