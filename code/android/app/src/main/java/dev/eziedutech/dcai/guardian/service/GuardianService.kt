@@ -11,6 +11,7 @@ import dev.eziedutech.dcai.guardian.BuildConfig
 import dev.eziedutech.dcai.guardian.ServiceLocator
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.DeviceRevokedException
+import dev.eziedutech.dcai.guardian.screen.ScreenGuard
 import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
 import dev.eziedutech.dcai.guardian.sites.SiteLists
 import dev.eziedutech.dcai.guardian.vision.ThreadLevels
@@ -51,6 +52,7 @@ class GuardianService : Service() {
             started = true
             scope.launch { streamLoop() }
             scope.launch { heartbeatLoop() }
+            scope.launch { screenLoop() }
         }
         return START_STICKY
     }
@@ -97,6 +99,15 @@ class GuardianService : Service() {
                 Notifications.showNudge(this, it)
             }
             "config" -> runCatching { scope.launch { refreshConfig() } }
+            "time_decision" -> {
+                val approved = data["approved"]?.jsonPrimitive?.content == "true"
+                val minutes = data["minutes"]?.jsonPrimitive?.content?.toIntOrNull() ?: 0
+                val store = ServiceLocator.store(this)
+                if (data["request_id"]?.jsonPrimitive?.content == store.pendingTimeRequest) store.pendingTimeRequest = null
+                if (approved && minutes > 0) screenGuard.onApproved(minutes)
+                Notifications.showTimeDecision(this, approved, minutes)
+                ScreenGuard.decisions.value++
+            }
             "revoked" -> onRevoked()
             // A received image is only looked at in a conversation at perhatian or above.
             "level" -> {
@@ -122,6 +133,20 @@ class GuardianService : Service() {
             !allowed && SiteGuardVpn.running -> SiteGuardVpn.stop(this)
             allowed && store.sitesEnabled && !SiteGuardVpn.running && VpnService.prepare(this) == null ->
                 SiteGuardVpn.start(this)
+        }
+    }
+
+    private val screenGuard by lazy { ScreenGuard(this) }
+
+    /** Time online checks, every two seconds while dcAI runs. */
+    private suspend fun screenLoop() {
+        while (scope.isActive) {
+            try {
+                kotlinx.coroutines.withContext(Dispatchers.IO) { screenGuard.tick() }
+            } catch (e: Exception) {
+                Log.d(TAG, "screen check failed: ${e.javaClass.simpleName}")
+            }
+            delay(2000)
         }
     }
 

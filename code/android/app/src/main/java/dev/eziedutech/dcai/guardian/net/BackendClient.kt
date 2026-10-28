@@ -112,6 +112,18 @@ class BackendClient(
         executeNoBody(authed(Request.Builder().url(url("/v1/device/sites/signals"))).post(body(signal)).build())
     }
 
+    suspend fun sendUsage(usage: UsageRequest): Unit = withContext(Dispatchers.IO) {
+        executeNoBody(authed(Request.Builder().url(url("/v1/device/usage"))).post(body(usage)).build())
+    }
+
+    suspend fun requestTime(request: TimeRequestBody): TimeRequestOut = withContext(Dispatchers.IO) {
+        execute<TimeRequestOut>(authed(Request.Builder().url(url("/v1/device/time-requests"))).post(body(request)).build())
+    }
+
+    suspend fun myTimeRequests(): List<TimeRequestOut> = withContext(Dispatchers.IO) {
+        execute<List<TimeRequestOut>>(authed(Request.Builder().url(url("/v1/device/time-requests"))).get().build())
+    }
+
     private fun executeNoBody(request: Request) = client.newCall(request).execute().use { resp ->
         if (resp.code == 401) throw DeviceRevokedException()
         if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")

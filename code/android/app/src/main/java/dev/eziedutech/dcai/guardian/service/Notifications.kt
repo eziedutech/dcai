@@ -97,6 +97,50 @@ object Notifications {
         },
     )
 
+    private const val TIME_ID = 6000
+
+    /** A gentle time reminder: winding down, a long session, ten minutes left. */
+    fun showTimeReminder(context: Context, kind: dev.eziedutech.dcai.guardian.screen.RemindKind, minutes: Int) {
+        val text = when (kind) {
+            dev.eziedutech.dcai.guardian.screen.RemindKind.WIND_DOWN -> context.getString(R.string.time_remind_wind_down, minutes)
+            dev.eziedutech.dcai.guardian.screen.RemindKind.SESSION -> context.getString(R.string.time_remind_session, minutes)
+            dev.eziedutech.dcai.guardian.screen.RemindKind.TEN_MINUTES_LEFT -> context.getString(R.string.time_remind_left, minutes)
+        }
+        post(context, TIME_ID, context.getString(R.string.time_remind_title), text)
+    }
+
+    /** Used when dcAI may not open its break screen over other apps. */
+    fun showTimeOut(context: Context, reason: dev.eziedutech.dcai.guardian.screen.BlockReason) {
+        post(context, TIME_ID, context.getString(R.string.time_remind_title), context.getString(timeOutText(reason)))
+    }
+
+    fun showTimeDecision(context: Context, approved: Boolean, minutes: Int) {
+        val text = if (approved) context.getString(R.string.time_decision_yes, minutes) else context.getString(R.string.time_decision_no)
+        post(context, TIME_ID + 1, context.getString(R.string.time_decision_title), text)
+    }
+
+    fun timeOutText(reason: dev.eziedutech.dcai.guardian.screen.BlockReason): Int = when (reason) {
+        dev.eziedutech.dcai.guardian.screen.BlockReason.BEDTIME -> R.string.timeout_bedtime_body
+        dev.eziedutech.dcai.guardian.screen.BlockReason.DAILY -> R.string.timeout_daily_body
+        dev.eziedutech.dcai.guardian.screen.BlockReason.CATEGORY -> R.string.timeout_category_body
+        dev.eziedutech.dcai.guardian.screen.BlockReason.SESSION -> R.string.timeout_session_body
+    }
+
+    private fun post(context: Context, id: Int, title: String, text: String) {
+        val manager = context.getSystemService(NotificationManager::class.java)
+        manager.notify(
+            id,
+            NotificationCompat.Builder(context, NUDGE_CHANNEL)
+                .setSmallIcon(R.drawable.ic_shield)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+                .setAutoCancel(true)
+                .setContentIntent(openApp(context))
+                .build(),
+        )
+    }
+
     /** A friendly reminder for the child. */
     fun showNudge(context: Context, nudge: String) {
         val manager = context.getSystemService(NotificationManager::class.java)

@@ -23,7 +23,7 @@ import dev.eziedutech.dcai.guardian.ui.theme.BrandLeaf
  * Flat illustrations in the logo's colours, drawn on a 100 x 100 grid so they scale to any
  * size. Each is decorative: screens carry their meaning in text.
  */
-enum class Art { SHIELD, SHIELD_WARN, CHAT, IMAGE, SITE, VOICE, KEYBOARD, FAMILY, CONSENT, PIN, NUDGE, TIP, EYE }
+enum class Art { SHIELD, SHIELD_WARN, CHAT, IMAGE, SITE, VOICE, KEYBOARD, FAMILY, CONSENT, PIN, NUDGE, TIP, EYE, CLOCK, MOON, BREAK }
 
 private val Sky = Color(0xFFDCE5FB)
 private val Mint = Color(0xFFCFF2E8)
@@ -51,6 +51,9 @@ fun Illustration(art: Art, modifier: Modifier = Modifier) {
             Art.NUDGE -> nudge(u)
             Art.TIP -> tip(u)
             Art.EYE -> eye(u)
+            Art.CLOCK -> clock(u)
+            Art.MOON -> moon(u)
+            Art.BREAK -> pause(u)
         }
     }
 }
@@ -273,4 +276,36 @@ private fun DrawScope.eye(u: Float) {
     drawCircle(Ink, 5f * u, p(u, 50f, 50f))
     drawCircle(Paper, 2f * u, p(u, 53f, 47f))
     drawRect(BrandLeaf, Rect(p(u, 30f, 76f), p(u, 70f, 79f)).topLeft, Size(40f * u, 3f * u))
+}
+
+private fun DrawScope.clock(u: Float) {
+    drawCircle(Paper, 30f * u, p(u, 50f, 52f))
+    drawCircle(BrandBlue, 30f * u, p(u, 50f, 52f), style = Stroke(4f * u))
+    for (i in 0 until 12) {
+        rotate(i * 30f, p(u, 50f, 52f)) { drawLine(Sky, p(u, 50f, 26f), p(u, 50f, 30f), 2f * u, StrokeCap.Round) }
+    }
+    drawLine(BrandBlue, p(u, 50f, 52f), p(u, 50f, 34f), 3.6f * u, StrokeCap.Round)
+    drawLine(BrandLeaf, p(u, 50f, 52f), p(u, 63f, 58f), 3.6f * u, StrokeCap.Round)
+    drawCircle(Sun, 3f * u, p(u, 50f, 52f))
+    drawArc(Sun, -90f, 110f, false, p(u, 14f, 16f), Size(72f * u, 72f * u), style = Stroke(3f * u, cap = StrokeCap.Round))
+}
+
+private fun DrawScope.moon(u: Float) {
+    drawCircle(Color(0xFF203F8F), 36f * u, p(u, 50f, 52f))
+    drawCircle(Color(0xFFFFE08A), 18f * u, p(u, 46f, 48f))
+    drawCircle(Color(0xFF203F8F), 15f * u, p(u, 55f, 42f))
+    for ((x, y, s) in listOf(Triple(30f, 34f, 1.6f), Triple(68f, 66f, 1.2f), Triple(36f, 70f, 1f), Triple(72f, 36f, 1.4f))) {
+        drawCircle(Paper, s * u, p(u, x, y))
+    }
+    leaf(u, 70f, 74f, 7f, angle = 30f)
+}
+
+private fun DrawScope.pause(u: Float) {
+    drawRoundRect(Paper, p(u, 26f, 22f), Size(48f * u, 60f * u), CornerRadius(10f * u))
+    drawRoundRect(BrandBlue, p(u, 30f, 28f), Size(40f * u, 30f * u), CornerRadius(5f * u))
+    drawRoundRect(Paper, p(u, 43f, 35f), Size(5f * u, 16f * u), CornerRadius(2f * u))
+    drawRoundRect(Paper, p(u, 52f, 35f), Size(5f * u, 16f * u), CornerRadius(2f * u))
+    drawRoundRect(Mint, p(u, 34f, 64f), Size(32f * u, 4f * u), CornerRadius(2f * u))
+    drawRoundRect(Sky, p(u, 38f, 71f), Size(24f * u, 4f * u), CornerRadius(2f * u))
+    leaf(u, 76f, 72f, 9f, angle = 30f)
 }

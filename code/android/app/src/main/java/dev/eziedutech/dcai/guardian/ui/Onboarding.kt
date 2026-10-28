@@ -26,6 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Translate
 import androidx.compose.material3.Checkbox
@@ -278,6 +279,8 @@ fun PermissionsScreen(
     onNotifications: () -> Unit,
     onSites: () -> Unit,
     onKeyboard: () -> Unit,
+    onUsage: () -> Unit,
+    onOverlay: () -> Unit,
     onDone: () -> Unit,
 ) {
     OnboardingScaffold(step = 4, onBack = null, content = {
@@ -299,6 +302,16 @@ fun PermissionsScreen(
                     Feature.PAPAN_KETIK.icon, stringResource(R.string.f_keyboard), stringResource(R.string.f_keyboard_short),
                     snapshot.status(Feature.PAPAN_KETIK), snapshot.keyboardOn,
                 ) { onKeyboard() }
+            }
+            if (snapshot.granted(Feature.WAKTU)) {
+                SwitchRow(
+                    Feature.WAKTU.icon, stringResource(R.string.perm_usage), stringResource(R.string.perm_usage_sub),
+                    if (snapshot.usageOn) Status.ON else Status.NEEDS_SETUP, snapshot.usageOn,
+                ) { onUsage() }
+                SwitchRow(
+                    Icons.Rounded.Layers, stringResource(R.string.perm_overlay), stringResource(R.string.perm_overlay_sub),
+                    if (snapshot.overlayOn) Status.ON else Status.NEEDS_SETUP, snapshot.overlayOn,
+                ) { onOverlay() }
             }
         }
         Row(

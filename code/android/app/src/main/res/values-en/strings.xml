@@ -203,4 +203,54 @@
     <string name="site_review_lead">dcAI held %1$s (category %2$s). A parent enters the PIN to allow it on this phone.</string>
     <string name="site_review_allow">Allow this site</string>
     <string name="site_review_keep">Keep it held</string>
+
+    <string name="f_time">Time online</string>
+    <string name="f_time_short">Daily limits, bedtime and short-video breaks.</string>
+    <string name="f_time_what">A parent sets limits for time online per day and per category, bedtime, and a break after watching short video for a long time. You get a reminder before time runs out, and you can ask for more time with a short reason.</string>
+    <string name="f_time_stays">The list of apps and when you use them stay on this phone. dcAI sees only app names and how long, never what is inside.</string>
+    <string name="f_time_sent">Total minutes per category (video, games, social, other) per day, minutes during bedtime and the longest session. A request for more time is sent with its reason masked.</string>
+    <string name="perm_usage">Usage access</string>
+    <string name="perm_usage_sub">To count how long apps are used on this phone.</string>
+    <string name="perm_overlay">Display over other apps</string>
+    <string name="perm_overlay_sub">For the break screen when time is up or at bedtime.</string>
+    <string name="cat_video">video</string>
+    <string name="cat_game">games</string>
+    <string name="cat_sosial">social media</string>
+    <string name="cat_lain">other apps</string>
+    <string name="duration_hm">%1$d h %2$d m</string>
+    <string name="duration_m">%1$d min</string>
+
+    <string name="home_today_title">Time online today</string>
+    <string name="home_today_left">%1$s left</string>
+    <string name="home_today_used_only">%1$s used today</string>
+    <string name="home_today_used">%1$s of %2$s</string>
+    <string name="home_today_bedtime">bedtime %1$s</string>
+    <string name="home_today_bedtime_now">It is bedtime now</string>
+    <string name="home_today_setup">Turn on usage access so time can be counted.</string>
+
+    <string name="time_remind_title">Time online</string>
+    <string name="time_remind_wind_down">Bedtime in %1$d minutes. Time to get ready.</string>
+    <string name="time_remind_session">%1$d minutes of watching. How about a short break?</string>
+    <string name="time_remind_left">%1$d minutes of time online left today.</string>
+    <string name="time_decision_title">Your parent answered</string>
+    <string name="time_decision_yes">Your parent allowed %1$d more minutes.</string>
+    <string name="time_decision_no">Your parent has not allowed more time right now.</string>
+
+    <string name="timeout_bedtime">Time for bed</string>
+    <string name="timeout_bedtime_body">Apps rest until morning. Calls and apps your parent allows still open.</string>
+    <string name="timeout_daily">Time online is up for today</string>
+    <string name="timeout_daily_body">You have used today\'s time online. It fills up again tomorrow.</string>
+    <string name="timeout_category">Time for %1$s is up for today</string>
+    <string name="timeout_category_body">Time for this category is up. Other apps still work.</string>
+    <string name="timeout_session">Take a short break</string>
+    <string name="timeout_session_body">You have watched for a long time without a pause. Stand up, drink some water, or look far away for a moment.</string>
+    <string name="timeout_home">Go to the home screen</string>
+
+    <string name="time_request_title">Ask for more time</string>
+    <string name="time_request_ask">Need more time? Ask your parent.</string>
+    <string name="time_request_reason">Short reason (optional)</string>
+    <string name="time_request_send">Send request</string>
+    <string name="time_request_waiting">Waiting for your parent</string>
+    <string name="time_request_waiting_sub">You will be told as soon as they answer.</string>
+    <string name="time_minutes">%1$d min</string>
 </resources>

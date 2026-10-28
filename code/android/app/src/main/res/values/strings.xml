@@ -224,4 +224,55 @@
     <string name="site_review_lead">dcAI menahan %1$s (kategori %2$s). Orang tua memasukkan PIN untuk mengizinkannya di ponsel ini.</string>
     <string name="site_review_allow">Izinkan situs ini</string>
     <string name="site_review_keep">Tetap ditahan</string>
+
+    <!-- Time online -->
+    <string name="f_time">Waktu online</string>
+    <string name="f_time_short">Batas harian, jam tidur, dan jeda video pendek.</string>
+    <string name="f_time_what">Orang tua mengatur batas waktu online per hari dan per kategori, jam tidur, dan jeda setelah lama menonton video pendek. Kamu diberi pengingat sebelum waktunya habis, dan bisa meminta tambahan waktu dengan alasan singkat.</string>
+    <string name="f_time_stays">Daftar aplikasi dan kapan kamu memakainya tetap di ponsel ini. dcAI hanya melihat nama aplikasi dan lamanya, tidak isinya.</string>
+    <string name="f_time_sent">Total menit per kategori (video, game, sosial, lainnya) per hari, menit di jam tidur, dan sesi terpanjang. Permintaan tambahan waktu dikirim dengan alasan yang sudah disamarkan.</string>
+    <string name="perm_usage">Akses penggunaan</string>
+    <string name="perm_usage_sub">Untuk menghitung lama pemakaian aplikasi di ponsel ini.</string>
+    <string name="perm_overlay">Tampil di atas aplikasi lain</string>
+    <string name="perm_overlay_sub">Untuk layar istirahat saat waktu habis atau jam tidur.</string>
+    <string name="cat_video">video</string>
+    <string name="cat_game">game</string>
+    <string name="cat_sosial">media sosial</string>
+    <string name="cat_lain">aplikasi lain</string>
+    <string name="duration_hm">%1$d j %2$d m</string>
+    <string name="duration_m">%1$d menit</string>
+
+    <string name="home_today_title">Waktu online hari ini</string>
+    <string name="home_today_left">Sisa %1$s</string>
+    <string name="home_today_used_only">Sudah %1$s hari ini</string>
+    <string name="home_today_used">%1$s dari %2$s</string>
+    <string name="home_today_bedtime">jam tidur %1$s</string>
+    <string name="home_today_bedtime_now">Sekarang jam tidur</string>
+    <string name="home_today_setup">Aktifkan akses penggunaan agar waktu bisa dihitung.</string>
+
+    <string name="time_remind_title">Waktu online</string>
+    <string name="time_remind_wind_down">%1$d menit lagi jam tidur. Saatnya bersiap.</string>
+    <string name="time_remind_session">Sudah %1$d menit menonton. Istirahat sebentar, yuk?</string>
+    <string name="time_remind_left">Waktu online hari ini tinggal %1$d menit.</string>
+    <string name="time_decision_title">Jawaban orang tua</string>
+    <string name="time_decision_yes">Orang tua mengizinkan tambahan %1$d menit.</string>
+    <string name="time_decision_no">Orang tua belum mengizinkan tambahan waktu sekarang.</string>
+
+    <string name="timeout_bedtime">Waktunya tidur</string>
+    <string name="timeout_bedtime_body">Aplikasi istirahat sampai pagi. Telepon dan aplikasi yang diizinkan orang tua tetap bisa dibuka.</string>
+    <string name="timeout_daily">Waktu online hari ini sudah habis</string>
+    <string name="timeout_daily_body">Kamu sudah memakai waktu online hari ini. Besok waktunya terisi lagi.</string>
+    <string name="timeout_category">Waktu %1$s hari ini sudah habis</string>
+    <string name="timeout_category_body">Waktu untuk kategori ini sudah habis. Aplikasi lain masih bisa dipakai.</string>
+    <string name="timeout_session">Istirahat sebentar</string>
+    <string name="timeout_session_body">Sudah lama menonton tanpa jeda. Coba berdiri, minum, atau lihat jauh sebentar.</string>
+    <string name="timeout_home">Ke layar utama ponsel</string>
+
+    <string name="time_request_title">Minta tambahan waktu</string>
+    <string name="time_request_ask">Butuh waktu lagi? Minta ke orang tua.</string>
+    <string name="time_request_reason">Alasan singkat (boleh dikosongkan)</string>
+    <string name="time_request_send">Kirim permintaan</string>
+    <string name="time_request_waiting">Menunggu jawaban orang tua</string>
+    <string name="time_request_waiting_sub">Kamu diberi tahu begitu orang tua menjawab.</string>
+    <string name="time_minutes">%1$d menit</string>
 </resources>

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.Gavel
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Notifications
@@ -100,6 +101,7 @@ fun HomeTab(
     onFeature: (Feature) -> Unit,
     onFix: () -> Unit,
     onTransparency: () -> Unit,
+    onAskTime: () -> Unit = {},
 ) {
     val nickname = snapshot.config?.childNickname.orEmpty()
     TabColumn(padding) {
@@ -113,6 +115,8 @@ fun HomeTab(
         }
 
         HeroCard(nickname, snapshot.issues, onFix)
+
+        if (snapshot.granted(Feature.WAKTU)) TodayCard(snapshot.today, onAskTime)
 
         SectionTitle(stringResource(R.string.home_features))
         Feature.entries.chunked(2).forEach { row ->
@@ -157,6 +161,50 @@ private fun HeroCard(nickname: String, issues: Int, onFix: () -> Unit) {
             Illustration(if (ok) Art.SHIELD else Art.SHIELD_WARN, Modifier.size(112.dp))
         }
     }
+}
+
+@Composable
+private fun TodayCard(today: dev.eziedutech.dcai.guardian.screen.TodayState?, onAskTime: () -> Unit) {
+    GroupCard {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Illustration(Art.CLOCK, Modifier.size(56.dp))
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.home_today_title), style = MaterialTheme.typography.titleMedium)
+                    val line = when {
+                        today == null -> stringResource(R.string.home_today_setup)
+                        today.inBedtime -> stringResource(R.string.home_today_bedtime_now)
+                        today.leftMinutes != null -> stringResource(R.string.home_today_left, hm(today.leftMinutes!!))
+                        else -> stringResource(R.string.home_today_used_only, hm(today.usedMinutes))
+                    }
+                    Text(line, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            val limit = today?.limitMinutes
+            if (today != null && limit != null) {
+                val total = (limit + today.bonusMinutes).coerceAtLeast(1)
+                androidx.compose.material3.LinearProgressIndicator(
+                    progress = { (today.usedMinutes.toFloat() / total).coerceIn(0f, 1f) },
+                    modifier = Modifier.fillMaxWidth().height(10.dp).clip(RoundedCornerShape(5.dp)),
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+                Text(
+                    stringResource(R.string.home_today_used, hm(today.usedMinutes), hm(total)) +
+                        (today.bedtimeStart?.let { "  ·  " + stringResource(R.string.home_today_bedtime, it) } ?: ""),
+                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            androidx.compose.material3.TextButton(onClick = onAskTime) { Text(stringResource(R.string.time_request_title)) }
+        }
+    }
+}
+
+@Composable
+private fun hm(minutes: Int): String {
+    val h = minutes / 60
+    val m = minutes % 60
+    return if (h > 0) stringResource(R.string.duration_hm, h, m) else stringResource(R.string.duration_m, m)
 }
 
 @Composable
@@ -240,6 +288,8 @@ fun ProtectionTab(
     onSites: (Boolean) -> Unit,
     onKeyboard: () -> Unit,
     onFeature: (Feature) -> Unit,
+    onUsage: () -> Unit = {},
+    onOverlay: () -> Unit = {},
 ) {
     TabColumn(padding) {
         Text(stringResource(R.string.tab_protection), style = MaterialTheme.typography.headlineMedium)
@@ -261,6 +311,18 @@ fun ProtectionTab(
                 Feature.PAPAN_KETIK.icon, stringResource(R.string.f_keyboard), stringResource(R.string.f_keyboard_short),
                 snapshot.status(Feature.PAPAN_KETIK), snapshot.keyboardOn, enabled = snapshot.granted(Feature.PAPAN_KETIK),
             ) { onKeyboard() }
+            if (snapshot.granted(Feature.WAKTU)) {
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
+                SwitchRow(
+                    Feature.WAKTU.icon, stringResource(R.string.perm_usage), stringResource(R.string.perm_usage_sub),
+                    if (snapshot.usageOn) Status.ON else Status.NEEDS_SETUP, snapshot.usageOn,
+                ) { onUsage() }
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
+                SwitchRow(
+                    Icons.Rounded.Layers, stringResource(R.string.perm_overlay), stringResource(R.string.perm_overlay_sub),
+                    if (snapshot.overlayOn) Status.ON else Status.NEEDS_SETUP, snapshot.overlayOn,
+                ) { onOverlay() }
+            }
         }
         Text(stringResource(R.string.prot_off_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 

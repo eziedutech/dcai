@@ -172,6 +172,14 @@ class MainActivity : LocalizedActivity() {
 
         fun keyboardSettings() = startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
 
+        fun usageSettings() = startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+
+        fun overlaySettings() = startActivity(
+            Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:$packageName")),
+        )
+
+        fun askTime() = startActivity(Intent(context, dev.eziedutech.dcai.guardian.screen.TimeOutActivity::class.java))
+
         val languageLabel = languageName(AppLocale.current(context))
         val route = stack.last()
         BackHandler(enabled = stack.size > 1) { back() }
@@ -199,6 +207,8 @@ class MainActivity : LocalizedActivity() {
                     onNotifications = { notifications() },
                     onSites = { sitesOn() },
                     onKeyboard = { keyboardSettings() },
+                    onUsage = { usageSettings() },
+                    onOverlay = { overlaySettings() },
                     onDone = {
                         store.setupDone = true
                         GuardianService.start(context)
@@ -212,6 +222,7 @@ class MainActivity : LocalizedActivity() {
                             onFeature = { go(Route.Detail(it)) },
                             onFix = { tab = Tab.PROTECTION },
                             onTransparency = { go(Route.Transparency) },
+                            onAskTime = { askTime() },
                         )
                         Tab.PROTECTION -> ProtectionTab(
                             padding, snapshot,
@@ -219,6 +230,8 @@ class MainActivity : LocalizedActivity() {
                             onSites = { on -> if (on) sitesOn() else pinPurpose = "sites_off" },
                             onKeyboard = { if (snapshot.keyboardOn) pinPurpose = "keyboard_off" else keyboardSettings() },
                             onFeature = { go(Route.Detail(it)) },
+                            onUsage = { usageSettings() },
+                            onOverlay = { overlaySettings() },
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
@@ -248,6 +261,9 @@ class MainActivity : LocalizedActivity() {
                         !snapshot.granted(f) -> null
                         f == Feature.SITUS && !snapshot.sitesOn -> stringResource(R.string.home_sites_enable) to { sitesOn() }
                         f == Feature.PAPAN_KETIK && !snapshot.keyboardOn -> stringResource(R.string.home_keyboard_enable) to { keyboardSettings() }
+                        f == Feature.WAKTU && !snapshot.usageOn -> stringResource(R.string.perm_usage) to { usageSettings() }
+                        f == Feature.WAKTU && !snapshot.overlayOn -> stringResource(R.string.perm_overlay) to { overlaySettings() }
+                        f == Feature.WAKTU -> stringResource(R.string.time_request_title) to { askTime() }
                         else -> null
                     }
                     FeatureDetailScreen(f, snapshot.status(f), snapshot.granted(f), action, onBack = { back() })

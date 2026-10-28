@@ -32,9 +32,67 @@ data class DeviceConfig(
     val scopes: List<String>,
     @SerialName("consent_version") val consentVersion: String? = null,
     @SerialName("stream_path") val streamPath: String = "/v1/device/stream",
+    @SerialName("screen_policy") val screenPolicy: ScreenPolicy? = null,
 ) {
     fun has(scope: String) = scope in scopes
 }
+
+/** The parent's time online settings (code/backpy/app/family/policy.py). */
+@Serializable
+data class Bedtime(val enabled: Boolean = true, val start: String = "21:00", val end: String = "05:30")
+
+@Serializable
+data class SessionRule(
+    val enabled: Boolean = true,
+    @SerialName("nudge_minutes") val nudgeMinutes: Int = 20,
+    @SerialName("limit_minutes") val limitMinutes: Int = 40,
+    @SerialName("break_minutes") val breakMinutes: Int = 5,
+)
+
+@Serializable
+data class ScreenPolicy(
+    val enabled: Boolean = true,
+    @SerialName("school_days") val schoolDays: List<Int> = listOf(1, 2, 3, 4, 5),
+    @SerialName("daily_limit_school") val dailyLimitSchool: Int? = 150,
+    @SerialName("daily_limit_weekend") val dailyLimitWeekend: Int? = 210,
+    @SerialName("category_limits") val categoryLimits: Map<String, Int?> = emptyMap(),
+    @SerialName("bedtime_school") val bedtimeSchool: Bedtime = Bedtime(),
+    @SerialName("bedtime_weekend") val bedtimeWeekend: Bedtime = Bedtime(start = "22:00", end = "06:30"),
+    @SerialName("wind_down_minutes") val windDownMinutes: Int = 15,
+    val session: SessionRule = SessionRule(),
+    @SerialName("always_allowed") val alwaysAllowed: List<String> = emptyList(),
+)
+
+@Serializable
+data class UsageDayRequest(
+    val day: String,
+    val minutes: Map<String, Int>,
+    @SerialName("bedtime_minutes") val bedtimeMinutes: Int,
+    @SerialName("longest_session") val longestSession: Int,
+    @SerialName("session_limits") val sessionLimits: Int,
+)
+
+@Serializable
+data class UsageRequest(val days: List<UsageDayRequest>)
+
+@Serializable
+data class TimeRequestContext(
+    @SerialName("used_today") val usedToday: Int,
+    @SerialName("limit_today") val limitToday: Int? = null,
+    val category: String? = null,
+    @SerialName("minutes_to_bedtime") val minutesToBedtime: Int? = null,
+)
+
+@Serializable
+data class TimeRequestBody(val minutes: Int, val reason: String, val context: TimeRequestContext)
+
+@Serializable
+data class TimeRequestOut(
+    val id: String,
+    val minutes: Int,
+    val status: String,
+    @SerialName("granted_minutes") val grantedMinutes: Int = 0,
+)
 
 @Serializable
 data class ConsentText(val version: String, val id: String, val en: String, val scopes: List<String>)

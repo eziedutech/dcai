@@ -115,6 +115,28 @@ class GuardianStore(context: Context) {
         prefs.edit { putString(KEY_NUDGES, json.encodeToString(list)) }
     }
 
+    /** Extra minutes the parent granted for [day]. */
+    fun bonusMinutes(day: java.time.LocalDate): Int = prefs.getInt(KEY_BONUS + day, 0)
+
+    fun addBonus(day: java.time.LocalDate, minutes: Int) =
+        prefs.edit { putInt(KEY_BONUS + day, bonusMinutes(day) + minutes) }
+
+    /** Short-video breaks that started on [day], for the day's totals. */
+    fun sessionLimits(day: java.time.LocalDate): Int = prefs.getInt(KEY_SESSION_LIMITS + day, 0)
+
+    fun addSessionLimit(day: java.time.LocalDate) =
+        prefs.edit { putInt(KEY_SESSION_LIMITS + day, sessionLimits(day) + 1) }
+
+    /** Bedtime extended by the parent until this time (epoch milliseconds), or 0. */
+    var bedtimeExtendedUntil: Long
+        get() = prefs.getLong(KEY_BEDTIME_EXT, 0L)
+        set(value) = prefs.edit { putLong(KEY_BEDTIME_EXT, value) }
+
+    /** The open request for more time, so the child sees it is waiting. */
+    var pendingTimeRequest: String?
+        get() = prefs.getString(KEY_PENDING_TIME, null)
+        set(value) = prefs.edit { if (value == null) remove(KEY_PENDING_TIME) else putString(KEY_PENDING_TIME, value) }
+
     /** Pairing ended (revoked by the parent, or the child's data was erased). The PIN and
      * the local image tuning go with it. */
     fun clear() = prefs.edit { clear() }
@@ -133,6 +155,10 @@ class GuardianStore(context: Context) {
         const val KEY_SETUP_DONE = "setup_done"
         const val KEY_CONSENT_READ = "consent_read"
         const val KEY_NUDGES = "nudges"
+        const val KEY_BONUS = "time_bonus_"
+        const val KEY_SESSION_LIMITS = "time_session_limits_"
+        const val KEY_PENDING_TIME = "time_pending"
+        const val KEY_BEDTIME_EXT = "time_bedtime_extended"
         const val MAX_NUDGES = 10
 
         fun b64(bytes: ByteArray): String = Base64.encodeToString(bytes, Base64.NO_WRAP)

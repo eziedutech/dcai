@@ -10,6 +10,8 @@ object DeviceState {
         "notification" to true,
         "keyboard" to isKeyboardEnabled(context),
         "vpn" to dev.eziedutech.dcai.guardian.sites.SiteGuardVpn.running,
+        "usage" to dev.eziedutech.dcai.guardian.screen.UsageReader(context).hasPermission(),
+        "overlay" to android.provider.Settings.canDrawOverlays(context),
     )
 
     /** Whether the dcAI keyboard is enabled. InputMethodManager needs no special read
