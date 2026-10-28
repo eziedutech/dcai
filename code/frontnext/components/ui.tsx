@@ -204,6 +204,7 @@ export function formatWhen(iso: string, lang: string) {
 }
 
 const KNOWN_APPS: Record<string, string> = {
+  "dev.eziedutech.dcai.samplechat": "Messenger Z",
   "com.whatsapp": "WhatsApp",
   "com.instagram.android": "Instagram",
   "com.zhiliaoapp.musically": "TikTok",
