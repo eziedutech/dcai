@@ -1,7 +1,6 @@
 package dev.eziedutech.dcai.guardian.sites
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,7 @@ import kotlinx.coroutines.withContext
  * allow it on this phone. The server then gets a note of a false detection with the
  * category only; the site's name stays on the phone.
  */
-class SiteReviewActivity : ComponentActivity() {
+class SiteReviewActivity : dev.eziedutech.dcai.guardian.ui.LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val site = intent.getStringExtra(EXTRA_SITE)?.let(SiteNames::normalise)
@@ -53,7 +52,7 @@ class SiteReviewActivity : ComponentActivity() {
         }
         val store = ServiceLocator.store(this)
         setContent {
-            MaterialTheme {
+            dev.eziedutech.dcai.guardian.ui.theme.DcaiTheme(dev.eziedutech.dcai.guardian.ui.UiPrefs(this).theme) {
                 Surface(Modifier.fillMaxSize()) {
                     val scope = rememberCoroutineScope()
                     var pin by remember { mutableStateOf("") }

@@ -41,7 +41,7 @@ class GuardianService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val store = ServiceLocator.store(this)
-        if (!store.isPaired) {
+        if (!store.isPaired || !store.setupDone) {
             stopSelf()
             return START_NOT_STICKY
         }
@@ -92,7 +92,10 @@ class GuardianService : Service() {
 
     private fun handle(event: String, data: kotlinx.serialization.json.JsonObject) {
         when (event) {
-            "nudge" -> data["child_nudge"]?.jsonPrimitive?.content?.let { Notifications.showNudge(this, it) }
+            "nudge" -> data["child_nudge"]?.jsonPrimitive?.content?.let {
+                ServiceLocator.store(this).addNudge(it)
+                Notifications.showNudge(this, it)
+            }
             "config" -> runCatching { scope.launch { refreshConfig() } }
             "revoked" -> onRevoked()
             // A received image is only looked at in a conversation at perhatian or above.

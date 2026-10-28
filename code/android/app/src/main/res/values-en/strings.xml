@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">Back</string>
+    <string name="action_next">Next</string>
+    <string name="action_continue">Start setup</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+
+    <string name="channel_status">dcAI status</string>
+    <string name="channel_status_desc">Shows that dcAI is on for this phone.</string>
+    <string name="channel_nudge">Reminders for the child</string>
+    <string name="channel_nudge_desc">Short messages for the child when a chat looks risky.</string>
+    <string name="status_active">dcAI is on for this phone.</string>
+    <string name="status_active_for">dcAI is on, guiding %1$s.</string>
+    <string name="nudge_title">Hold on a moment</string>
+
+    <string name="status_on">On</string>
+    <string name="status_needs_setup">Needs turning on</string>
+    <string name="status_off">Off</string>
+    <string name="status_not_granted">Not approved</string>
+    <string name="status_soon">Coming soon</string>
+
+    <string name="welcome_tagline">A safe companion online</string>
+    <string name="welcome_start">Get started</string>
+    <string name="welcome_note">Set up together with a parent. The child always knows dcAI is on.</string>
+    <string name="intro1_title">Beside you in chats</string>
+    <string name="intro1_body">dcAI recognises risky chats and gives a reminder in the moment.</string>
+    <string name="intro2_title">Personal data stays on the phone</string>
+    <string name="intro2_body">Names, numbers and addresses are masked on the phone. Images are never sent.</string>
+    <string name="intro3_title">Parents get guidance</string>
+    <string name="intro3_body">Parents receive patterns and conversation starters. They do not read the messages.</string>
+    <string name="step_of">Step %1$d of %2$d</string>
+
+    <string name="connect_title">Connect to the parent\'s account</string>
+    <string name="connect_lead">Enter the pairing code from the parent\'s dcAI dashboard. The code lasts 10 minutes.</string>
+    <string name="connect_advanced">Advanced settings</string>
+    <string name="setup_server">Server address</string>
+    <string name="setup_code">Pairing code</string>
+    <string name="setup_pair">Connect</string>
+    <string name="setup_pairing">Connecting…</string>
+    <string name="setup_error">The code does not match or has expired. Ask for a new code on the dashboard.</string>
+    <string name="setup_neterror">Cannot reach the server. Check the address and the connection.</string>
+
+    <string name="consent_title">Consent</string>
+    <string name="consent_lead">A parent approved these protections for %1$s on the dcAI dashboard. Read them together before turning dcAI on.</string>
+    <string name="consent_read_full">Read the full consent text</string>
+    <string name="consent_check_guardian">I am this child\'s parent or guardian, and I agree to the protections above.</string>
+    <string name="consent_check_together">We have read together what dcAI does.</string>
+    <string name="consent_accept">Agree and continue</string>
+    <string name="consent_loading">Loading the consent text…</string>
+
+    <string name="pin_title">Create a parent PIN</string>
+    <string name="pin_lead">The PIN is used to review a held image or site and to switch a protection off. Keep it to yourself.</string>
+    <string name="setup_pin">Parent PIN (4 to 8 digits)</string>
+    <string name="pin_again">Repeat the PIN</string>
+    <string name="pin_mismatch">The PINs do not match.</string>
+    <string name="pin_save">Save PIN</string>
+    <string name="pin_dialog_title">Parent PIN</string>
+    <string name="pin_dialog_sites_off">Switching site protection off needs the parent PIN. The parent is also told on the dashboard.</string>
+    <string name="pin_dialog_keyboard_off">Changing the dcAI keyboard needs the parent PIN.</string>
+    <string name="pin_dialog_change">Enter the current PIN to create a new one.</string>
+
+    <string name="perm_title">Turn protections on</string>
+    <string name="perm_lead">Switch on what is needed. The status is always shown on the home screen.</string>
+    <string name="perm_notifications">dcAI notifications</string>
+    <string name="perm_notifications_sub">For reminders and the sign that dcAI is on.</string>
+    <string name="perm_note">Chats and images are guided through chat apps that integrate dcAI. No extra permission is needed.</string>
+    <string name="perm_done">Done</string>
+    <string name="perm_required">dcAI notifications must be on.</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_protection">Protection</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="home_subtitle">Digital companion</string>
+    <string name="home_hello">Hi, %1$s</string>
+    <string name="home_hello_plain">Hi</string>
+    <string name="home_protected">You are protected</string>
+    <string name="home_protected_sub">All protections are on.</string>
+    <string name="home_attention">Needs attention</string>
+    <string name="home_attention_sub">%1$d protections are not on yet. Tap to set them up.</string>
+    <string name="home_features">What dcAI helps with</string>
+    <string name="home_nudges">Latest reminders</string>
+    <string name="home_nudges_empty">No reminders yet. Keep your chats safe.</string>
+    <string name="home_tip">Tip of the day</string>
+    <string name="home_transparency_title">How dcAI works</string>
+    <string name="home_transparency_short">What dcAI sees and when parents are told.</string>
+    <string name="home_sites_enable">Turn on site protection</string>
+    <string name="home_keyboard_enable">Set up the keyboard</string>
+    <string name="home_images_model_off">Sensitive image detection is off: no model for it is installed on this phone.</string>
+
+    <string name="tip1">A friend you just met online is still a stranger. Keep your address and school to yourself.</string>
+    <string name="tip2">If someone asks you to keep a secret from your parents, that is a sign to tell them.</string>
+    <string name="tip3">A free gift that asks you to move to another app deserves suspicion.</string>
+    <string name="tip4">A photo once sent is hard to take back. Think before you send.</string>
+    <string name="tip5">You can stop replying to anyone who makes you uncomfortable.</string>
+    <string name="tip6">Use a different password for every account.</string>
+
+    <string name="f_chat">Chats</string>
+    <string name="f_chat_short">Recognises risky chats.</string>
+    <string name="f_chat_what">Messages in chat apps that integrate dcAI are assessed for risky patterns, such as asking for photos, moving to another app, or keeping secrets from parents. You get a short reminder in the moment.</string>
+    <string name="f_chat_stays">Names, phone numbers, addresses, schools and accounts are masked on the phone before anything is sent. Message text is not stored.</string>
+    <string name="f_chat_sent">Masked messages, to be assessed. Only the pattern, level and advice for the parent are stored.</string>
+
+    <string name="f_image">Images</string>
+    <string name="f_image_short">Blurs personal data in images.</string>
+    <string name="f_image_what">An image you are about to share is checked on the phone. Faces and personal data such as a student card or an address are blurred. Images in a risky chat are checked too, and their text is assessed.</string>
+    <string name="f_image_stays">Images always stay on this phone. If dcAI blurs by mistake, show your parent. They review it on this phone with the PIN.</string>
+    <string name="f_image_sent">Only a label, such as \"personal data blurred\". The image itself is never sent.</string>
+
+    <string name="f_site">Site protection</string>
+    <string name="f_site_short">Holds risky sites on this phone.</string>
+    <string name="f_site_what">Site names are matched against a list on the phone. Adult, gambling, scam, malware, dating, drug and hate sites are held, and you are told why.</string>
+    <string name="f_site_stays">The sites you open stay on this phone. App traffic does not pass through dcAI. The VPN key icon at the top of the screen shows this protection is on.</string>
+    <string name="f_site_sent">Only the category of a held site, such as \"gambling\". The site\'s name is not sent.</string>
+
+    <string name="f_voice">Voice notes</string>
+    <string name="f_voice_short">Voice notes in risky chats.</string>
+    <string name="f_voice_what">A voice note in a chat that is already risky is turned into text, masked, then assessed like any message. This comes to the app soon.</string>
+    <string name="f_voice_stays">Recordings are not stored.</string>
+    <string name="f_voice_sent">The recording goes to Meta\'s transcription service to become text. The text is masked before it is assessed.</string>
+
+    <string name="f_keyboard">dcAI keyboard</string>
+    <string name="f_keyboard_short">Beside you when you type.</string>
+    <string name="f_keyboard_what">When you send with the Check key, what you typed is assessed too, for example if you share personal data or need support.</string>
+    <string name="f_keyboard_stays">Your typing is masked on the phone before it is sent. The keyboard only sees your own typing.</string>
+    <string name="f_keyboard_sent">Masked text, each time you press Check.</string>
+    <string name="keyboard_label">dcAI keyboard</string>
+    <string name="keyboard_check">Check</string>
+
+    <string name="detail_what">What it does</string>
+    <string name="detail_stays">What stays on the phone</string>
+    <string name="detail_sent">What is sent</string>
+    <string name="detail_not_granted_title">Not approved</string>
+    <string name="detail_not_granted">A parent has not approved this protection on the dcAI dashboard, so dcAI does not use it.</string>
+
+    <string name="prot_lead">Everything that is on for this phone. Switching a protection off needs the parent PIN.</string>
+    <string name="prot_on_phone">On this phone</string>
+    <string name="prot_from_parent">Approved by a parent</string>
+    <string name="prot_granted">Approved</string>
+    <string name="prot_not_granted">Not approved</string>
+    <string name="prot_off_note">If a protection is switched off, the parent is told on the dashboard.</string>
+
+    <string name="set_general">General</string>
+    <string name="set_language">Language</string>
+    <string name="set_theme">Appearance</string>
+    <string name="lang_system">Follow system</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="set_security">Security</string>
+    <string name="set_pin">Parent PIN</string>
+    <string name="set_pin_sub">Change the PIN</string>
+    <string name="set_device">Device</string>
+    <string name="set_for">Guiding</string>
+    <string name="set_server">Server</string>
+    <string name="set_version">Version</string>
+    <string name="set_consent_version">consent %1$s</string>
+    <string name="set_info">Information</string>
+    <string name="set_consent_text">Consent text</string>
+    <string name="set_licenses">Licenses</string>
+    <string name="set_unpair">Disconnect this phone</string>
+    <string name="set_unpair_sub">Done by a parent from the dashboard</string>
+    <string name="set_unpair_body">A parent disconnects this phone from the dcAI dashboard. dcAI then stops, and its data on this phone is deleted.</string>
+
+    <string name="tr_p1">dcAI does not work in secret. The \"dcAI is on\" notification shows the whole time dcAI runs, and you can always open this page.</string>
+    <string name="tr_p2">dcAI guides chats in apps that integrate dcAI and the text you type with the dcAI keyboard. Other apps are not read.</string>
+    <string name="tr_p3">Personal data is masked on the phone. Images stay on the phone. For sites, only the category is sent.</string>
+    <string name="tr_p4">Parents receive levels, patterns and conversation starters. They do not receive message text or images.</string>
+    <string name="tr_p5">An AI assessment is an estimate and can be wrong. If you think dcAI got it wrong, tell your parent.</string>
+
+    <string name="lic_p1">Site lists: UT1 Blacklists, Université Toulouse Capitole, CC BY-SA 4.0. The lists on this phone are hashed adaptations under the same license.</string>
+    <string name="lic_p2">Face and text detection in images: Google ML Kit, on-device models.</string>
+    <string name="lic_p3">Pattern assessment: Muse Spark and Llama by Meta.</string>
+    <string name="lic_p4">Open source components: AndroidX, Jetpack Compose, Kotlin, OkHttp, kotlinx.serialization, under their own licenses.</string>
+
+    <string name="review_title">Review with a parent</string>
+    <string name="review_lead">dcAI blurred this image. A parent enters the PIN to see it and decide.</string>
+    <string name="review_pin">Parent PIN</string>
+    <string name="review_open">Open image</string>
+    <string name="review_close">Close</string>
+    <string name="review_no_pin">No parent PIN is set on this phone. The image stays blurred.</string>
+    <string name="review_wrong_pin">Wrong PIN.</string>
+    <string name="review_unreadable">The image cannot be opened.</string>
+    <string name="review_decide">Does this image need to be blurred?</string>
+    <string name="review_keep">Yes, keep it blurred</string>
+    <string name="review_false">Wrong detection, show it</string>
+
+    <string name="site_held_title">This site is held</string>
+    <string name="site_held_text">dcAI held a %1$s site. If you think that is wrong, show your parent.</string>
+    <string name="site_cat_dewasa">adult content</string>
+    <string name="site_cat_judi">gambling</string>
+    <string name="site_cat_penipuan">scam</string>
+    <string name="site_cat_berbahaya">malware</string>
+    <string name="site_cat_kencan">dating</string>
+    <string name="site_cat_narkoba">drug</string>
+    <string name="site_cat_kebencian">hate</string>
+    <string name="site_cat_lain">risky</string>
+    <string name="site_review_lead">dcAI held %1$s (category %2$s). A parent enters the PIN to allow it on this phone.</string>
+    <string name="site_review_allow">Allow this site</string>
+    <string name="site_review_keep">Keep it held</string>
+</resources>

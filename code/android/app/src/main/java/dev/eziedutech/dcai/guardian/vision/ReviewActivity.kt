@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +51,7 @@ import kotlinx.coroutines.withContext
  * without the image (tier 2). The image is never stored or sent, and the screen blocks
  * screenshots while it is open.
  */
-class ReviewActivity : ComponentActivity() {
+class ReviewActivity : dev.eziedutech.dcai.guardian.ui.LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
@@ -66,7 +65,7 @@ class ReviewActivity : ComponentActivity() {
         val modelVersion = intent.getStringExtra(EXTRA_MODEL_VERSION)?.take(120)?.ifBlank { null } ?: OnDeviceDetectors.VERSION
 
         setContent {
-            MaterialTheme {
+            dev.eziedutech.dcai.guardian.ui.theme.DcaiTheme(dev.eziedutech.dcai.guardian.ui.UiPrefs(this).theme) {
                 Surface(Modifier.fillMaxSize()) {
                     ReviewScreen(
                         hasPin = ServiceLocator.store(this).hasPin,

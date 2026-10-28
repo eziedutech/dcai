@@ -10,6 +10,7 @@ coroutines = "1.11.0"
 okhttp = "5.5.1"
 junit = "4.13.2"
 mlkitFace = "16.1.7"
+materialIcons = "1.7.8"
 mlkitText = "16.0.1"
 
 [libraries]
@@ -28,6 +29,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-sse = { module = "com.squareup.okhttp3:okhttp-sse", version.ref = "okhttp" }
 okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver3", version.ref = "okhttp" }
+compose-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIcons" }
 mlkit-face = { module = "com.google.mlkit:face-detection", version.ref = "mlkitFace" }
 mlkit-text = { module = "com.google.mlkit:text-recognition", version.ref = "mlkitText" }
 junit = { module = "junit:junit", version.ref = "junit" }

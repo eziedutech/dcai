@@ -62,6 +62,11 @@ class BackendClient(
             execute<PairResponse>(req)
         }
 
+    /** The current consent text; public, no token needed. */
+    suspend fun consentText(): ConsentText = withContext(Dispatchers.IO) {
+        execute<ConsentText>(Request.Builder().url(url("/v1/consents/text")).get().build())
+    }
+
     suspend fun config(): DeviceConfig = withContext(Dispatchers.IO) {
         execute<DeviceConfig>(authed(Request.Builder().url(url("/v1/device/config"))).get().build())
     }

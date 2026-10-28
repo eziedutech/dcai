@@ -37,6 +37,9 @@ data class DeviceConfig(
 }
 
 @Serializable
+data class ConsentText(val version: String, val id: String, val en: String, val scopes: List<String>)
+
+@Serializable
 data class HeartbeatRequest(
     @SerialName("app_version") val appVersion: String,
     val services: Map<String, Boolean>,

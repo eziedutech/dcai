@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Compose draws the screens; this only sets the window before the first frame. -->
     <style name="Theme.DcaiGuardian" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#1F3A5F</item>
-        <item name="android:windowBackground">#FBFCFD</item>
+        <item name="android:windowBackground">#F5F7FC</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

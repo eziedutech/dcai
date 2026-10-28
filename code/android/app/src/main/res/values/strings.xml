@@ -1,18 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">dcAI Guardian</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="id">
+    <string name="app_name" translatable="false">dcAI Guardian</string>
 
+    <!-- Actions -->
+    <string name="action_back">Kembali</string>
+    <string name="action_next">Lanjut</string>
+    <string name="action_continue">Mulai menyiapkan</string>
+    <string name="action_skip">Lewati</string>
+    <string name="action_confirm">Konfirmasi</string>
+    <string name="action_cancel">Batal</string>
+    <string name="action_close">Tutup</string>
+
+    <!-- Notifications and the foreground service -->
     <string name="channel_status">Status dcAI</string>
     <string name="channel_status_desc">Menandakan dcAI sedang aktif di ponsel ini.</string>
     <string name="channel_nudge">Pengingat untuk anak</string>
     <string name="channel_nudge_desc">Pesan singkat untuk anak saat ada obrolan berisiko.</string>
-
     <string name="status_active">dcAI aktif di ponsel ini.</string>
     <string name="status_active_for">dcAI aktif, mendampingi %1$s.</string>
     <string name="nudge_title">Sebentar ya</string>
 
-    <string name="setup_title">Sambungkan ponsel ini</string>
-    <string name="setup_lead">Orang tua membuat kode di dasbor dcAI, lalu memasukkannya di sini. Anak akan selalu tahu dcAI aktif.</string>
+    <!-- Status indicators -->
+    <string name="status_on">Aktif</string>
+    <string name="status_needs_setup">Perlu diaktifkan</string>
+    <string name="status_off">Mati</string>
+    <string name="status_not_granted">Belum disetujui</string>
+    <string name="status_soon">Segera hadir</string>
+
+    <!-- Welcome and intro -->
+    <string name="welcome_tagline">Teman aman di dunia digital</string>
+    <string name="welcome_start">Mulai</string>
+    <string name="welcome_note">Disiapkan bersama orang tua. Anak selalu tahu dcAI aktif.</string>
+    <string name="intro1_title">Mendampingi di obrolan</string>
+    <string name="intro1_body">dcAI mengenali obrolan yang berisiko dan memberi pengingat pada saat itu juga.</string>
+    <string name="intro2_title">Data pribadi tetap di ponsel</string>
+    <string name="intro2_body">Nama, nomor, dan alamat disamarkan di ponsel. Gambar tidak pernah dikirim.</string>
+    <string name="intro3_title">Orang tua mendapat panduan</string>
+    <string name="intro3_body">Orang tua menerima pola dan saran untuk memulai percakapan. Isi pesan tidak dibaca orang tua.</string>
+    <string name="step_of">Langkah %1$d dari %2$d</string>
+
+    <!-- Connect -->
+    <string name="connect_title">Sambungkan ke akun orang tua</string>
+    <string name="connect_lead">Masukkan kode pasangan dari dasbor dcAI orang tua. Kode berlaku 10 menit.</string>
+    <string name="connect_advanced">Pengaturan lanjutan</string>
     <string name="setup_server">Alamat server</string>
     <string name="setup_code">Kode pasangan</string>
     <string name="setup_pair">Sambungkan</string>
@@ -20,36 +50,150 @@
     <string name="setup_error">Kode tidak cocok atau sudah kedaluwarsa. Minta kode baru di dasbor.</string>
     <string name="setup_neterror">Tidak bisa menghubungi server. Periksa alamat dan koneksi.</string>
 
-    <string name="home_active_for">dcAI aktif, mendampingi %1$s</string>
-    <string name="home_active">dcAI aktif di ponsel ini</string>
-    <string name="home_what_title">Yang dilakukan dcAI</string>
-    <string name="home_scopes_title">Yang kamu dan orang tuamu setujui</string>
-    <string name="home_transparency">dcAI tidak bekerja diam-diam. Notifikasi di atas selalu tampil selama dcAI aktif. Orang tua menerima pola dan saran, tidak membaca isi pesanmu.</string>
-    <string name="home_keyboard_title">Papan ketik dcAI</string>
-    <string name="home_keyboard_on">Papan ketik dcAI aktif.</string>
-    <string name="home_keyboard_off">Aktifkan papan ketik dcAI agar pesan yang kamu ketik ikut didampingi.</string>
-    <string name="home_keyboard_enable">Atur papan ketik</string>
-    <string name="home_keyboard_choose">Pilih papan ketik dcAI</string>
+    <!-- Consent -->
+    <string name="consent_title">Persetujuan</string>
+    <string name="consent_lead">Orang tua sudah menyetujui perlindungan ini untuk %1$s di dasbor dcAI. Baca bersama sebelum mengaktifkan.</string>
+    <string name="consent_read_full">Baca teks persetujuan lengkap</string>
+    <string name="consent_check_guardian">Saya orang tua atau wali anak ini, dan saya menyetujui perlindungan di atas.</string>
+    <string name="consent_check_together">Kami sudah membaca bersama apa yang dilakukan dcAI.</string>
+    <string name="consent_accept">Setuju dan lanjutkan</string>
+    <string name="consent_loading">Memuat teks persetujuan…</string>
 
-    <string name="scope_percakapan">Percakapan</string>
-    <string name="scope_gambar">Gambar</string>
-    <string name="scope_domain">Situs</string>
-    <string name="scope_suara">Pesan suara</string>
-    <string name="scope_keyboard">Papan ketik</string>
-
-    <string name="how_1">Pesan dinilai untuk mengenali pola berisiko. Data pribadi disamarkan di ponsel sebelum pesan dikirim.</string>
-    <string name="how_2">Isi pesan tidak disimpan. Yang disimpan hanya pola, level, dan saran.</string>
-    <string name="how_3">Kamu mendapat pengingat singkat saat ada obrolan berisiko.</string>
-
+    <!-- PIN -->
+    <string name="pin_title">Buat PIN orang tua</string>
+    <string name="pin_lead">PIN dipakai untuk meninjau gambar atau situs yang ditahan dan untuk mematikan perlindungan. Simpan PIN ini, jangan beri tahu anak.</string>
     <string name="setup_pin">PIN orang tua (4 sampai 8 angka)</string>
-    <string name="setup_pin_hint">Dipakai saat orang tua meninjau gambar yang dikaburkan di ponsel ini.</string>
+    <string name="pin_again">Ulangi PIN</string>
+    <string name="pin_mismatch">PIN tidak sama.</string>
+    <string name="pin_save">Simpan PIN</string>
+    <string name="pin_dialog_title">PIN orang tua</string>
+    <string name="pin_dialog_sites_off">Mematikan perlindungan situs butuh PIN orang tua. Orang tua juga diberi tahu di dasbor.</string>
+    <string name="pin_dialog_keyboard_off">Mengganti papan ketik dcAI butuh PIN orang tua.</string>
+    <string name="pin_dialog_change">Masukkan PIN saat ini untuk membuat PIN baru.</string>
 
-    <string name="home_images_title">Gambar</string>
-    <string name="home_images_on">Gambar dinilai di ponsel ini dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan kamu bagikan dikaburkan. Teks pada gambar di obrolan berisiko ikut dinilai setelah disamarkan.</string>
+    <!-- Permissions -->
+    <string name="perm_title">Aktifkan perlindungan</string>
+    <string name="perm_lead">Nyalakan yang dibutuhkan. Statusnya selalu terlihat di beranda.</string>
+    <string name="perm_notifications">Notifikasi dcAI</string>
+    <string name="perm_notifications_sub">Untuk pengingat dan tanda dcAI aktif.</string>
+    <string name="perm_note">Obrolan dan gambar didampingi lewat aplikasi chat yang memasang dcAI. Tidak perlu izin tambahan.</string>
+    <string name="perm_done">Selesai</string>
+    <string name="perm_required">Notifikasi dcAI wajib aktif.</string>
+
+    <!-- Tabs -->
+    <string name="tab_home">Beranda</string>
+    <string name="tab_protection">Perlindungan</string>
+    <string name="tab_settings">Pengaturan</string>
+
+    <!-- Home -->
+    <string name="home_subtitle">Pendamping digital</string>
+    <string name="home_hello">Halo, %1$s</string>
+    <string name="home_hello_plain">Halo</string>
+    <string name="home_protected">Kamu terlindungi</string>
+    <string name="home_protected_sub">Semua perlindungan aktif.</string>
+    <string name="home_attention">Perlu perhatian</string>
+    <string name="home_attention_sub">%1$d perlindungan belum aktif. Ketuk untuk mengatur.</string>
+    <string name="home_features">Yang didampingi dcAI</string>
+    <string name="home_nudges">Pengingat terakhir</string>
+    <string name="home_nudges_empty">Belum ada pengingat. Tetap jaga obrolanmu, ya.</string>
+    <string name="home_tip">Tips hari ini</string>
+    <string name="home_transparency_title">Cara dcAI bekerja</string>
+    <string name="home_transparency_short">Apa yang dilihat dcAI dan kapan orang tua diberi tahu.</string>
+    <string name="home_sites_enable">Aktifkan perlindungan situs</string>
+    <string name="home_keyboard_enable">Atur papan ketik</string>
     <string name="home_images_model_off">Deteksi gambar sensitif belum aktif: model untuk itu belum dipasang di ponsel ini.</string>
-    <string name="home_images_model_on">Deteksi gambar sensitif aktif di ponsel ini.</string>
-    <string name="home_images_review">Bila dcAI salah mengaburkan, tunjukkan ke orang tuamu. Mereka meninjaunya di ponsel ini dengan PIN.</string>
 
+    <string name="tip1">Teman yang baru dikenal online tetap orang asing. Jangan bagikan alamat atau sekolahmu.</string>
+    <string name="tip2">Bila ada yang minta rahasia dari orang tuamu, itu tanda untuk bercerita ke orang tua.</string>
+    <string name="tip3">Hadiah gratis yang minta kamu pindah aplikasi patut dicurigai.</string>
+    <string name="tip4">Foto yang sudah terkirim sulit ditarik kembali. Pikirkan dulu sebelum mengirim.</string>
+    <string name="tip5">Kamu boleh berhenti membalas siapa pun yang membuatmu tidak nyaman.</string>
+    <string name="tip6">Gunakan kata sandi yang berbeda untuk setiap akun.</string>
+
+    <!-- Features -->
+    <string name="f_chat">Obrolan</string>
+    <string name="f_chat_short">Mengenali obrolan yang berisiko.</string>
+    <string name="f_chat_what">Pesan di aplikasi chat yang memasang dcAI dinilai untuk mengenali pola berisiko, misalnya permintaan foto, ajakan pindah aplikasi, atau rahasia dari orang tua. Kamu mendapat pengingat singkat pada saat itu juga.</string>
+    <string name="f_chat_stays">Nama, nomor telepon, alamat, sekolah, dan akun disamarkan di ponsel sebelum apa pun dikirim. Isi pesan tidak disimpan.</string>
+    <string name="f_chat_sent">Pesan yang sudah disamarkan, untuk dinilai. Yang disimpan hanya pola, level, dan saran untuk orang tua.</string>
+
+    <string name="f_image">Gambar</string>
+    <string name="f_image_short">Mengaburkan data pribadi di gambar.</string>
+    <string name="f_image_what">Gambar yang akan kamu bagikan diperiksa di ponsel. Wajah dan data pribadi seperti kartu pelajar atau alamat dikaburkan. Gambar di obrolan berisiko juga diperiksa, dan teksnya ikut dinilai.</string>
+    <string name="f_image_stays">Gambar selalu tetap di ponsel ini. Bila dcAI salah mengaburkan, tunjukkan ke orang tuamu. Mereka meninjaunya di ponsel ini dengan PIN.</string>
+    <string name="f_image_sent">Hanya label, misalnya \"data pribadi dikaburkan\". Gambarnya tidak pernah dikirim.</string>
+
+    <string name="f_site">Perlindungan situs</string>
+    <string name="f_site_short">Menahan situs berisiko di ponsel ini.</string>
+    <string name="f_site_what">Nama situs dicocokkan dengan daftar di ponsel. Situs dewasa, judi, penipuan, program berbahaya, kencan, narkoba, dan kebencian ditahan, dan kamu diberi tahu alasannya.</string>
+    <string name="f_site_stays">Riwayat situs yang kamu buka tetap di ponsel ini. Lalu lintas aplikasi tidak melewati dcAI. Ikon kunci VPN di atas layar menandai perlindungan ini aktif.</string>
+    <string name="f_site_sent">Hanya kategori situs yang ditahan, misalnya \"judi\". Nama situsnya tidak dikirim.</string>
+
+    <string name="f_voice">Pesan suara</string>
+    <string name="f_voice_short">Pesan suara di obrolan berisiko.</string>
+    <string name="f_voice_what">Pesan suara di obrolan yang sudah berisiko diubah menjadi teks, disamarkan, lalu dinilai seperti pesan lain. Fitur ini segera hadir di aplikasi.</string>
+    <string name="f_voice_stays">Rekaman suara tidak disimpan.</string>
+    <string name="f_voice_sent">Rekaman dikirim ke layanan transkripsi Meta untuk diubah menjadi teks. Teksnya disamarkan sebelum dinilai.</string>
+
+    <string name="f_keyboard">Papan ketik dcAI</string>
+    <string name="f_keyboard_short">Mendampingi pesan yang kamu ketik.</string>
+    <string name="f_keyboard_what">Saat kamu mengirim dengan tombol Periksa, pesan yang kamu ketik ikut dinilai, misalnya bila kamu membagikan data pribadi atau sedang butuh dukungan.</string>
+    <string name="f_keyboard_stays">Ketikanmu disamarkan di ponsel sebelum dikirim. Papan ketik hanya melihat ketikanmu sendiri.</string>
+    <string name="f_keyboard_sent">Teks yang sudah disamarkan, setiap kali kamu menekan Periksa.</string>
+    <string name="keyboard_label">Papan ketik dcAI</string>
+    <string name="keyboard_check">Periksa</string>
+
+    <string name="detail_what">Yang dilakukan</string>
+    <string name="detail_stays">Yang tetap di ponsel</string>
+    <string name="detail_sent">Yang dikirim</string>
+    <string name="detail_not_granted_title">Belum disetujui</string>
+    <string name="detail_not_granted">Orang tua belum menyetujui perlindungan ini di dasbor dcAI, jadi dcAI tidak memakainya.</string>
+
+    <!-- Protection tab -->
+    <string name="prot_lead">Semua yang aktif di ponsel ini. Mematikan perlindungan butuh PIN orang tua.</string>
+    <string name="prot_on_phone">Di ponsel ini</string>
+    <string name="prot_from_parent">Disetujui orang tua</string>
+    <string name="prot_granted">Disetujui</string>
+    <string name="prot_not_granted">Belum disetujui</string>
+    <string name="prot_off_note">Bila perlindungan dimatikan, orang tua diberi tahu di dasbor.</string>
+
+    <!-- Settings -->
+    <string name="set_general">Umum</string>
+    <string name="set_language">Bahasa</string>
+    <string name="set_theme">Tampilan</string>
+    <string name="lang_system">Ikuti sistem</string>
+    <string name="theme_system">Ikuti sistem</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="set_security">Keamanan</string>
+    <string name="set_pin">PIN orang tua</string>
+    <string name="set_pin_sub">Ubah PIN</string>
+    <string name="set_device">Perangkat</string>
+    <string name="set_for">Mendampingi</string>
+    <string name="set_server">Server</string>
+    <string name="set_version">Versi</string>
+    <string name="set_consent_version">persetujuan %1$s</string>
+    <string name="set_info">Informasi</string>
+    <string name="set_consent_text">Teks persetujuan</string>
+    <string name="set_licenses">Lisensi</string>
+    <string name="set_unpair">Putuskan ponsel ini</string>
+    <string name="set_unpair_sub">Dilakukan orang tua dari dasbor</string>
+    <string name="set_unpair_body">Orang tua memutuskan ponsel ini dari dasbor dcAI. Saat itu dcAI berhenti, dan data di ponsel ini dihapus.</string>
+
+    <!-- Transparency -->
+    <string name="tr_p1">dcAI tidak bekerja diam-diam. Notifikasi \"dcAI aktif\" selalu tampil selama dcAI berjalan, dan halaman ini selalu bisa kamu buka.</string>
+    <string name="tr_p2">dcAI mendampingi obrolan di aplikasi chat yang memasang dcAI dan teks yang kamu ketik dengan papan ketik dcAI. Aplikasi lain tidak dibaca.</string>
+    <string name="tr_p3">Data pribadi disamarkan di ponsel. Gambar tetap di ponsel. Untuk situs, yang dikirim hanya kategorinya.</string>
+    <string name="tr_p4">Orang tua menerima level, pola, dan saran untuk memulai percakapan. Orang tua tidak menerima isi pesan atau gambar.</string>
+    <string name="tr_p5">Penilaian AI adalah perkiraan dan bisa salah. Bila menurutmu dcAI keliru, ceritakan ke orang tuamu.</string>
+
+    <!-- Licenses -->
+    <string name="lic_p1">Daftar situs: UT1 Blacklists, Université Toulouse Capitole, lisensi CC BY-SA 4.0. Daftar di ponsel ini adalah adaptasi berbentuk hash dengan lisensi yang sama.</string>
+    <string name="lic_p2">Deteksi wajah dan teks di gambar: Google ML Kit, model di perangkat.</string>
+    <string name="lic_p3">Penilaian pola: Muse Spark dan Llama dari Meta.</string>
+    <string name="lic_p4">Komponen sumber terbuka: AndroidX, Jetpack Compose, Kotlin, OkHttp, kotlinx.serialization, dengan lisensi masing-masing.</string>
+
+    <!-- Image review -->
     <string name="review_title">Tinjau bersama orang tua</string>
     <string name="review_lead">dcAI mengaburkan gambar ini. Orang tua memasukkan PIN untuk melihatnya dan memutuskan.</string>
     <string name="review_pin">PIN orang tua</string>
@@ -62,6 +206,7 @@
     <string name="review_keep">Ya, tetap dikaburkan</string>
     <string name="review_false">Salah deteksi, tampilkan</string>
 
+    <!-- Sites -->
     <string name="site_held_title">Situs ini ditahan</string>
     <string name="site_held_text">dcAI menahan situs berkategori %1$s. Bila menurutmu keliru, tunjukkan ke orang tuamu.</string>
     <string name="site_cat_dewasa">konten dewasa</string>
@@ -72,18 +217,7 @@
     <string name="site_cat_narkoba">narkoba</string>
     <string name="site_cat_kebencian">kebencian</string>
     <string name="site_cat_lain">berisiko</string>
-
-    <string name="home_sites_title">Situs</string>
-    <string name="home_sites_body">Nama situs dicocokkan dengan daftar di ponsel ini. Situs berkategori dewasa, judi, penipuan, program berbahaya, kencan, narkoba, atau kebencian ditahan, dan kamu diberi tahu alasannya. Orang tuamu hanya menerima kategorinya.</string>
-    <string name="home_sites_on">Perlindungan situs aktif. Ikon kunci VPN di atas menandainya.</string>
-    <string name="home_sites_off">Perlindungan situs belum aktif.</string>
-    <string name="home_sites_enable">Aktifkan perlindungan situs</string>
-    <string name="home_sites_source">Daftar situs: %1$s, lisensi %2$s.</string>
-
     <string name="site_review_lead">dcAI menahan %1$s (kategori %2$s). Orang tua memasukkan PIN untuk mengizinkannya di ponsel ini.</string>
     <string name="site_review_allow">Izinkan situs ini</string>
     <string name="site_review_keep">Tetap ditahan</string>
-
-    <string name="keyboard_label">Papan ketik dcAI</string>
-    <string name="keyboard_check">Periksa</string>
 </resources>

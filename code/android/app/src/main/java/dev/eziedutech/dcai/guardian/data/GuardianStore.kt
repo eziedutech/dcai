@@ -16,6 +16,9 @@ import kotlinx.serialization.json.Json
  * to the Android Keystore. For the hackathon prototype it lives in private app storage,
  * which is sandboxed per app.
  */
+@kotlinx.serialization.Serializable
+data class Nudge(val text: String, val at: Long)
+
 class GuardianStore(context: Context) {
     private val prefs = context.getSharedPreferences("dcai_guardian", Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true }
@@ -91,6 +94,27 @@ class GuardianStore(context: Context) {
         get() = prefs.getBoolean(KEY_SITES_ON, false)
         set(value) = prefs.edit { putBoolean(KEY_SITES_ON, value) }
 
+    /** Setup on the phone finished: consent read together, PIN set, protections switched on. */
+    var setupDone: Boolean
+        get() = prefs.getBoolean(KEY_SETUP_DONE, false)
+        set(value) = prefs.edit { putBoolean(KEY_SETUP_DONE, value) }
+
+    /** The consent version the parent and child read together on this phone. */
+    var consentRead: String?
+        get() = prefs.getString(KEY_CONSENT_READ, null)
+        set(value) = prefs.edit { putString(KEY_CONSENT_READ, value) }
+
+    /** The child's latest reminders, newest first. Reminder text only, never a message. */
+    val nudges: List<Nudge>
+        get() = prefs.getString(KEY_NUDGES, null)?.let {
+            runCatching { json.decodeFromString<List<Nudge>>(it) }.getOrNull()
+        }.orEmpty()
+
+    fun addNudge(text: String, at: Long = System.currentTimeMillis()) {
+        val list = (listOf(Nudge(text, at)) + nudges).distinctBy { it.text }.take(MAX_NUDGES)
+        prefs.edit { putString(KEY_NUDGES, json.encodeToString(list)) }
+    }
+
     /** Pairing ended (revoked by the parent, or the child's data was erased). The PIN and
      * the local image tuning go with it. */
     fun clear() = prefs.edit { clear() }
@@ -106,6 +130,10 @@ class GuardianStore(context: Context) {
         const val MAX_CONFIRMED = 200
         const val KEY_ALLOWED_SITES = "sites_allowed"
         const val KEY_SITES_ON = "sites_on"
+        const val KEY_SETUP_DONE = "setup_done"
+        const val KEY_CONSENT_READ = "consent_read"
+        const val KEY_NUDGES = "nudges"
+        const val MAX_NUDGES = 10
 
         fun b64(bytes: ByteArray): String = Base64.encodeToString(bytes, Base64.NO_WRAP)
         fun unb64(text: String): ByteArray = Base64.decode(text, Base64.NO_WRAP)
