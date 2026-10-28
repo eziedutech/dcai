@@ -72,7 +72,7 @@ def test_consent_text_is_public(api):
     assert resp.status_code == 200
     body = resp.json()
     assert body["version"] == CURRENT.version
-    assert set(body["scopes"]) == {"percakapan", "keyboard", "gambar", "domain", "suara"}
+    assert set(body["scopes"]) == {"percakapan", "keyboard", "gambar", "domain", "suara", "waktu"}
     for word in ("memonitor", "memantau", "mengawasi", "memata-matai", "spyware"):
         assert word not in body["id"].lower()
     # The phone-wide text says what a child always sees and what never leaves the phone.

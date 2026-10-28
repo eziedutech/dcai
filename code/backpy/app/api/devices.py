@@ -175,6 +175,8 @@ class DeviceConfig(BaseModel):
     scopes: list[Scope]
     consent_version: str | None
     stream_path: str = "/v1/device/stream"
+    # The parent's time online settings, present while the waktu scope is granted.
+    screen_policy: dict | None = None
 
 
 def device_config(db: Session, device: Device) -> DeviceConfig:
@@ -188,13 +190,20 @@ def device_config(db: Session, device: Device) -> DeviceConfig:
         .order_by(ConsentRecord.created_at.desc(), ConsentRecord.id.desc())
         .limit(1)
     )
+    scopes = sorted(active_scopes(db, child.id))
+    screen_policy = None
+    if Scope.WAKTU in scopes:
+        from app.family.service import policy_for
+
+        screen_policy = policy_for(db, child)[0].model_dump(mode="json")
     return DeviceConfig(
         device_id=str(device.id),
         child_nickname=child.nickname,
         age_range=child.age_range,
         language=guardian.language,
-        scopes=sorted(active_scopes(db, child.id)),
+        scopes=scopes,
         consent_version=latest,
+        screen_policy=screen_policy,
     )
 
 

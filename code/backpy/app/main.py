@@ -11,6 +11,8 @@ from app.api.auth import router as auth_router
 from app.api.children import router as children_router
 from app.api.dashboard import router as dashboard_router
 from app.api.devices import device_router, guardian_router
+from app.api.family import device_router as family_device_router
+from app.api.family import guardian_router as family_router
 from app.api.health import router as health_router
 from app.api.messages import router as messages_router
 from app.api.sites import router as sites_router
@@ -50,5 +52,7 @@ app.include_router(messages_router, prefix="/v1")
 app.include_router(guardian_router, prefix="/v1")
 app.include_router(device_router, prefix="/v1")
 app.include_router(sites_router, prefix="/v1")
+app.include_router(family_router, prefix="/v1")
+app.include_router(family_device_router, prefix="/v1")
 app.include_router(dashboard_router, prefix="/v1")
 app.include_router(ask_router, prefix="/v1")

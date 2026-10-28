@@ -14,6 +14,7 @@ class Scope(StrEnum):
     GAMBAR = "gambar"  # images judged on the phone; only labels are stored
     DOMAIN = "domain"  # sites matched on the phone; only the category of a flagged site
     SUARA = "suara"  # voice notes in risky chats transcribed, masked, then assessed
+    WAKTU = "waktu"  # minutes per app category per day, counted on the phone; limits, bedtime
 
 
 @dataclass(frozen=True)
@@ -101,7 +102,8 @@ V1 = ConsentText(
     en=_V1_EN,
     scopes=(Scope.PERCAKAPAN, Scope.KEYBOARD),
 )
-V2 = ConsentText(version="2026-10-28.1", id=_V2_ID, en=_V2_EN, scopes=tuple(Scope))
+_V2_SCOPES = (Scope.PERCAKAPAN, Scope.KEYBOARD, Scope.GAMBAR, Scope.DOMAIN, Scope.SUARA)
+V2 = ConsentText(version="2026-10-28.1", id=_V2_ID, en=_V2_EN, scopes=_V2_SCOPES)
 
 # V3 states what the build does: text comes from chat apps with the dcAI SDK and from the
 # dcAI keyboard, and images never leave the phone.
@@ -119,5 +121,32 @@ _V3_EN = _V2_EN.replace(
     "- Images: images are judged on the phone. An image detected as sensitive is fully blurred and never sent. Other images that need a closer look are sent at a small size after faces and personal text are blurred. Only the label is stored.",
     "- Images: images are judged on the phone and never sent. A sensitive image is fully blurred. Faces and personal data in an image the child is about to share are blurred. Text in an image received in a risky chat is masked, then assessed like a message. Only the label is stored. If dcAI blurs by mistake, the parent reviews it on the child's phone with a PIN; only a note of the false detection is sent, without the image.",
 )
-CURRENT = ConsentText(version="2026-10-28.2", id=_V3_ID, en=_V3_EN, scopes=tuple(Scope))
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, CURRENT)}
+V3 = ConsentText(version="2026-10-28.2", id=_V3_ID, en=_V3_EN, scopes=_V2_SCOPES)
+
+# V4 adds time online: limits, bedtime and short-video breaks set by the parent.
+_V4_ID = _V3_ID.replace(
+    "- Papan ketik (opsional): nada teks yang diketik diperiksa setelah disamarkan.",
+    "- Papan ketik (opsional): nada teks yang diketik diperiksa setelah disamarkan.\n"
+    "- Waktu online: lama pemakaian aplikasi dihitung di ponsel per kategori (video, game, sosial, lainnya). "
+    "Yang dikirim hanya total menit per kategori per hari, menit di jam tidur, dan sesi terpanjang; daftar aplikasi tetap di ponsel. "
+    "Batas harian, jam tidur, dan jeda dari video pendek diatur orang tua, dan anak selalu melihat sisa waktunya. "
+    "Anak dapat meminta tambahan waktu dengan alasan singkat yang disamarkan lalu dikirim ke orang tua.",
+).replace(
+    "Penilaian memakai model AI dari Meta yang dijalankan oleh penyedia inferensi. Yang dikirim ke model selalu sudah disamarkan.",
+    "Penilaian memakai model AI dari Meta yang dijalankan oleh penyedia inferensi. Yang dikirim ke model selalu sudah disamarkan. "
+    "Ringkasan mingguan, saran untuk permintaan waktu, dan usulan batas dibuat model AI dari angka agregat dan alasan yang sudah disamarkan; keputusan tetap di tangan orang tua.",
+)
+_V4_EN = _V3_EN.replace(
+    "- Keyboard (optional): the tone of typed text is checked after masking.",
+    "- Keyboard (optional): the tone of typed text is checked after masking.\n"
+    "- Time online: app use is counted on the phone per category (video, games, social, other). "
+    "Only the total minutes per category per day, minutes during bedtime and the longest session are sent; the list of apps stays on the phone. "
+    "Daily limits, bedtime and breaks from short video are set by the parent, and the child always sees the time left. "
+    "The child can ask for more time with a short reason, masked, then sent to the parent.",
+).replace(
+    "Assessments use AI models from Meta run by inference providers. What is sent to a model is always masked first.",
+    "Assessments use AI models from Meta run by inference providers. What is sent to a model is always masked first. "
+    "The weekly summary, advice on time requests and suggested limits are written by an AI model from aggregate numbers and masked reasons; the parent decides.",
+)
+CURRENT = ConsentText(version="2026-10-28.3", id=_V4_ID, en=_V4_EN, scopes=tuple(Scope))
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, CURRENT)}

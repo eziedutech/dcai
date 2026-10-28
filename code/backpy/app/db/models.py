@@ -7,10 +7,11 @@ only, with an expiry.
 """
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     JSON,
+    Date,
     ForeignKey,
     Index,
     Integer,
@@ -253,6 +254,81 @@ class DetectionFeedback(Base):
     score: Mapped[int] = mapped_column(Integer, nullable=False)
     model_version: Mapped[str] = mapped_column(String(120), nullable=False)
     verdict: Mapped[str] = mapped_column(String(20), nullable=False)
+    created_at: Mapped[datetime] = _created()
+
+
+class ScreenPolicyRow(Base):
+    """The parent's time settings for one child: limits, bedtime, short-video breaks."""
+
+    __tablename__ = "screen_policy"
+
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), primary_key=True
+    )
+    policy: Mapped[dict] = mapped_column(JSON, nullable=False)
+    updated_at: Mapped[datetime] = _created()
+
+
+class UsageDay(Base):
+    """Minutes per app category for one day on one phone, counted on the phone. No app
+    names, no timeline: only totals, minutes during bedtime and the longest session."""
+
+    __tablename__ = "usage_day"
+    __table_args__ = (UniqueConstraint("device_id", "day", name="uq_usage_day_device_day"),)
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    device_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("device.id", ondelete="CASCADE"), nullable=False
+    )
+    day: Mapped[date] = mapped_column(Date, nullable=False)
+    # {"video": 42, "game": 30, "sosial": 18, "lain": 25}
+    minutes: Mapped[dict] = mapped_column(JSON, nullable=False)
+    bedtime_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    longest_session: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    session_limits: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    updated_at: Mapped[datetime] = _created()
+
+
+class TimeRequest(Base):
+    """A child asking for more time. The reason is the child's note to the parent, masked
+    on the phone and again here, at most 200 characters."""
+
+    __tablename__ = "time_request"
+    __table_args__ = (Index("ix_time_request_child_created", "child_id", "created_at"),)
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False
+    )
+    device_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("device.id", ondelete="SET NULL")
+    )
+    minutes: Mapped[int] = mapped_column(Integer, nullable=False)
+    reason: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    context: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    # menunggu | diizinkan | ditolak | kedaluwarsa
+    status: Mapped[str] = mapped_column(String(12), nullable=False, default="menunggu")
+    granted_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    advice: Mapped[dict | None] = mapped_column(JSON)
+    decided_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    created_at: Mapped[datetime] = _created()
+
+
+class FamilyDigest(Base):
+    """The weekly summary for a parent, written from aggregates only."""
+
+    __tablename__ = "family_digest"
+
+    id: Mapped[uuid.UUID] = _id()
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    week_start: Mapped[date] = mapped_column(Date, nullable=False)
+    output: Mapped[dict] = mapped_column(JSON, nullable=False)
+    source: Mapped[str] = mapped_column(String(8), nullable=False)
     created_at: Mapped[datetime] = _created()
 
 
