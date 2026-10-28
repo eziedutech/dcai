@@ -2,88 +2,9 @@
 
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
+import { LiveDemo } from "./demo";
 import { Parallax } from "./motion";
-import { LevelBadge, SiteFooter, SiteHeader } from "./ui";
-
-/** Child's screen on the left, parent's view on the right: the same moment, and only the
- * pattern crosses over. The one animation on the page. */
-function SplitDemo() {
-  const { t } = useT();
-  const msgs = ["home.demo.msg1", "home.demo.msg2", "home.demo.msg3"] as const;
-  const patterns = ["home.demo.p1", "home.demo.p2", "home.demo.p3", "home.demo.p4"] as const;
-  return (
-    <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,22rem)_auto_minmax(0,1fr)]">
-      <figure className="mx-auto w-full max-w-[22rem]">
-        <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.child")}</figcaption>
-        <Parallax speed={-0.035}>
-          <div className="rounded-[var(--radius-phone)] border-[7px] border-ink bg-ink p-1 shadow-[0_30px_60px_-30px_rgba(20,35,58,0.6)]">
-            <div className="flex min-h-[27rem] flex-col rounded-[22px] bg-[#f4f6f9]">
-              <div className="flex items-center gap-3 rounded-t-[22px] border-b border-line bg-white px-4 py-3">
-                <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-mist text-sm font-bold text-slate">?</span>
-                <span className="text-sm font-semibold">{t("home.demo.contact")}</span>
-              </div>
-              <ol className="flex flex-1 flex-col gap-2.5 px-3.5 py-4 text-[0.92rem] leading-snug">
-                {msgs.map((m, i) => (
-                  <li
-                    key={m}
-                    className="arrive max-w-[85%] rounded-2xl rounded-bl-md bg-white px-3.5 py-2 shadow-sm"
-                    style={{ animationDelay: `${250 + i * 650}ms` }}
-                  >
-                    {t(m)}
-                  </li>
-                ))}
-              </ol>
-              <div
-                className="arrive m-2.5 rounded-2xl border border-navy/15 bg-white p-3.5 shadow-[0_8px_24px_-12px_rgba(31,58,95,0.5)]"
-                style={{ animationDelay: "2400ms" }}
-                role="note"
-              >
-                <p className="mb-1 flex items-center gap-2 text-xs font-bold text-navy">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/dcai-logo.png" alt="" width={12} height={14} className="h-3.5 w-auto" />
-                  dcAI
-                </p>
-                <p className="text-[0.92rem] leading-snug text-ink">{t("home.demo.nudge")}</p>
-              </div>
-            </div>
-          </div>
-        </Parallax>
-      </figure>
-
-      {/* What crosses from the phone to the parent: labels, never text. */}
-      <div aria-hidden className="hidden items-center lg:flex">
-        <svg width="72" height="24" viewBox="0 0 72 24">
-          <path d="M2 12 H62" stroke="#566373" strokeWidth="1.5" strokeDasharray="4 5" />
-          <path d="M60 6 L68 12 L60 18" fill="none" stroke="#566373" strokeWidth="1.5" />
-        </svg>
-      </div>
-
-      <figure className="w-full">
-        <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.parent")}</figcaption>
-        <div className="arrive glass-fill rounded-2xl bg-white/80 p-6" style={{ animationDelay: "2900ms" }}>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-lg font-bold">Raka, 10-12</p>
-            <LevelBadge level="mendesak" size="lg" />
-          </div>
-          <p className="mt-5 text-sm font-semibold text-slate">{t("home.demo.patterns")}</p>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {patterns.map((p) => (
-              <li key={p} className="rounded-full bg-mist px-3 py-1 text-sm font-medium">
-                {t(p)}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-sm font-semibold text-slate">{t("home.demo.starter")}</p>
-          <p className="mt-1.5 text-[1.05rem] font-medium leading-snug">&ldquo;{t("home.demo.starterText")}&rdquo;</p>
-          <p className="mt-6 flex items-start gap-2 border-t border-line pt-4 text-sm text-slate">
-            <LockIcon />
-            {t("home.demo.noText")}
-          </p>
-        </div>
-      </figure>
-    </div>
-  );
-}
+import { SiteFooter, SiteHeader } from "./ui";
 
 function LockIcon() {
   return (
@@ -362,7 +283,7 @@ export function HomePage() {
           </div>
           <div className="glass relative z-10 mt-16 rounded-[2rem] p-5 sm:p-8">
             <p className="eyebrow mb-5">{t("home.demo.eyebrow")}</p>
-            <SplitDemo />
+            <LiveDemo />
           </div>
         </section>
 
