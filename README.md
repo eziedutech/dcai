@@ -177,7 +177,7 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 | Suite | Result |
 |---|---|
 | Unit and API tests on SQLite | 360 passed |
-| The database tests again on PostgreSQL 18 | 86 passed |
+| The database tests again on PostgreSQL 18 (CI) | 102 passed |
 | Dashboard: type check, lint, production build | passing |
 | Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets, time rules), lint, debug APK | 35 passed |
 
