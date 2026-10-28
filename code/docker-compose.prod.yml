@@ -1,0 +1,92 @@
+# dcAI in production: PostgreSQL (db), the API (api) and the web app (web).
+# Dokploy: a Compose service from this repository with composePath ./code/docker-compose.prod.yml,
+# the variables below in its Environment tab, and two domains on the same host:
+#   path /    -> service web, port 3000
+#   path /v1  -> service api, port 8000 (the phone's API; no path stripping)
+# Nothing here publishes a port by itself; the database stays on the private network.
+name: dcai
+
+services:
+  db:
+    image: postgres:18.6-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dcai
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      POSTGRES_DB: dcai
+    volumes:
+      - dcai-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dcai -d dcai"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ..
+      dockerfile: code/backpy/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://dcai:${DB_PASSWORD}@db:5432/dcai
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY}
+      REASONING_ENDPOINTS: ${REASONING_ENDPOINTS:-}
+      SCREENING_ENDPOINTS: ${SCREENING_ENDPOINTS:-}
+      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-20}
+      META_API_KEY: ${META_API_KEY:-}
+      META_API_BASE: ${META_API_BASE:-}
+      MUSE_MODEL: ${MUSE_MODEL:-}
+      META_REASONING_EFFORT: ${META_REASONING_EFFORT:-}
+      META_PRICE_IN_PER_MTOK: ${META_PRICE_IN_PER_MTOK:-}
+      META_PRICE_CACHED_PER_MTOK: ${META_PRICE_CACHED_PER_MTOK:-}
+      META_PRICE_OUT_PER_MTOK: ${META_PRICE_OUT_PER_MTOK:-}
+      FIREWORKS_BASE: ${FIREWORKS_BASE:-}
+      FIREWORKS_API_KEY: ${FIREWORKS_API_KEY:-}
+      FW_MUSE_PROVIDER: ${FW_MUSE_PROVIDER:-}
+      FW_MUSE_MODEL: ${FW_MUSE_MODEL:-}
+      FW_MUSE_JSON_MODE: ${FW_MUSE_JSON_MODE:-}
+      FW_MUSE_REASONING_EFFORT: ${FW_MUSE_REASONING_EFFORT:-}
+      FW_MUSE_PRICE_IN_PER_MTOK: ${FW_MUSE_PRICE_IN_PER_MTOK:-}
+      FW_MUSE_PRICE_CACHED_PER_MTOK: ${FW_MUSE_PRICE_CACHED_PER_MTOK:-}
+      FW_MUSE_PRICE_OUT_PER_MTOK: ${FW_MUSE_PRICE_OUT_PER_MTOK:-}
+      WANDB_BASE: ${WANDB_BASE:-}
+      WANDB_API_KEY: ${WANDB_API_KEY:-}
+      WB_STUDENT_PROVIDER: ${WB_STUDENT_PROVIDER:-}
+      WB_STUDENT_BASE: ${WB_STUDENT_BASE:-}
+      WB_STUDENT_API_KEY: ${WB_STUDENT_API_KEY:-}
+      WB_STUDENT_MODEL: ${WB_STUDENT_MODEL:-}
+      WB_STUDENT_JSON_MODE: ${WB_STUDENT_JSON_MODE:-}
+      WB_STUDENT_PRICE_IN_PER_MTOK: ${WB_STUDENT_PRICE_IN_PER_MTOK:-}
+      WB_STUDENT_PRICE_CACHED_PER_MTOK: ${WB_STUDENT_PRICE_CACHED_PER_MTOK:-}
+      WB_STUDENT_PRICE_OUT_PER_MTOK: ${WB_STUDENT_PRICE_OUT_PER_MTOK:-}
+      VOICE_ENDPOINT: ${VOICE_ENDPOINT:-}
+      VOICE_MODEL: ${VOICE_MODEL:-}
+      VOICE_PRICE_PER_HOUR: ${VOICE_PRICE_PER_HOUR:-}
+    volumes:
+      - dcai-lists:/srv/lists
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 30s
+
+  web:
+    build: ./frontnext
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      DCAI_API_URL: http://api:8000
+    expose:
+      - "3000"
+
+volumes:
+  dcai-db:
+  dcai-lists:

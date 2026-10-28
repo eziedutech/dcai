@@ -1,6 +1,6 @@
 """Build the phone's site lists from UT1 Blacklists (CC BY-SA 4.0).
 
-    uv run python -m app.blocklist.build                 # download from the GitHub mirror
+    uv run python -m app.blocklist.build                 # download from UT1
     uv run python -m app.blocklist.build --source DIR    # local copy: DIR/<ut1 cat>/domains*
 
 Writes data/blocklist/<category>.bin and manifest.json. The output is an adaptation of
@@ -14,6 +14,8 @@ import argparse
 import hashlib
 import itertools
 import json
+import tarfile
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,18 +24,29 @@ import httpx
 from app.blocklist.lists import CATEGORIES, LICENSE, SOURCE, encode
 
 OUT_DIR = Path(__file__).resolve().parents[4] / "data" / "blocklist"
-MIRROR_API = "https://api.github.com/repos/olbat/ut1-blacklists/contents/blacklists/{cat}"
+# One archive per category from UT1 itself: no API rate limit, the same lists the mirror holds.
+UT1_ARCHIVE = "https://dsi.ut-capitole.fr/blacklists/download/{cat}.tar.gz"
 
 
 def _remote_lines(cat: str, http: httpx.Client):
-    listing = http.get(MIRROR_API.format(cat=cat), timeout=30)
-    listing.raise_for_status()
-    # Large categories are split into domains.0, domains.1, ...
-    files = [f for f in listing.json() if f["name"].split(".")[0] == "domains"]
-    for f in sorted(files, key=lambda f: f["name"]):
-        with http.stream("GET", f["download_url"], timeout=300) as resp:
+    with tempfile.TemporaryFile() as tmp:
+        with http.stream("GET", UT1_ARCHIVE.format(cat=cat), timeout=300) as resp:
             resp.raise_for_status()
-            yield from resp.iter_lines()
+            for chunk in resp.iter_bytes():
+                tmp.write(chunk)
+        tmp.seek(0)
+        with tarfile.open(fileobj=tmp, mode="r:gz") as tar:
+            # Large categories may be split into domains.0, domains.1, ...
+            members = [
+                m
+                for m in tar.getmembers()
+                if m.isfile() and Path(m.name).name.split(".")[0] == "domains"
+            ]
+            for m in sorted(members, key=lambda m: m.name):
+                fh = tar.extractfile(m)
+                if fh is not None:
+                    for raw in fh:
+                        yield raw.decode("utf-8", errors="ignore")
 
 
 def _local_lines(source: Path, cat: str):

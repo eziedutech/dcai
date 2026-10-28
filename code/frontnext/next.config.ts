@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   // repo rule against long dashes. Its instruction (read the bundled docs) is followed.
   agentRules: false,
   poweredByHeader: false,
+  // A self-contained server for the container image.
+  output: "standalone",
   turbopack: {
     rules: {
       "*.css": {

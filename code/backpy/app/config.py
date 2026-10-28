@@ -45,7 +45,8 @@ class Endpoint:
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(extra="ignore")
+    # Empty values count as unset, so a deployment can list every variable and fill only some.
+    model_config = SettingsConfigDict(extra="ignore", env_ignore_empty=True)
 
     reasoning_endpoints: str = ""
     screening_endpoints: str = ""
