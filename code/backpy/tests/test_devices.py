@@ -191,6 +191,26 @@ def test_messages_need_conversation_consent(api):
     assert message(api, dev, "halo").status_code == 403
 
 
+def test_noise_apps_are_not_conversations(api, db_url):
+    _tokens, _child, dev, _ = paired(api)
+    resp = api.post(
+        "/v1/device/messages?wait=true",
+        json={
+            "thread_key": THREAD,
+            "app": "com.android.systemui",
+            "channel": "game_chat",
+            "contact_known": False,
+            "sender": "contact",
+            "text": "halo apa kabar semuanya",
+        },
+        headers=dev,
+    )
+    assert resp.status_code == 202, resp.text
+    assert resp.json()["conversation_id"] == "" and resp.json()["queued"] is False
+    with create_engine(db_url).connect() as conn:
+        assert conn.execute(text("SELECT COUNT(*) FROM conversation")).scalar_one() == 0
+
+
 def test_message_from_phone_is_analysed_per_thread(api, db_url):
     _tokens, _child, dev, _ = paired(api)
     first = message(api, dev, "halo, main yuk").json()

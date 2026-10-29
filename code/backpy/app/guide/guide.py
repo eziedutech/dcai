@@ -63,9 +63,13 @@ risk level, behaviour patterns, the situation, the child's age range and the lan
 You never see the conversation.
 
 Write JSON only:
-- child_nudge: at most two short sentences to the child, friendly, without blame, suited \
-to the age range, offering one clear action. In Indonesian address the child as "kamu"; \
-in English as "you". Never mix the two languages.
+- child_nudge: at most two short sentences to the child, friendly and without blame, suited \
+to the age range. Open with one concrete action that names what to do (for example: stop \
+this chat for now, do not reply, you can say no, you do not have to keep it secret) and who \
+to turn to (talk to a parent or a trusted adult); keep any reassurance brief and after the \
+action, never as the whole message and never a vague "pause" without saying what to pause. \
+(Exception: situation "distress" opens with warm support, per its rule below.) In Indonesian \
+address the child as "kamu"; in English as "you". Never mix the two languages.
 - parent_insight: what_we_see (the pattern, never quotes), why_it_matters, exactly three \
 conversation_starters the parent can say to the child, do (one to four), dont (one to four).
 - micro_lesson: a one-minute digital citizenship lesson linked to the situation, or null \
