@@ -158,6 +158,13 @@ def test_withdrawn_scope_reaches_the_phone(api):
     assert live[-1].event == "config" and live[-1].data["scopes"] == ["percakapan"]
 
 
+def test_screen_reading_scope_reaches_the_phone(api):
+    tokens, child, dev, _body = paired(api)
+    resp = consent(api, tokens, child["id"], scopes=["layar"])
+    assert resp.status_code == 201
+    assert "layar" in api.get("/v1/device/config", headers=dev).json()["scopes"]
+
+
 def test_service_switched_off_is_an_event_for_the_parent(api, db_url):
     tokens, child, dev, _ = paired(api)
     beat = {"app_version": "0.1.0", "services": {"accessibility": True, "notification": True}}

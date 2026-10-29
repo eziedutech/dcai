@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dcAI reads screen text across apps so it can recognise risky chat patterns. It is a
+     parental-control feature, not an accessibility aid: the description says so (Google Play
+     AccessibilityService policy, answer/10964491). canTakeScreenshot lets dcAI judge an image
+     in a risky chat on the phone; the screenshot is never sent. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeViewTextChanged|typeWindowContentChanged|typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
+    android:canRetrieveWindowContent="true"
+    android:canTakeScreenshot="true"
+    android:description="@string/accessibility_desc"
+    android:notificationTimeout="300" />

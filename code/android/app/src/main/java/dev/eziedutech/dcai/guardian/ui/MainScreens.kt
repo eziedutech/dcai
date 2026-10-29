@@ -343,6 +343,7 @@ fun ProtectionTab(
     onUsage: () -> Unit = {},
     onOverlay: () -> Unit = {},
     onMessages: () -> Unit = {},
+    onAccessibility: () -> Unit = {},
 ) {
     TabColumn(padding) {
         Text(stringResource(R.string.tab_protection), style = MaterialTheme.typography.headlineMedium)
@@ -370,6 +371,13 @@ fun ProtectionTab(
                     Feature.OBROLAN.icon, stringResource(R.string.perm_messages), stringResource(R.string.perm_messages_sub),
                     if (snapshot.messagesOn) Status.ON else Status.NEEDS_SETUP, snapshot.messagesOn,
                 ) { onMessages() }
+            }
+            if (snapshot.granted(Feature.LAYAR)) {
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
+                SwitchRow(
+                    Feature.LAYAR.icon, stringResource(R.string.perm_accessibility), stringResource(R.string.perm_accessibility_sub),
+                    snapshot.status(Feature.LAYAR), snapshot.accessibilityOn,
+                ) { onAccessibility() }
             }
             if (snapshot.granted(Feature.WAKTU)) {
                 HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)

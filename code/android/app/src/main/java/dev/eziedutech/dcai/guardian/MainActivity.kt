@@ -178,6 +178,8 @@ class MainActivity : LocalizedActivity() {
 
         fun messagesSettings() = startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
 
+        fun accessibilitySettings() = startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+
         fun overlaySettings() = startActivity(
             Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:$packageName")),
         )
@@ -214,6 +216,7 @@ class MainActivity : LocalizedActivity() {
                     onUsage = { usageSettings() },
                     onOverlay = { overlaySettings() },
                     onMessages = { messagesSettings() },
+                    onAccessibility = { accessibilitySettings() },
                     onDone = {
                         store.setupDone = true
                         GuardianService.start(context)
@@ -238,6 +241,7 @@ class MainActivity : LocalizedActivity() {
                             onUsage = { usageSettings() },
                             onOverlay = { overlaySettings() },
                             onMessages = { if (snapshot.messagesOn) pinPurpose = "messages_off" else messagesSettings() },
+                            onAccessibility = { if (snapshot.accessibilityOn) pinPurpose = "accessibility_off" else accessibilitySettings() },
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
@@ -267,6 +271,7 @@ class MainActivity : LocalizedActivity() {
                     val action: Pair<String, () -> Unit>? = when {
                         !snapshot.granted(f) -> null
                         f == Feature.SITUS && !snapshot.sitesOn -> stringResource(R.string.home_sites_enable) to { sitesOn() }
+                        f == Feature.LAYAR && !snapshot.accessibilityOn -> stringResource(R.string.perm_accessibility) to { accessibilitySettings() }
                         f == Feature.PAPAN_KETIK && !snapshot.keyboardOn -> stringResource(R.string.home_keyboard_enable) to { keyboardSettings() }
                         f == Feature.WAKTU && !snapshot.usageOn -> stringResource(R.string.perm_usage) to { usageSettings() }
                         f == Feature.WAKTU && !snapshot.overlayOn -> stringResource(R.string.perm_overlay) to { overlaySettings() }
@@ -335,6 +340,7 @@ class MainActivity : LocalizedActivity() {
                         "sites_off" -> R.string.pin_dialog_sites_off
                         "keyboard_off" -> R.string.pin_dialog_keyboard_off
                         "messages_off" -> R.string.pin_dialog_messages_off
+                        "accessibility_off" -> R.string.pin_dialog_accessibility_off
                         else -> R.string.pin_dialog_change
                     },
                 ),
@@ -350,6 +356,7 @@ class MainActivity : LocalizedActivity() {
                         }
                         "keyboard_off" -> keyboardSettings()
                         "messages_off" -> messagesSettings()
+                        "accessibility_off" -> accessibilitySettings()
                         "change_pin" -> go(Route.ChangePin)
                     }
                 },

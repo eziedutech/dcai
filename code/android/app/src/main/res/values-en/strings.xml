@@ -61,13 +61,14 @@
     <string name="pin_dialog_sites_off">Switching site protection off needs the parent PIN. The parent is also told on the dashboard.</string>
     <string name="pin_dialog_keyboard_off">Changing the dcAI keyboard needs the parent PIN.</string>
     <string name="pin_dialog_messages_off">Turning off reading incoming messages needs the parent PIN.</string>
+    <string name="pin_dialog_accessibility_off">Turning off screen-text reading needs the parent PIN.</string>
     <string name="pin_dialog_change">Enter the current PIN to create a new one.</string>
 
     <string name="perm_title">Turn protections on</string>
     <string name="perm_lead">Switch on what is needed. The status is always shown on the home screen.</string>
     <string name="perm_notifications">dcAI notifications</string>
     <string name="perm_notifications_sub">For reminders and the sign that dcAI is on.</string>
-    <string name="perm_note">Chats and images are guided through chat apps that integrate dcAI. No extra permission is needed.</string>
+    <string name="perm_note">Screen reading and incoming messages use the permissions above. Chats are also guided in apps that include dcAI and in anything typed with the dcAI keyboard.</string>
     <string name="perm_done">Done</string>
     <string name="perm_required">dcAI notifications must be on.</string>
 
@@ -103,9 +104,14 @@
 
     <string name="f_chat">Chats</string>
     <string name="f_chat_short">Recognises risky chats.</string>
-    <string name="f_chat_what">Messages in chat apps that integrate dcAI are assessed for risky patterns, such as asking for photos, moving to another app, or keeping secrets from parents. You get a short reminder in the moment.</string>
+    <string name="f_chat_what">Messages dcAI sees on this phone are assessed for risky patterns, such as asking for photos, moving to another app, or keeping secrets from parents. You get a short reminder in the moment.</string>
     <string name="f_chat_stays">Names, phone numbers, addresses, schools and accounts are masked on the phone before anything is sent. Message text is not stored.</string>
     <string name="f_chat_sent">Masked messages, to be assessed. Only the pattern, level and advice for the parent are stored.</string>
+    <string name="f_screen">Screen text</string>
+    <string name="f_screen_short">Recognises risky chats in any app.</string>
+    <string name="f_screen_what">dcAI reads the text shown on screen so it can recognise risky patterns in any app you chat in, whatever keyboard you use. You get a short reminder in the moment.</string>
+    <string name="f_screen_stays">Text is masked on the phone before anything is sent, the same as other messages. The screen is never stored or sent as an image.</string>
+    <string name="f_screen_sent">Masked messages, to be assessed. Only the pattern, level and advice for the parent are stored.</string>
 
     <string name="f_image">Images</string>
     <string name="f_image_short">Blurs personal data in images.</string>
@@ -169,7 +175,7 @@
     <string name="set_unpair_body">A parent disconnects this phone from the dcAI dashboard. dcAI then stops, and its data on this phone is deleted.</string>
 
     <string name="tr_p1">dcAI does not work in secret. The \"dcAI is on\" notification shows the whole time dcAI runs, and you can always open this page.</string>
-    <string name="tr_p2">dcAI guides chats in apps that integrate dcAI and the text you type with the dcAI keyboard. Other apps are not read.</string>
+    <string name="tr_p2">When your parent turns on screen reading, dcAI reads the text on your screen to guide chats in any app. It also works with the dcAI keyboard and with chat notifications. dcAI reads only while the \"dcAI is on\" notification is showing.</string>
     <string name="tr_p3">Personal data is masked on the phone. Images stay on the phone. For sites, only the category is sent.</string>
     <string name="tr_p4">Parents receive levels, patterns and conversation starters. They do not receive message text or images.</string>
     <string name="tr_p5">An AI assessment is an estimate and can be wrong. If you think dcAI got it wrong, tell your parent.</string>
@@ -215,6 +221,11 @@
     <string name="perm_messages">Incoming messages</string>
     <string name="perm_messages_sub">Reads message notifications in chat apps, so what the other person writes is assessed too.</string>
     <string name="messages_listener_label">dcAI: incoming messages</string>
+    <string name="perm_accessibility">Read screen text (all apps)</string>
+    <string name="perm_accessibility_sub">Lets dcAI recognise risky chats in any app, whatever keyboard is used. Turned on in Android\'s accessibility settings.</string>
+    <string name="accessibility_label">dcAI: read screen text</string>
+    <string name="accessibility_desc">dcAI reads the text shown on screen to recognise risky chat patterns and guide the child, for a parent who installed dcAI. It is a parental-control feature, not an accessibility aid. The \"dcAI aktif\" notification stays visible the whole time; there is no hidden mode.</string>
+    <string name="screen_sensitive_nudge">That image may be sensitive. You do not have to send it. If someone is pressing you, you can talk to a trusted adult.</string>
     <string name="perm_overlay">Display over other apps</string>
     <string name="perm_overlay_sub">For the break screen when time is up or at bedtime.</string>
     <string name="cat_video">video</string>

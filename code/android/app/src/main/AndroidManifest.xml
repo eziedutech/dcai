@@ -90,6 +90,22 @@
             </intent-filter>
         </service>
 
+        <!-- Screen text across any app (proposal 0002). The parent grants this in Android's
+             accessibility settings; the child sees dcAI there and the "dcAI aktif"
+             notification stays visible. Not an accessibility aid: the description says so. -->
+        <service
+            android:name=".ingest.ScreenReaderService"
+            android:exported="true"
+            android:label="@string/accessibility_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service" />
+        </service>
+
         <receiver
             android:name=".ingest.ChatIngestReceiver"
             android:exported="true"

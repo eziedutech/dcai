@@ -72,6 +72,7 @@
     <string name="pin_dialog_sites_off">Mematikan perlindungan situs butuh PIN orang tua. Orang tua juga diberi tahu di dasbor.</string>
     <string name="pin_dialog_keyboard_off">Mengganti papan ketik dcAI butuh PIN orang tua.</string>
     <string name="pin_dialog_messages_off">Mematikan pembacaan pesan masuk butuh PIN orang tua.</string>
+    <string name="pin_dialog_accessibility_off">Mematikan pembacaan teks layar butuh PIN orang tua.</string>
     <string name="pin_dialog_change">Masukkan PIN saat ini untuk membuat PIN baru.</string>
 
     <!-- Permissions -->
@@ -79,7 +80,7 @@
     <string name="perm_lead">Nyalakan yang dibutuhkan. Statusnya selalu terlihat di beranda.</string>
     <string name="perm_notifications">Notifikasi dcAI</string>
     <string name="perm_notifications_sub">Untuk pengingat dan tanda dcAI aktif.</string>
-    <string name="perm_note">Obrolan dan gambar didampingi lewat aplikasi chat yang memasang dcAI. Tidak perlu izin tambahan.</string>
+    <string name="perm_note">Pembacaan teks layar dan pesan masuk memakai izin di atas. Obrolan juga didampingi di aplikasi yang memasang dcAI dan di teks yang kamu ketik dengan papan ketik dcAI.</string>
     <string name="perm_done">Selesai</string>
     <string name="perm_required">Notifikasi dcAI wajib aktif.</string>
 
@@ -118,9 +119,14 @@
     <!-- Features -->
     <string name="f_chat">Obrolan</string>
     <string name="f_chat_short">Mengenali obrolan yang berisiko.</string>
-    <string name="f_chat_what">Pesan di aplikasi chat yang memasang dcAI dinilai untuk mengenali pola berisiko, misalnya permintaan foto, ajakan pindah aplikasi, atau rahasia dari orang tua. Kamu mendapat pengingat singkat pada saat itu juga.</string>
+    <string name="f_chat_what">Pesan yang dilihat dcAI di ponsel ini dinilai untuk mengenali pola berisiko, misalnya permintaan foto, ajakan pindah aplikasi, atau rahasia dari orang tua. Kamu mendapat pengingat singkat pada saat itu juga.</string>
     <string name="f_chat_stays">Nama, nomor telepon, alamat, sekolah, dan akun disamarkan di ponsel sebelum apa pun dikirim. Isi pesan tidak disimpan.</string>
     <string name="f_chat_sent">Pesan yang sudah disamarkan, untuk dinilai. Yang disimpan hanya pola, level, dan saran untuk orang tua.</string>
+    <string name="f_screen">Teks layar</string>
+    <string name="f_screen_short">Mengenali obrolan berisiko di aplikasi apa pun.</string>
+    <string name="f_screen_what">dcAI membaca teks yang tampil di layar agar bisa mengenali pola berisiko di aplikasi apa pun tempat kamu mengobrol, dengan keyboard apa pun. Kamu mendapat pengingat singkat pada saat itu juga.</string>
+    <string name="f_screen_stays">Teks disamarkan di ponsel sebelum apa pun dikirim, sama seperti pesan lain. Layar tidak pernah disimpan atau dikirim sebagai gambar.</string>
+    <string name="f_screen_sent">Pesan yang sudah disamarkan, untuk dinilai. Yang disimpan hanya pola, level, dan saran untuk orang tua.</string>
 
     <string name="f_image">Gambar</string>
     <string name="f_image_short">Mengaburkan data pribadi di gambar.</string>
@@ -187,7 +193,7 @@
 
     <!-- Transparency -->
     <string name="tr_p1">dcAI tidak bekerja diam-diam. Notifikasi \"dcAI aktif\" selalu tampil selama dcAI berjalan, dan halaman ini selalu bisa kamu buka.</string>
-    <string name="tr_p2">dcAI mendampingi obrolan di aplikasi chat yang memasang dcAI dan teks yang kamu ketik dengan papan ketik dcAI. Aplikasi lain tidak dibaca.</string>
+    <string name="tr_p2">Bila orang tuamu mengaktifkan pembacaan teks layar, dcAI membaca teks di layarmu untuk mendampingi obrolan di aplikasi apa pun. dcAI juga bekerja dengan papan ketik dcAI dan dengan notifikasi obrolan. dcAI hanya membaca selama notifikasi \"dcAI aktif\" tampil.</string>
     <string name="tr_p3">Data pribadi disamarkan di ponsel. Gambar tetap di ponsel. Untuk situs, yang dikirim hanya kategorinya.</string>
     <string name="tr_p4">Orang tua menerima level, pola, dan saran untuk memulai percakapan. Orang tua tidak menerima isi pesan atau gambar.</string>
     <string name="tr_p5">Penilaian AI adalah perkiraan dan bisa salah. Bila menurutmu dcAI keliru, ceritakan ke orang tuamu.</string>
@@ -237,6 +243,11 @@
     <string name="perm_messages">Pesan masuk</string>
     <string name="perm_messages_sub">Membaca notifikasi pesan di aplikasi chat, agar pesan dari lawan bicara ikut dinilai.</string>
     <string name="messages_listener_label">dcAI: pesan masuk</string>
+    <string name="perm_accessibility">Baca teks layar (semua aplikasi)</string>
+    <string name="perm_accessibility_sub">Agar dcAI mengenali obrolan berisiko di aplikasi apa pun, dengan keyboard apa pun. Diaktifkan di pengaturan aksesibilitas Android.</string>
+    <string name="accessibility_label">dcAI: baca teks layar</string>
+    <string name="accessibility_desc">dcAI membaca teks yang tampil di layar untuk mengenali pola obrolan berisiko dan mendampingi anak, untuk orang tua yang memasang dcAI. Ini fitur kontrol orang tua, bukan alat bantu aksesibilitas. Notifikasi \"dcAI aktif\" tetap tampil selama berjalan; tidak ada mode tersembunyi.</string>
+    <string name="screen_sensitive_nudge">Gambar itu mungkin sensitif. Kamu tidak harus mengirimnya. Kalau ada yang mendesakmu, kamu bisa bicara dengan orang dewasa yang kamu percaya.</string>
     <string name="perm_overlay">Tampil di atas aplikasi lain</string>
     <string name="perm_overlay_sub">Untuk layar istirahat saat waktu habis atau jam tidur.</string>
     <string name="cat_video">video</string>
