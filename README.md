@@ -10,7 +10,7 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000000)
 ![Android API 30+](https://img.shields.io/badge/Android-API%2030%2B-3DDC84)
 
-Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). Prototype; all data is synthetic.
+Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). MVP; all data is synthetic.
 
 **Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app) (homepage and parent dashboard; the phone's API is under `/v1`). Please use synthetic data only: free model credits allow the provider to use request content.
 
@@ -242,6 +242,8 @@ With Muse Spark on Baseten added to the stage 2 pool and the 70B backup configur
 - A first run with a 1500-token cap for stage 2 had 52 of 208 calls cut while the model was still reasoning. The cap is now 3000.
 
 Full tables are in `eval/pipeline/dev.md`.
+
+The flows below were run on an Android emulator; the screen-text accessibility flow was also verified end-to-end on a physical Android device.
 
 ### dcAI on an emulator, one live run
 
