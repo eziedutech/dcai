@@ -14,14 +14,30 @@ android {
         applicationId = "dev.eziedutech.dcai.guardian"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        // Raise both for every APK published; the site's download button names this version.
+        versionCode = 2
+        versionName = "0.2.0"
         // The backend as seen from the Android emulator. A real phone sets it during setup.
         buildConfigField("String", "DEFAULT_SERVER", "\"http://10.0.2.2:8000\"")
     }
 
+    // Release signing comes from the environment (the keystore never enters the repo).
+    // Without it, as in CI, the release build stays unsigned.
+    val keystore = System.getenv("DCAI_KEYSTORE")
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = file(keystore)
+                storePassword = System.getenv("DCAI_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("DCAI_KEY_ALIAS")
+                keyPassword = System.getenv("DCAI_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (keystore != null) signingConfig = signingConfigs.getByName("release")
             // The public deployment; debug builds keep the emulator's host machine.
             buildConfigField("String", "DEFAULT_SERVER", "\"https://dcai.digitalsafe.app\"")
             isMinifyEnabled = true
