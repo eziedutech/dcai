@@ -136,7 +136,7 @@ class BackendClient(
         val listener = object : EventSourceListener() {
             override fun onEvent(eventSource: EventSource, id: String?, type: String?, data: String) {
                 val obj = runCatching { json.parseToJsonElement(data).jsonObject }.getOrNull() ?: return
-                onEvent(LiveEvent(type ?: "message", obj))
+                onEvent(LiveEvent(type ?: "message", obj, id))
             }
 
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: okhttp3.Response?) {

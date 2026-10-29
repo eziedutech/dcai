@@ -82,11 +82,13 @@ services:
     expose:
       - "8000"
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health')"]
-      interval: 10s
-      timeout: 3s
-      retries: 12
-      start_period: 30s
+      # Give the single worker slack under a burst of messages so a busy moment does not
+      # flap the container out of the router (which takes the dashboard down with it).
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health', timeout=8)"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
 
   web:
     build: ./frontnext
