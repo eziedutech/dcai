@@ -1,7 +1,7 @@
 """Consent text shown to the guardian. A consent record stores the version it agreed to,
 so a published version is never edited: change the text by adding a new version.
 
-Draft for the hackathon prototype. Final legal text needs review by counsel (spec 10).
+Draft for the hackathon MVP. Final legal text needs review by counsel (spec 10).
 """
 
 from dataclasses import dataclass

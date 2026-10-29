@@ -74,7 +74,7 @@ const id = {
   "home.demo.lead":
     "Kontak baru di game memuji, menawarkan hadiah, meminta rahasia, lalu meminta foto. dcAI menilai rangkaiannya, memberi anak pengingat saat itu juga, dan hanya polanya yang sampai ke orang tua.",
 
-  "home.meta.hackathon": "Prototipe untuk Meta Global AI Developer Hackathon 2026. Semua data contoh adalah sintetis.",
+  "home.meta.hackathon": "MVP untuk Meta Global AI Developer Hackathon 2026. Semua data contoh adalah sintetis.",
 
   "home.others.eyebrow": "Solusi Lain",
 
@@ -88,7 +88,7 @@ const id = {
   "foot.dashboard": "Dasbor",
   "foot.ecosystem": "Ekosistem digitalsafe.app",
   "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
-  "foot.synthetic": "Prototipe. Semua data contoh sintetis.",
+  "foot.synthetic": "MVP. Semua data contoh sintetis.",
 
   "page.how.eyebrow": "Untuk anak dan orang tua",
   "page.privacy.eyebrow": "Kebijakan",
@@ -229,7 +229,7 @@ const id = {
   "home.eco.numeria.tag": "Matematika, XR/VR",
   "home.eco.numeria.b":
     "Game dan pembelajaran matematika yang aman dan bersahabat, menghadirkan pengalaman belajar nyata, interaktif, dan terukur melalui teknologi Extended Reality (XR/VR) serta Kecerdasan Artifisial.",
-  "home.foot": "Prototipe untuk Meta Global AI Developer Hackathon 2026. Semua data contoh adalah sintetis.",
+  "home.foot": "MVP untuk Meta Global AI Developer Hackathon 2026. Semua data contoh adalah sintetis.",
 
   "auth.signin": "Masuk",
   "auth.signup": "Daftar",
@@ -541,7 +541,7 @@ const en: Record<Key, string> = {
   "home.demo.lead":
     "A new contact in a game praises, offers a gift, asks for secrecy, then asks for a photo. dcAI assesses the sequence, gives the child a reminder in the moment, and only the pattern reaches the parent.",
 
-  "home.meta.hackathon": "Prototype for the Meta Global AI Developer Hackathon 2026. All example data is synthetic.",
+  "home.meta.hackathon": "MVP for the Meta Global AI Developer Hackathon 2026. All example data is synthetic.",
 
   "home.others.eyebrow": "Other Solutions",
 
@@ -555,7 +555,7 @@ const en: Record<Key, string> = {
   "foot.dashboard": "Dashboard",
   "foot.ecosystem": "The digitalsafe.app ecosystem",
   "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
-  "foot.synthetic": "Prototype. All example data is synthetic.",
+  "foot.synthetic": "MVP. All example data is synthetic.",
 
   "page.how.eyebrow": "For children and parents",
   "page.privacy.eyebrow": "Policy",
@@ -696,7 +696,7 @@ const en: Record<Key, string> = {
   "home.eco.numeria.tag": "Mathematics, XR/VR",
   "home.eco.numeria.b":
     "Safe and friendly mathematics games and learning that bring a real, interactive and measurable experience through Extended Reality (XR/VR) and Artificial Intelligence.",
-  "home.foot": "Prototype for the Meta Global AI Developer Hackathon 2026. All example data is synthetic.",
+  "home.foot": "MVP for the Meta Global AI Developer Hackathon 2026. All example data is synthetic.",
 
   "auth.signin": "Sign in",
   "auth.signup": "Sign up",

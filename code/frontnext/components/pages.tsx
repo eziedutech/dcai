@@ -87,9 +87,9 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         ],
       },
       {
-        h: "Status prototipe",
+        h: "Status MVP",
         p: [
-          "dcAI masih prototipe untuk hackathon dan belum dipakai oleh keluarga sungguhan. Semua data contoh adalah sintetis. Saat memakai kredit gratis, Meta dapat memakai isi permintaan untuk peningkatan produk, jadi hanya data sintetis yang dikirim. Teks persetujuan dan halaman ini belum ditinjau penasihat hukum.",
+          "dcAI adalah MVP hackathon dan belum dipakai oleh keluarga sungguhan. Semua data contoh adalah sintetis. Saat memakai kredit gratis, Meta dapat memakai isi permintaan untuk peningkatan produk, jadi hanya data sintetis yang dikirim. Teks persetujuan dan halaman ini belum ditinjau penasihat hukum.",
         ],
       },
     ],
@@ -135,9 +135,9 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         ],
       },
       {
-        h: "Prototype status",
+        h: "MVP status",
         p: [
-          "dcAI is a hackathon prototype and is not yet used by real families. All example data is synthetic. With free credits, Meta may use request content for product improvement, so only synthetic data is sent. The consent text and this page have not had legal review.",
+          "dcAI is a hackathon MVP and is not yet used by real families. All example data is synthetic. With free credits, Meta may use request content for product improvement, so only synthetic data is sent. The consent text and this page have not had legal review.",
         ],
       },
     ],
