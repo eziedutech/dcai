@@ -342,6 +342,7 @@ fun ProtectionTab(
     onFeature: (Feature) -> Unit,
     onUsage: () -> Unit = {},
     onOverlay: () -> Unit = {},
+    onMessages: () -> Unit = {},
 ) {
     TabColumn(padding) {
         Text(stringResource(R.string.tab_protection), style = MaterialTheme.typography.headlineMedium)
@@ -363,6 +364,13 @@ fun ProtectionTab(
                 Feature.PAPAN_KETIK.icon, stringResource(R.string.f_keyboard), stringResource(R.string.f_keyboard_short),
                 snapshot.status(Feature.PAPAN_KETIK), snapshot.keyboardOn, enabled = snapshot.granted(Feature.PAPAN_KETIK),
             ) { onKeyboard() }
+            if (snapshot.granted(Feature.OBROLAN)) {
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
+                SwitchRow(
+                    Feature.OBROLAN.icon, stringResource(R.string.perm_messages), stringResource(R.string.perm_messages_sub),
+                    if (snapshot.messagesOn) Status.ON else Status.NEEDS_SETUP, snapshot.messagesOn,
+                ) { onMessages() }
+            }
             if (snapshot.granted(Feature.WAKTU)) {
                 HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
                 SwitchRow(

@@ -54,7 +54,9 @@ from app.scenarios.schema import Channel
 guardian_router = APIRouter(tags=["devices"])
 device_router = APIRouter(prefix="/device", tags=["device"])
 
-Service = Literal["accessibility", "notification", "vpn", "keyboard", "usage", "overlay"]
+Service = Literal[
+    "accessibility", "notification", "vpn", "keyboard", "messages", "usage", "overlay"
+]
 ThreadKey = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9_-]{16,64}$")]
 PackageName = Annotated[
     str, StringConstraints(pattern=r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$", max_length=100)

@@ -12,8 +12,30 @@ android {
         applicationId = "dev.eziedutech.dcai.samplechat"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        // Same version as dcAI Guardian; published beside it for demos on a real phone.
+        versionCode = 3
+        versionName = "0.2.1"
+    }
+
+    // Signed with the same key as dcAI Guardian, from the environment, so the signature
+    // permission to hand messages to dcAI is granted. Without it the release is unsigned.
+    val keystore = System.getenv("DCAI_KEYSTORE")
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = file(keystore)
+                storePassword = System.getenv("DCAI_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("DCAI_KEY_ALIAS")
+                keyPassword = System.getenv("DCAI_KEY_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (keystore != null) signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+        }
     }
     buildFeatures { compose = true }
     compileOptions {

@@ -78,6 +78,18 @@
                 android:resource="@xml/method" />
         </service>
 
+        <!-- Incoming messages from chat apps' notifications. The parent grants this access in
+             Android's settings; the child sees dcAI in that list. -->
+        <service
+            android:name=".ingest.MessageNotificationListener"
+            android:exported="true"
+            android:label="@string/messages_listener_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".ingest.ChatIngestReceiver"
             android:exported="true"

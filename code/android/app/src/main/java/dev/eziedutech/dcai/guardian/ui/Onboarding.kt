@@ -288,6 +288,7 @@ fun PermissionsScreen(
     onUsage: () -> Unit,
     onOverlay: () -> Unit,
     onDone: () -> Unit,
+    onMessages: () -> Unit = {},
 ) {
     OnboardingScaffold(step = 4, onBack = null, content = {
         Text(stringResource(R.string.perm_title), style = MaterialTheme.typography.headlineMedium)
@@ -308,6 +309,12 @@ fun PermissionsScreen(
                     Feature.PAPAN_KETIK.icon, stringResource(R.string.f_keyboard), stringResource(R.string.f_keyboard_short),
                     snapshot.status(Feature.PAPAN_KETIK), snapshot.keyboardOn,
                 ) { onKeyboard() }
+            }
+            if (snapshot.granted(Feature.OBROLAN)) {
+                SwitchRow(
+                    Feature.OBROLAN.icon, stringResource(R.string.perm_messages), stringResource(R.string.perm_messages_sub),
+                    if (snapshot.messagesOn) Status.ON else Status.NEEDS_SETUP, snapshot.messagesOn,
+                ) { onMessages() }
             }
             if (snapshot.granted(Feature.WAKTU)) {
                 SwitchRow(

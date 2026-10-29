@@ -60,6 +60,7 @@
     <string name="pin_dialog_title">Parent PIN</string>
     <string name="pin_dialog_sites_off">Switching site protection off needs the parent PIN. The parent is also told on the dashboard.</string>
     <string name="pin_dialog_keyboard_off">Changing the dcAI keyboard needs the parent PIN.</string>
+    <string name="pin_dialog_messages_off">Turning off reading incoming messages needs the parent PIN.</string>
     <string name="pin_dialog_change">Enter the current PIN to create a new one.</string>
 
     <string name="perm_title">Turn protections on</string>
@@ -211,6 +212,9 @@
     <string name="f_time_sent">Total minutes per category (video, games, social, other) per day, minutes during bedtime and the longest session. A request for more time is sent with its reason masked.</string>
     <string name="perm_usage">Usage access</string>
     <string name="perm_usage_sub">To count how long apps are used on this phone.</string>
+    <string name="perm_messages">Incoming messages</string>
+    <string name="perm_messages_sub">Reads message notifications in chat apps, so what the other person writes is assessed too.</string>
+    <string name="messages_listener_label">dcAI: incoming messages</string>
     <string name="perm_overlay">Display over other apps</string>
     <string name="perm_overlay_sub">For the break screen when time is up or at bedtime.</string>
     <string name="cat_video">video</string>

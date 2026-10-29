@@ -9,6 +9,7 @@ object DeviceState {
         // The persistent notification is shown the whole time the service runs.
         "notification" to true,
         "keyboard" to isKeyboardEnabled(context),
+        "messages" to dev.eziedutech.dcai.guardian.ingest.MessageNotificationListener.enabled(context),
         "vpn" to dev.eziedutech.dcai.guardian.sites.SiteGuardVpn.running,
         "usage" to dev.eziedutech.dcai.guardian.screen.UsageReader(context).hasPermission(),
         "overlay" to android.provider.Settings.canDrawOverlays(context),

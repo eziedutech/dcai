@@ -46,6 +46,7 @@ data class Snapshot(
     val notificationsOn: Boolean,
     val keyboardOn: Boolean,
     val sitesOn: Boolean,
+    val messagesOn: Boolean = false,
     val sensitiveModel: Boolean,
     val usageOn: Boolean = false,
     val overlayOn: Boolean = false,
@@ -65,7 +66,9 @@ data class Snapshot(
 
     /** Things the child's phone should switch on but has not. */
     val issues: Int
-        get() = (if (notificationsOn) 0 else 1) + Feature.entries.count { status(it) == Status.NEEDS_SETUP }
+        get() = (if (notificationsOn) 0 else 1) +
+            (if (granted(Feature.OBROLAN) && !messagesOn) 1 else 0) +
+            Feature.entries.count { status(it) == Status.NEEDS_SETUP }
 
     companion object {
         fun read(context: Context) = Snapshot(
@@ -73,6 +76,7 @@ data class Snapshot(
             notificationsOn = NotificationManagerCompat.from(context).areNotificationsEnabled(),
             keyboardOn = DeviceState.isKeyboardEnabled(context),
             sitesOn = SiteGuardVpn.running,
+            messagesOn = dev.eziedutech.dcai.guardian.ingest.MessageNotificationListener.enabled(context),
             sensitiveModel = ServiceLocator.sensitiveModel.installed,
             usageOn = UsageReader(context).hasPermission(),
             overlayOn = android.provider.Settings.canDrawOverlays(context),

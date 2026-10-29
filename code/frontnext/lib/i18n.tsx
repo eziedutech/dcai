@@ -456,6 +456,7 @@ const id = {
   "service.notification": "Notifikasi tetap",
   "service.vpn": "Penyaring situs",
   "service.keyboard": "Papan ketik dcAI",
+  "service.messages": "Pesan masuk",
 
   "conf.rendah": "rendah",
   "conf.sedang": "sedang",
@@ -917,6 +918,7 @@ const en: Record<Key, string> = {
   "service.notification": "Persistent notification",
   "service.vpn": "Site filter",
   "service.keyboard": "dcAI keyboard",
+  "service.messages": "Incoming messages",
 
   "conf.rendah": "low",
   "conf.sedang": "medium",

@@ -176,6 +176,8 @@ class MainActivity : LocalizedActivity() {
 
         fun usageSettings() = startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
 
+        fun messagesSettings() = startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+
         fun overlaySettings() = startActivity(
             Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:$packageName")),
         )
@@ -211,6 +213,7 @@ class MainActivity : LocalizedActivity() {
                     onKeyboard = { keyboardSettings() },
                     onUsage = { usageSettings() },
                     onOverlay = { overlaySettings() },
+                    onMessages = { messagesSettings() },
                     onDone = {
                         store.setupDone = true
                         GuardianService.start(context)
@@ -234,6 +237,7 @@ class MainActivity : LocalizedActivity() {
                             onFeature = { go(Route.Detail(it)) },
                             onUsage = { usageSettings() },
                             onOverlay = { overlaySettings() },
+                            onMessages = { if (snapshot.messagesOn) pinPurpose = "messages_off" else messagesSettings() },
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
@@ -330,6 +334,7 @@ class MainActivity : LocalizedActivity() {
                     when (purpose) {
                         "sites_off" -> R.string.pin_dialog_sites_off
                         "keyboard_off" -> R.string.pin_dialog_keyboard_off
+                        "messages_off" -> R.string.pin_dialog_messages_off
                         else -> R.string.pin_dialog_change
                     },
                 ),
@@ -344,6 +349,7 @@ class MainActivity : LocalizedActivity() {
                             refresh++
                         }
                         "keyboard_off" -> keyboardSettings()
+                        "messages_off" -> messagesSettings()
                         "change_pin" -> go(Route.ChangePin)
                     }
                 },
