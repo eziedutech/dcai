@@ -10,7 +10,7 @@ from app.risk.schemas import Level
 _T: dict[str, dict[Situation, dict]] = {
     "id": {
         Situation.APPROACH: {
-            "child_nudge": "Kamu boleh berhenti membalas dan tidak wajib merahasiakan apa pun. Ceritakan obrolan ini ke orang dewasa yang kamu percaya.",
+            "child_nudge": "Berhenti dulu chatnya dan coba bicarakan dengan orang tuamu. Kamu tidak wajib merahasiakan apa pun, dan ini bukan salahmu.",
             "what_we_see": "Kontak dalam obrolan ini menunjukkan pola pendekatan yang perlu didampingi, misalnya membangun kedekatan dengan cepat atau meminta hal pribadi.",
             "why_it_matters": "Pola seperti ini sering berjalan bertahap. Anak yang merasa aman bercerita lebih mudah dilindungi sejak awal.",
             "starters": [
@@ -158,7 +158,7 @@ _T: dict[str, dict[Situation, dict]] = {
     },
     "en": {
         Situation.APPROACH: {
-            "child_nudge": "You can stop replying, and you never have to keep a secret like this. Tell an adult you trust about this chat.",
+            "child_nudge": "Stop this chat for now and talk to your parent about it. You do not have to keep anything secret, and this is not your fault.",
             "what_we_see": "The contact in this chat shows an approach pattern that needs your support, such as building closeness fast or asking for personal things.",
             "why_it_matters": "Patterns like this often unfold step by step. A child who feels safe to talk is easier to protect early.",
             "starters": [

@@ -376,6 +376,32 @@ def _conversation(
     return conversation
 
 
+# Packages that are not conversations: system UI, keyboards/IMEs, launchers and browsers.
+# The phone filters these too, but the server drops them as well so a phone on an older
+# build cannot create junk threads like "systemui", "latin" or "chrome". Site safety is the
+# VPN's job, not the chat pipeline, so browsers belong here.
+_NOISE_APPS = {"android", "com.android.systemui", "com.android.settings"}
+_NOISE_SUBSTRINGS = (
+    "inputmethod",
+    "latin",
+    "gboard",
+    "swiftkey",
+    ".ime",
+    "launcher",
+    "systemui",
+    "chrome",
+    "firefox",
+    "browser",
+    "org.mozilla",
+    "opera",
+)
+
+
+def _is_noise_app(app: str) -> bool:
+    low = app.lower()
+    return app in _NOISE_APPS or any(s in low for s in _NOISE_SUBSTRINGS)
+
+
 @device_router.post("/messages", status_code=status.HTTP_202_ACCEPTED)
 async def device_message(
     body: DeviceMessageIn,
@@ -391,6 +417,10 @@ async def device_message(
     once; the level and any nudge arrive on the live stream. wait=true answers after
     analysis (simulator and tests)."""
     _require(db, device, Scope.PERCAKAPAN)
+    # System UI, keyboards, launchers and browsers are not chats: accept but do not analyse,
+    # so they never become conversations or load the pipeline.
+    if _is_noise_app(body.app):
+        return DeviceMessageOut(conversation_id="", queued=False)
     limiter = state_item(
         request.app.state,
         "device_limiter",
