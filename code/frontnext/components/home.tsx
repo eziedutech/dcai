@@ -5,6 +5,7 @@ import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
 import { Parallax } from "./motion";
+import { APK_URL } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
 
 function LockIcon() {
@@ -47,6 +48,21 @@ function Icon({ name }: { name: keyof typeof ICONS }) {
   );
 }
 
+/** The opening of each homepage section: the menu's word, the claim, one line under it. */
+function SectionHead({ id, eyebrow, title, lead }: { id: string; eyebrow: string; title: string; lead: string }) {
+  return (
+    <div>
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 id={id} className="mt-3 max-w-[26ch] text-[2.3rem] font-extrabold leading-[1.1] tracking-[-0.03em]">
+        {title}
+      </h2>
+      <p className="mt-4 max-w-[60ch] text-lg text-ink/75">{lead}</p>
+    </div>
+  );
+}
+
+const sub = "text-[1.6rem] font-bold leading-tight tracking-[-0.02em]";
+
 function Features() {
   const { t } = useT();
   const cards = [
@@ -55,11 +71,11 @@ function Features() {
     { n: 3, icon: "clock" },
   ] as const;
   return (
-    <section className="mx-auto mt-32 max-w-6xl px-5 sm:px-8" aria-labelledby="feat-h">
+    <div className="mt-20" aria-labelledby="feat-h">
       <p className="eyebrow">{t("home.feat.eyebrow")}</p>
-      <h2 id="feat-h" className="mt-3 max-w-[24ch] text-[2rem] font-bold leading-tight tracking-[-0.02em]">
+      <h3 id="feat-h" className={`mt-3 max-w-[30ch] ${sub}`}>
         {t("home.feat.title")}
-      </h2>
+      </h3>
       <p className="mt-4 max-w-[60ch] text-slate">{t("home.feat.lead")}</p>
       <div className="mt-10 grid gap-5 md:grid-cols-3">
         {cards.map(({ n, icon }) => (
@@ -78,20 +94,20 @@ function Features() {
           </article>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
 function Control() {
   const { t } = useT();
   return (
-    <section id="privasi" className="mx-auto mt-32 max-w-6xl px-5 sm:px-8" aria-labelledby="control-h">
+    <div id="privasi" className="mt-24 scroll-mt-24" aria-labelledby="control-h">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
         <div className="lg:sticky lg:top-28">
           <p className="eyebrow">{t("home.control.eyebrow")}</p>
-          <h2 id="control-h" className="mt-3 text-[2rem] font-bold leading-tight tracking-[-0.02em]">
+          <h3 id="control-h" className={`mt-3 ${sub}`}>
             {t("home.control.title")}
-          </h2>
+          </h3>
           <p className="mt-4 max-w-[52ch] text-slate">{t("home.control.lead")}</p>
           <ul className="mt-6 space-y-2.5">
             {([1, 2, 3] as const).map((i) => (
@@ -133,15 +149,15 @@ function Control() {
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
 function Steps() {
   const { t } = useT();
   return (
-    <section className="mx-auto mt-32 max-w-6xl px-5 sm:px-8">
-      <h2 className="max-w-[30ch] text-[2rem] font-bold leading-tight tracking-[-0.02em]">{t("home.steps.title")}</h2>
+    <div className="mt-24">
+      <h3 className={`max-w-[30ch] ${sub}`}>{t("home.steps.title")}</h3>
       <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {([1, 2, 3, 4] as const).map((n) => (
           <li key={n} className="glass rounded-3xl p-6">
@@ -151,7 +167,7 @@ function Steps() {
           </li>
         ))}
       </ol>
-    </section>
+    </div>
   );
 }
 
@@ -163,8 +179,8 @@ function Models() {
     ["ExecuTorch", "home.meta.next"],
   ] as const;
   return (
-    <section className="mx-auto mt-32 max-w-6xl px-5 sm:px-8">
-      <h2 className="text-[2rem] font-bold leading-tight tracking-[-0.02em]">{t("home.meta.title")}</h2>
+    <div className="mt-24">
+      <h3 className={sub}>{t("home.meta.title")}</h3>
       <dl className="mt-8 grid gap-5 sm:grid-cols-3">
         {rows.map(([name, key]) => (
           <div key={name} className="border-t border-ink/15 pt-4">
@@ -173,7 +189,12 @@ function Models() {
           </div>
         ))}
       </dl>
-    </section>
+      <p className="mt-8 flex items-start gap-2.5 rounded-2xl bg-navy/[0.06] px-4 py-3 text-[0.95rem] text-ink/85">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/dcai-logo.png" alt="" width={14} height={16} className="mt-0.5 h-4 w-auto" />
+        {t("home.meta.hackathon")}
+      </p>
+    </div>
   );
 }
 
@@ -191,10 +212,10 @@ function About() {
     { key: "numeria", name: "Numeria Arena", full: null, mark: <Mark src="/eco/numeria.png" /> },
   ] as const;
   return (
-    <section id="tentang" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="about-h">
+    <section id="solusi" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="about-h">
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="eyebrow">{t("home.about.eyebrow")}</p>
+          <p className="eyebrow">{t("home.others.eyebrow")}</p>
           <h2 id="about-h" className="mt-3 text-[2rem] font-bold leading-tight tracking-[-0.02em]">{t("home.about.title")}</h2>
           <p className="mt-4 max-w-[50ch] text-[1.05rem] text-ink/80">{t("home.about.lead")}</p>
         </div>
@@ -255,45 +276,87 @@ function AppShots() {
   );
 }
 
+/** The hero's main action: the Android app. Until the release build is final there is no
+ * file, and the button says so instead of linking to nothing. */
+function DownloadButton() {
+  const { t } = useT();
+  const cls =
+    "inline-flex items-center gap-2.5 rounded-xl bg-navy px-5 py-3 font-semibold text-paper shadow-[0_10px_24px_-14px_rgba(31,58,95,0.9)]";
+  const icon = (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 3 5 6v5.5c0 4.5 3 8.1 7 9.5 4-1.4 7-5 7-9.5V6l-7-3Z M12 8.5v6M9.3 12l2.7 2.7 2.7-2.7" />
+    </svg>
+  );
+  if (APK_URL) {
+    return (
+      <a href={APK_URL} download className={`${cls} hover:bg-ink`}>
+        {icon}
+        {t("home.download")}
+      </a>
+    );
+  }
+  return (
+    <button type="button" disabled aria-describedby="download-soon" className={`${cls} cursor-not-allowed`}>
+      {icon}
+      {t("home.download")}
+    </button>
+  );
+}
+
 export function HomePage() {
   const { t } = useT();
   return (
     <>
-      <SiteHeader />
+      <SiteHeader home />
       <main>
-        <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 sm:pt-20">
+        <section id="tentang" className="mx-auto max-w-6xl scroll-mt-24 px-5 pt-14 sm:px-8 sm:pt-20" aria-labelledby="hero-h">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <Parallax speed={0.08}>
               <blockquote className="max-w-[58ch] border-l-2 border-navy/40 pl-4 text-[1.02rem] leading-relaxed text-slate italic">
                 &ldquo;{t("home.tagline")}&rdquo;
               </blockquote>
-              <h1 className="mt-8 max-w-[18ch] text-[2.5rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-ink sm:text-[3.6rem] lg:text-[3.25rem]">
+              <h1 id="hero-h" className="mt-8 max-w-[18ch] text-[2.5rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-ink sm:text-[3.6rem] lg:text-[3.25rem]">
                 {t("home.title")}
               </h1>
               <p className="mt-6 max-w-[60ch] text-lg text-ink/75">{t("home.lead")}</p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <Link href="/dasbor" className="rounded-xl bg-navy px-5 py-3 font-semibold text-paper shadow-[0_10px_24px_-14px_rgba(31,58,95,0.9)] hover:bg-ink">
-                  {t("home.cta")}
-                </Link>
-                <Link href="/#privasi" className="glass-fill rounded-xl px-5 py-3 font-semibold hover:border-navy/40">
-                  {t("home.cta2")}
+                <DownloadButton />
+                <Link href="/#cara-kerja" className="glass-fill rounded-xl px-5 py-3 font-semibold hover:border-navy/40">
+                  {t("home.seeHow")}
                 </Link>
               </div>
+              {!APK_URL && (
+                <p id="download-soon" className="mt-3 text-sm text-slate">
+                  {t("home.downloadSoon")}
+                </p>
+              )}
             </Parallax>
             <AppShots />
           </div>
-          <FactsBand />
-          <div className="glass relative z-10 mt-12 rounded-[2rem] p-5 sm:p-8">
-            <p className="eyebrow mb-5">{t("home.demo.eyebrow")}</p>
-            <LiveDemo />
-          </div>
         </section>
 
-        <CardDemo />
-        <Features />
-        <Steps />
-        <Control />
-        <Models />
+        <section id="mengapa" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="why-h">
+          <SectionHead id="why-h" eyebrow={t("home.why.eyebrow")} title={t("home.why.title")} lead={t("home.why.lead")} />
+          <FactsBand />
+          <Features />
+        </section>
+
+        <section id="cara-kerja" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="how-h">
+          <SectionHead id="how-h" eyebrow={t("home.how.eyebrow")} title={t("home.how.title")} lead={t("home.how.lead")} />
+          <div className="glass relative z-10 mt-10 rounded-[2rem] p-5 sm:p-8" aria-labelledby="demo-h">
+            <p className="eyebrow">{t("home.demo.eyebrow")}</p>
+            <h3 id="demo-h" className={`mt-3 max-w-[26ch] ${sub}`}>
+              {t("home.demo.title")}
+            </h3>
+            <p className="mt-3 mb-7 max-w-[64ch] text-ink/75">{t("home.demo.lead")}</p>
+            <LiveDemo />
+          </div>
+          <CardDemo />
+          <Steps />
+          <Control />
+          <Models />
+        </section>
+
         <About />
       </main>
       <SiteFooter />

@@ -2,34 +2,43 @@
 
 import { useT } from "@/lib/i18n";
 import type { Level } from "@/lib/types";
-import { LevelBadge, SiteFooter, SiteHeader } from "./ui";
+import { LevelBadge, PageIntro, ReadNext, SiteFooter, SiteHeader } from "./ui";
 
 type Section = { h: string; p?: string[]; list?: string[] };
 
-function Prose({ title, lead, sections }: { title: string; lead: string; sections: Section[] }) {
+/** One document section in a glass card, the same on every page. */
+function Card({ s }: { s: Section }) {
+  return (
+    <section className="glass rounded-3xl p-7 sm:p-8">
+      <h2 className="text-[1.3rem] font-bold">{s.h}</h2>
+      {s.p?.map((para) => (
+        <p key={para} className="mt-3 max-w-[66ch]">
+          {para}
+        </p>
+      ))}
+      {s.list && (
+        <ul className="mt-3 max-w-[66ch] list-disc space-y-1.5 pl-5">
+          {s.list.map((li) => (
+            <li key={li}>{li}</li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function Prose({ eyebrow, title, lead, sections, current }: { eyebrow: string; title: string; lead: string; sections: Section[]; current: "/privasi" }) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 pt-14 sm:px-8">
-        <h1 className="text-[2.4rem] font-extrabold leading-tight tracking-[-0.03em]">{title}</h1>
-        <p className="mb-10 mt-4 max-w-[62ch] text-lg text-ink/75">{lead}</p>
-        {sections.map((s) => (
-          <section key={s.h} className="glass mt-6 rounded-3xl p-7 sm:p-8">
-            <h2 className="text-[1.3rem] font-bold">{s.h}</h2>
-            {s.p?.map((para) => (
-              <p key={para} className="mt-3 max-w-[66ch]">
-                {para}
-              </p>
-            ))}
-            {s.list && (
-              <ul className="mt-3 max-w-[66ch] list-disc space-y-1.5 pl-5">
-                {s.list.map((li) => (
-                  <li key={li}>{li}</li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
+      <main className="mx-auto max-w-5xl px-5 pt-14 sm:px-8">
+        <PageIntro eyebrow={eyebrow} title={title} lead={lead} />
+        <div className="mt-10 grid gap-6">
+          {sections.map((s) => (
+            <Card key={s.h} s={s} />
+          ))}
+        </div>
+        <ReadNext current={current} />
       </main>
       <SiteFooter />
     </>
@@ -136,8 +145,8 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
 };
 
 export function PrivacyPage() {
-  const { lang } = useT();
-  return <Prose {...PRIVACY[lang]} />;
+  const { lang, t } = useT();
+  return <Prose eyebrow={t("page.privacy.eyebrow")} current="/privasi" {...PRIVACY[lang]} />;
 }
 
 const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Level, string>; sections: Section[] }> = {
@@ -216,14 +225,13 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
 };
 
 export function HowPage() {
-  const { lang } = useT();
+  const { lang, t } = useT();
   const c = HOW[lang];
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 pt-14 sm:px-8">
-        <h1 className="text-[2.4rem] font-extrabold leading-tight tracking-[-0.03em]">{c.title}</h1>
-        <p className="mt-4 max-w-[62ch] text-lg text-ink/75">{c.lead}</p>
+      <main className="mx-auto max-w-5xl px-5 pt-14 sm:px-8">
+        <PageIntro eyebrow={t("page.how.eyebrow")} title={c.title} lead={c.lead} />
         <dl className="glass mt-10 divide-y divide-ink/[0.07] rounded-3xl px-7">
           {(Object.keys(c.levels) as Level[]).map((l) => (
             <div key={l} className="grid gap-2 py-5 sm:grid-cols-[12rem_1fr]">
@@ -234,21 +242,12 @@ export function HowPage() {
             </div>
           ))}
         </dl>
-        {c.sections.map((s) => (
-          <section key={s.h} className="glass mt-6 rounded-3xl p-7 sm:p-8">
-            <h2 className="text-[1.3rem] font-bold">{s.h}</h2>
-            {s.p?.map((para) => (
-              <p key={para} className="mt-3 max-w-[66ch]">{para}</p>
-            ))}
-            {s.list && (
-              <ul className="mt-3 max-w-[66ch] list-disc space-y-1.5 pl-5">
-                {s.list.map((li) => (
-                  <li key={li}>{li}</li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
+        <div className="mt-6 grid gap-6">
+          {c.sections.map((s) => (
+            <Card key={s.h} s={s} />
+          ))}
+        </div>
+        <ReadNext current="/cara-kerja" />
       </main>
       <SiteFooter />
     </>

@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { TOPICS } from "@/lib/facts";
 import { useT } from "@/lib/i18n";
-import { SiteFooter, SiteHeader } from "./ui";
+import { PageIntro, ReadNext, SiteFooter, SiteHeader } from "./ui";
 
 // Source names are written once, in Indonesian; English swaps the few joining words.
 function sourceLabel(src: string, lang: string) {
@@ -23,9 +22,7 @@ export function FactsPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-5 pt-14 sm:px-8">
-        <p className="eyebrow">{t("facts.eyebrow")}</p>
-        <h1 className="mt-3 max-w-[22ch] text-[2.4rem] font-extrabold leading-tight tracking-[-0.03em]">{t("facts.title")}</h1>
-        <p className="mt-4 max-w-[64ch] text-lg text-ink/75">{t("facts.lead")}</p>
+        <PageIntro eyebrow={t("facts.eyebrow")} title={t("facts.title")} lead={t("facts.lead")} />
 
         <nav aria-label={t("facts.topics")} className="mt-8 flex flex-wrap gap-2">
           {TOPICS.map((topic) => (
@@ -70,9 +67,7 @@ export function FactsPage() {
           <h2 className="font-bold text-ink">{t("facts.method.t")}</h2>
           <p className="mt-2">{t("facts.method.b")}</p>
         </section>
-        <Link href="/" className="mt-8 inline-block font-semibold text-navy underline-offset-4 hover:underline">
-          {t("facts.back")}
-        </Link>
+        <ReadNext current="/fakta" />
       </main>
       <SiteFooter />
     </>

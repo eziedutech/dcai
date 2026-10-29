@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ApiError, session } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 import type { Guardian } from "@/lib/types";
-import { Button, Field, LangToggle, Logo } from "./ui";
+import { Button, Field, SiteFooter, SiteHeader } from "./ui";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const { t, lang, setLang } = useT();
@@ -43,13 +43,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-10 px-5 py-8">
-      <div className="flex items-center justify-between">
-        <Logo />
-        <LangToggle />
-      </div>
-      <main className="glass my-auto rounded-3xl p-7 sm:p-9">
-        <h1 className="text-[1.75rem] font-bold tracking-[-0.02em]">
+    <>
+      <SiteHeader />
+      <main className="glass mx-auto mt-16 max-w-md rounded-3xl p-7 sm:p-9">
+        <p className="eyebrow">{t("auth.for")}</p>
+        <h1 className="mt-2 text-[1.75rem] font-bold tracking-[-0.02em]">
           {mode === "login" ? t("auth.signinTitle") : t("auth.signupTitle")}
         </h1>
         <form onSubmit={submit} className="mt-8 space-y-5" noValidate={false}>
@@ -82,6 +80,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           </Link>
         </p>
       </main>
-    </div>
+      <SiteFooter />
+    </>
   );
 }

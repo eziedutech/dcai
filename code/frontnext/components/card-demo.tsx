@@ -240,14 +240,14 @@ export function CardDemo() {
   const { t } = useT();
   const { ref, f } = useFrameClock(FRAMES);
   return (
-    <section className="mx-auto mt-8 max-w-6xl px-5 sm:px-8" aria-labelledby="card-h">
+    <div className="mt-8" aria-labelledby="card-h">
       <div ref={ref} className="glass grid items-start gap-8 rounded-[2rem] p-5 sm:p-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-12">
         <Phone f={f} />
         <div>
           <p className="eyebrow">{t("home.card.eyebrow")}</p>
-          <h2 id="card-h" className="mt-3 max-w-[22ch] text-[2rem] font-bold leading-tight tracking-[-0.02em]">
+          <h3 id="card-h" className="mt-3 max-w-[26ch] text-[1.6rem] font-bold leading-tight tracking-[-0.02em]">
             {t("home.card.title")}
-          </h2>
+          </h3>
           <p className="mt-4 max-w-[58ch] text-ink/75">{t("home.card.lead")}</p>
 
           <figure className="mt-7">
@@ -289,6 +289,6 @@ export function CardDemo() {
           </figure>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

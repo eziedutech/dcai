@@ -161,9 +161,8 @@ const STATS = [
 export function FactsBand() {
   const { t } = useT();
   return (
-    <section className="mt-16" aria-labelledby="stats-h">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="stats-h" className="eyebrow">{t("home.stats.title")}</h2>
+    <div className="mt-10">
+      <div className="flex flex-wrap items-baseline justify-end gap-3">
         <Link href="/fakta" className="inline-flex items-center gap-1.5 text-[0.88rem] font-semibold text-navy underline-offset-4 hover:underline">
           {t("home.stats.more")}
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
@@ -182,7 +181,7 @@ export function FactsBand() {
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }
 
