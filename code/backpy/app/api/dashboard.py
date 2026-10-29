@@ -10,7 +10,7 @@ from app.api.deps import DbDep, GuardianDep, owned_child
 from app.dashboard import queries
 from app.dashboard.queries import ConversationSummary, DeviceStatus, EventOut, InsightOut, Overview
 from app.db.models import Insight, RiskAssessment
-from app.guide.translate import guide_text, rationale_texts
+from app.guide.translate import guide_text, rationale_texts, written_in
 from app.risk.schemas import Level
 
 router = APIRouter(tags=["dashboard"])
@@ -32,16 +32,14 @@ async def overview(
     target = lang or guardian.language
     ov = queries.overview(db, owned_child(db, guardian, child_id), days, target)
     latest = ov.latest_insight
-    if latest is not None:
-        source = latest.language or guardian.language
-        actual = source
-        update: dict = {}
+    ins = db.get(Insight, uuid.UUID(latest.id)) if latest is not None else None
+    if latest is not None and ins is not None:
+        source = written_in(ins)
+        update, actual = {}, source
         if source != target:
-            ins = db.get(Insight, uuid.UUID(latest.id))
-            if ins is not None:
-                update, actual = await guide_text(
-                    request.app.state.muse, db, ins, Level(latest.level), source, target
-                )
+            update, actual = await guide_text(
+                request.app.state.muse, db, ins, Level(latest.level), source, target
+            )
         ov.latest_insight = latest.model_copy(update={**update, "language": actual})
     return ov
 
@@ -89,7 +87,11 @@ def insights(
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ) -> list[InsightOut]:
     rows = queries.insights(db, owned_child(db, guardian, child_id), limit, guardian.language)
-    return [r if r.language else r.model_copy(update={"language": guardian.language}) for r in rows]
+    out = []
+    for r in rows:
+        ins = None if r.language else db.get(Insight, uuid.UUID(r.id))
+        out.append(r.model_copy(update={"language": written_in(ins)}) if ins else r)
+    return out
 
 
 @router.get("/children/{child_id}/protection")

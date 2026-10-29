@@ -14,6 +14,7 @@ The model receives the Guide's own output only: patterns and advice, never messa
 
 import json
 import logging
+import re
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
@@ -36,6 +37,18 @@ add advice, links, phone numbers or names. Never mix the two languages. Output O
 the given schema."""
 
 LANGUAGES = {"id": "Indonesian", "en": "English"}
+
+# Common Indonesian words that English text does not use.
+_INDONESIAN = re.compile(r"\b(yang|dan|dengan|untuk|anak|kamu|tidak|ini|itu|agar|bisa)\b", re.I)
+
+
+def written_in(ins: Insight) -> str:
+    """The insight's language. Older insights did not record it; the guardian's setting
+    may have changed since, so their text decides."""
+    if ins.language:
+        return ins.language
+    sample = " ".join([ins.child_nudge, *map(str, (ins.parent_insight or {}).values())])
+    return "id" if len(_INDONESIAN.findall(sample)) >= 3 else "en"
 
 
 def _text(ins: Insight) -> dict:

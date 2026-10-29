@@ -10,7 +10,7 @@ from app.db.base import session_factory
 from app.db.models import Insight
 from app.guide.guide import Situation
 from app.guide.templates import template
-from app.guide.translate import _Items, guide_text
+from app.guide.translate import _Items, guide_text, written_in
 from app.llm import LLMResult
 from app.risk.schemas import Level
 from tests.conftest import auth
@@ -121,13 +121,15 @@ def test_conversation_rationales_translated_in_one_call(api):
 
 
 def test_an_insight_without_a_recorded_language_is_translated(api):
-    # Insights written before the language was recorded are in the guardian's language.
+    # Older insights did not record their language; the text decides, since the guardian
+    # may have switched the account to English since.
     tokens, child, dev, _ = paired(api)
     message(api, dev, "halo")
     message(api, dev, "kirim foto kamu")
     with session_factory(get_settings().database_url)() as db:
         db.execute(update(Insight).values(language=None))
         db.commit()
+    api.patch("/v1/auth/me", json={"language": "en"}, headers=auth(tokens))
     english = template(Situation.APPROACH, Level.WASPADA, "en")
     api.app.state.muse = FakeReasoning(english)
 
@@ -135,3 +137,13 @@ def test_an_insight_without_a_recorded_language_is_translated(api):
     latest = api.get(url, headers=auth(tokens)).json()["latest_insight"]
 
     assert latest["language"] == "en" and latest["child_nudge"] == english.child_nudge
+
+
+def test_written_in_reads_the_text_of_older_insights():
+    ins = model_insight()
+    ins.language = None
+    assert written_in(ins) == "id"
+    en = template(Situation.APPROACH, Level.WASPADA, "en")
+    ins.child_nudge = en.child_nudge
+    ins.parent_insight = en.parent_insight.model_dump()
+    assert written_in(ins) == "en"
