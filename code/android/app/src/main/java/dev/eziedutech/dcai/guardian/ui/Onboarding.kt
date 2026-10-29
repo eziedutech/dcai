@@ -289,6 +289,7 @@ fun PermissionsScreen(
     onOverlay: () -> Unit,
     onDone: () -> Unit,
     onMessages: () -> Unit = {},
+    onAccessibility: () -> Unit = {},
 ) {
     OnboardingScaffold(step = 4, onBack = null, content = {
         Text(stringResource(R.string.perm_title), style = MaterialTheme.typography.headlineMedium)
@@ -315,6 +316,12 @@ fun PermissionsScreen(
                     Feature.OBROLAN.icon, stringResource(R.string.perm_messages), stringResource(R.string.perm_messages_sub),
                     if (snapshot.messagesOn) Status.ON else Status.NEEDS_SETUP, snapshot.messagesOn,
                 ) { onMessages() }
+            }
+            if (snapshot.granted(Feature.LAYAR)) {
+                SwitchRow(
+                    Feature.LAYAR.icon, stringResource(R.string.perm_accessibility), stringResource(R.string.perm_accessibility_sub),
+                    snapshot.status(Feature.LAYAR), snapshot.accessibilityOn,
+                ) { if (!snapshot.accessibilityOn) onAccessibility() }
             }
             if (snapshot.granted(Feature.WAKTU)) {
                 SwitchRow(

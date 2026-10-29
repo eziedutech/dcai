@@ -15,6 +15,7 @@ class Scope(StrEnum):
     DOMAIN = "domain"  # sites matched on the phone; only the category of a flagged site
     SUARA = "suara"  # voice notes in risky chats transcribed, masked, then assessed
     WAKTU = "waktu"  # minutes per app category per day, counted on the phone; limits, bedtime
+    LAYAR = "layar"  # screen text read across any app on the phone (accessibility); masked
 
 
 @dataclass(frozen=True)
@@ -148,5 +149,21 @@ _V4_EN = _V3_EN.replace(
     "Assessments use AI models from Meta run by inference providers. What is sent to a model is always masked first. "
     "The weekly summary, advice on time requests and suggested limits are written by an AI model from aggregate numbers and masked reasons; the parent decides.",
 )
-CURRENT = ConsentText(version="2026-10-28.3", id=_V4_ID, en=_V4_EN, scopes=tuple(Scope))
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, CURRENT)}
+_V4_SCOPES = (*_V2_SCOPES, Scope.WAKTU)
+V4 = ConsentText(version="2026-10-28.3", id=_V4_ID, en=_V4_EN, scopes=_V4_SCOPES)
+
+# V5 restores the screen-reading scope agreed in proposal 0002: dcAI reads screen text
+# across any app (accessibility) and assesses a screenshot of a risky chat on the phone.
+# The keyboard and chat-notification paths stay as complements, not the only sources.
+_V5_ID = _V4_ID.replace(
+    "- Percakapan: pesan di aplikasi chat yang memasang dcAI dan teks yang diketik dengan papan ketik dcAI diproses di ponsel anak.",
+    "- Percakapan: pesan yang dilihat dcAI di ponsel anak diproses di ponsel itu: dari papan ketik dcAI, dari notifikasi aplikasi chat, dan, bila pembacaan teks layar diaktifkan, dari teks yang tampil di layar aplikasi apa pun.\n"
+    "- Layar (semua aplikasi): bila diaktifkan orang tua, dcAI membaca teks yang tampil di layar aplikasi apa pun untuk mengenali pola berisiko, selalu dengan notifikasi tetap dan tanpa mode tersembunyi. Teks disamarkan di ponsel dan hanya pesan yang ditandai yang dikirim. Pada percakapan yang sudah berisiko, dcAI mengambil tangkapan layar dan menilainya di ponsel; tangkapan layar tidak pernah dikirim.",
+)
+_V5_EN = _V4_EN.replace(
+    "- Conversations: messages in chat apps that integrate dcAI and text typed with the dcAI keyboard are processed on the child's phone.",
+    "- Conversations: messages dcAI sees on the child's phone are processed on the phone: from the dcAI keyboard, from chat apps' notifications, and, when screen reading is on, from the text shown on screen in any app.\n"
+    "- Screen (all apps): when the parent turns it on, dcAI reads the text shown on screen in any app to recognise risky patterns, always with the persistent notification and no hidden mode. Text is masked on the phone and only flagged messages are sent. In a chat that is already risky, dcAI takes a screenshot and assesses it on the phone; the screenshot is never sent.",
+)
+CURRENT = ConsentText(version="2026-10-30.1", id=_V5_ID, en=_V5_EN, scopes=tuple(Scope))
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, CURRENT)}

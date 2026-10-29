@@ -72,7 +72,9 @@ def test_consent_text_is_public(api):
     assert resp.status_code == 200
     body = resp.json()
     assert body["version"] == CURRENT.version
-    assert set(body["scopes"]) == {"percakapan", "keyboard", "gambar", "domain", "suara", "waktu"}
+    assert set(body["scopes"]) == {
+        "percakapan", "keyboard", "gambar", "domain", "suara", "waktu", "layar",
+    }
     for word in ("memonitor", "memantau", "mengawasi", "memata-matai", "spyware"):
         assert word not in body["id"].lower()
     # The phone-wide text says what a child always sees and what never leaves the phone.
@@ -96,16 +98,21 @@ def test_old_text_version_can_be_revoked_but_not_granted(api):
 
 
 def test_current_text_matches_the_build_for_images_and_text_sources():
-    """V2 promised to send some images at a small size and to read screen text; the build
-    does neither, so V3 replaced it and V2 can only be revoked."""
+    """The build reads screen text across any app (accessibility, proposal 0002), the dcAI
+    keyboard and chat notifications, and judges images on the phone without sending them.
+    V2 had promised to send some images at a small size; CURRENT does not."""
     from app.consent.texts import V2
 
     assert CURRENT.version != V2.version
     for body in (CURRENT.id, CURRENT.en):
         assert "ukuran kecil" not in body and "small size" not in body
-        assert "di layar" not in body and "on the child's screen" not in body
     assert "gambar dinilai di ponsel dan tidak pernah dikirim" in CURRENT.id
     assert "images are judged on the phone and never sent" in CURRENT.en
+    # Screen reading across apps is named again, with its transparency promise.
+    assert "teks yang tampil di layar aplikasi apa pun" in CURRENT.id
+    assert "text shown on screen in any app" in CURRENT.en
+    assert "tangkapan layar tidak pernah dikirim" in CURRENT.id
+    assert "screenshot is never sent" in CURRENT.en
 
 
 def test_guardian_cannot_touch_another_guardians_child(api):
