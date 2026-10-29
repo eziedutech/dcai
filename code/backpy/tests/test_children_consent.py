@@ -73,7 +73,13 @@ def test_consent_text_is_public(api):
     body = resp.json()
     assert body["version"] == CURRENT.version
     assert set(body["scopes"]) == {
-        "percakapan", "keyboard", "gambar", "domain", "suara", "waktu", "layar",
+        "percakapan",
+        "keyboard",
+        "gambar",
+        "domain",
+        "suara",
+        "waktu",
+        "layar",
     }
     for word in ("memonitor", "memantau", "mengawasi", "memata-matai", "spyware"):
         assert word not in body["id"].lower()
