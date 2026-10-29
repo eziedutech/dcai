@@ -21,6 +21,17 @@ def test_endpoint_reads_shared_provider_key(monkeypatch):
     assert "fw-key" not in repr(ep)
 
 
+def test_backup_flag(monkeypatch):
+    for name, flag in (("wb_one", "true"), ("wb_two", "")):
+        monkeypatch.setenv(f"{name.upper()}_BASE", "https://x.example/v1")
+        monkeypatch.setenv(f"{name.upper()}_API_KEY", "k")
+        monkeypatch.setenv(f"{name.upper()}_MODEL", "m")
+        monkeypatch.setenv(f"{name.upper()}_BACKUP", flag)
+
+    assert endpoint_from_env("wb_one").backup is True
+    assert endpoint_from_env("wb_two").backup is False
+
+
 def test_meta_accepts_spec_variable_names(monkeypatch):
     monkeypatch.setenv("META_API_KEY", "meta-key")
     monkeypatch.setenv("MUSE_MODEL", "muse-from-models-list")

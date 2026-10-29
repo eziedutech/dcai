@@ -7,10 +7,11 @@ Model endpoints are grouped in two pools:
 
 Each pool lists endpoint names, for example REASONING_ENDPOINTS=meta,fw_muse.
 An endpoint name N reads N_BASE, N_API_KEY, N_MODEL, N_JSON_MODE, N_REASONING_EFFORT and
-N_PRICE_IN_PER_MTOK, N_PRICE_CACHED_PER_MTOK, N_PRICE_OUT_PER_MTOK. When N_PROVIDER
+N_PRICE_IN_PER_MTOK, N_PRICE_CACHED_PER_MTOK, N_PRICE_OUT_PER_MTOK and N_BACKUP. When N_PROVIDER
 is set (for example fireworks), missing N_BASE and N_API_KEY are read from
 FIREWORKS_BASE and FIREWORKS_API_KEY, so one key serves several models.
 The name "meta" also accepts the spec names META_API_BASE, META_API_KEY, MUSE_MODEL.
+N_BACKUP=true keeps an endpoint out of the rotation: it is tried only after the others fail.
 """
 
 import os
@@ -42,6 +43,8 @@ class Endpoint:
     price_in_per_mtok: float | None = None
     price_cached_per_mtok: float | None = None
     price_out_per_mtok: float | None = None
+    # Out of the rotation; tried only after every other endpoint in the pool failed.
+    backup: bool = False
 
 
 class Settings(BaseSettings):
@@ -118,6 +121,7 @@ def endpoint_from_env(name: str) -> Endpoint | None:
         price_in_per_mtok=_to_float(read("PRICE_IN_PER_MTOK")),
         price_cached_per_mtok=_to_float(read("PRICE_CACHED_PER_MTOK")),
         price_out_per_mtok=_to_float(read("PRICE_OUT_PER_MTOK")),
+        backup=read("BACKUP").strip().lower() in ("1", "true", "yes"),
     )
 
 

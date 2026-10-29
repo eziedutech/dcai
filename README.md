@@ -42,7 +42,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Built today
 
-- **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API and on Fireworks, Llama on an open-weights inference provider. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema.
+- **One model interface** (`LLMClient`) over a pool of providers: Muse Spark on the Meta Model API, Fireworks and Baseten, Llama on an open-weights inference provider. Calls rotate across providers, fail over on rate limits and outages, and every output is validated against a schema. Stage 1 runs on the distilled student with Llama 3.3 70B as a backup that is called only when the student fails.
 - **Masking by fixed rules**, with 55 shared test cases meant for the keyboard as well.
 - **Grooming Shield**, stages 1 and 2, the rule floor, and `POST /v1/messages/analyze`, measured live on the dev split (below).
 - **Citizenship Guide** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/guide/channels.json`, where only manually verified entries carry a number.
@@ -178,6 +178,8 @@ The site's download button offers the APK from the repository's GitHub release. 
 | `<NAME>_BASE`, `<NAME>_API_KEY`, `<NAME>_MODEL`, `<NAME>_PROVIDER` | any other OpenAI-compatible endpoint, such as the Llama models and the distilled student |
 | `<NAME>_PRICE_IN_PER_MTOK`, `_CACHED_`, `_OUT_` | prices for cost logs; without them the cost is logged as `unknown` |
 | `<NAME>_JSON_MODE`, `<NAME>_REASONING_EFFORT` | per endpoint: `json_schema`, `json_object` or `none`; reasoning effort |
+| `<NAME>_BACKUP` | `true` keeps the endpoint out of the rotation; it is tried only after the others fail |
+| `BT_MUSE_*` | Muse Spark Open on the Baseten Model API (hackathon credits) |
 | `DATABASE_URL` | SQLite or PostgreSQL |
 | `SECRET_KEY` | signs 15-minute access tokens; refresh tokens rotate |
 | `PAIRING_CODE_MINUTES`, `DEVICE_MESSAGES_PER_MINUTE` | pairing code lifetime; per-phone message limit |
@@ -217,6 +219,8 @@ The site's download button offers the APK from the repository's GitHub release. 
 - **Detection delay sits at the target,** median 2 messages: the staged approaches are caught, a couple of messages after the dataset marks the start.
 
 Full tables are in `eval/pipeline/test.md`. Run it with `make eval-test`.
+
+With Muse Spark on Baseten added to the stage 2 pool and the 70B backup configured (`eval/pipeline/test-pool-bt.md`, the 18-scenario split, student v2): risky approaches 4 of 4 at `waspada` or higher, ordinary and hard cases 1 of 7, self-harm flagged 1 of 1, score never decreased 18 of 18, no message without a complete analysis. Baseten answered 14 of the 40 stage 2 calls; those are unpriced (hackathon credits). The backup was not called, since the student never failed.
 
 ### Full pipeline on the dev split
 

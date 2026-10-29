@@ -137,6 +137,34 @@ async def test_round_robin_spreads_load(sleeper):
 
 
 @respx.mock
+async def test_backup_endpoint_is_only_used_after_a_failure(sleeper):
+    a, b = make_endpoint("a"), make_endpoint("b")
+    spare = make_endpoint("spare", backup=True)
+    ra = respx.post(f"{a.base_url}/chat/completions").respond(json=chat_response(GOOD))
+    rb = respx.post(f"{b.base_url}/chat/completions").respond(json=chat_response(GOOD))
+    rs = respx.post(f"{spare.base_url}/chat/completions").respond(json=chat_response(GOOD))
+    c = client([spare, a, b], sleeper)
+
+    for _ in range(4):
+        await ask(c)
+
+    assert (ra.call_count, rb.call_count, rs.call_count) == (2, 2, 0)
+
+
+@respx.mock
+async def test_backup_takes_over_when_the_primary_fails(sleeper):
+    a, spare = make_endpoint("a"), make_endpoint("spare", backup=True)
+    respx.post(f"{a.base_url}/chat/completions").respond(503)
+    rs = respx.post(f"{spare.base_url}/chat/completions").respond(json=chat_response(GOOD))
+
+    result = await ask(client([a, spare], sleeper))
+
+    assert result.usage.endpoint == "spare"
+    assert rs.call_count == 1
+    assert sleeper.delays == []
+
+
+@respx.mock
 async def test_single_endpoint_retries_bounded_with_backoff(sleeper):
     ep = make_endpoint()
     route = respx.post(f"{ep.base_url}/chat/completions").respond(503)

@@ -2,8 +2,9 @@
 
 Calls rotate across endpoints so no single provider carries all the load. A transient
 failure moves to the next endpoint; an endpoint that answered 429 rests until its
-Retry-After passes. Invalid JSON gets exactly one repair attempt, then LLMOutputInvalid,
-and the caller falls back to its safe value. Logs carry metadata only, never text.
+Retry-After passes. Backup endpoints stay out of the rotation and come after the others.
+Invalid JSON gets exactly one repair attempt, then LLMOutputInvalid, and the caller falls
+back to its safe value. Logs carry metadata only, never text.
 """
 
 import asyncio
@@ -268,8 +269,10 @@ class PooledClient:
         return raw
 
     def _rotation_order(self) -> list[Endpoint]:
-        start = next(self._rotation) % len(self.endpoints)
-        rotated = self.endpoints[start:] + self.endpoints[:start]
+        primary = [e for e in self.endpoints if not e.backup] or self.endpoints
+        backup = [e for e in self.endpoints if e not in primary]
+        start = next(self._rotation) % len(primary)
+        rotated = primary[start:] + primary[:start] + backup
         now = time.monotonic()
         awake = [e for e in rotated if self._resting_until.get(e.name, 0.0) <= now]
         # If every endpoint is resting, still try them: a refusal beats silent waiting.
