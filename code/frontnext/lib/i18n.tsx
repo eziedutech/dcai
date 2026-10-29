@@ -59,6 +59,7 @@ const id = {
 
   "home.download": "Lindungi Anak Kita Sekarang",
   "home.downloadSoon": "Aplikasi Android segera tersedia untuk diunduh.",
+  "home.downloadStore": "Versi {v} · Android 11+. Segera hadir di Play Store.",
   "home.seeHow": "Lihat cara kerjanya",
 
   "home.why.eyebrow": "Mengapa Ini Penting",
@@ -520,6 +521,7 @@ const en: Record<Key, string> = {
 
   "home.download": "Protect Our Children Now",
   "home.downloadSoon": "The Android app will be available to download soon.",
+  "home.downloadStore": "Version {v} · Android 11+. Will be available on the Play Store soon.",
   "home.seeHow": "See how it works",
 
   "home.why.eyebrow": "Why this Matters",

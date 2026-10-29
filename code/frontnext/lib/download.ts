@@ -1,5 +1,8 @@
 /**
- * Where the Android app is downloaded from. Empty until the release build is final; the
- * download button then reads as coming soon instead of linking to a file.
+ * The Android app the site offers, from the repository's GitHub release. For a new APK,
+ * raise versionName and versionCode in code/android/app/build.gradle.kts, publish a
+ * release with the file dcai-guardian-<version>.apk, then change APK_VERSION here.
+ * An empty APK_URL turns the download button into "coming soon".
  */
-export const APK_URL = "";
+export const APK_VERSION = "0.2.0";
+export const APK_URL = `https://github.com/eziedutech/dcai/releases/download/v${APK_VERSION}/dcai-guardian-${APK_VERSION}.apk`;

@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
 import { Parallax } from "./motion";
-import { APK_URL } from "@/lib/download";
+import { APK_URL, APK_VERSION } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
 
 function LockIcon() {
@@ -325,11 +325,9 @@ export function HomePage() {
                   {t("home.seeHow")}
                 </Link>
               </div>
-              {!APK_URL && (
-                <p id="download-soon" className="mt-3 text-sm text-slate">
-                  {t("home.downloadSoon")}
-                </p>
-              )}
+              <p id="download-soon" className="mt-3 text-sm text-slate">
+                {APK_URL ? t("home.downloadStore").replace("{v}", APK_VERSION) : t("home.downloadSoon")}
+              </p>
             </Parallax>
             <AppShots />
           </div>

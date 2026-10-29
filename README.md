@@ -166,6 +166,8 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 
 `code/docker-compose.prod.yml` runs PostgreSQL, the API and the web app; on Dokploy it is a Compose service from this repository with the model variables, `DB_PASSWORD` and `SECRET_KEY` in its environment, and two domains on one host: `/` to `web:3000` and `/v1` to `api:8000`. The API migrates on start and builds the site lists from UT1 into a volume the first time (about five minutes). Release builds of the Android app point at the public host; debug builds at the emulator's host machine.
 
+The site's download button offers the APK from the repository's GitHub release. For a new version: raise `versionCode` and `versionName` in `code/android/app/build.gradle.kts`, build `assembleRelease` with the signing variables set (`DCAI_KEYSTORE`, `DCAI_KEYSTORE_PASSWORD`, `DCAI_KEY_ALIAS`, `DCAI_KEY_PASSWORD`; the keystore stays outside the repository), publish a release `v<version>` with the file `dcai-guardian-<version>.apk`, then set `APK_VERSION` in `code/frontnext/lib/download.ts`. Without the signing variables, as in CI, the release build is unsigned.
+
 ## Configuration
 
 | Variable | Purpose |
