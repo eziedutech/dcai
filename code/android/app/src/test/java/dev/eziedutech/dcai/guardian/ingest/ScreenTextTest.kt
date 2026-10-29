@@ -1,7 +1,9 @@
 package dev.eziedutech.dcai.guardian.ingest
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** The parts of reading screen text that need no Android framework. */
@@ -34,6 +36,16 @@ class ScreenTextTest {
         // The same window re-read adds only the genuinely new line.
         val second = s.newLines(pkg, "Kak Bima", listOf("halo apa kabar", "main yuk", "kirim foto dong"))
         assertEquals(listOf("kirim foto dong"), second)
+    }
+
+    @Test
+    fun systemKeyboardAndLauncherPackagesAreNoise() {
+        assertTrue(ScreenText.isNoiseApp("com.android.systemui"))
+        assertTrue(ScreenText.isNoiseApp("com.google.android.inputmethod.latin"))
+        assertTrue(ScreenText.isNoiseApp("com.sec.android.app.launcher"))
+        assertTrue(ScreenText.isNoiseApp("android"))
+        assertFalse(ScreenText.isNoiseApp("com.whatsapp"))
+        assertFalse(ScreenText.isNoiseApp("org.telegram.messenger"))
     }
 
     @Test

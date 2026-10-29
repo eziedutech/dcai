@@ -45,7 +45,7 @@ class ScreenReaderService : AccessibilityService() {
         val store = ServiceLocator.store(this)
         if (store.config?.has("layar") != true) return
         val pkg = event.packageName?.toString() ?: return
-        if (pkg == packageName) return
+        if (pkg == packageName || ScreenText.isNoiseApp(pkg)) return
 
         val root = rootInActiveWindow ?: return
         val collected = collect(root)

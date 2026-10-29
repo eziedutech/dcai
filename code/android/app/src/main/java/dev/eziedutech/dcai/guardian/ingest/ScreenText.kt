@@ -58,5 +58,15 @@ class ScreenText(private val keep: Int = 400) {
     companion object {
         /** Ignore fragments shorter than this: timestamps, single letters, UI chrome. */
         const val MIN = 3
+
+        // System UI, keyboards/IMEs and launchers are not conversations; reading them made
+        // junk threads (e.g. "systemui", "latin") and needless load on the backend. Skip them.
+        private val NOISE_APPS = setOf("android", "com.android.systemui", "com.android.settings")
+        private val NOISE_SUBSTRINGS =
+            listOf("inputmethod", "latin", "gboard", "swiftkey", ".ime", "launcher", "systemui")
+
+        /** Whether an app package is system/keyboard/launcher chrome rather than a chat. */
+        fun isNoiseApp(pkg: String): Boolean =
+            pkg in NOISE_APPS || NOISE_SUBSTRINGS.any { pkg.contains(it, ignoreCase = true) }
     }
 }

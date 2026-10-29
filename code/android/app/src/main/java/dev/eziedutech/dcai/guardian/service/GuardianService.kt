@@ -63,6 +63,10 @@ class GuardianService : Service() {
 
     private var started = false
 
+    // The id of the last live event seen, sent as Last-Event-ID on reconnect so the server
+    // replays what was missed while the stream was briefly down (e.g. a nudge).
+    @Volatile private var lastEventId: String? = null
+
     private fun startForegroundCompat() {
         val nickname = ServiceLocator.store(this).config?.childNickname
         val notification = Notifications.statusNotification(this, nickname)
@@ -89,8 +93,11 @@ class GuardianService : Service() {
     private suspend fun awaitStream(client: BackendClient): Int? = suspendCancellableCoroutine { cont ->
         var source: EventSource? = null
         source = client.openStream(
-            lastEventId = null,
-            onEvent = { event -> scope.launch { handle(event.event, event.data) } },
+            lastEventId = lastEventId,
+            onEvent = { event ->
+                event.id?.let { lastEventId = it }
+                scope.launch { handle(event.event, event.data) }
+            },
             onClosed = { code -> if (cont.isActive) cont.resume(code) },
         )
         cont.invokeOnCancellation { source?.cancel() }

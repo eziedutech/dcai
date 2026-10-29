@@ -173,4 +173,4 @@ data class DetectionFeedbackRequest(
 )
 
 /** A live update on the device stream: event name plus already-parsed JSON object. */
-data class LiveEvent(val event: String, val data: kotlinx.serialization.json.JsonObject)
+data class LiveEvent(val event: String, val data: kotlinx.serialization.json.JsonObject, val id: String? = null)
