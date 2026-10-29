@@ -63,8 +63,9 @@ class InsightOut(BaseModel):
     patterns: list[str]
     situation: str | None
     source: str | None
-    # The language child_nudge, parent_insight and micro_lesson are in.
-    language: str
+    # The language child_nudge, parent_insight and micro_lesson are in; None for insights
+    # written before it was recorded, which are in the guardian's language.
+    language: str | None
     # What the child was told, so the parent knows what the child has already heard.
     child_nudge: str
     parent_insight: dict
@@ -183,7 +184,7 @@ def insights(
             patterns=list(ra.patterns),
             situation=ins.situation,
             source=ins.source,
-            language=ins.language or language,
+            language=ins.language,
             child_nudge=ins.child_nudge,
             parent_insight=ins.parent_insight,
             micro_lesson=ins.micro_lesson,

@@ -32,13 +32,17 @@ async def overview(
     target = lang or guardian.language
     ov = queries.overview(db, owned_child(db, guardian, child_id), days, target)
     latest = ov.latest_insight
-    if latest is not None and latest.language != target:
-        ins = db.get(Insight, uuid.UUID(latest.id))
-        if ins is not None:
-            text, actual = await guide_text(
-                request.app.state.muse, db, ins, Level(latest.level), latest.language, target
-            )
-            ov.latest_insight = latest.model_copy(update={**text, "language": actual})
+    if latest is not None:
+        source = latest.language or guardian.language
+        actual = source
+        update: dict = {}
+        if source != target:
+            ins = db.get(Insight, uuid.UUID(latest.id))
+            if ins is not None:
+                update, actual = await guide_text(
+                    request.app.state.muse, db, ins, Level(latest.level), source, target
+                )
+        ov.latest_insight = latest.model_copy(update={**update, "language": actual})
     return ov
 
 
@@ -84,7 +88,8 @@ def insights(
     guardian: GuardianDep,
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ) -> list[InsightOut]:
-    return queries.insights(db, owned_child(db, guardian, child_id), limit, guardian.language)
+    rows = queries.insights(db, owned_child(db, guardian, child_id), limit, guardian.language)
+    return [r if r.language else r.model_copy(update={"language": guardian.language}) for r in rows]
 
 
 @router.get("/children/{child_id}/protection")

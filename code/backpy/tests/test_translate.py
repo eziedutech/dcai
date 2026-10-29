@@ -3,6 +3,10 @@ translated once and kept, the original when translation fails."""
 
 import json
 
+from sqlalchemy import update
+
+from app.config import get_settings
+from app.db.base import session_factory
 from app.db.models import Insight
 from app.guide.guide import Situation
 from app.guide.templates import template
@@ -114,3 +118,20 @@ def test_conversation_rationales_translated_in_one_call(api):
     assert own[0]["rationale_for_parent"] != "A stranger is building closeness."
     assert en[0]["rationale_for_parent"] == "A stranger is building closeness."
     assert again == en and len(translator.calls) == 1
+
+
+def test_an_insight_without_a_recorded_language_is_translated(api):
+    # Insights written before the language was recorded are in the guardian's language.
+    tokens, child, dev, _ = paired(api)
+    message(api, dev, "halo")
+    message(api, dev, "kirim foto kamu")
+    with session_factory(get_settings().database_url)() as db:
+        db.execute(update(Insight).values(language=None))
+        db.commit()
+    english = template(Situation.APPROACH, Level.WASPADA, "en")
+    api.app.state.muse = FakeReasoning(english)
+
+    url = f"/v1/children/{child['id']}/overview?lang=en"
+    latest = api.get(url, headers=auth(tokens)).json()["latest_insight"]
+
+    assert latest["language"] == "en" and latest["child_nudge"] == english.child_nudge
