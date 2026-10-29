@@ -86,7 +86,7 @@ const id = {
   "foot.signup": "Daftar",
   "foot.dashboard": "Dasbor",
   "foot.ecosystem": "Ekosistem digitalsafe.app",
-  "foot.rights": "© 2026 digitalsafe.app",
+  "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
   "foot.synthetic": "Prototipe. Semua data contoh sintetis.",
 
   "page.how.eyebrow": "Untuk anak dan orang tua",
@@ -547,7 +547,7 @@ const en: Record<Key, string> = {
   "foot.signup": "Sign up",
   "foot.dashboard": "Dashboard",
   "foot.ecosystem": "The digitalsafe.app ecosystem",
-  "foot.rights": "© 2026 digitalsafe.app",
+  "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
   "foot.synthetic": "Prototype. All example data is synthetic.",
 
   "page.how.eyebrow": "For children and parents",
