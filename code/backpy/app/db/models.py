@@ -171,6 +171,8 @@ class RiskAssessment(Base):
     confidence: Mapped[str] = mapped_column(String(8), nullable=False)
     # Which model (or "rules") produced it; never a hardcoded version in code.
     model_version: Mapped[str] = mapped_column(String(120), nullable=False)
+    # The rationale (always written in Indonesian) in English, filled on first view.
+    translations: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = _created()
 
 
@@ -200,6 +202,10 @@ class Insight(Base):
     # approach | dangerous | bullied | bullying | shared_data | distress | general
     situation: Mapped[str | None] = mapped_column(String(12))
     source: Mapped[str | None] = mapped_column(String(8))  # model | template
+    # The language it was written in; older rows have none and use the guardian's.
+    language: Mapped[str | None] = mapped_column(String(2))
+    # The same text in the other dashboard language, filled on first view: {"en": {...}}.
+    translations: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = _created()
 
 

@@ -261,6 +261,7 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
                     micro_lesson=out.micro_lesson.model_dump() if out.micro_lesson else None,
                     situation=guide_result.situation.value,
                     source=guide_result.source,
+                    language=job.language,
                 )
             )
             db.commit()

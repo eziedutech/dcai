@@ -318,6 +318,8 @@ const id = {
   "ask.s2": "Bagaimana memulai obrolan tentang ini?",
   "ask.s3": "Apa yang dcAI simpan tentang anak saya?",
   "ask.tooMany": "Terlalu banyak pertanyaan. Coba lagi dalam satu menit.",
+  "ask.start": "Mulai dari salah satu pertanyaan ini",
+  "ask.enter": "Enter untuk kirim, Shift+Enter untuk baris baru",
 
   "set.title": "Pengaturan",
   "set.language": "Bahasa",
@@ -777,6 +779,8 @@ const en: Record<Key, string> = {
   "ask.s2": "How do I start a conversation about this?",
   "ask.s3": "What does dcAI store about my child?",
   "ask.tooMany": "Too many questions. Try again in a minute.",
+  "ask.start": "Start with one of these questions",
+  "ask.enter": "Enter to send, Shift+Enter for a new line",
 
   "set.title": "Settings",
   "set.language": "Language",

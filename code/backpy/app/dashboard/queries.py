@@ -36,6 +36,7 @@ REQUIRED_SERVICES = ("notification",)
 
 class ConversationSummary(BaseModel):
     conversation_id: str
+    assessment_id: str
     app: str | None
     channel: str
     level: str
@@ -62,6 +63,8 @@ class InsightOut(BaseModel):
     patterns: list[str]
     situation: str | None
     source: str | None
+    # The language child_nudge, parent_insight and micro_lesson are in.
+    language: str
     # What the child was told, so the parent knows what the child has already heard.
     child_nudge: str
     parent_insight: dict
@@ -132,6 +135,7 @@ def conversations(db: Session, child: ChildProfile, days: int = 30) -> list[Conv
     return [
         ConversationSummary(
             conversation_id=str(conv.id),
+            assessment_id=str(ra.id),
             app=conv.app,
             channel=conv.channel,
             level=ra.level,
@@ -179,6 +183,7 @@ def insights(
             patterns=list(ra.patterns),
             situation=ins.situation,
             source=ins.source,
+            language=ins.language or language,
             child_nudge=ins.child_nudge,
             parent_insight=ins.parent_insight,
             micro_lesson=ins.micro_lesson,

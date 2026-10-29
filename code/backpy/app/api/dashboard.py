@@ -2,29 +2,68 @@
 message text, which is not stored anywhere."""
 
 import uuid
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Request
 
 from app.api.deps import DbDep, GuardianDep, owned_child
 from app.dashboard import queries
 from app.dashboard.queries import ConversationSummary, DeviceStatus, EventOut, InsightOut, Overview
+from app.db.models import Insight, RiskAssessment
+from app.guide.translate import guide_text, rationale_texts
+from app.risk.schemas import Level
 
 router = APIRouter(tags=["dashboard"])
 
 Days = Annotated[int, Query(ge=1, le=90)]
+# The dashboard's display language; the guardian's own language when absent.
+Lang = Literal["id", "en"] | None
 
 
 @router.get("/children/{child_id}/overview")
-def overview(child_id: uuid.UUID, db: DbDep, guardian: GuardianDep, days: Days = 7) -> Overview:
-    return queries.overview(db, owned_child(db, guardian, child_id), days, guardian.language)
+async def overview(
+    child_id: uuid.UUID,
+    request: Request,
+    db: DbDep,
+    guardian: GuardianDep,
+    days: Days = 7,
+    lang: Lang = None,
+) -> Overview:
+    target = lang or guardian.language
+    ov = queries.overview(db, owned_child(db, guardian, child_id), days, target)
+    latest = ov.latest_insight
+    if latest is not None and latest.language != target:
+        ins = db.get(Insight, uuid.UUID(latest.id))
+        if ins is not None:
+            text, actual = await guide_text(
+                request.app.state.muse, db, ins, Level(latest.level), latest.language, target
+            )
+            ov.latest_insight = latest.model_copy(update={**text, "language": actual})
+    return ov
 
 
 @router.get("/children/{child_id}/conversations")
-def conversations(
-    child_id: uuid.UUID, db: DbDep, guardian: GuardianDep, days: Days = 30
+async def conversations(
+    child_id: uuid.UUID,
+    request: Request,
+    db: DbDep,
+    guardian: GuardianDep,
+    days: Days = 30,
+    lang: Lang = None,
 ) -> list[ConversationSummary]:
-    return queries.conversations(db, owned_child(db, guardian, child_id), days)
+    rows = queries.conversations(db, owned_child(db, guardian, child_id), days)
+    target = lang or guardian.language
+    if target == "id" or not rows:
+        return rows
+    ids = [uuid.UUID(r.assessment_id) for r in rows]
+    found = db.query(RiskAssessment).filter(RiskAssessment.id.in_(ids)).all()
+    texts = await rationale_texts(request.app.state.muse, db, found, target)
+    return [
+        r.model_copy(
+            update={"rationale_for_parent": texts.get(r.assessment_id, r.rationale_for_parent)}
+        )
+        for r in rows
+    ]
 
 
 @router.get("/children/{child_id}/events")

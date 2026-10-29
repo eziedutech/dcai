@@ -31,16 +31,17 @@ export function ChildView({ childId }: { childId: string }) {
   const load = useCallback(async () => {
     try {
       const [overview, events, conversations] = await Promise.all([
-        api<Overview>(`children/${childId}/overview`),
+        // The Guide's text and the rationales follow the dashboard language.
+        api<Overview>(`children/${childId}/overview?lang=${lang}`),
         api<EventRow[]>(`children/${childId}/events?days=30&limit=40`),
-        api<Conversation[]>(`children/${childId}/conversations?days=30`),
+        api<Conversation[]>(`children/${childId}/conversations?days=30&lang=${lang}`),
       ]);
       setData({ overview, events, conversations });
       setError(false);
     } catch {
       setError(true);
     }
-  }, [childId]);
+  }, [childId, lang]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch on mount and child change
