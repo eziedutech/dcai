@@ -1,7 +1,12 @@
 package dev.eziedutech.dcai.guardian.ingest
 
+import android.annotation.SuppressLint
 import android.inputmethodservice.InputMethodService
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -22,23 +27,32 @@ import kotlinx.coroutines.launch
  * emptied field with typed text in the buffer counts as sent.
  *
  * Letters with a three-state Shift (one-shot, caps lock, off), a numbers-and-symbols layer,
- * and punctuation, so a child can use it as their everyday keyboard. The child knows it is
- * dcAI: it is named "dcAI" in the keyboard picker and the guardian notification stays
- * visible.
+ * an emoji layer, light haptics, and long-press (top row to digits, period to comma, Del to
+ * repeat), so a child can use it as their everyday keyboard. The child knows it is dcAI: it
+ * is named "dcAI" in the keyboard picker and the guardian notification stays visible.
  */
 class DcaiKeyboardService : InputMethodService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val buffer = StringBuilder()
+    private val handler = Handler(Looper.getMainLooper())
+    private var repeatDelete: Runnable? = null
 
     private enum class Caps { OFF, SHIFT, LOCK }
+    private enum class Layer { LETTERS, SYMBOLS, EMOJI }
 
     private var caps = Caps.OFF
-    private var symbols = false
+    private var layer = Layer.LETTERS
     private lateinit var root: LinearLayout
 
     private val letterRows = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
-    // Two symbol rows plus a shorter punctuation row (del sits at its end, like the letters).
+    private val topDigits = "1234567890" // long-press on the top letter row types these
     private val symbolRows = listOf("1234567890", "@#\$_&-+()/", "*\"':;!?")
+    private val emojis = listOf(
+        "😀", "😁", "😂", "🤣", "😊", "😍", "😘", "😎",
+        "🤔", "😅", "😭", "😡", "😴", "🥳", "😇", "🤝",
+        "👍", "👎", "👌", "🙏", "👏", "💪", "🙌", "🤗",
+        "🎉", "❤️", "🔥", "✨", "⭐", "✅", "❌", "❓",
+    )
 
     override fun onCreateInputView(): View {
         root = LinearLayout(this).apply {
@@ -52,38 +66,130 @@ class DcaiKeyboardService : InputMethodService() {
     /** Rebuild the keys for the current layer and Shift state. */
     private fun render() {
         root.removeAllViews()
-        val rows = if (symbols) symbolRows else letterRows
-        rows.forEachIndexed { i, chars ->
-            val line = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-            // Last row carries Shift (letters only) at the left and Del at the right.
-            if (i == rows.lastIndex) {
-                if (!symbols) line.addView(key(shiftLabel()) { onShift() }, weight(1.5f))
+        when (layer) {
+            Layer.LETTERS -> renderLetters()
+            Layer.SYMBOLS -> renderSymbols()
+            Layer.EMOJI -> renderEmoji()
+        }
+    }
+
+    private fun renderLetters() {
+        letterRows.forEachIndexed { i, chars ->
+            val line = row()
+            if (i == letterRows.lastIndex) {
+                line.addView(key(shiftLabel()) { onShift() }, weight(1.5f))
                 chars.forEach { ch -> line.addView(letterKey(ch.toString()), weight()) }
-                line.addView(key("⌫") { backspace() }, weight(1.5f))
+                line.addView(deleteKey(), weight(1.5f))
             } else {
-                chars.forEach { ch -> line.addView(letterKey(ch.toString()), weight()) }
+                chars.forEachIndexed { j, ch ->
+                    val long = if (i == 0) topDigits.getOrNull(j)?.toString() else null
+                    line.addView(letterKey(ch.toString(), long), weight())
+                }
             }
             root.addView(line)
         }
-        val bottom = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        bottom.addView(key(if (symbols) "ABC" else "?123") { toggleSymbols() }, weight(1.5f))
-        bottom.addView(key("space") { type(" ") }, weight(5f))
-        bottom.addView(key(".") { type(".") }, weight())
-        bottom.addView(key(getString(dev.eziedutech.dcai.guardian.R.string.keyboard_check)) { send() }, weight(2f))
+        val bottom = row()
+        bottom.addView(key("?123") { setLayer(Layer.SYMBOLS) }, weight(1.5f))
+        bottom.addView(key("😊") { setLayer(Layer.EMOJI) }, weight(1.2f))
+        bottom.addView(key("space") { type(" ") }, weight(4f))
+        bottom.addView(key(".") { type(".") }.withLongPress(",") { type(",") }, weight())
+        bottom.addView(sendKey(), weight(2f))
         root.addView(bottom)
     }
 
+    private fun renderSymbols() {
+        symbolRows.forEachIndexed { i, chars ->
+            val line = row()
+            chars.forEach { ch -> line.addView(key(ch.toString()) { type(ch.toString()) }, weight()) }
+            if (i == symbolRows.lastIndex) line.addView(deleteKey(), weight(1.5f))
+            root.addView(line)
+        }
+        val bottom = row()
+        bottom.addView(key("ABC") { setLayer(Layer.LETTERS) }, weight(1.5f))
+        bottom.addView(key("😊") { setLayer(Layer.EMOJI) }, weight(1.2f))
+        bottom.addView(key("space") { type(" ") }, weight(4f))
+        bottom.addView(key(",") { type(",") }, weight())
+        bottom.addView(sendKey(), weight(2f))
+        root.addView(bottom)
+    }
+
+    private fun renderEmoji() {
+        emojis.chunked(8).forEach { group ->
+            val line = row()
+            group.forEach { e -> line.addView(key(e) { type(e) }, weight()) }
+            root.addView(line)
+        }
+        val bottom = row()
+        bottom.addView(key("ABC") { setLayer(Layer.LETTERS) }, weight(1.5f))
+        bottom.addView(key("space") { type(" ") }, weight(5f))
+        bottom.addView(deleteKey(), weight(1.5f))
+        bottom.addView(sendKey(), weight(2f))
+        root.addView(bottom)
+    }
+
+    private fun row() = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+
     private fun shiftLabel() = if (caps == Caps.LOCK) "⇪" else "⇧"
 
-    private fun letterKey(ch: String): Button {
-        val shown = if (!symbols && caps != Caps.OFF) ch.uppercase() else ch
-        return key(shown) { type(shown) }
+    private fun letterKey(ch: String, longText: String? = null): Button {
+        val shown = if (layer == Layer.LETTERS && caps != Caps.OFF) ch.uppercase() else ch
+        val b = key(shown) { type(shown) }
+        return if (longText != null) b.withLongPress(longText) { type(longText) } else b
     }
 
     private fun key(label: String, onClick: () -> Unit) = Button(this).apply {
         text = label
         isAllCaps = false
-        setOnClickListener { onClick() }
+        setOnClickListener { v ->
+            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onClick()
+        }
+    }
+
+    private fun Button.withLongPress(hint: String, onLong: () -> Unit): Button = apply {
+        setOnLongClickListener {
+            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            onLong()
+            true
+        }
+    }
+
+    private fun sendKey() =
+        key(getString(dev.eziedutech.dcai.guardian.R.string.keyboard_check)) { send() }
+
+    /** Del that repeats while held. */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun deleteKey() = Button(this).apply {
+        text = "⌫"
+        isAllCaps = false
+        setOnTouchListener { v, e ->
+            when (e.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    backspace()
+                    val r = object : Runnable {
+                        override fun run() {
+                            backspace()
+                            handler.postDelayed(this, 55)
+                        }
+                    }
+                    repeatDelete = r
+                    handler.postDelayed(r, 350)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    stopRepeatDelete()
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun stopRepeatDelete() {
+        repeatDelete?.let { handler.removeCallbacks(it) }
+        repeatDelete = null
     }
 
     private fun weight(w: Float = 1f) =
@@ -98,8 +204,8 @@ class DcaiKeyboardService : InputMethodService() {
         render()
     }
 
-    private fun toggleSymbols() {
-        symbols = !symbols
+    private fun setLayer(next: Layer) {
+        layer = next
         caps = Caps.OFF
         render()
     }
@@ -163,11 +269,13 @@ class DcaiKeyboardService : InputMethodService() {
         super.onStartInput(attribute, restarting)
         buffer.clear()
         caps = Caps.OFF
-        symbols = false
+        layer = Layer.LETTERS
+        stopRepeatDelete()
         if (::root.isInitialized) render()
     }
 
     override fun onDestroy() {
+        stopRepeatDelete()
         scope.cancel()
         super.onDestroy()
     }
