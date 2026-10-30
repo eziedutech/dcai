@@ -1,6 +1,8 @@
-# dcAI in production: PostgreSQL (db), the API (api) and the web app (web).
-# Dokploy: a Compose service from this repository with composePath ./code/docker-compose.prod.yml,
-# the variables below in its Environment tab, and two domains on the same host:
+# dcAI: PostgreSQL (db), the API (api) and the web app (web), for LOCAL development and as a
+# reference. Production now runs three separate Dokploy services in one project (a managed
+# Postgres plus api and web as Applications) so the database lifecycle is independent of app
+# rebuilds; see docs/deploy.md. Keeping the database inside this Compose tied its volume to
+# the app deploy, which is what risked data loss on rebuilds.
 #   path /    -> service web, port 3000
 #   path /v1  -> service api, port 8000 (the phone's API; no path stripping)
 # Nothing here publishes a port by itself; the database stays on the private network.
