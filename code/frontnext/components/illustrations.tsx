@@ -65,6 +65,128 @@ export function SchoolScene({ className = "" }: Props) {
   );
 }
 
+/** One protection covering three areas: a shield with a check over a child's phone, with
+ * content, social and privacy badges beneath it. Matches the three feature pillars. */
+export function ProtectScene({ className = "" }: Props) {
+  return (
+    <svg
+      viewBox="0 0 420 300"
+      className={`${base} ${className}`}
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      {/* shield with a check */}
+      <g className="stroke-navy" strokeWidth="2.6">
+        <path d="M210 34l66 23v48c0 46-29 69-66 83-37-14-66-37-66-83V57z" className="fill-navy/[0.05]" />
+        <path d="M184 112l18 18 34-40" strokeWidth="3" />
+      </g>
+
+      {/* connectors to the three pillars */}
+      <path
+        d="M172 150c-22 20-44 30-68 40M210 170v34M248 150c22 20 44 30 68 40"
+        className="stroke-navy/25"
+        strokeWidth="1.6"
+        strokeDasharray="3 7"
+      />
+
+      {/* content: a site held */}
+      <g>
+        <circle cx="104" cy="236" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
+        <g className="stroke-navy" strokeWidth="2">
+          <rect x="90" y="224" width="28" height="22" rx="3" className="fill-navy/[0.06]" />
+          <path d="M90 231h28" strokeWidth="1.6" />
+        </g>
+        <circle cx="104" cy="236" r="12" className="stroke-mendesak fill-none" strokeWidth="2.4" />
+        <path d="M96 244l16-16" className="stroke-mendesak" strokeWidth="2.4" />
+      </g>
+
+      {/* social: a kind conversation */}
+      <g>
+        <circle cx="210" cy="238" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
+        <path d="M196 226h28a5 5 0 0 1 5 5v12a5 5 0 0 1-5 5h-15l-9 7v-7a5 5 0 0 1-4-22z" className="fill-navy/[0.06] stroke-navy" strokeWidth="2" />
+        <path d="M210 234c-3-4-9-2-9 3 0 4 6 7 9 10 3-3 9-6 9-10 0-5-6-7-9-3z" className="fill-navy/70" stroke="none" />
+      </g>
+
+      {/* privacy: a lock */}
+      <g>
+        <circle cx="316" cy="236" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
+        <g className="stroke-navy" strokeWidth="2.2">
+          <rect x="304" y="234" width="24" height="18" rx="3" className="fill-navy/[0.06]" />
+          <path d="M308 234v-5a8 8 0 0 1 16 0v5" />
+          <circle cx="316" cy="242" r="2.4" className="fill-navy" stroke="none" />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+/** The four steps as one quiet pipeline: on the phone, masked and flagged, assessed by the
+ * model, then guidance. Sits above the step cards. */
+export function FlowScene({ className = "" }: Props) {
+  const nodes = [48, 180, 312, 444];
+  return (
+    <svg
+      viewBox="0 0 492 116"
+      className={`${base} ${className}`}
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      {/* arrows between the nodes */}
+      <g className="stroke-navy/30" strokeWidth="2">
+        {[[78, 150], [210, 282], [342, 414]].map(([x1, x2]) => (
+          <g key={x1}>
+            <path d={`M${x1} 58h${x2 - x1 - 8}`} strokeDasharray="2 7" />
+            <path d={`M${x2 - 14} 52l6 6-6 6`} className="stroke-navy/55" />
+          </g>
+        ))}
+      </g>
+
+      {nodes.map((cx) => (
+        <rect
+          key={cx}
+          x={cx - 28}
+          y={30}
+          width="56"
+          height="56"
+          rx="15"
+          className="fill-navy/[0.04] stroke-navy"
+          strokeWidth="2.3"
+        />
+      ))}
+
+      {/* 1. on the phone */}
+      <g className="stroke-navy" strokeWidth="2.1">
+        <rect x={38} y={42} width="20" height="32" rx="4" className="fill-paper" />
+        <path d="M44 48h8" strokeWidth="1.6" />
+      </g>
+
+      {/* 2. masked and flagged */}
+      <g className="fill-navy/70" stroke="none">
+        {[170, 180, 190].map((x) => (
+          <circle key={x} cx={x} cy="58" r="3.4" />
+        ))}
+      </g>
+
+      {/* 3. assessed by the model */}
+      <path
+        d="M312 42l4.5 11.5 11.5 4.5-11.5 4.5-4.5 11.5-4.5-11.5-11.5-4.5 11.5-4.5z"
+        className="fill-navy/15 stroke-navy"
+        strokeWidth="2"
+      />
+
+      {/* 4. guidance */}
+      <g>
+        <path d="M430 46h28a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4h-16l-8 6v-6a4 4 0 0 1-4-20z" className="fill-navy/[0.06] stroke-navy" strokeWidth="2" />
+        <path d="M444 54c-2.6-3.4-7.6-1.6-7.6 2.6 0 3.4 5 6 7.6 8.4 2.6-2.4 7.6-5 7.6-8.4 0-4.2-5-6-7.6-2.6z" className="fill-navy/70" stroke="none" />
+      </g>
+    </svg>
+  );
+}
+
 /** How Meta's models reach the phone: a large teacher model distils into a small student
  * that runs on-device. The lineage, not literal hardware. */
 export function ModelsScene({ className = "" }: Props) {

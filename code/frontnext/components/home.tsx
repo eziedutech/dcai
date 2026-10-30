@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
-import { ModelsScene, SchoolScene } from "./illustrations";
+import { FlowScene, ModelsScene, ProtectScene, SchoolScene } from "./illustrations";
 import { Parallax } from "./motion";
 import { APK_URL, APK_VERSION } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
@@ -73,12 +73,17 @@ function Features() {
   ] as const;
   return (
     <div className="mt-20" aria-labelledby="feat-h">
-      <p className="eyebrow">{t("home.feat.eyebrow")}</p>
-      <h3 id="feat-h" className={`mt-3 max-w-[30ch] ${sub}`}>
-        {t("home.feat.title")}
-      </h3>
-      <p className="mt-4 max-w-[60ch] text-slate">{t("home.feat.lead")}</p>
-      <div className="mt-10 grid gap-5 md:grid-cols-3">
+      <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+        <div>
+          <p className="eyebrow">{t("home.feat.eyebrow")}</p>
+          <h3 id="feat-h" className={`mt-3 max-w-[30ch] ${sub}`}>
+            {t("home.feat.title")}
+          </h3>
+          <p className="mt-4 max-w-[52ch] text-slate">{t("home.feat.lead")}</p>
+        </div>
+        <ProtectScene className="mx-auto max-w-sm lg:max-w-none" />
+      </div>
+      <div className="mt-12 grid gap-5 md:grid-cols-3">
         {cards.map(({ n, icon }) => (
           <article key={n} className="glass row-span-4 grid grid-rows-subgrid gap-0 rounded-3xl p-7">
             <Icon name={icon} />
@@ -159,7 +164,8 @@ function Steps() {
   return (
     <div className="mt-24">
       <h3 className={`max-w-[30ch] ${sub}`}>{t("home.steps.title")}</h3>
-      <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <FlowScene className="mt-8 max-w-3xl" />
+      <ol className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {([1, 2, 3, 4] as const).map((n) => (
           <li key={n} className="glass rounded-3xl p-6">
             <p className="grid h-8 w-8 place-items-center rounded-full bg-navy text-sm font-bold text-paper tabular">{n}</p>
