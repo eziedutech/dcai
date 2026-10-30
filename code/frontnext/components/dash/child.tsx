@@ -101,7 +101,7 @@ export function ChildView({ childId }: { childId: string }) {
           <LevelStrip ov={ov} />
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-            <section aria-labelledby="insight-h" className="glass rounded-3xl p-6 sm:p-7">
+            <section aria-labelledby="insight-h" className="glass rounded-2xl p-6 sm:p-7">
               <h2 id="insight-h" className="text-lg font-bold">{t("dash.latestInsight")}</h2>
               {ov.latest_insight ? (
                 <InsightBlock insight={ov.latest_insight} />
@@ -111,20 +111,20 @@ export function ChildView({ childId }: { childId: string }) {
             </section>
             <div className="space-y-6">
               <Protection ov={ov} childId={childId} />
-              <section aria-labelledby="events-h" className="glass rounded-3xl p-6">
+              <section aria-labelledby="events-h" className="glass rounded-2xl p-6">
                 <h2 id="events-h" className="text-lg font-bold">{t("dash.events")}</h2>
                 {events.length === 0 ? (
                   <p className="mt-3 text-slate">{t("dash.noEvents")}</p>
                 ) : (
-                  <ol className="mt-3 ml-1 border-l-2 border-ink/10">
+                  <ol className="mt-3 space-y-3">
                     {events.map((e) => (
-                      <li key={e.id} className="relative py-2 pl-5">
+                      <li key={e.id} className="flex items-baseline gap-2.5">
                         <span
                           aria-hidden
-                          className={`absolute top-[0.95rem] -left-[5px] h-2 w-2 rounded-full ${LEVEL_STYLE[e.level as Level]?.bar ?? "bg-slate"}`}
+                          className={`relative top-[0.4rem] h-2 w-2 shrink-0 rounded-full ${LEVEL_STYLE[e.level as Level]?.bar ?? "bg-slate"}`}
                         />
-                        <p className="text-[0.95rem] font-medium">{tx(`event.${e.kind}`, e.kind)}</p>
-                        <p className="text-sm text-slate tabular">{formatWhen(e.created_at, lang)}</p>
+                        <span className="text-[0.95rem] font-medium">{tx(`event.${e.kind}`, e.kind)}</span>
+                        <span className="ml-auto shrink-0 text-sm text-slate tabular">{formatWhen(e.created_at, lang)}</span>
                       </li>
                     ))}
                   </ol>
@@ -133,7 +133,7 @@ export function ChildView({ childId }: { childId: string }) {
             </div>
           </div>
 
-          <section className="glass mt-6 rounded-3xl p-6 sm:p-7" aria-labelledby="conv-h">
+          <section className="glass mt-6 rounded-2xl p-6 sm:p-7" aria-labelledby="conv-h">
             <h2 id="conv-h" className="text-lg font-bold">{t("dash.conversations")}</h2>
             <p className="mt-1 text-sm text-slate">{t("dash.textNotStored")}</p>
             {conversations.length === 0 ? (
@@ -161,28 +161,25 @@ function LevelStrip({ ov }: { ov: Overview }) {
     [ov.sensitive_images_blurred, t("dash.blurred")],
   ];
   return (
-    <section className="glass relative mt-8 overflow-hidden rounded-3xl px-7 py-7" aria-labelledby="level-h">
-      <div aria-hidden className={`absolute inset-0 ${s.bg} opacity-45`} />
-      <div className="relative flex flex-wrap items-start justify-between gap-6">
-        <div className="max-w-[46ch]">
-          <h2 id="level-h" className="text-sm font-semibold text-slate">
-            {t("dash.levelNow")}, {t("dash.window").toLowerCase()}
-          </h2>
-          <div className="mt-2">
-            <LevelBadge level={ov.level} size="lg" />
-          </div>
-          <p className={`mt-3 text-[1.05rem] font-medium ${s.text}`}>{t(`levelHint.${ov.level}`)}</p>
-          <p className="mt-1 text-sm text-slate">{t("dash.estimate")}</p>
+    <section className="glass mt-8 flex flex-wrap items-start justify-between gap-6 rounded-2xl px-7 py-6" aria-labelledby="level-h">
+      <div className="max-w-[46ch]">
+        <h2 id="level-h" className="text-sm font-semibold text-slate">
+          {t("dash.levelNow")}, {t("dash.window").toLowerCase()}
+        </h2>
+        <div className="mt-2">
+          <LevelBadge level={ov.level} size="lg" />
         </div>
-        <dl className="flex gap-8">
-          {stats.map(([n, label]) => (
-            <div key={label} className="flex flex-col-reverse">
-              <dt className="mt-1 max-w-[10ch] text-sm leading-tight text-slate">{label}</dt>
-              <dd className="text-[1.9rem] font-bold leading-none tabular">{n}</dd>
-            </div>
-          ))}
-        </dl>
+        <p className={`mt-3 text-[1.05rem] font-medium ${s.text}`}>{t(`levelHint.${ov.level}`)}</p>
+        <p className="mt-1 text-sm text-slate">{t("dash.estimate")}</p>
       </div>
+      <dl className="flex gap-8">
+        {stats.map(([n, label]) => (
+          <div key={label} className="flex flex-col-reverse">
+            <dt className="mt-1 max-w-[10ch] text-sm leading-tight text-slate">{label}</dt>
+            <dd className="text-[1.9rem] font-bold leading-none tabular">{n}</dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }
@@ -221,9 +218,9 @@ export function InsightBlock({ insight }: { insight: Insight }) {
         </div>
       </dl>
       <h3 className="mt-6 text-sm font-semibold text-slate">{t("dash.starters")}</h3>
-      <ul className="mt-2 space-y-2">
+      <ul className="mt-2 space-y-1.5">
         {pi.conversation_starters.map((s) => (
-          <li key={s} className="glass-fill rounded-xl border-l-4 !border-l-navy px-4 py-2.5 text-[1.02rem] font-medium">
+          <li key={s} className="rounded-lg border border-ink/10 bg-white/60 px-3.5 py-2 text-[1.02rem]">
             &ldquo;{s}&rdquo;
           </li>
         ))}
@@ -275,7 +272,7 @@ export function InsightBlock({ insight }: { insight: Insight }) {
 function Protection({ ov, childId }: { ov: Overview; childId: string }) {
   const { t, tx, lang } = useT();
   return (
-    <section aria-labelledby="prot-h" className="glass rounded-3xl p-6">
+    <section aria-labelledby="prot-h" className="glass rounded-2xl p-6">
       <h2 id="prot-h" className="text-lg font-bold">{t("dash.protection")}</h2>
       {ov.devices.length === 0 ? (
         <div className="mt-3">
