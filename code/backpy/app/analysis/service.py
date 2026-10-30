@@ -191,7 +191,18 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
         first_support = step.support_needed and not any(
             s.support_needed for s in analyzer.steps[:-1]
         )
-        due = guide_due or (step.raised and step.level != Level.AMAN) or first_support
+        # A considered (stage 2) assessment at perhatian or above must guide even when the
+        # level did not rise on this exact step. Under a burst the level often reaches risk
+        # via an earlier message (stage 1 + rule floor), so by the time stage 2 runs,
+        # step.raised is already False; the raise-only trigger then skipped the Guide, so the
+        # dashboard got a level but no insight and the child got no nudge.
+        considered_risk = step.source == "model" and step.level != Level.AMAN
+        due = (
+            guide_due
+            or (step.raised and step.level != Level.AMAN)
+            or considered_risk
+            or first_support
+        )
         run_guide = due and assess
         assessment = None
         if step.raised or step.source == "model" or step.index == 1 or run_guide:
@@ -218,7 +229,7 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
         db.commit()
         quick = None
         if job.device_id is not None and (
-            (step.raised and step.level != Level.AMAN) or first_support
+            (step.raised and step.level != Level.AMAN) or considered_risk or first_support
         ):
             quick = instant(
                 level=step.level,
