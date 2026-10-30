@@ -191,6 +191,30 @@ def test_parent_joins_only_with_the_sekolah_scope(api):
     assert api.get("/v1/school/classes", headers=sauth(tok)).json()[0]["members"] == 0
 
 
+def test_parent_can_list_and_leave_classes(api):
+    from tests.conftest import auth
+    from tests.conftest import register as guardian_register
+    from tests.test_children_consent import add_child, consent
+
+    tok = register(api)
+    room = make_class(api, tok, "8B")
+    g = guardian_register(api)
+    child = add_child(api, g)
+    consent(api, g, child["id"], scopes=["sekolah"])
+    api.post(
+        f"/v1/children/{child['id']}/class",
+        json={"join_code": room["join_code"]},
+        headers=auth(g),
+    )
+
+    listed = api.get(f"/v1/children/{child['id']}/classes", headers=auth(g))
+    assert listed.status_code == 200
+    assert listed.json() == [{"classroom_id": room["id"], "name": "8B"}]
+
+    api.delete(f"/v1/children/{child['id']}/class/{room['id']}", headers=auth(g))
+    assert api.get(f"/v1/children/{child['id']}/classes", headers=auth(g)).json() == []
+
+
 def test_revoking_sekolah_drops_a_child_from_the_count(api, db_url):
     tok = register(api)
     room = make_class(api, tok)

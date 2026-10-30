@@ -201,6 +201,27 @@ def leave_class(
     db.commit()
 
 
+class ChildClassOut(BaseModel):
+    classroom_id: str
+    name: str
+
+
+@router.get("/children/{child_id}/classes")
+def list_child_classes(
+    child_id: uuid.UUID, db: DbDep, guardian: GuardianDep
+) -> list[ChildClassOut]:
+    """Classes this child is in (proposal 0004), so a parent can see and leave them. Only the
+    class id and name leave; the school side still sees only the aggregate, never a child."""
+    child = owned_child(db, guardian, child_id)
+    rows = db.execute(
+        select(Classroom.id, Classroom.name)
+        .join(ClassMembership, ClassMembership.classroom_id == Classroom.id)
+        .where(ClassMembership.child_id == child.id)
+        .order_by(Classroom.created_at)
+    ).all()
+    return [ChildClassOut(classroom_id=str(cid), name=name) for cid, name in rows]
+
+
 @router.delete("/children/{child_id}/data", status_code=status.HTTP_204_NO_CONTENT)
 def delete_child_data(
     child_id: uuid.UUID, request: Request, db: DbDep, guardian: GuardianDep

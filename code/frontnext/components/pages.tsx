@@ -68,6 +68,14 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         ],
       },
       {
+        h: "Berbagi dengan sekolah (opsional)",
+        list: [
+          "Hanya aktif bila orang tua menyetujui lingkup Ringkasan sekolah dan memasukkan kode kelas dari guru.",
+          "Sekolah hanya melihat angka agregat per level untuk satu kelas, tidak pernah identitas, level, insight, atau percakapan satu anak pun.",
+          "Angka baru muncul bila cukup anak ikut, demi menjaga anonimitas. Orang tua bisa keluar dari kelas kapan saja, dan anak langsung gugur dari hitungan.",
+        ],
+      },
+      {
         h: "Yang disimpan",
         list: [
           "Skor, level, jenis pola, tingkat keyakinan, dan penjelasan untuk orang tua.",
@@ -83,6 +91,7 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         list: [
           "Setiap lingkup persetujuan bisa ditarik kapan saja, dan ponsel berhenti memakainya.",
           "Ponsel bisa dilepas dari dasbor; tokennya langsung berhenti berlaku.",
+          "Keikutsertaan di kelas sekolah bisa dihentikan kapan saja dari Pengaturan.",
           "Semua data anak bisa dihapus dari Pengaturan. Catatan audit hanya menyimpan bahwa penghapusan terjadi, tanpa nama.",
         ],
       },
@@ -116,6 +125,14 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         ],
       },
       {
+        h: "Sharing with a school (optional)",
+        list: [
+          "Active only when a parent grants the School overview scope and enters the class code from the teacher.",
+          "A school sees only aggregate counts per level for one class, never a single child's identity, level, insight or conversation.",
+          "Numbers appear only when enough children take part, to keep it anonymous. A parent can leave a class at any time, and the child drops out of the counts at once.",
+        ],
+      },
+      {
         h: "What is stored",
         list: [
           "Score, level, pattern types, confidence and the explanation for the parent.",
@@ -131,6 +148,7 @@ const PRIVACY: Record<"id" | "en", { title: string; lead: string; sections: Sect
         list: [
           "Each consent scope can be withdrawn at any time, and the phone stops using it.",
           "A phone can be unpaired from the dashboard; its token stops working at once.",
+          "Taking part in a school class can be stopped at any time from Settings.",
           "All of a child's data can be deleted from Settings. The audit log keeps only that a deletion happened, without names.",
         ],
       },

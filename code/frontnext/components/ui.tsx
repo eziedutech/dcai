@@ -136,6 +136,9 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
             ))}
           </span>
           <LangToggle />
+          <Link href="/sekolah" className="hidden rounded-xl px-2.5 py-2 font-semibold whitespace-nowrap text-slate hover:bg-white/60 hover:text-ink sm:inline-flex">
+            {t("nav.school")}
+          </Link>
           <Link href="/dasbor" className="hidden rounded-xl bg-navy px-3.5 py-2 font-semibold whitespace-nowrap text-paper hover:bg-ink sm:inline-flex">
             {t("nav.parent")}
           </Link>
@@ -152,6 +155,9 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
                   {i.label}
                 </Link>
               ))}
+              <Link href="/sekolah" className={`${link(false)} py-2`} onClick={closeMenu}>
+                {t("nav.school")}
+              </Link>
               <Link href="/dasbor" className="mt-1 rounded-xl bg-navy px-3.5 py-2 text-center font-semibold text-paper hover:bg-ink sm:hidden">
                 {t("nav.parent")}
               </Link>
@@ -181,6 +187,7 @@ export function SiteFooter() {
         ["/masuk", t("foot.signin")],
         ["/daftar", t("foot.signup")],
         ["/dasbor", t("foot.dashboard")],
+        ["/sekolah", t("foot.school")],
       ],
     },
     {

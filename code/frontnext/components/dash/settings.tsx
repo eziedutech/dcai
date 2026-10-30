@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useT } from "@/lib/i18n";
-import type { Child, ConsentText, Device, Guardian, Lang, Scope } from "@/lib/types";
+import type { Child, ChildClass, ConsentText, Device, Guardian, Lang, Scope } from "@/lib/types";
 import { Button, formatWhen } from "../ui";
 import { useDash } from "./shell";
 
@@ -118,6 +118,8 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
         })}
       </ul>
 
+      <SchoolClasses child={child} />
+
       <h3 className="mt-8 font-bold">{t("set.devices")}</h3>
       {devices.length === 0 ? (
         <p className="mt-2 text-slate">{t("dash.noDevice")}</p>
@@ -161,5 +163,89 @@ function ChildSettings({ child, text }: { child: Child; text: ConsentText | null
         </div>
       </div>
     </section>
+  );
+}
+
+/** Join or leave a school class (proposal 0004). Only available once the sekolah scope is
+ * granted; the school still sees only the anonymous aggregate, never this child. */
+function SchoolClasses({ child }: { child: Child }) {
+  const { t } = useT();
+  const hasScope = child.consent_scopes.includes("sekolah");
+  const [classes, setClasses] = useState<ChildClass[]>([]);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!hasScope) return;
+    api<ChildClass[]>(`children/${child.id}/classes`).then(setClasses, () => undefined);
+  }, [child.id, hasScope]);
+
+  async function join(e: React.FormEvent) {
+    e.preventDefault();
+    const c = code.trim();
+    if (!c) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await api(`children/${child.id}/class`, { method: "POST", body: { join_code: c } });
+      setCode("");
+      setClasses(await api<ChildClass[]>(`children/${child.id}/classes`));
+    } catch {
+      setError(t("set.joinError"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function leave(classroomId: string) {
+    setBusy(true);
+    try {
+      await api(`children/${child.id}/class/${classroomId}`, { method: "DELETE" });
+      setClasses((cs) => cs.filter((c) => c.classroom_id !== classroomId));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      <h3 className="mt-8 font-bold">{t("set.school")}</h3>
+      <p className="mt-1 max-w-[60ch] text-sm text-slate">{t("set.schoolHint")}</p>
+      {!hasScope ? (
+        <p className="mt-3 text-sm text-slate">{t("set.schoolNeedScope")}</p>
+      ) : (
+        <>
+          {classes.length === 0 ? (
+            <p className="mt-3 text-slate">{t("set.noJoined")}</p>
+          ) : (
+            <ul className="mt-3 divide-y divide-ink/[0.07] border-y border-ink/[0.07]">
+              {classes.map((c) => (
+                <li key={c.classroom_id} className="flex items-center justify-between gap-4 py-3">
+                  <span className="font-medium">{c.name}</span>
+                  <Button variant="quiet" disabled={busy} onClick={() => leave(c.classroom_id)} className="shrink-0">
+                    {t("set.leave")}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <form onSubmit={join} className="mt-4 flex flex-wrap items-end gap-2">
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-semibold text-ink">{t("set.joinCode")}</span>
+              <input
+                value={code}
+                onChange={(e) => setCode(e.target.value.toUpperCase())}
+                autoComplete="off"
+                maxLength={16}
+                className="rounded-xl border border-ink/10 bg-white/75 px-3.5 py-2.5 tracking-[0.15em] tabular uppercase outline-none focus:border-navy focus:ring-2 focus:ring-navy/20"
+              />
+            </label>
+            <Button type="submit" disabled={busy || !code.trim()}>{t("set.join")}</Button>
+          </form>
+          {error && <p role="alert" className="mt-2 text-sm font-medium text-mendesak">{error}</p>}
+        </>
+      )}
+    </>
   );
 }

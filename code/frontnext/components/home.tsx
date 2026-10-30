@@ -171,6 +171,30 @@ function Steps() {
   );
 }
 
+function Schools() {
+  const { t } = useT();
+  return (
+    <div className="mt-24" aria-labelledby="school-h">
+      <p className="eyebrow">{t("home.school.eyebrow")}</p>
+      <h3 id="school-h" className={`mt-3 max-w-[30ch] ${sub}`}>
+        {t("home.school.title")}
+      </h3>
+      <p className="mt-4 max-w-[60ch] text-slate">{t("home.school.lead")}</p>
+      <ul className="mt-6 space-y-2.5">
+        {([1, 2, 3] as const).map((i) => (
+          <li key={i} className="flex gap-2.5 font-medium">
+            <Check />
+            {t(`home.school.i${i}`)}
+          </li>
+        ))}
+      </ul>
+      <Link href="/sekolah" className="mt-7 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
+        {t("home.school.cta")}
+      </Link>
+    </div>
+  );
+}
+
 function Models() {
   const { t } = useT();
   const rows = [
@@ -181,6 +205,7 @@ function Models() {
   return (
     <div className="mt-24">
       <h3 className={sub}>{t("home.meta.title")}</h3>
+      <p className="mt-4 max-w-[62ch] text-slate">{t("home.meta.lead")}</p>
       <dl className="mt-8 grid gap-5 sm:grid-cols-3">
         {rows.map(([name, key]) => (
           <div key={name} className="border-t border-ink/15 pt-4">
@@ -352,6 +377,7 @@ export function HomePage() {
           <CardDemo />
           <Steps />
           <Control />
+          <Schools />
           <Models />
         </section>
 

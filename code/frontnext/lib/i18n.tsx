@@ -54,7 +54,8 @@ const id = {
   "nav.howHome": "Cara Kerja",
   "nav.others": "Solusi Lain",
   "nav.howPage": "Cara AI Membantu",
-  "nav.parent": "Orang Tua / Guru",
+  "nav.parent": "Orang tua",
+  "nav.school": "Sekolah",
   "nav.menu": "Menu",
 
   "home.download": "Lindungi Anak Kita Sekarang",
@@ -68,7 +69,7 @@ const id = {
 
   "home.how.eyebrow": "Cara Kerja",
   "home.how.title": "Anak dibimbing saat itu juga, orang tua memahami polanya",
-  "home.how.lead": "Dua contoh dengan data sintetis, lalu alurnya dari ponsel anak sampai dasbor orang tua dan guru.",
+  "home.how.lead": "Dua contoh dengan data sintetis, lalu alurnya dari ponsel anak sampai dasbor orang tua.",
 
   "home.demo.title": "Pola berisiko dikenali lintas pesan",
   "home.demo.lead":
@@ -86,6 +87,7 @@ const id = {
   "foot.signin": "Masuk",
   "foot.signup": "Daftar",
   "foot.dashboard": "Dasbor",
+  "foot.school": "Dasbor sekolah",
   "foot.ecosystem": "Ekosistem digitalsafe.app",
   "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
   "foot.synthetic": "MVP. Semua data contoh sintetis.",
@@ -97,7 +99,7 @@ const id = {
   "page.moreFacts": "Angka dari lembaga dan jurnal untuk setiap risiko.",
   "page.morePrivacy": "Apa yang diproses, di mana, dan berapa lama.",
 
-  "auth.for": "Untuk orang tua dan guru",
+  "auth.for": "Untuk orang tua",
   "home.stats.title": "Mengapa ini penting",
   "home.stats.more": "Fakta lainnya",
   "home.stats.s1.v": "20 juta",
@@ -206,10 +208,18 @@ const id = {
   "home.privacy.note":
     "Anak selalu tahu dcAI aktif: ada notifikasi tetap di ponselnya, dan tidak ada mode tersembunyi.",
 
-  "home.meta.title": "Dibangun dengan model Meta",
-  "home.meta.muse": "Muse Spark menilai pola percakapan, menulis bimbingan, dan menjawab pertanyaan orang tua lewat Tanya dcAI.",
-  "home.meta.llama": "Llama memberi label perilaku per pesan sebagai penyaring awal.",
+  "home.meta.title": "Dibangun dan dilatih dengan model Meta",
+  "home.meta.lead": "Inference dan pelatihan dcAI berjalan di atas model Meta. Muse Spark menilai pola dan menulis bimbingan; Llama menyaring per pesan. Penyaring awal adalah murid Llama 3.1 8B hasil distilasi, dengan Muse Spark sebagai guru yang melabeli data latih.",
+  "home.meta.muse": "Muse Spark menilai pola percakapan, menulis bimbingan, dan menjawab pertanyaan orang tua lewat Tanya dcAI, melalui Meta Model API.",
+  "home.meta.llama": "Llama 3.1 8B hasil distilasi memberi label perilaku per pesan; Llama 3.3 70B sebagai cadangan.",
   "home.meta.next": "Rencana berikutnya: model Llama yang lebih kecil hasil distilasi, berjalan di ponsel.",
+  "home.school.eyebrow": "Untuk sekolah",
+  "home.school.title": "Ringkasan anonim untuk sekolah",
+  "home.school.lead": "Dengan persetujuan orang tua, sebuah kelas berbagi hanya angka agregat anonim per level. Sekolah tak pernah melihat identitas, level, insight, atau percakapan satu anak pun.",
+  "home.school.i1": "Orang tua menyetujui lingkup sekolah, lalu memasukkan kode kelas dari guru.",
+  "home.school.i2": "Angka hanya muncul bila cukup anak ikut, demi menjaga anonimitas.",
+  "home.school.i3": "Orang tua dapat menarik keikutsertaan kapan saja; anak langsung keluar dari hitungan.",
+  "home.school.cta": "Masuk dasbor sekolah",
   "home.about.eyebrow": "Tentang Kami",
   "home.about.title": "Tentang dcAI",
   "home.about.lead":
@@ -350,6 +360,14 @@ const id = {
   "set.consent": "Lingkup persetujuan",
   "set.withdraw": "Tarik",
   "set.grant": "Setujui",
+  "set.school": "Kelas sekolah",
+  "set.schoolHint": "Ikut agregat anonim kelas dengan memasukkan kode dari guru. Perlu lingkup Ringkasan sekolah.",
+  "set.schoolNeedScope": "Setujui lingkup Ringkasan sekolah dulu untuk ikut kelas.",
+  "set.joinCode": "Kode kelas",
+  "set.join": "Gabung kelas",
+  "set.joinError": "Kode kelas tidak ditemukan.",
+  "set.leave": "Keluar",
+  "set.noJoined": "Belum ikut kelas mana pun.",
   "set.devices": "Ponsel",
   "set.revoke": "Lepaskan ponsel",
   "set.revoked": "Dilepas",
@@ -475,6 +493,8 @@ const id = {
   "scopeHint.gambar": "Gambar dinilai di ponsel dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan dibagikan dikaburkan.",
   "scopeHint.domain": "Situs dicocokkan dengan daftar di ponsel; hanya kategorinya dikirim.",
   "scopeHint.keyboard": "Nada teks yang diketik diperiksa setelah disamarkan. Opsional.",
+  "scope.sekolah": "Ringkasan sekolah",
+  "scopeHint.sekolah": "Anak ikut dihitung dalam angka agregat anonim kelasnya. Sekolah tak pernah melihat identitas, level, insight, atau percakapan anak. Bisa ditarik kapan saja.",
 
   "service.accessibility": "Pembaca layar dcAI",
   "service.notification": "Notifikasi tetap",
@@ -543,7 +563,8 @@ const en: Record<Key, string> = {
   "nav.howHome": "How it Works",
   "nav.others": "Other Solutions",
   "nav.howPage": "How the AI Helps",
-  "nav.parent": "Parent / Teacher",
+  "nav.parent": "Parent",
+  "nav.school": "School",
   "nav.menu": "Menu",
 
   "home.download": "Protect Our Children Now",
@@ -557,7 +578,7 @@ const en: Record<Key, string> = {
 
   "home.how.eyebrow": "How it Works",
   "home.how.title": "The child is guided in the moment, the parent understands the pattern",
-  "home.how.lead": "Two examples with synthetic data, then the flow from the child's phone to the parent's and teacher's dashboard.",
+  "home.how.lead": "Two examples with synthetic data, then the flow from the child's phone to the parent's dashboard.",
 
   "home.demo.title": "Risky patterns recognised across messages",
   "home.demo.lead":
@@ -575,6 +596,7 @@ const en: Record<Key, string> = {
   "foot.signin": "Sign in",
   "foot.signup": "Sign up",
   "foot.dashboard": "Dashboard",
+  "foot.school": "School dashboard",
   "foot.ecosystem": "The digitalsafe.app ecosystem",
   "foot.rights": "© 2026 digitalsafe.app by EZI EDUTECH",
   "foot.synthetic": "MVP. All example data is synthetic.",
@@ -586,7 +608,7 @@ const en: Record<Key, string> = {
   "page.moreFacts": "Figures from institutions and journals for each risk.",
   "page.morePrivacy": "What is processed, where, and for how long.",
 
-  "auth.for": "For parents and teachers",
+  "auth.for": "For parents",
   "home.stats.title": "Why this matters",
   "home.stats.more": "More facts",
   "home.stats.s1.v": "20 million",
@@ -695,10 +717,18 @@ const en: Record<Key, string> = {
   "home.privacy.note":
     "The child always knows dcAI is on: a persistent notification on their phone, and no hidden mode.",
 
-  "home.meta.title": "Built with Meta models",
-  "home.meta.muse": "Muse Spark assesses chat patterns, writes the guidance and answers parents through Ask dcAI.",
-  "home.meta.llama": "Llama labels behaviour per message as the first filter.",
+  "home.meta.title": "Built and trained with Meta models",
+  "home.meta.lead": "Both dcAI's inference and its training run on Meta models. Muse Spark assesses patterns and writes the guidance; Llama screens per message. The first filter is a distilled Llama 3.1 8B student, trained with Muse Spark as the teacher that labels the data.",
+  "home.meta.muse": "Muse Spark assesses chat patterns, writes the guidance and answers parents through Ask dcAI, over the Meta Model API.",
+  "home.meta.llama": "A distilled Llama 3.1 8B labels behaviour per message; Llama 3.3 70B as backup.",
   "home.meta.next": "Next: a smaller distilled Llama model that runs on the phone.",
+  "home.school.eyebrow": "For schools",
+  "home.school.title": "An anonymous overview for schools",
+  "home.school.lead": "With a parent's consent, a class shares only anonymous aggregate counts per level. A school never sees any single child's identity, level, insight or conversation.",
+  "home.school.i1": "A parent grants the school scope, then enters the class code from the teacher.",
+  "home.school.i2": "Numbers appear only when enough children take part, to keep it anonymous.",
+  "home.school.i3": "A parent can withdraw at any time; the child drops out of the counts at once.",
+  "home.school.cta": "Open the school dashboard",
   "home.about.eyebrow": "About Us",
   "home.about.title": "About dcAI",
   "home.about.lead":
@@ -837,6 +867,14 @@ const en: Record<Key, string> = {
   "set.consent": "Consent scopes",
   "set.withdraw": "Withdraw",
   "set.grant": "Agree",
+  "set.school": "School class",
+  "set.schoolHint": "Join a class's anonymous aggregate by entering the code from the teacher. Needs the School overview scope.",
+  "set.schoolNeedScope": "Grant the School overview scope first to join a class.",
+  "set.joinCode": "Class code",
+  "set.join": "Join class",
+  "set.joinError": "Class code not found.",
+  "set.leave": "Leave",
+  "set.noJoined": "Not in any class yet.",
   "set.devices": "Phones",
   "set.revoke": "Unpair phone",
   "set.revoked": "Unpaired",
@@ -962,6 +1000,8 @@ const en: Record<Key, string> = {
   "scopeHint.gambar": "Images are judged on the phone and never sent. Faces and personal data in an image about to be shared are blurred.",
   "scopeHint.domain": "Sites are matched against a list on the phone; only the category is sent.",
   "scopeHint.keyboard": "The tone of typed text is checked after masking. Optional.",
+  "scope.sekolah": "School overview",
+  "scopeHint.sekolah": "The child is counted in the class's anonymous aggregate. A school never sees the child's identity, level, insight or conversation. Withdrawable at any time.",
 
   "service.accessibility": "dcAI screen reader",
   "service.notification": "Persistent notification",

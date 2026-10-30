@@ -14,7 +14,9 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 
 **Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app) (homepage and parent dashboard; the phone's API is under `/v1`). Please use synthetic data only: free model credits allow the provider to use request content.
 
-**Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video), and guidance for the parent. It is one pillar of digitalsafe.app. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud.
+**Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video), and guidance for the parent. It is one pillar of digitalsafe.app. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud. With a parent's separate consent a school can see class-level aggregates only, never a child.
+
+**Meta at the core.** Meta's models run every reasoning step. Muse Spark (Meta), on the Meta Model API, handles the conversation assessment, the Citizenship Guide and Ask dcAI; Meta Llama screens each message. The stage 1 screener is a Llama 3.1 8B student distilled from a Muse Spark teacher that labels the training data (LoRA SFT). Built for the Meta Global AI Developer Hackathon.
 
 ## Table of Contents
 
@@ -56,9 +58,10 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Guide call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
+- **School view, aggregates only** (`/sekolah`, with `/sekolah/masuk` and `/sekolah/daftar`; `POST /v1/school/*`). A parent may grant an optional `sekolah` consent scope and join a class with a one-time join code. The school sees only k-anonymity counts per level over the class, never a child's identity, level, insight or conversation. Counts show from 5 consenting children; the more sensitive "needs support" count needs 10, and the group is otherwise suppressed. Each child's level and support flag are counted on the server and dropped, never returned per child. The school module lives in `code/backpy/app/school/`.
 - **Facts page** (`/fakta`): published figures for each risk dcAI addresses (UNICEF, WHO/Europe, The Lancet, Disrupting Harm Indonesia, PPATK, BNPT and others), each quoted as its source states it and linked to the page that was checked. These are the only figures in the product not measured by this project.
 - **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
-- **Time online.** The parent sets daily limits for school days and weekends, limits per category (video, games, social, other), bedtime with a wind-down reminder, breaks after long short-video sessions, and apps that are always allowed. The phone counts foreground time from Android's usage access (app names and minutes, never what is inside an app), reminds the child before time runs out, and shows a break screen at a limit or at bedtime. The child can ask for more time with a short reason, masked on the phone and again on the server; Muse Spark suggests allow, allow part or not now, and the parent decides on the dashboard, which reaches the phone over the live stream. The server keeps minutes per category per day, bedtime minutes and the longest session. Muse Spark also writes a weekly summary for the parent from aggregate numbers and can propose limits, which change nothing until the parent saves them.
+- **Time online.** The parent sets daily limits for school days and weekends, limits per category (video, games, social, other), bedtime with a wind-down reminder, breaks after long short-video sessions, and apps that are always allowed. **Focus mode** uses that allowlist the other way: the parent names the apps the child may keep using, and everything else is held, for homework or bedtime. The phone counts foreground time from Android's usage access (app names and minutes, never what is inside an app), reminds the child before time runs out, and shows a break screen at a limit or at bedtime. The child can ask for more time with a short reason, masked on the phone and again on the server; Muse Spark suggests allow, allow part or not now, and the parent decides on the dashboard, which reaches the phone over the live stream. The server keeps minutes per category per day, bedtime minutes and the longest session. Muse Spark also writes a weekly summary for the parent from aggregate numbers and can propose limits, which change nothing until the parent saves them.
 - **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
 - **58 synthetic scenarios** (621 messages, seven groups, including invitations to fights, drugs, alcohol or weapons for ages 10 to 17), with a locked 40/18 dev/test split. New scenarios join the split by the same hash, so no earlier id moved.
 
@@ -111,10 +114,11 @@ adb shell input text "halo%skak" && adb shell input keyevent KEYCODE_ENTER
 ```
 code/backpy/   FastAPI: llm (provider pool), privacy (masking), risk (stage 1, floor, stage 2,
                pipeline), guide, analysis (per-conversation queue), live (SSE broker), consent,
-               auth, api (/v1, /v1/device), migrations (Alembic), tests
+               school (aggregate-only class view), auth, api (/v1, /v1/device, /v1/school),
+               migrations (Alembic), tests
 data/          scenarios (synthetic JSON, split.json), privacy (masking test cases)
 eval/          measurement output (ids and labels only, no text)
-code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI.
+code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, Ask dcAI, school (/sekolah).
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
 code/distill/  OpenPipe ART: fine-tunes the stage 1 student on a serverless training service
@@ -163,7 +167,13 @@ npm run dev -- --port 3100      # http://localhost:3100, expects the backend on 
 
 ### Deploying
 
-`code/docker-compose.prod.yml` runs PostgreSQL, the API and the web app; on Dokploy it is a Compose service from this repository with the model variables, `DB_PASSWORD` and `SECRET_KEY` in its environment, and two domains on one host: `/` to `web:3000` and `/v1` to `api:8000`. The API migrates on start and builds the site lists from UT1 into a volume the first time (about five minutes). Release builds of the Android app point at the public host; debug builds at the emulator's host machine.
+Production runs three separate services in one Dokploy project, so the database's lifecycle is detached from the apps and a rebuild never touches its data:
+
+- **dcai-db**: a managed PostgreSQL 18, its own volume and lifecycle.
+- **dcai-api**: the FastAPI backend as an Application (Dockerfile `code/backpy/Dockerfile`, build context the repo root), on domain path `/v1` to port 8000. The container runs `alembic upgrade head` on start, so the schema is created on first deploy, and builds the site lists from UT1 into a volume the first time (about five minutes).
+- **dcai-web**: the Next.js app as an Application (Dockerfile `code/frontnext/Dockerfile`), on domain path `/` to port 3000. It reaches the backend only server side, over the internal `DCAI_API_URL`.
+
+The model variables, `DATABASE_URL`, `SECRET_KEY` and `DCAI_API_URL` are set per service in Dokploy; secret values never enter the repository. Full steps, including the cutover from the old single-Compose setup, are in [docs/deploy.md](docs/deploy.md). `code/docker-compose.prod.yml` is kept for local and development use and reference only. Release builds of the Android app point at the public host; debug builds at the emulator's host machine.
 
 The site's download button offers the APK from the repository's GitHub release. For a new version: raise `versionCode` and `versionName` in `code/android/app/build.gradle.kts`, build `assembleRelease` with the signing variables set (`DCAI_KEYSTORE`, `DCAI_KEYSTORE_PASSWORD`, `DCAI_KEY_ALIAS`, `DCAI_KEY_PASSWORD`; the keystore stays outside the repository), publish a release `v<version>` with the file `dcai-guardian-<version>.apk`, then set `APK_VERSION` in `code/frontnext/lib/download.ts`. Without the signing variables, as in CI, the release build is unsigned.
 
@@ -381,13 +391,13 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
 - **Not everything is processed on the device.** Masked messages go to model providers for assessment.
 - **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
-- **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible about once in 200,000 checks. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
+- **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible but rare by design: with about 5 million 40-bit hashes, roughly one lookup in 200,000 collides, an estimate from the hash width and list size rather than a measurement. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
 - **The invitation label is new, and the screener was trained before it existed.** Student v2 finds 6 of 11 invitations on dev with precision 0.67, so it raises false alarms (one of two look-alike hard cases on dev) and can miss a single invitation in an otherwise ordinary chat. A retrained v3 removed the false alarm but missed more risk and was not adopted. See Results.
 - The consent text has not had legal review.
 
 ## Credits and licenses
 
-- **Meta Muse Spark** through the Meta Model API and Fireworks; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider (Llama 3.x Community License).
+- **Meta Muse Spark** through the Meta Model API, with Muse Spark Open on Fireworks and Baseten; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider (Llama 3.x Community License). The stage 1 screener is a Llama 3.1 8B student distilled from a Muse Spark teacher (LoRA SFT via OpenPipe ART).
 - **UT1 Blacklists**, Universite Toulouse Capitole, CC BY-SA 4.0: the site lists on the phone are hashed adaptations under the same license.
 - **Google ML Kit** face detection and text recognition, bundled on-device models (ML Kit terms).
 - **FastAPI**, **uvicorn**, **pydantic**, **httpx**, **SQLAlchemy**, **Alembic**, **psycopg**, **argon2-cffi**, **PyJWT**, **pytest**, **respx**, **ruff**, **PostgreSQL**: their respective open source licenses.

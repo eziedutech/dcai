@@ -6,7 +6,7 @@ import { ACCESS_COOKIE, BACKEND, CSRF_HEADER, refresh } from "@/lib/server/backe
 // Only paths the dashboard needs pass; the phone's API (/v1/device) never does.
 
 const ALLOWED = [
-  /^children(\/[0-9a-f-]{36}(\/(overview|conversations|events|insights|protection|devices|consents|pairing-codes|stream|data|usage|time-requests|digest|screen-policy(\/suggestion)?))?)?$/,
+  /^children(\/[0-9a-f-]{36}(\/(overview|conversations|events|insights|protection|devices|consents|pairing-codes|stream|data|usage|time-requests|digest|screen-policy(\/suggestion)?|class(\/[0-9a-f-]{36})?|classes))?)?$/,
   /^time-requests\/[0-9a-f-]{36}\/decision$/,
   /^consents(\/text)?$/,
   /^devices\/[0-9a-f-]{36}$/,
