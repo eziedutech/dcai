@@ -89,6 +89,10 @@ class ConversationAnalyzer:
     steps: list[Step] = field(default_factory=list)
     # Evidence from messages added with assess=False, waiting for the next stage 2 call.
     pending_evidence: bool = False
+    # The Guide is owed for this conversation but was left to a later message in a burst.
+    # Kept here, not in the drain loop, so the debt survives between drain cycles (a trickle
+    # of messages each starts a fresh drain, and a burst's unpaid debt must not be lost).
+    guide_due: bool = False
 
     @property
     def score(self) -> int:

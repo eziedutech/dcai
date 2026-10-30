@@ -171,6 +171,84 @@ async def test_messages_arriving_together_share_one_stage2_call(state):
     assert not w.busy()
 
 
+def _seed_assessment(url, conv_id, score, level):
+    """A level already reached for this conversation but never guided: what a restart (or a
+    missed trigger in an earlier build) leaves behind: a risk_assessment with no insight."""
+    from app.db.base import session_factory
+    from app.db.models import RiskAssessment
+
+    with session_factory(url)() as db:
+        db.add(
+            RiskAssessment(
+                conversation_id=conv_id,
+                score=score,
+                level=level,
+                patterns=[],
+                trajectory="stabil",
+                rationale="Level dari aturan keselamatan.",
+                confidence="rendah",
+                model_version="rules",
+            )
+        )
+        db.commit()
+
+
+async def test_level_at_risk_without_a_raise_still_produces_insight_and_nudge(state):
+    # Reproduces the open bug: the conversation sits at mendesak (reached earlier via the
+    # rule floor, so raised is False now and stage 2 never runs) with no insight stored. The
+    # raise-only trigger skipped the Guide; the dashboard had a level but no insight and the
+    # child got no nudge. One insight + nudge per escalation must still be produced.
+    import uuid
+
+    from app.analysis.service import Job, worker
+    from app.db.base import session_factory
+    from app.db.models import Insight
+    from app.live.broker import Broker, child_key, device_key
+
+    child_id, conv_id = _child_with_consent(state.settings.database_url)
+    _seed_assessment(state.settings.database_url, conv_id, 85, "mendesak")
+    state.broker = Broker()
+    device_id = uuid.uuid4()
+
+    fut = worker(state).submit(
+        Job(conv_id, child_id, "id", False, "dm", "contact", "oke", device_id=device_id),
+        wait=True,
+    )
+    result = await fut
+
+    assert result.step.level.value == "mendesak"
+    assert result.step.raised is False
+    assert result.step.source != "model"  # reached via the rule floor, not stage 2
+    assert state.muse.calls == 0  # stage 2 was not triggered on this message
+    assert result.guide is not None  # guided anyway
+    assert state.muse.guide_calls == 1
+    with session_factory(state.settings.database_url)() as db:
+        assert db.query(Insight).count() == 1
+    guardian_events = [e.event for e in state.broker.since(child_key(child_id), "x-0")]
+    assert "insight" in guardian_events  # the dashboard's "Insight terbaru" updates
+    device_events = [e.event for e in state.broker.since(device_key(device_id), "x-0")]
+    assert "nudge" in device_events  # the child's phone is nudged
+
+
+async def test_a_flood_cannot_postpone_the_assessment_forever(state):
+    # Under a steady burst the queue never empties, so assess would stay False and the level
+    # would go out with no insight. The cap forces a considered assessment mid-burst.
+    from app.analysis.service import MAX_DEFERRED_MESSAGES, Job, worker
+
+    child_id, conv_id = _child_with_consent(state.settings.database_url)
+    w = worker(state)
+    futures = [
+        w.submit(Job(conv_id, child_id, "id", False, "dm", "contact", "kirim foto kamu"), wait=True)
+        for _ in range(MAX_DEFERRED_MESSAGES + 2)
+    ]
+    results = await asyncio.gather(*futures)
+
+    called = [r.step.stage2_called for r in results]
+    assert called[MAX_DEFERRED_MESSAGES - 1] is False  # still deferred one before the cap
+    assert called[MAX_DEFERRED_MESSAGES] is True  # forced at the cap, queue not yet empty
+    assert not w.busy()
+
+
 async def test_a_failed_message_does_not_stop_the_queue(state):
     from app.analysis.service import ConversationGone, Job, worker
 
