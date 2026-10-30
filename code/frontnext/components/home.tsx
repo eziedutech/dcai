@@ -195,9 +195,7 @@ function Schools() {
             {t("home.school.cta")}
           </Link>
         </div>
-        <div className="glass rounded-3xl p-6 sm:p-9">
-          <SchoolScene />
-        </div>
+        <SchoolScene className="mx-auto max-w-md lg:max-w-none" />
       </div>
     </div>
   );
@@ -217,9 +215,7 @@ function Models() {
           <h3 className={sub}>{t("home.meta.title")}</h3>
           <p className="mt-4 max-w-[58ch] text-slate">{t("home.meta.lead")}</p>
         </div>
-        <div className="glass rounded-3xl p-6 sm:p-9">
-          <ModelsScene />
-        </div>
+        <ModelsScene className="mx-auto max-w-md lg:max-w-none" />
       </div>
       <dl className="mt-10 grid gap-5 sm:grid-cols-3">
         {rows.map(([name, key]) => (
