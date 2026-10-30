@@ -21,10 +21,19 @@ from app.config import get_settings
 from app.llm import build_clients
 
 
+class _DropHealthChecks(logging.Filter):
+    """Keep the container healthcheck's own GET /v1/health out of the access log; it hits
+    every 15s and otherwise drowns the real traffic, making the log hard to open."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "/v1/health" not in record.getMessage()
+
+
 def configure_logging() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
     # httpx logs request URLs at INFO; keep them out, they add nothing and grow the log.
     logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("uvicorn.access").addFilter(_DropHealthChecks())
 
 
 @asynccontextmanager

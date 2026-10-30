@@ -234,7 +234,10 @@ async def process(state, job: Job, *, assess: bool = True) -> Result:
             or need_insight
         )
         run_guide = due and assess
-        log.info(
+        # Log the decision at INFO only when it is interesting (the Guide runs, or the level
+        # is not aman); the calm, per-message common case goes to DEBUG so the log stays small.
+        emit = log.info if (run_guide or step.level != Level.AMAN) else log.debug
+        emit(
             "guide_decision cid=%s level=%s source=%s raised=%s assess=%s guide_due=%s "
             "considered_risk=%s first_support=%s need_insight=%s run_guide=%s",
             conversation.id,
