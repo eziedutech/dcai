@@ -82,3 +82,18 @@ export async function refresh(): Promise<Tokens | null> {
 /** Non-GET calls from the browser must carry this header. A cross-site form cannot set
  * it, and a cross-site script cannot send it without a CORS preflight this app refuses. */
 export const CSRF_HEADER = "x-dcai-request";
+
+// School staff (proposal 0004). Staff sessions have an access token only (no refresh yet),
+// kept in its own httpOnly cookie so a staff session is separate from a guardian one.
+export const STAFF_COOKIE = "dcai_sat";
+
+export async function storeStaffToken(accessToken: string, expiresAt: string) {
+  const jar = await cookies();
+  const maxAge = Math.max(60, Math.floor((Date.parse(expiresAt) - Date.now()) / 1000));
+  jar.set(STAFF_COOKIE, accessToken, { httpOnly: true, sameSite: "lax", secure, path: "/", maxAge });
+}
+
+export async function clearStaffToken() {
+  const jar = await cookies();
+  jar.delete({ name: STAFF_COOKIE, path: "/" });
+}

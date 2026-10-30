@@ -6,6 +6,18 @@ export type Scope = "percakapan" | "layar" | "gambar" | "domain" | "keyboard" | 
 
 export type Guardian = { id: string; email: string; name: string; language: Lang };
 
+// School module (proposal 0004): staff accounts and aggregate-only class views.
+export type Staff = { id: string; email: string; name: string; role: string; school_id: string };
+export type StaffClass = { id: string; name: string; members: number; join_code?: string | null };
+export type ClassOverview = {
+  classroom_id: string;
+  window_days: number;
+  total: number;
+  suppressed: boolean;
+  by_level: Record<string, number> | null;
+  support: number | null;
+};
+
 export type Child = {
   id: string;
   nickname: string;
