@@ -93,3 +93,18 @@ def new_device_token() -> tuple[str, str]:
 
 def hash_device_token(token: str) -> str:
     return hashlib.sha256(f"device:{token}".encode()).hexdigest()
+
+
+CLASS_CODE_LENGTH = 6
+
+
+def new_class_code() -> tuple[str, str]:
+    """A class join code a teacher shares; a parent types it to let their child be counted
+    (proposal 0004). Returns (code shown to the teacher, hash for the database)."""
+    code = "".join(secrets.choice(_PAIRING_ALPHABET) for _ in range(CLASS_CODE_LENGTH))
+    return code, hash_class_code(code)
+
+
+def hash_class_code(code: str) -> str:
+    normalized = "".join(ch for ch in code.upper() if ch.isalnum())
+    return hashlib.sha256(f"class:{normalized}".encode()).hexdigest()

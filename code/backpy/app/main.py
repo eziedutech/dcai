@@ -15,6 +15,7 @@ from app.api.family import device_router as family_device_router
 from app.api.family import guardian_router as family_router
 from app.api.health import router as health_router
 from app.api.messages import router as messages_router
+from app.api.school import router as school_router
 from app.api.sites import router as sites_router
 from app.config import get_settings
 from app.llm import build_clients
@@ -54,3 +55,4 @@ app.include_router(family_router, prefix="/v1")
 app.include_router(family_device_router, prefix="/v1")
 app.include_router(dashboard_router, prefix="/v1")
 app.include_router(ask_router, prefix="/v1")
+app.include_router(school_router, prefix="/v1")

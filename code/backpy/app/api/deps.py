@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from app.auth.security import DEVICE_TOKEN_PREFIX, hash_device_token, read_access_token
 from app.config import Settings
 from app.db.base import session_factory, utcnow
-from app.db.models import ChildProfile, Device, Guardian
+from app.db.models import ChildProfile, Device, Guardian, SchoolStaff
 
 _bearer = HTTPBearer(auto_error=False)
 
@@ -79,3 +79,24 @@ def current_device(
 
 
 DeviceDep = Annotated[Device, Depends(current_device)]
+
+
+def current_staff(
+    db: DbDep,
+    settings: SettingsDep,
+    creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
+) -> SchoolStaff:
+    """A signed-in school staff account. A guardian or device token resolves to no staff
+    row, so it cannot reach staff endpoints."""
+    staff_id = read_access_token(creds.credentials, settings.secret_key) if creds else None
+    staff = db.get(SchoolStaff, staff_id) if staff_id else None
+    if staff is None:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            "not signed in or token expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return staff
+
+
+StaffDep = Annotated[SchoolStaff, Depends(current_staff)]
