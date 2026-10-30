@@ -15,7 +15,15 @@ from app.api.devices import notify_config_changed, notify_devices_revoked
 from app.auth.security import hash_class_code
 from app.consent.service import active_scopes, has_consent
 from app.consent.texts import CURRENT, VERSIONS, Scope
-from app.db.models import ChildProfile, ClassMembership, Classroom, ConsentRecord
+from app.db.models import (
+    ChildProfile,
+    ClassMembership,
+    Classroom,
+    ConsentRecord,
+    Conversation,
+    Event,
+    ImageSignal,
+)
 
 router = APIRouter(tags=["children", "consent"])
 
@@ -220,6 +228,19 @@ def list_child_classes(
         .order_by(Classroom.created_at)
     ).all()
     return [ChildClassOut(classroom_id=str(cid), name=name) for cid, name in rows]
+
+
+@router.delete("/children/{child_id}/history", status_code=status.HTTP_204_NO_CONTENT)
+def clear_child_history(child_id: uuid.UUID, db: DbDep, guardian: GuardianDep) -> None:
+    """Erase this child's activity history: events, conversations (with their assessments,
+    insights and excerpts, by database cascade) and image labels. The child profile, consent
+    and paired phones stay. Time-online data is kept; it lives under its own tab."""
+    child = owned_child(db, guardian, child_id)
+    db.execute(delete(Event).where(Event.child_id == child.id))
+    db.execute(delete(Conversation).where(Conversation.child_id == child.id))
+    db.execute(delete(ImageSignal).where(ImageSignal.child_id == child.id))
+    audit.record(db, audit.guardian_actor(guardian.id), "child_history_cleared", child.id)
+    db.commit()
 
 
 @router.delete("/children/{child_id}/data", status_code=status.HTTP_204_NO_CONTENT)

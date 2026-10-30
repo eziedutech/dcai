@@ -500,6 +500,8 @@ function SettingsPanel({ child }: { child: Child }) {
   const [text, setText] = useState<ConsentText | null>(null);
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmingClear, setConfirmingClear] = useState(false);
+  const [cleared, setCleared] = useState(false);
 
   useEffect(() => {
     api<ConsentText>("consents/text").then(setText, () => undefined);
@@ -514,6 +516,17 @@ function SettingsPanel({ child }: { child: Child }) {
         body: { child_id: child.id, text_version: text.version, action: on ? "grant" : "revoke", scopes: [scope] },
       });
       await reload();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function clearHistory() {
+    setBusy(true);
+    try {
+      await api(`children/${child.id}/history`, { method: "DELETE" });
+      setConfirmingClear(false);
+      setCleared(true);
     } finally {
       setBusy(false);
     }
@@ -547,6 +560,22 @@ function SettingsPanel({ child }: { child: Child }) {
             );
           })}
         </ul>
+      </section>
+
+      <section className="glass rounded-2xl p-6 sm:p-7" aria-labelledby="clear-h">
+        <h2 id="clear-h" className="text-lg font-bold">{t("set.clearHistory")}</h2>
+        <p className="mt-1 max-w-[62ch] text-sm text-slate">{t("set.clearHistoryHint")}</p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          {confirmingClear ? (
+            <>
+              <Button variant="danger" disabled={busy} onClick={clearHistory}>{t("set.clearConfirm")}</Button>
+              <Button variant="quiet" disabled={busy} onClick={() => setConfirmingClear(false)}>{t("common.cancel")}</Button>
+            </>
+          ) : (
+            <Button variant="quiet" onClick={() => { setCleared(false); setConfirmingClear(true); }}>{t("set.clearHistory")}</Button>
+          )}
+          {cleared && <span role="status" className="text-sm text-aman">{t("set.cleared")}</span>}
+        </div>
       </section>
 
       <section className="rounded-2xl border border-mendesak/30 bg-mendesak-soft/40 px-6 py-6" aria-labelledby="delete-h">

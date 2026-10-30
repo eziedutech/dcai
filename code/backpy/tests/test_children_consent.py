@@ -172,3 +172,63 @@ def test_delete_child_data_cascades_and_is_audited(api, db_url):
         ).scalar_one()
     assert audit == child["id"]
     assert api.get("/v1/children", headers=auth(tokens)).json() == []
+
+
+def test_clear_history_keeps_child_consent_and_phones(api, db_url):
+    import uuid as _uuid
+
+    from app.db.base import session_factory
+    from app.db.models import Conversation, Event, ImageSignal, Insight, RiskAssessment
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    consent(api, tokens, child["id"])
+    cid = _uuid.UUID(child["id"])
+
+    with session_factory(db_url)() as db:
+        conv = Conversation(child_id=cid, channel="dm")
+        db.add(conv)
+        db.flush()
+        ra = RiskAssessment(
+            conversation_id=conv.id,
+            score=60,
+            level="waspada",
+            patterns=[],
+            trajectory="stabil",
+            rationale="x",
+            confidence="sedang",
+            model_version="rules",
+        )
+        db.add(ra)
+        db.flush()
+        db.add(Insight(assessment_id=ra.id, child_nudge="hati-hati", parent_insight={}))
+        db.add(Event(child_id=cid, kind="risiko_naik", level="waspada"))
+        db.add(
+            ImageSignal(
+                child_id=cid,
+                trigger="kirim",
+                category="teks_pribadi",
+                action="dikaburkan",
+                score=10,
+                model_version="rules",
+            )
+        )
+        db.commit()
+
+    resp = api.delete(f"/v1/children/{child['id']}/history", headers=auth(tokens))
+    assert resp.status_code == 204
+
+    with create_engine(db_url).connect() as conn:
+        # History is gone, including the rows that cascade from a conversation.
+        for table in ("conversation", "risk_assessment", "insight", "event", "image_signal"):
+            assert conn.execute(text(f"SELECT COUNT(*) FROM {table}")).scalar_one() == 0, table
+        # The child and its consent stay.
+        assert conn.execute(text("SELECT COUNT(*) FROM child_profile")).scalar_one() == 1
+        assert conn.execute(text("SELECT COUNT(*) FROM consent_record")).scalar_one() >= 1
+        audit = conn.execute(
+            text("SELECT target FROM audit_log WHERE action = 'child_history_cleared'")
+        ).scalar_one()
+    assert audit == child["id"]
+
+    listed = api.get("/v1/children", headers=auth(tokens)).json()
+    assert listed[0]["id"] == child["id"] and "percakapan" in listed[0]["consent_scopes"]

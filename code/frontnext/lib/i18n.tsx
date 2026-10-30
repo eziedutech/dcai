@@ -381,6 +381,10 @@ const id = {
   "set.devices": "Ponsel",
   "set.revoke": "Lepaskan ponsel",
   "set.revoked": "Dilepas",
+  "set.clearHistory": "Bersihkan riwayat",
+  "set.clearHistoryHint": "Hapus peristiwa, percakapan, insight, dan label gambar anak ini. Profil, persetujuan, ponsel, dan data Waktu online tetap. Tidak bisa dibatalkan.",
+  "set.clearConfirm": "Ya, bersihkan",
+  "set.cleared": "Riwayat dibersihkan.",
   "set.delete": "Hapus semua data anak",
   "set.deleteHint":
     "Profil, persetujuan, penilaian, insight, peristiwa, dan ponsel yang terpasang dihapus. Tidak bisa dibatalkan.",
@@ -906,6 +910,10 @@ const en: Record<Key, string> = {
   "set.devices": "Phones",
   "set.revoke": "Unpair phone",
   "set.revoked": "Unpaired",
+  "set.clearHistory": "Clear history",
+  "set.clearHistoryHint": "Delete this child's events, conversations, insights and image labels. The profile, consent, phones and Time online data stay. This cannot be undone.",
+  "set.clearConfirm": "Yes, clear",
+  "set.cleared": "History cleared.",
   "set.delete": "Delete all of this child's data",
   "set.deleteHint":
     "The profile, consent, assessments, insight, events and paired phones are deleted. This cannot be undone.",
