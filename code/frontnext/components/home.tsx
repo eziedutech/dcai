@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
-import { FlowScene, ModelsScene, ProtectScene, SchoolScene } from "./illustrations";
+import { ModelsScene, ProtectScene, SchoolScene, StepsFlow } from "./illustrations";
 import { Parallax } from "./motion";
 import { APK_URL, APK_VERSION } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
@@ -164,8 +164,8 @@ function Steps() {
   return (
     <div className="mt-24">
       <h3 className={`max-w-[30ch] ${sub}`}>{t("home.steps.title")}</h3>
-      <FlowScene className="mt-8 max-w-3xl" />
-      <ol className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <StepsFlow />
+      <ol className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {([1, 2, 3, 4] as const).map((n) => (
           <li key={n} className="glass rounded-3xl p-6">
             <p className="grid h-8 w-8 place-items-center rounded-full bg-navy text-sm font-bold text-paper tabular">{n}</p>
@@ -189,17 +189,19 @@ function Schools() {
             {t("home.school.title")}
           </h3>
           <p className="mt-4 max-w-[56ch] text-slate">{t("home.school.lead")}</p>
-          <ul className="mt-6 space-y-2.5">
-            {([1, 2, 3] as const).map((i) => (
-              <li key={i} className="flex gap-2.5 font-medium">
-                <Check />
-                {t(`home.school.i${i}`)}
-              </li>
-            ))}
-          </ul>
-          <Link href="/sekolah" className="mt-7 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
-            {t("home.school.cta")}
-          </Link>
+          <div className="glass mt-7 rounded-3xl p-6 sm:p-7">
+            <ul className="space-y-3">
+              {([1, 2, 3] as const).map((i) => (
+                <li key={i} className="flex gap-2.5 font-medium">
+                  <Check />
+                  {t(`home.school.i${i}`)}
+                </li>
+              ))}
+            </ul>
+            <Link href="/sekolah" className="mt-6 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
+              {t("home.school.cta")}
+            </Link>
+          </div>
         </div>
         <SchoolScene className="mx-auto max-w-md lg:max-w-none" />
       </div>
@@ -210,9 +212,9 @@ function Schools() {
 function Models() {
   const { t } = useT();
   const rows = [
-    ["Muse Spark", "home.meta.muse"],
-    ["Llama", "home.meta.llama"],
-    ["ExecuTorch", "home.meta.next"],
+    { name: "Muse Spark", key: "home.meta.muse", next: false },
+    { name: "Llama", key: "home.meta.llama", next: false },
+    { name: "ExecuTorch", key: "home.meta.next", next: true },
   ] as const;
   return (
     <div className="mt-24">
@@ -224,10 +226,16 @@ function Models() {
         <ModelsScene className="mx-auto max-w-md lg:max-w-none" />
       </div>
       <dl className="mt-10 grid gap-5 sm:grid-cols-3">
-        {rows.map(([name, key]) => (
-          <div key={name} className="border-t border-ink/15 pt-4">
-            <dt className="font-bold">{name}</dt>
-            <dd className="mt-2 text-slate">{t(key)}</dd>
+        {rows.map(({ name, key, next }) => (
+          <div
+            key={name}
+            className={`rounded-3xl p-6 sm:p-7 ${next ? "border border-dashed border-ink/15 bg-white/35" : "glass"}`}
+          >
+            <dt className="flex items-center gap-2.5 font-bold">
+              <span aria-hidden className={`h-2.5 w-2.5 rounded-full ${next ? "border-2 border-navy/40" : "bg-navy"}`} />
+              {name}
+            </dt>
+            <dd className="mt-3 text-[0.97rem] leading-relaxed text-ink/75">{t(key)}</dd>
           </div>
         ))}
       </dl>

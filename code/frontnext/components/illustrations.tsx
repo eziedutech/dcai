@@ -1,250 +1,412 @@
-// Decorative line-and-duotone illustrations for the homepage, drawn in the same single
-// stroke weight and navy palette as the page's icons. All are aria-hidden: they carry no
-// information the surrounding copy does not already give.
+// Decorative illustrations for the homepage, in the page's navy palette: soft gradients, a
+// gentle drop shadow and a faint backdrop glow, one stroke weight throughout. All are
+// aria-hidden; the surrounding copy carries the meaning. They sit on the page background,
+// never inside a card.
 
 type Props = { className?: string };
 
-const base = "h-auto w-full";
+const NAVY = "#1f3a5f";
+const NAVY_2 = "#2f5486";
+const INK = "#14233a";
+const LINE = "#d8dfe6";
+const MIST = "#eef2f6";
+const AMAN = "#2f6b4f";
+const PERHATIAN = "#b07a12";
+const WASPADA = "#c45a1f";
+const MENDESAK = "#9e2b25";
 
-/** A school beside an anonymous class aggregate: a row of identical figures grouped inside a
- * dashed boundary (k-anonymity), summarised as bars on the four-level scale behind a shield.
- * Nothing points to a single child. */
-export function SchoolScene({ className = "" }: Props) {
+const svgBase = "h-auto w-full overflow-visible";
+
+/** Shared defs: a soft shadow and the navy gradient, with ids namespaced per illustration. */
+function Defs({ id }: { id: string }) {
   return (
-    <svg
-      viewBox="0 0 420 300"
-      className={`${base} ${className}`}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {/* ground */}
-      <path d="M34 254h352" className="stroke-navy/20" strokeWidth="2" />
-
-      {/* school building */}
-      <g className="stroke-navy" strokeWidth="2.4">
-        <path d="M72 254V150h132v104" className="fill-navy/[0.05]" />
-        <path d="M60 150 138 108l78 42z" className="fill-navy/10" />
-        <rect x="122" y="206" width="32" height="48" rx="2" className="fill-navy/[0.12]" />
-        <path d="M138 206v48" className="stroke-navy/40" strokeWidth="1.6" />
-        <rect x="88" y="170" width="26" height="24" rx="2" className="fill-paper" strokeWidth="1.8" />
-        <rect x="162" y="170" width="26" height="24" rx="2" className="fill-paper" strokeWidth="1.8" />
-        <path d="M138 108V88" />
-        <path d="M138 90h22l-6 7 6 7h-22" className="fill-navy/70" stroke="none" />
-      </g>
-
-      {/* aggregate card: bars on the four-level scale, behind a privacy shield */}
-      <g>
-        <rect x="250" y="96" width="140" height="104" rx="12" className="fill-paper stroke-navy/15" strokeWidth="2" />
-        <path d="M268 120h58" className="stroke-navy/25" strokeWidth="3" />
-        <rect x="268" y="162" width="16" height="22" rx="3" className="fill-aman" />
-        <rect x="292" y="150" width="16" height="34" rx="3" className="fill-perhatian" />
-        <rect x="316" y="168" width="16" height="16" rx="3" className="fill-waspada" />
-        <rect x="340" y="156" width="16" height="28" rx="3" className="fill-mendesak" />
-        {/* shield */}
-        <path
-          d="M360 104l16 6v10c0 8-6 14-16 17-10-3-16-9-16-17v-10z"
-          className="fill-navy/10 stroke-navy"
-          strokeWidth="2"
-        />
-        <path d="M353 120l5 5 9-10" className="stroke-navy" strokeWidth="2.2" />
-      </g>
-
-      {/* an anonymous group: identical figures inside a dashed boundary */}
-      <g>
-        <rect x="250" y="214" width="140" height="44" rx="22" className="stroke-navy/30" strokeWidth="1.6" strokeDasharray="4 6" />
-        {[274, 300, 326, 352].map((cx) => (
-          <g key={cx} className="fill-navy/15 stroke-navy" strokeWidth="1.6">
-            <circle cx={cx} cy="230" r="5.5" />
-            <path d={`M${cx - 8} 246c0-6 3.6-9.5 8-9.5s8 3.5 8 9.5`} className="fill-none" />
-          </g>
-        ))}
-      </g>
-    </svg>
+    <defs>
+      <filter id={`${id}-shadow`} x="-30%" y="-30%" width="160%" height="170%">
+        <feDropShadow dx="0" dy="12" stdDeviation="12" floodColor={INK} floodOpacity="0.14" />
+      </filter>
+      <filter id={`${id}-shadow-sm`} x="-30%" y="-30%" width="160%" height="170%">
+        <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor={INK} floodOpacity="0.12" />
+      </filter>
+      <linearGradient id={`${id}-navy`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor={NAVY_2} />
+        <stop offset="1" stopColor={NAVY} />
+      </linearGradient>
+      <linearGradient id={`${id}-paper`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" />
+        <stop offset="1" stopColor={MIST} />
+      </linearGradient>
+      <radialGradient id={`${id}-glow`}>
+        <stop offset="0" stopColor={NAVY} stopOpacity="0.13" />
+        <stop offset="1" stopColor={NAVY} stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id={`${id}-teal`}>
+        <stop offset="0" stopColor="#3c7a86" stopOpacity="0.12" />
+        <stop offset="1" stopColor="#3c7a86" stopOpacity="0" />
+      </radialGradient>
+    </defs>
   );
 }
 
-/** One protection covering three areas: a shield with a check over a child's phone, with
- * content, social and privacy badges beneath it. Matches the three feature pillars. */
+/** A four-point sparkle, the page's small accent. */
+function Sparkle({ x, y, r = 6, opacity = 0.35 }: { x: number; y: number; r?: number; opacity?: number }) {
+  return (
+    <path
+      d={`M${x} ${y - r}l${r * 0.28} ${r * 0.72} ${r * 0.72} ${r * 0.28}-${r * 0.72} ${r * 0.28}-${r * 0.28} ${r * 0.72}-${r * 0.28}-${r * 0.72}-${r * 0.72}-${r * 0.28} ${r * 0.72}-${r * 0.28}z`}
+      fill={NAVY}
+      opacity={opacity}
+    />
+  );
+}
+
+/** The navy shield with a white check, used as the protection badge. */
+function ShieldBadge({ id, x, y, s = 1 }: { id: string; x: number; y: number; s?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`} filter={`url(#${id}-shadow-sm)`}>
+      <path d="M0-30 26-20v18C26 16 15 27 0 32-15 27-26 16-26-2v-18z" fill={`url(#${id}-navy)`} />
+      <path d="M-10 1 -3 8 11-7" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </g>
+  );
+}
+
+/** Feature pillars: a child's phone with a calm chat and a nudge, under a protection badge,
+ * with three floating chips for content, social and privacy. */
 export function ProtectScene({ className = "" }: Props) {
+  const id = "ps";
   return (
-    <svg
-      viewBox="0 0 420 300"
-      className={`${base} ${className}`}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {/* shield with a check */}
-      <g className="stroke-navy" strokeWidth="2.6">
-        <path d="M210 34l66 23v48c0 46-29 69-66 83-37-14-66-37-66-83V57z" className="fill-navy/[0.05]" />
-        <path d="M184 112l18 18 34-40" strokeWidth="3" />
-      </g>
+    <svg viewBox="0 0 440 340" className={`${svgBase} ${className}`} fill="none" aria-hidden>
+      <Defs id={id} />
+      <circle cx="220" cy="175" r="170" fill={`url(#${id}-glow)`} />
+      <circle cx="330" cy="250" r="110" fill={`url(#${id}-teal)`} />
+      <ellipse cx="220" cy="190" rx="190" ry="78" stroke={NAVY} strokeOpacity="0.16" strokeWidth="1.5" strokeDasharray="3 8" />
 
-      {/* connectors to the three pillars */}
-      <path
-        d="M172 150c-22 20-44 30-68 40M210 170v34M248 150c22 20 44 30 68 40"
-        className="stroke-navy/25"
-        strokeWidth="1.6"
-        strokeDasharray="3 7"
-      />
-
-      {/* content: a site held */}
-      <g>
-        <circle cx="104" cy="236" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
-        <g className="stroke-navy" strokeWidth="2">
-          <rect x="90" y="224" width="28" height="22" rx="3" className="fill-navy/[0.06]" />
-          <path d="M90 231h28" strokeWidth="1.6" />
-        </g>
-        <circle cx="104" cy="236" r="12" className="stroke-mendesak fill-none" strokeWidth="2.4" />
-        <path d="M96 244l16-16" className="stroke-mendesak" strokeWidth="2.4" />
+      {/* phone */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="160" y="56" width="120" height="228" rx="26" fill={INK} />
+        <rect x="167" y="63" width="106" height="214" rx="20" fill="#f4f6f9" />
       </g>
-
-      {/* social: a kind conversation */}
-      <g>
-        <circle cx="210" cy="238" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
-        <path d="M196 226h28a5 5 0 0 1 5 5v12a5 5 0 0 1-5 5h-15l-9 7v-7a5 5 0 0 1-4-22z" className="fill-navy/[0.06] stroke-navy" strokeWidth="2" />
-        <path d="M210 234c-3-4-9-2-9 3 0 4 6 7 9 10 3-3 9-6 9-10 0-5-6-7-9-3z" className="fill-navy/70" stroke="none" />
+      <rect x="203" y="70" width="34" height="7" rx="3.5" fill={INK} />
+      {/* chat */}
+      <rect x="176" y="96" width="62" height="18" rx="9" fill="#fff" stroke={LINE} />
+      <rect x="208" y="122" width="54" height="18" rx="9" fill={NAVY} />
+      <rect x="176" y="148" width="48" height="18" rx="9" fill="#fff" stroke={LINE} />
+      {/* nudge card */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="176" y="180" width="88" height="56" rx="12" fill="#fff" />
       </g>
+      <rect x="176" y="180" width="4" height="56" rx="2" fill={AMAN} />
+      <circle cx="194" cy="196" r="7" fill={AMAN} fillOpacity="0.15" />
+      <path d="M190.5 196l2.6 2.6 4.6-5" stroke={AMAN} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="206" y="192" width="46" height="6" rx="3" fill={INK} fillOpacity="0.7" />
+      <rect x="188" y="210" width="66" height="5" rx="2.5" fill={INK} fillOpacity="0.18" />
+      <rect x="188" y="221" width="50" height="5" rx="2.5" fill={INK} fillOpacity="0.18" />
+      <rect x="176" y="250" width="88" height="16" rx="8" fill="#fff" stroke={LINE} />
 
-      {/* privacy: a lock */}
-      <g>
-        <circle cx="316" cy="236" r="30" className="fill-paper stroke-navy/15" strokeWidth="2" />
-        <g className="stroke-navy" strokeWidth="2.2">
-          <rect x="304" y="234" width="24" height="18" rx="3" className="fill-navy/[0.06]" />
-          <path d="M308 234v-5a8 8 0 0 1 16 0v5" />
-          <circle cx="316" cy="242" r="2.4" className="fill-navy" stroke="none" />
-        </g>
+      <ShieldBadge id={id} x={286} y={74} s={1.1} />
+
+      {/* chip: content held */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="34" y="104" width="112" height="48" rx="14" fill="#fff" />
       </g>
+      <rect x="44" y="114" width="28" height="28" rx="9" fill={MENDESAK} fillOpacity="0.1" />
+      <circle cx="58" cy="128" r="8" stroke={MENDESAK} strokeWidth="2" />
+      <path d="M52.5 133.5l11-11" stroke={MENDESAK} strokeWidth="2" strokeLinecap="round" />
+      <rect x="80" y="120" width="52" height="6" rx="3" fill={INK} fillOpacity="0.65" />
+      <rect x="80" y="132" width="36" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+
+      {/* chip: kind interactions */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="26" y="226" width="112" height="48" rx="14" fill="#fff" />
+      </g>
+      <rect x="36" y="236" width="28" height="28" rx="9" fill={AMAN} fillOpacity="0.12" />
+      <path d="M50 255c-4-3.4-8-6-8-9.6 0-2.6 2-4.4 4.3-4.4 1.6 0 3 .9 3.7 2.2.7-1.3 2.1-2.2 3.7-2.2 2.3 0 4.3 1.8 4.3 4.4 0 3.6-4 6.2-8 9.6z" fill={AMAN} />
+      <rect x="72" y="242" width="52" height="6" rx="3" fill={INK} fillOpacity="0.65" />
+      <rect x="72" y="254" width="38" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+
+      {/* chip: privacy */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="304" y="200" width="112" height="48" rx="14" fill="#fff" />
+      </g>
+      <rect x="314" y="210" width="28" height="28" rx="9" fill={NAVY} fillOpacity="0.1" />
+      <rect x="320.5" y="223" width="15" height="11" rx="2.5" fill={NAVY} />
+      <path d="M323.5 223v-3a4.5 4.5 0 0 1 9 0v3" stroke={NAVY} strokeWidth="2" />
+      <rect x="350" y="216" width="52" height="6" rx="3" fill={INK} fillOpacity="0.65" />
+      <rect x="350" y="228" width="40" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+
+      <Sparkle x={366} y={140} r={8} />
+      <Sparkle x={112} y={196} r={5} opacity={0.25} />
+      <Sparkle x={392} y={290} r={5} opacity={0.25} />
     </svg>
   );
 }
 
-/** The four steps as one quiet pipeline: on the phone, masked and flagged, assessed by the
- * model, then guidance. Sits above the step cards. */
-export function FlowScene({ className = "" }: Props) {
-  const nodes = [48, 180, 312, 444];
+/** One of the four "how it works" steps, drawn as a tile so the four line up with the step
+ * cards beneath them. */
+export function StepIcon({ n, className = "" }: Props & { n: 1 | 2 | 3 | 4 }) {
+  const id = `st${n}`;
   return (
-    <svg
-      viewBox="0 0 492 116"
-      className={`${base} ${className}`}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {/* arrows between the nodes */}
-      <g className="stroke-navy/30" strokeWidth="2">
-        {[[78, 150], [210, 282], [342, 414]].map(([x1, x2]) => (
-          <g key={x1}>
-            <path d={`M${x1} 58h${x2 - x1 - 8}`} strokeDasharray="2 7" />
-            <path d={`M${x2 - 14} 52l6 6-6 6`} className="stroke-navy/55" />
+    <svg viewBox="0 0 160 120" className={`${svgBase} ${className}`} fill="none" aria-hidden>
+      <Defs id={id} />
+      <circle cx="80" cy="60" r="58" fill={`url(#${id}-glow)`} />
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="40" y="20" width="80" height="80" rx="24" fill={`url(#${id}-paper)`} />
+      </g>
+      <rect x="40.5" y="20.5" width="79" height="79" rx="23.5" stroke={NAVY} strokeOpacity="0.12" />
+
+      {n === 1 && (
+        <g>
+          {/* on the phone: text masked before it leaves */}
+          <rect x="62" y="34" width="36" height="54" rx="8" fill={INK} />
+          <rect x="65.5" y="38" width="29" height="46" rx="5" fill="#f4f6f9" />
+          <rect x="69" y="46" width="18" height="5" rx="2.5" fill={INK} fillOpacity="0.55" />
+          <g fill={NAVY}>
+            <circle cx="71" cy="59" r="2.4" />
+            <circle cx="77.5" cy="59" r="2.4" />
+            <circle cx="84" cy="59" r="2.4" />
           </g>
-        ))}
-      </g>
+          <rect x="69" y="67" width="14" height="5" rx="2.5" fill={INK} fillOpacity="0.3" />
+          <circle cx="100" cy="38" r="10" fill={`url(#${id}-navy)`} />
+          <path d="M96 38.5l2.6 2.6 5-5.2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+      )}
 
-      {nodes.map((cx) => (
-        <rect
-          key={cx}
-          x={cx - 28}
-          y={30}
-          width="56"
-          height="56"
-          rx="15"
-          className="fill-navy/[0.04] stroke-navy"
-          strokeWidth="2.3"
-        />
-      ))}
+      {n === 2 && (
+        <g>
+          {/* only the flagged message is sent */}
+          <rect x="56" y="36" width="48" height="11" rx="5.5" fill={INK} fillOpacity="0.12" />
+          <rect x="56" y="54" width="48" height="12" rx="6" fill={PERHATIAN} fillOpacity="0.16" stroke={PERHATIAN} strokeWidth="1.6" />
+          <rect x="62" y="58" width="22" height="4" rx="2" fill={PERHATIAN} />
+          <rect x="56" y="73" width="48" height="11" rx="5.5" fill={INK} fillOpacity="0.12" />
+          <path d="M108 50v20" stroke={PERHATIAN} strokeWidth="2" strokeLinecap="round" />
+          <path d="M108 51h10l-3 4 3 4h-10" fill={PERHATIAN} />
+        </g>
+      )}
 
-      {/* 1. on the phone */}
-      <g className="stroke-navy" strokeWidth="2.1">
-        <rect x={38} y={42} width="20" height="32" rx="4" className="fill-paper" />
-        <path d="M44 48h8" strokeWidth="1.6" />
-      </g>
+      {n === 3 && (
+        <g>
+          {/* assessed as a pattern across messages */}
+          <path d="M54 76l14-12 14 6 16-20" stroke={NAVY} strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <g fill={NAVY} fillOpacity="0.45">
+            <circle cx="54" cy="76" r="3.4" />
+            <circle cx="68" cy="64" r="3.4" />
+            <circle cx="82" cy="70" r="3.4" />
+          </g>
+          <path d="M98 34l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" fill={`url(#${id}-navy)`} />
+          <g>
+            <rect x="56" y="86" width="10" height="5" rx="2.5" fill={AMAN} />
+            <rect x="69" y="86" width="10" height="5" rx="2.5" fill={PERHATIAN} />
+            <rect x="82" y="86" width="10" height="5" rx="2.5" fill={WASPADA} />
+            <rect x="95" y="86" width="10" height="5" rx="2.5" fill={MENDESAK} fillOpacity="0.3" />
+          </g>
+        </g>
+      )}
 
-      {/* 2. masked and flagged */}
-      <g className="fill-navy/70" stroke="none">
-        {[170, 180, 190].map((x) => (
-          <circle key={x} cx={x} cy="58" r="3.4" />
-        ))}
-      </g>
-
-      {/* 3. assessed by the model */}
-      <path
-        d="M312 42l4.5 11.5 11.5 4.5-11.5 4.5-4.5 11.5-4.5-11.5-11.5-4.5 11.5-4.5z"
-        className="fill-navy/15 stroke-navy"
-        strokeWidth="2"
-      />
-
-      {/* 4. guidance */}
-      <g>
-        <path d="M430 46h28a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4h-16l-8 6v-6a4 4 0 0 1-4-20z" className="fill-navy/[0.06] stroke-navy" strokeWidth="2" />
-        <path d="M444 54c-2.6-3.4-7.6-1.6-7.6 2.6 0 3.4 5 6 7.6 8.4 2.6-2.4 7.6-5 7.6-8.4 0-4.2-5-6-7.6-2.6z" className="fill-navy/70" stroke="none" />
-      </g>
+      {n === 4 && (
+        <g>
+          {/* guidance: a short nudge for the child, starters for the parent */}
+          <path d="M52 40h30a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H64l-8 6v-6h-4a6 6 0 0 1-6-6v-8a6 6 0 0 1 6-6z" fill={AMAN} fillOpacity="0.14" />
+          <rect x="54" y="47" width="26" height="4.5" rx="2.25" fill={AMAN} />
+          <g filter={`url(#${id}-shadow-sm)`}>
+            <rect x="70" y="56" width="42" height="34" rx="9" fill="#fff" />
+          </g>
+          <rect x="76" y="63" width="22" height="4.5" rx="2.25" fill={NAVY} />
+          <rect x="76" y="72" width="30" height="4" rx="2" fill={INK} fillOpacity="0.2" />
+          <rect x="76" y="80" width="24" height="4" rx="2" fill={INK} fillOpacity="0.2" />
+          <path d="M106 52c-3-2.6-6-4.5-6-7.2 0-2 1.5-3.3 3.2-3.3 1.2 0 2.3.7 2.8 1.6.5-.9 1.6-1.6 2.8-1.6 1.7 0 3.2 1.3 3.2 3.3 0 2.7-3 4.6-6 7.2z" fill={NAVY} />
+        </g>
+      )}
     </svg>
   );
 }
 
-/** How Meta's models reach the phone: a large teacher model distils into a small student
- * that runs on-device. The lineage, not literal hardware. */
-export function ModelsScene({ className = "" }: Props) {
+/** A school beside its anonymous class overview: counts on the four-level scale behind a
+ * shield, and a group of identical figures inside a dashed boundary. No single child. */
+export function SchoolScene({ className = "" }: Props) {
+  const id = "ss";
   return (
-    <svg
-      viewBox="0 0 420 240"
-      className={`${base} ${className}`}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {/* teacher: a large node with a spark (Muse Spark) */}
+    <svg viewBox="0 0 460 340" className={`${svgBase} ${className}`} fill="none" aria-hidden>
+      <Defs id={id} />
+      <linearGradient id={`${id}-wall`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" />
+        <stop offset="1" stopColor="#e7edf4" />
+      </linearGradient>
+      <linearGradient id={`${id}-glass`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#dbe6f3" />
+        <stop offset="1" stopColor="#c3d3e7" />
+      </linearGradient>
+      <circle cx="170" cy="190" r="160" fill={`url(#${id}-glow)`} />
+      <circle cx="350" cy="120" r="110" fill={`url(#${id}-teal)`} />
+
+      {/* ground */}
+      <ellipse cx="160" cy="288" rx="150" ry="14" fill={INK} fillOpacity="0.06" />
+
+      {/* trees */}
       <g>
-        <rect x="34" y="64" width="112" height="112" rx="20" className="fill-navy/[0.06] stroke-navy" strokeWidth="2.4" />
-        {/* chip pins */}
-        <g className="stroke-navy/40" strokeWidth="2">
-          <path d="M56 64V50M90 64V50M124 64V50M56 176v14M90 176v14M124 176v14" />
+        <rect x="35" y="244" width="5" height="40" rx="2" fill={NAVY} fillOpacity="0.35" />
+        <circle cx="37.5" cy="236" r="22" fill={AMAN} fillOpacity="0.16" />
+        <circle cx="30" cy="242" r="14" fill={AMAN} fillOpacity="0.14" />
+        <rect x="281" y="250" width="5" height="34" rx="2" fill={NAVY} fillOpacity="0.35" />
+        <circle cx="283.5" cy="244" r="18" fill={AMAN} fillOpacity="0.16" />
+      </g>
+
+      {/* building */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="66" y="160" width="190" height="124" rx="6" fill={`url(#${id}-wall)`} />
+        <path d="M52 166 161 104l109 62z" fill={`url(#${id}-navy)`} />
+      </g>
+      <rect x="66.5" y="160.5" width="189" height="123" rx="5.5" stroke={NAVY} strokeOpacity="0.15" />
+      <circle cx="161" cy="142" r="11" fill="#fff" fillOpacity="0.9" />
+      <path d="M161 136v6l4 2.5" stroke={NAVY} strokeWidth="1.8" strokeLinecap="round" />
+      {/* windows */}
+      {[84, 120, 180, 216].map((x) => (
+        <g key={x}>
+          <rect x={x} y="184" width="24" height="26" rx="3" fill={`url(#${id}-glass)`} />
+          <path d={`M${x + 12} 184v26M${x} 197h24`} stroke="#fff" strokeOpacity="0.8" strokeWidth="1.4" />
+          <rect x={x} y="226" width="24" height="26" rx="3" fill={`url(#${id}-glass)`} />
+          <path d={`M${x + 12} 226v26M${x} 239h24`} stroke="#fff" strokeOpacity="0.8" strokeWidth="1.4" />
         </g>
-        {/* spark */}
-        <path
-          d="M90 92l7 19 19 7-19 7-7 19-7-19-19-7 19-7z"
-          className="fill-navy/15 stroke-navy"
-          strokeWidth="2"
-        />
+      ))}
+      {/* door */}
+      <rect x="146" y="234" width="30" height="50" rx="3" fill={`url(#${id}-navy)`} />
+      <circle cx="170" cy="260" r="1.8" fill="#fff" />
+      <rect x="138" y="282" width="46" height="5" rx="2" fill={NAVY} fillOpacity="0.2" />
+      {/* flag */}
+      <path d="M161 104V66" stroke={NAVY} strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M161 68h26l-6 7 6 7h-26z" fill={`url(#${id}-navy)`} />
+
+      {/* link from the school to its overview */}
+      <path d="M262 174c22-6 28-28 40-40" stroke={NAVY} strokeOpacity="0.3" strokeWidth="1.6" strokeDasharray="3 7" strokeLinecap="round" />
+
+      {/* overview card */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="290" y="40" width="152" height="122" rx="16" fill="#fff" />
       </g>
+      <rect x="306" y="56" width="54" height="7" rx="3.5" fill={INK} fillOpacity="0.7" />
+      <rect x="306" y="69" width="34" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+      <path d="M306 146h120" stroke={LINE} strokeWidth="1.5" />
+      <rect x="310" y="114" width="20" height="32" rx="4" fill={AMAN} />
+      <rect x="338" y="98" width="20" height="48" rx="4" fill={PERHATIAN} />
+      <rect x="366" y="122" width="20" height="24" rx="4" fill={WASPADA} />
+      <rect x="394" y="130" width="20" height="16" rx="4" fill={MENDESAK} />
+      <ShieldBadge id={id} x={430} y={46} s={0.78} />
 
-      {/* teacher -> student */}
-      <path d="M150 120h44" className="stroke-navy/35" strokeWidth="2.2" strokeDasharray="2 7" />
-      <path d="M190 114l8 6-8 6" className="stroke-navy/60" strokeWidth="2.2" />
-
-      {/* student: a smaller distilled node (a small network) */}
-      <g>
-        <rect x="204" y="86" width="72" height="68" rx="14" className="fill-navy/[0.04] stroke-navy" strokeWidth="2.2" />
-        <g className="fill-navy stroke-navy" strokeWidth="1.8">
-          <path d="M224 104l20 16M244 120l12-12M224 104v24M244 120v16" className="stroke-navy/50 fill-none" />
-          <circle cx="224" cy="104" r="4" />
-          <circle cx="256" cy="108" r="4" />
-          <circle cx="244" cy="120" r="4" />
-          <circle cx="224" cy="128" r="4" />
-          <circle cx="244" cy="136" r="4" />
+      {/* the anonymous group */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="290" y="190" width="152" height="62" rx="31" fill="#fff" />
+      </g>
+      <rect x="298" y="198" width="136" height="46" rx="23" stroke={NAVY} strokeOpacity="0.3" strokeWidth="1.5" strokeDasharray="4 6" />
+      {[318, 344, 370, 396].map((cx) => (
+        <g key={cx}>
+          <circle cx={cx} cy="214" r="6" fill={NAVY} fillOpacity="0.75" />
+          <path d={`M${cx - 9} 233c0-6.5 4-10 9-10s9 3.5 9 10z`} fill={NAVY} fillOpacity="0.3" />
         </g>
-      </g>
+      ))}
+      <circle cx="420" cy="221" r="8" fill={NAVY} fillOpacity="0.1" />
+      <path d="M416 221h8M420 217v8" stroke={NAVY} strokeWidth="1.8" strokeLinecap="round" />
 
-      {/* student -> phone */}
-      <path d="M280 120h32" className="stroke-navy/35" strokeWidth="2.2" strokeDasharray="2 7" />
-      <path d="M308 114l8 6-8 6" className="stroke-navy/60" strokeWidth="2.2" />
-
-      {/* on-device: the distilled student runs on the phone */}
-      <g>
-        <rect x="330" y="68" width="60" height="104" rx="13" className="fill-paper stroke-navy" strokeWidth="2.4" />
-        <path d="M352 80h16" className="stroke-navy/35" strokeWidth="2.4" />
-        <path
-          d="M360 104l4.5 12 12 4.5-12 4.5-4.5 12-4.5-12-12-4.5 12-4.5z"
-          className="fill-navy/15 stroke-navy"
-          strokeWidth="1.8"
-        />
-      </g>
+      <Sparkle x={274} y={60} r={7} />
+      <Sparkle x={448} y={186} r={5} opacity={0.25} />
     </svg>
+  );
+}
+
+/** Meta's models in dcAI: a masked message from the phone is screened by the distilled Llama
+ * student, flagged ones are assessed by Muse Spark, and Muse Spark as the teacher labels the
+ * data the student learns from (the loop above). Both models run on the server. */
+export function ModelsScene({ className = "" }: Props) {
+  const id = "ms";
+  return (
+    <svg viewBox="0 0 460 300" className={`${svgBase} ${className}`} fill="none" aria-hidden>
+      <Defs id={id} />
+      <radialGradient id={`${id}-spark`}>
+        <stop offset="0" stopColor="#ffffff" stopOpacity="0.55" />
+        <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+      </radialGradient>
+      <circle cx="300" cy="170" r="160" fill={`url(#${id}-glow)`} />
+      <circle cx="90" cy="200" r="100" fill={`url(#${id}-teal)`} />
+      <ellipse cx="250" cy="268" rx="200" ry="12" fill={INK} fillOpacity="0.05" />
+
+      {/* distillation loop: the teacher labels data the student learns from */}
+      <path d="M368 96C368 26 206 26 206 100" stroke={NAVY} strokeOpacity="0.35" strokeWidth="1.8" strokeDasharray="3 7" strokeLinecap="round" />
+      <path d="M200 92l6 9 6-9" stroke={NAVY} strokeOpacity="0.6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="262" y="34" width="52" height="30" rx="9" fill="#fff" />
+      </g>
+      <rect x="270" y="42" width="16" height="4" rx="2" fill={NAVY} fillOpacity="0.6" />
+      <rect x="270" y="50" width="22" height="4" rx="2" fill={NAVY} fillOpacity="0.25" />
+      <circle cx="302" cy="49" r="6" fill={AMAN} fillOpacity="0.15" />
+      <path d="M299.4 49l1.8 1.8 3.4-3.6" stroke={AMAN} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* phone: a masked message leaves */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="22" y="104" width="70" height="128" rx="16" fill={INK} />
+        <rect x="27" y="109" width="60" height="118" rx="12" fill="#f4f6f9" />
+      </g>
+      <rect x="34" y="128" width="40" height="13" rx="6.5" fill="#fff" stroke={LINE} />
+      <rect x="44" y="148" width="36" height="13" rx="6.5" fill={NAVY} />
+      <g fill={NAVY} fillOpacity="0.8">
+        <circle cx="44" cy="177" r="2.6" />
+        <circle cx="51" cy="177" r="2.6" />
+        <circle cx="58" cy="177" r="2.6" />
+      </g>
+      <rect x="34" y="169" width="34" height="16" rx="8" stroke={NAVY} strokeOpacity="0.3" strokeDasharray="2 3" />
+
+      {/* phone -> student */}
+      <path d="M100 168h44" stroke={NAVY} strokeOpacity="0.35" strokeWidth="1.8" strokeDasharray="3 7" strokeLinecap="round" />
+      <path d="M140 162l7 6-7 6" stroke={NAVY} strokeOpacity="0.6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* student: Llama 3.1 8B, the screener */}
+      <g stroke={NAVY} strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round">
+        <path d="M178 112v-8M206 112v-8M234 112v-8M178 224v8M206 224v8M234 224v8" />
+      </g>
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="158" y="112" width="96" height="112" rx="22" fill={`url(#${id}-paper)`} />
+      </g>
+      <rect x="158.5" y="112.5" width="95" height="111" rx="21.5" stroke={NAVY} strokeOpacity="0.18" />
+      <g stroke={NAVY} strokeOpacity="0.4" strokeWidth="1.6">
+        <path d="M184 146l22 22 22-22M184 190l22-22 22 22M206 146v44" />
+      </g>
+      <g fill={NAVY}>
+        <circle cx="184" cy="146" r="5" />
+        <circle cx="228" cy="146" r="5" />
+        <circle cx="206" cy="168" r="6.5" />
+        <circle cx="184" cy="190" r="5" />
+        <circle cx="228" cy="190" r="5" />
+      </g>
+      <text x="206" y="252" textAnchor="middle" fontSize="12.5" fontWeight="700" fill={INK}>Llama 3.1 8B</text>
+
+      {/* student -> teacher, for flagged messages */}
+      <path d="M262 168h30" stroke={NAVY} strokeOpacity="0.35" strokeWidth="1.8" strokeDasharray="3 7" strokeLinecap="round" />
+      <path d="M288 162l7 6-7 6" stroke={NAVY} strokeOpacity="0.6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* teacher: Muse Spark */}
+      <g stroke={NAVY} strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round">
+        <path d="M334 100v-8M368 100v-8M402 100v-8M334 236v8M368 236v8M402 236v8" />
+      </g>
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="302" y="100" width="132" height="136" rx="28" fill={`url(#${id}-navy)`} />
+      </g>
+      <circle cx="368" cy="168" r="52" fill={`url(#${id}-spark)`} />
+      <path d="M368 130l9.5 28.5 28.5 9.5-28.5 9.5-9.5 28.5-9.5-28.5-28.5-9.5 28.5-9.5z" fill="#fff" />
+      <path d="M404 120l3 7.5 7.5 3-7.5 3-3 7.5-3-7.5-7.5-3 7.5-3z" fill="#fff" fillOpacity="0.6" />
+      <text x="368" y="264" textAnchor="middle" fontSize="12.5" fontWeight="700" fill={INK}>Muse Spark</text>
+
+      <Sparkle x={128} y={90} r={6} />
+      <Sparkle x={446} y={210} r={5} opacity={0.25} />
+    </svg>
+  );
+}
+
+/** The flow above the four step cards: a dashed track with one tile per step, laid out on
+ * the same grid as the cards so each tile sits over its card. */
+export function StepsFlow() {
+  return (
+    <div aria-hidden className="relative mt-10 hidden lg:block">
+      <div className="absolute top-1/2 right-[12.5%] left-[12.5%] -translate-y-1/2 border-t-2 border-dashed border-navy/15" />
+      <div className="relative grid grid-cols-4 gap-5">
+        {([1, 2, 3, 4] as const).map((n) => (
+          <StepIcon key={n} n={n} className="mx-auto max-w-[11rem]" />
+        ))}
+      </div>
+    </div>
   );
 }

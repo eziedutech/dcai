@@ -170,12 +170,13 @@ export function FactsBand() {
           </svg>
         </Link>
       </div>
-      <ul className="mt-5 grid gap-6 sm:grid-cols-3">
+      <ul className="mt-5 grid gap-5 sm:grid-cols-3">
         {STATS.map(({ n, href }) => (
-          <li key={n} className="border-t border-ink/15 pt-4">
-            <p className="text-[2.4rem] font-bold leading-none tracking-[-0.03em] text-navy tabular">{t(`home.stats.${n}.v`)}</p>
-            <p className="mt-3 text-[0.95rem] leading-snug text-slate">{t(`home.stats.${n}.b`)}</p>
-            <a href={href} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[0.78rem] font-semibold text-slate/80 underline-offset-4 hover:text-navy hover:underline">
+          <li key={n} className="glass flex flex-col rounded-3xl p-6 sm:p-7">
+            <span aria-hidden className="block h-1 w-10 rounded-full bg-navy/70" />
+            <p className="mt-5 text-[2.4rem] font-bold leading-none tracking-[-0.03em] text-navy tabular">{t(`home.stats.${n}.v`)}</p>
+            <p className="mt-3 flex-1 text-[0.95rem] leading-snug text-ink/75">{t(`home.stats.${n}.b`)}</p>
+            <a href={href} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block border-t border-ink/[0.08] pt-4 text-[0.78rem] font-semibold text-slate underline-offset-4 hover:text-navy hover:underline">
               {t(`home.stats.${n}.src`)}
             </a>
           </li>
