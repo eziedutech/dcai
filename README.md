@@ -103,6 +103,21 @@ A school sees how its classes are doing as a group, never a child. Each child ta
 
 A school never sees a child's name or nickname, which child is at which level, insight, conversations, events, images, sites or devices. The class list shows how many children joined. Tests: `code/backpy/tests/test_school.py` and `tests/test_school_aggregate.py`.
 
+### Parent and school, for one child
+
+The parent and the school are separate roles with separate logins, and they never share a view. The school is always downstream of the parent.
+
+| | Parent | School |
+| --- | --- | --- |
+| Login | `/masuk` to `/dasbor` | `/sekolah/masuk` to `/sekolah` |
+| Relationship to the child | guardian: installs dcAI, gives consent, holds the PIN | none: never linked to a child |
+| Sees about the child | the full dashboard: level, insight, events, time online, devices | nothing: only anonymous counts per level for a whole class |
+| Can act on the child | yes: consent per scope, time rules, leave a class, delete all data | no: cannot add, see or act on any child |
+| How the child reaches a class | the parent grants the school scope and enters the class join code | receives the child only as one number in the class aggregate |
+| Turning it off | withdraw the scope or leave the class at any time | cannot keep a child; the count drops at once when the parent withdraws |
+
+So for a single child: the parent controls everything and sees everything; the school sees nothing about that child and only ever counts them, anonymously and with the parent's consent, inside a class total. A child reaches a class only through the parent's code, and the parent can remove the child from the school at any moment. Nothing about one child flows from the school to the parent, or from the parent's dashboard to the school.
+
 ## How to test
 
 ```bash

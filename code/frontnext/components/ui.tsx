@@ -87,6 +87,7 @@ const PAGE_NAV = [
   ["/cara-kerja", "nav.howPage"],
   ["/fakta", "nav.facts"],
   ["/privasi", "nav.privacy"],
+  ["/next", "nav.next"],
 ] as const;
 
 /** Which homepage section is on screen, for the menu. */
@@ -178,6 +179,7 @@ export function SiteFooter() {
         ["/#cara-kerja", t("nav.howHome")],
         ["/cara-kerja", t("nav.howPage")],
         ["/fakta", t("nav.facts")],
+        ["/next", t("foot.next")],
         ["/#tentang", t("foot.download")],
       ],
     },

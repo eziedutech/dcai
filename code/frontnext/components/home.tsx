@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
-import { ModelsScene, ProtectScene, SchoolScene, StepsFlow } from "./illustrations";
+import { DevicesScene, ModelsScene, ProtectScene, SchoolScene, StepsFlow } from "./illustrations";
 import { Parallax } from "./motion";
 import { APK_URL, APK_VERSION } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
@@ -248,6 +248,39 @@ function Models() {
   );
 }
 
+function NextPlan() {
+  const { t } = useT();
+  const cards = [
+    ["home.next.win", "home.next.winB"],
+    ["home.next.apple", "home.next.appleB"],
+  ] as const;
+  return (
+    <section id="rencana" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="next-h">
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+        <div>
+          <p className="eyebrow">{t("home.next.eyebrow")}</p>
+          <h2 id="next-h" className="mt-3 max-w-[20ch] text-[2rem] font-bold leading-tight tracking-[-0.02em]">
+            {t("home.next.title")}
+          </h2>
+          <p className="mt-4 max-w-[54ch] text-slate">{t("home.next.lead")}</p>
+          <dl className="mt-6 grid gap-4 sm:grid-cols-2">
+            {cards.map(([tt, bb]) => (
+              <div key={tt} className="glass rounded-2xl p-5">
+                <dt className="font-bold">{t(tt)}</dt>
+                <dd className="mt-2 text-[0.95rem] text-ink/75">{t(bb)}</dd>
+              </div>
+            ))}
+          </dl>
+          <Link href="/next" className="mt-7 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
+            {t("home.next.cta")}
+          </Link>
+        </div>
+        <DevicesScene className="mx-auto max-w-md lg:max-w-none" />
+      </div>
+    </section>
+  );
+}
+
 /** A platform's logo, the same size for every card. */
 function Mark({ src }: { src: string }) {
   // eslint-disable-next-line @next/next/no-img-element
@@ -405,6 +438,8 @@ export function HomePage() {
           <Schools />
           <Models />
         </section>
+
+        <NextPlan />
 
         <About />
       </main>

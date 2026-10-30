@@ -396,6 +396,65 @@ export function ModelsScene({ className = "" }: Props) {
   );
 }
 
+/** The next platforms: the same dcAI engine across a desktop, a laptop and a tablet, held
+ * together by one shield and one backend (the dashed arc). Devices, not a literal product. */
+export function DevicesScene({ className = "" }: Props) {
+  const id = "dv";
+  return (
+    <svg viewBox="0 0 460 300" className={`${svgBase} ${className}`} fill="none" aria-hidden>
+      <Defs id={id} />
+      <circle cx="230" cy="150" r="170" fill={`url(#${id}-glow)`} />
+      <circle cx="360" cy="210" r="110" fill={`url(#${id}-teal)`} />
+
+      {/* one backend ties them together */}
+      <path d="M96 150C150 70 310 70 372 150" stroke={NAVY} strokeOpacity="0.28" strokeWidth="1.6" strokeDasharray="3 8" strokeLinecap="round" />
+
+      <ellipse cx="232" cy="256" rx="180" ry="13" fill={INK} fillOpacity="0.05" />
+
+      {/* desktop monitor (Windows) */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="150" y="70" width="164" height="110" rx="12" fill={`url(#${id}-paper)`} />
+      </g>
+      <rect x="150.5" y="70.5" width="163" height="109" rx="11.5" stroke={NAVY} strokeOpacity="0.16" />
+      <rect x="164" y="84" width="60" height="7" rx="3.5" fill={INK} fillOpacity="0.5" />
+      <rect x="164" y="100" width="136" height="6" rx="3" fill={INK} fillOpacity="0.14" />
+      <rect x="164" y="114" width="118" height="6" rx="3" fill={INK} fillOpacity="0.14" />
+      <rect x="164" y="128" width="92" height="6" rx="3" fill={INK} fillOpacity="0.14" />
+      <rect x="210" y="180" width="44" height="26" fill={INK} fillOpacity="0.14" />
+      <rect x="182" y="206" width="100" height="8" rx="4" fill={NAVY} fillOpacity="0.2" />
+
+      {/* laptop (macOS) */}
+      <g filter={`url(#${id}-shadow-sm)`}>
+        <rect x="320" y="150" width="104" height="70" rx="9" fill={`url(#${id}-paper)`} />
+      </g>
+      <rect x="320.5" y="150.5" width="103" height="69" rx="8.5" stroke={NAVY} strokeOpacity="0.16" />
+      <rect x="332" y="162" width="34" height="5" rx="2.5" fill={INK} fillOpacity="0.5" />
+      <rect x="332" y="174" width="80" height="4.5" rx="2.25" fill={INK} fillOpacity="0.14" />
+      <rect x="332" y="185" width="64" height="4.5" rx="2.25" fill={INK} fillOpacity="0.14" />
+      <rect x="332" y="196" width="72" height="4.5" rx="2.25" fill={INK} fillOpacity="0.14" />
+      <path d="M312 230h120l-6-10h-108z" fill={`url(#${id}-paper)`} stroke={NAVY} strokeOpacity="0.16" />
+
+      {/* tablet / phone (iOS) */}
+      <g filter={`url(#${id}-shadow)`}>
+        <rect x="40" y="128" width="86" height="118" rx="16" fill={INK} />
+        <rect x="45" y="133" width="76" height="108" rx="12" fill="#f4f6f9" />
+      </g>
+      <rect x="74" y="140" width="18" height="5" rx="2.5" fill={INK} />
+      <rect x="55" y="156" width="40" height="6" rx="3" fill={INK} fillOpacity="0.5" />
+      <rect x="55" y="170" width="56" height="5" rx="2.5" fill={INK} fillOpacity="0.14" />
+      <rect x="55" y="182" width="44" height="5" rx="2.5" fill={INK} fillOpacity="0.14" />
+      <rect x="55" y="205" width="56" height="20" rx="10" fill={NAVY} fillOpacity="0.14" />
+
+      {/* one shield over all three */}
+      <ShieldBadge id={id} x={232} y={150} s={1.25} />
+
+      <Sparkle x={126} y={96} r={7} />
+      <Sparkle x={398} y={120} r={5} opacity={0.25} />
+      <Sparkle x={300} y={250} r={5} opacity={0.25} />
+    </svg>
+  );
+}
+
 /** The flow above the four step cards: a dashed track with one tile per step, laid out on
  * the same grid as the cards so each tile sits over its card. */
 export function StepsFlow() {

@@ -111,6 +111,24 @@ child. It is opt-in per child, by the parent.
 What a school never sees: a child's name or nickname, which child is at which level, insight,
 conversations, events, images, sites or devices. The class list shows how many children joined.
 
+### Parent and school, for one child
+
+Two separate roles, two separate logins, no shared view. The school is always downstream of the
+parent.
+
+- **The parent is the guardian.** They install dcAI, give consent per scope, hold the PIN, and
+  see the full dashboard (level, insight, events, time online, devices) at `/dasbor`. Without the
+  parent there is no dcAI for that child.
+- **The school has no link to the child.** A teacher signs in at `/sekolah` and sees only
+  anonymous counts per level for a whole class. They cannot add, see or act on any one child.
+- **The child reaches a class only through the parent**: the parent grants the school scope and
+  enters the class join code. The school then counts that child as one number in the class total,
+  under k-anonymity.
+- **The parent can undo it at any time**: withdraw the scope or leave the class, and the child
+  drops from the school's count at once. Deleting the child removes the membership too.
+- **Nothing about one child flows between the two**: not from the school to the parent, not from
+  the parent's dashboard to the school. The school's only output is a class-level aggregate.
+
 Not built yet for schools: inviting more staff to the same school, a school-wide view across
 classes, and per-case referral controlled by the parent.
 
