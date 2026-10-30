@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import dev.eziedutech.dcai.guardian.MainActivity
 import dev.eziedutech.dcai.guardian.R
@@ -19,7 +21,9 @@ import dev.eziedutech.dcai.guardian.sites.SiteReviewActivity
  */
 object Notifications {
     const val STATUS_CHANNEL = "dcai_status"
-    const val NUDGE_CHANNEL = "dcai_nudge"
+    // v2: a gentle chime and a soft vibration. A channel's sound is locked once created, so
+    // a new id is needed for the change to take effect on phones that already had the old one.
+    const val NUDGE_CHANNEL = "dcai_nudge2"
     const val STATUS_ID = 1
     private var nextNudgeId = 1000
     private const val SITE_ID_BASE = 5000
@@ -32,9 +36,19 @@ object Notifications {
                 setShowBadge(false)
             },
         )
+        manager.deleteNotificationChannel("dcai_nudge") // replaced by the v2 channel below
         manager.createNotificationChannel(
             NotificationChannel(NUDGE_CHANNEL, context.getString(R.string.channel_nudge), NotificationManager.IMPORTANCE_HIGH).apply {
                 description = context.getString(R.string.channel_nudge_desc)
+                // Noticeable but gentle: a soft double-tap vibration and the default
+                // notification chime, not an alarm; dcAI guides, it does not frighten.
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 120, 80, 120)
+                val attrs = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+                setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), attrs)
             },
         )
     }
