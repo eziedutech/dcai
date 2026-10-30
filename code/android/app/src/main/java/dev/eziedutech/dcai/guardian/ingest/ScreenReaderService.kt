@@ -40,6 +40,12 @@ class ScreenReaderService : AccessibilityService() {
     private val screen = ScreenText()
     private var lastShot = 0L
 
+    // Notification text (title and the sensitive-image nudge) in the dcAI app language, not
+    // the phone's, like GuardianService and SiteGuardVpn.
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(dev.eziedutech.dcai.guardian.ui.localizedService(newBase))
+    }
+
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         event ?: return
         val store = ServiceLocator.store(this)
