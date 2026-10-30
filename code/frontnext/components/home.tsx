@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import { CardDemo } from "./card-demo";
 import { FactsBand, LiveDemo } from "./demo";
+import { ModelsScene, SchoolScene } from "./illustrations";
 import { Parallax } from "./motion";
 import { APK_URL, APK_VERSION } from "@/lib/download";
 import { SiteFooter, SiteHeader } from "./ui";
@@ -175,22 +176,29 @@ function Schools() {
   const { t } = useT();
   return (
     <div className="mt-24" aria-labelledby="school-h">
-      <p className="eyebrow">{t("home.school.eyebrow")}</p>
-      <h3 id="school-h" className={`mt-3 max-w-[30ch] ${sub}`}>
-        {t("home.school.title")}
-      </h3>
-      <p className="mt-4 max-w-[60ch] text-slate">{t("home.school.lead")}</p>
-      <ul className="mt-6 space-y-2.5">
-        {([1, 2, 3] as const).map((i) => (
-          <li key={i} className="flex gap-2.5 font-medium">
-            <Check />
-            {t(`home.school.i${i}`)}
-          </li>
-        ))}
-      </ul>
-      <Link href="/sekolah" className="mt-7 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
-        {t("home.school.cta")}
-      </Link>
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+        <div>
+          <p className="eyebrow">{t("home.school.eyebrow")}</p>
+          <h3 id="school-h" className={`mt-3 max-w-[30ch] ${sub}`}>
+            {t("home.school.title")}
+          </h3>
+          <p className="mt-4 max-w-[56ch] text-slate">{t("home.school.lead")}</p>
+          <ul className="mt-6 space-y-2.5">
+            {([1, 2, 3] as const).map((i) => (
+              <li key={i} className="flex gap-2.5 font-medium">
+                <Check />
+                {t(`home.school.i${i}`)}
+              </li>
+            ))}
+          </ul>
+          <Link href="/sekolah" className="mt-7 inline-flex rounded-xl bg-navy px-5 py-3 font-semibold text-paper hover:bg-ink">
+            {t("home.school.cta")}
+          </Link>
+        </div>
+        <div className="glass rounded-3xl p-6 sm:p-9">
+          <SchoolScene />
+        </div>
+      </div>
     </div>
   );
 }
@@ -204,9 +212,16 @@ function Models() {
   ] as const;
   return (
     <div className="mt-24">
-      <h3 className={sub}>{t("home.meta.title")}</h3>
-      <p className="mt-4 max-w-[62ch] text-slate">{t("home.meta.lead")}</p>
-      <dl className="mt-8 grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+        <div>
+          <h3 className={sub}>{t("home.meta.title")}</h3>
+          <p className="mt-4 max-w-[58ch] text-slate">{t("home.meta.lead")}</p>
+        </div>
+        <div className="glass rounded-3xl p-6 sm:p-9">
+          <ModelsScene />
+        </div>
+      </div>
+      <dl className="mt-10 grid gap-5 sm:grid-cols-3">
         {rows.map(([name, key]) => (
           <div key={name} className="border-t border-ink/15 pt-4">
             <dt className="font-bold">{name}</dt>
