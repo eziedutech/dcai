@@ -138,6 +138,7 @@ object Notifications {
         dev.eziedutech.dcai.guardian.screen.BlockReason.DAILY -> R.string.timeout_daily_body
         dev.eziedutech.dcai.guardian.screen.BlockReason.CATEGORY -> R.string.timeout_category_body
         dev.eziedutech.dcai.guardian.screen.BlockReason.SESSION -> R.string.timeout_session_body
+        dev.eziedutech.dcai.guardian.screen.BlockReason.APP_NOT_ALLOWED -> R.string.timeout_app_body
     }
 
     private fun post(context: Context, id: Int, title: String, text: String) {

@@ -139,6 +139,7 @@ private fun TimeOutScreen(reason: BlockReason?, category: String?, until: Long, 
         BlockReason.DAILY -> Art.CLOCK to stringResource(R.string.timeout_daily)
         BlockReason.CATEGORY -> Art.CLOCK to stringResource(R.string.timeout_category, categoryLabel ?: "")
         BlockReason.SESSION -> Art.BREAK to stringResource(R.string.timeout_session)
+        BlockReason.APP_NOT_ALLOWED -> Art.CLOCK to stringResource(R.string.timeout_app)
         null -> Art.CLOCK to stringResource(R.string.time_request_title)
     }
 

@@ -114,6 +114,7 @@ export type ScreenPolicy = {
   wind_down_minutes: number;
   session: { enabled: boolean; nudge_minutes: number; limit_minutes: number; break_minutes: number };
   always_allowed: string[];
+  focus_mode: boolean;
 };
 export type PolicyOut = { policy: ScreenPolicy; is_default: boolean };
 export type Suggestion = { policy: ScreenPolicy; rationale: string; source: "model" | "template" };

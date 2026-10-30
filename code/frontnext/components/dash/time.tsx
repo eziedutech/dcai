@@ -581,6 +581,19 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
             placeholder="com.example.belajar"
           />
         </label>
+
+        <label className="flex items-start gap-2.5">
+          <input
+            type="checkbox"
+            className="mt-1 h-4 w-4 accent-[#1f3a5f]"
+            checked={p.focus_mode}
+            onChange={(e) => set({ focus_mode: e.target.checked })}
+          />
+          <span>
+            <span className="block font-bold">{t("time.focus")}</span>
+            <span className="mt-1 block text-sm text-slate">{t("time.focusHint")}</span>
+          </span>
+        </label>
       </fieldset>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">

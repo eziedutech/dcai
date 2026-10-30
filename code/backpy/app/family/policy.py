@@ -66,6 +66,9 @@ class ScreenPolicy(BaseModel):
     session: Session = Field(default_factory=Session)
     # Always open, also at bedtime and after a limit (study, maps, calls to parents).
     always_allowed: list[PackageName] = Field(default_factory=list, max_length=30)
+    # Focus mode: when on, only always_allowed apps (plus the phone's essentials) open; the
+    # rest show the break screen. A soft block on the phone, not a device lock.
+    focus_mode: bool = False
 
 
 def defaults_for_age(age_range: str) -> ScreenPolicy:

@@ -53,6 +53,21 @@ class TimeRulesTest {
     }
 
     @Test
+    fun focusModeBlocksAppsOutsideTheAllowedSet() {
+        val focus = policy.copy(focusMode = true)
+        val allowed = setOf("com.study")
+        val game = iv("com.game", AppCategory.GAME, wed, 1)
+        val study = iv("com.study", AppCategory.LAIN, wed, 1)
+        // Outside the list: the break screen, whatever the category or totals.
+        val blocked = TimeRules.decide(focus, wed, ms(wed), game, totals(), 0.0, 0, null, null, allowed)
+        assertTrue(blocked is Verdict.Block && blocked.reason == BlockReason.APP_NOT_ALLOWED)
+        // In the list: allowed (no other limit is hit).
+        assertEquals(Verdict.Allow, TimeRules.decide(focus, wed, ms(wed), study, totals(), 0.0, 0, null, null, allowed))
+        // Focus off: focus mode never blocks.
+        assertEquals(Verdict.Allow, TimeRules.decide(policy, wed, ms(wed), game, totals(), 0.0, 0, null, null, emptySet()))
+    }
+
+    @Test
     fun totalsAddUpPerCategoryAndCountBedtime() {
         val night = LocalDateTime.of(2026, 10, 28, 20, 50)
         val t = TimeRules.totals(listOf(iv("v", AppCategory.VIDEO, night, 20), iv("g", AppCategory.GAME, wed, 30)), policy, zone)

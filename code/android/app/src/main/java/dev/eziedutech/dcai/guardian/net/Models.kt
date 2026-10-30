@@ -61,6 +61,7 @@ data class ScreenPolicy(
     @SerialName("wind_down_minutes") val windDownMinutes: Int = 15,
     val session: SessionRule = SessionRule(),
     @SerialName("always_allowed") val alwaysAllowed: List<String> = emptyList(),
+    @SerialName("focus_mode") val focusMode: Boolean = false,
 )
 
 @Serializable

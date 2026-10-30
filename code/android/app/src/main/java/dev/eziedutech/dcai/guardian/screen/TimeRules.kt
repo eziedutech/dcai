@@ -26,7 +26,7 @@ data class DayTotals(
     val total: Int get() = minutes.values.sum()
 }
 
-enum class BlockReason { BEDTIME, DAILY, CATEGORY, SESSION }
+enum class BlockReason { BEDTIME, DAILY, CATEGORY, SESSION, APP_NOT_ALLOWED }
 
 sealed interface Verdict {
     data object Allow : Verdict
@@ -134,9 +134,15 @@ object TimeRules {
         bonus: Int,
         breakUntil: Long?,
         bedtimeExtendedUntil: Long? = null,
+        focusAllowed: Set<String> = emptySet(),
     ): Verdict {
         if (!policy.enabled || foreground == null) return Verdict.Allow
         val category = foreground.category
+        // Focus mode: anything outside the allowed set (and the phone's essentials, already in
+        // focusAllowed) gets the break screen, whatever its category or the day's totals.
+        if (policy.focusMode && foreground.pkg !in focusAllowed) {
+            return Verdict.Block(BlockReason.APP_NOT_ALLOWED, category)
+        }
         val extended = bedtimeExtendedUntil != null && nowMillis < bedtimeExtendedUntil
         if (inBedtime(policy, now) && !extended) return Verdict.Block(BlockReason.BEDTIME, null)
         if (breakUntil != null && nowMillis < breakUntil && category in SESSION_CATEGORIES) {

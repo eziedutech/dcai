@@ -42,6 +42,16 @@ class ScreenGuard(private val context: Context) {
 
     fun canShowOverScreen() = Settings.canDrawOverlays(context)
 
+    /** Apps that must open even in focus mode: dcAI, the launcher, the dialer, system UI and
+     * settings. Resolved on this phone so the child is never locked out of home or a call. */
+    private fun essentialApps(): Set<String> {
+        val pm = context.packageManager
+        fun resolve(intent: Intent) = runCatching { pm.resolveActivity(intent, 0)?.activityInfo?.packageName }.getOrNull()
+        val launcher = resolve(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
+        val dialer = resolve(Intent(Intent.ACTION_DIAL))
+        return setOfNotNull(context.packageName, launcher, dialer, "com.android.settings", "com.android.systemui")
+    }
+
     suspend fun tick() {
         val store = ServiceLocator.store(context)
         val config = store.config ?: return
@@ -75,7 +85,8 @@ class ScreenGuard(private val context: Context) {
         } ?: 0.0
 
         val extended = store.bedtimeExtendedUntil.takeIf { it > 0 }
-        when (val v = TimeRules.decide(policy, now, nowMs, fg, totals, session, bonus, breakUntil, extended)) {
+        val focusAllowed = if (policy.focusMode) allowed + essentialApps() else emptySet()
+        when (val v = TimeRules.decide(policy, now, nowMs, fg, totals, session, bonus, breakUntil, extended, focusAllowed)) {
             is Verdict.Block -> {
                 if (v.reason == BlockReason.SESSION && breakUntil == null) {
                     breakUntil = v.untilMillis

@@ -281,6 +281,8 @@
     <string name="timeout_category_body">Waktu untuk kategori ini sudah habis. Aplikasi lain masih bisa dipakai.</string>
     <string name="timeout_session">Istirahat sebentar</string>
     <string name="timeout_session_body">Sudah lama menonton tanpa jeda. Coba berdiri, minum, atau lihat jauh sebentar.</string>
+    <string name="timeout_app">Sedang mode fokus</string>
+    <string name="timeout_app_body">Aplikasi ini di luar daftar mode fokus. Telepon dan aplikasi yang diizinkan orang tua tetap bisa dibuka.</string>
     <string name="timeout_home">Ke layar utama ponsel</string>
 
     <string name="time_request_title">Minta tambahan waktu</string>

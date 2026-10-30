@@ -259,6 +259,8 @@
     <string name="timeout_category_body">Time for this category is up. Other apps still work.</string>
     <string name="timeout_session">Take a short break</string>
     <string name="timeout_session_body">You have watched for a long time without a pause. Stand up, drink some water, or look far away for a moment.</string>
+    <string name="timeout_app">Focus mode is on</string>
+    <string name="timeout_app_body">This app is outside the focus list. The phone and the apps your parent allows stay open.</string>
     <string name="timeout_home">Go to the home screen</string>
 
     <string name="time_request_title">Ask for more time</string>
