@@ -16,6 +16,9 @@ class Scope(StrEnum):
     SUARA = "suara"  # voice notes in risky chats transcribed, masked, then assessed
     WAKTU = "waktu"  # minutes per app category per day, counted on the phone; limits, bedtime
     LAYAR = "layar"  # screen text read across any app on the phone (accessibility); masked
+    # Child counted in a class aggregate (proposal 0004). Offered from a later consent
+    # version once the school flow ships; not in any published version's scopes yet.
+    SEKOLAH = "sekolah"
 
 
 @dataclass(frozen=True)
@@ -165,7 +168,8 @@ _V5_EN = _V4_EN.replace(
     "- Conversations: messages dcAI sees on the child's phone are processed on the phone: from the dcAI keyboard, from chat apps' notifications, and, when screen reading is on, from the text shown on screen in any app.\n"
     "- Screen (all apps): when the parent turns it on, dcAI reads the text shown on screen in any app to recognise risky patterns, always with the persistent notification and no hidden mode. Text is masked on the phone and only flagged messages are sent. In a chat that is already risky, dcAI takes a screenshot and assesses it on the phone; the screenshot is never sent.",
 )
-V5 = ConsentText(version="2026-10-30.1", id=_V5_ID, en=_V5_EN, scopes=tuple(Scope))
+_V5_SCOPES = (*_V2_SCOPES, Scope.WAKTU, Scope.LAYAR)  # pinned: predates the sekolah scope
+V5 = ConsentText(version="2026-10-30.1", id=_V5_ID, en=_V5_EN, scopes=_V5_SCOPES)
 
 # V6 removes voice notes. The phone cannot capture a voice note from other apps, so the
 # scope was never functional; the Suara paragraph is dropped and SUARA leaves the offered
@@ -186,6 +190,6 @@ CURRENT = ConsentText(
     version="2026-10-30.2",
     id=_V6_ID,
     en=_V6_EN,
-    scopes=tuple(s for s in Scope if s != Scope.SUARA),
+    scopes=tuple(s for s in _V5_SCOPES if s != Scope.SUARA),
 )
 VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, CURRENT)}

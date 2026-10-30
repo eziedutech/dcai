@@ -348,3 +348,63 @@ class AuditLog(Base):
     action: Mapped[str] = mapped_column(String(40), nullable=False)
     target: Mapped[str | None] = mapped_column(String(60))
     created_at: Mapped[datetime] = _created()
+
+
+# School module (proposal 0004, aggregate-only). A school sees counts per level for a class,
+# never a child's insight, conversation or identity. A class only counts a child whose parent
+# granted the "sekolah" scope; membership is an aggregation link, not access to the child.
+
+
+class School(Base):
+    __tablename__ = "school"
+
+    id: Mapped[uuid.UUID] = _id()
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = _created()
+
+
+class SchoolStaff(Base):
+    """A teacher or counsellor account, tied to a school, never to a child. Mirrors the
+    guardian login so the same auth can serve it; a staff member sees only aggregates."""
+
+    __tablename__ = "school_staff"
+
+    id: Mapped[uuid.UUID] = _id()
+    school_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("school.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    email: Mapped[str] = mapped_column(String(254), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
+    role: Mapped[str] = mapped_column(String(16), nullable=False, default="bk")  # bk | kepala
+    password_hash: Mapped[str] = mapped_column(String(200), nullable=False)
+    created_at: Mapped[datetime] = _created()
+
+
+class Classroom(Base):
+    __tablename__ = "classroom"
+
+    id: Mapped[uuid.UUID] = _id()
+    school_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("school.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
+    # Parent-entered join code, stored as a hash like a pairing code; single purpose.
+    join_code_hash: Mapped[str | None] = mapped_column(String(64), unique=True)
+    created_at: Mapped[datetime] = _created()
+
+
+class ClassMembership(Base):
+    """A child counted in a class. Created only after the parent granted the sekolah scope;
+    it links the child to the class for aggregation, and carries no access to the child."""
+
+    __tablename__ = "class_membership"
+    __table_args__ = (UniqueConstraint("classroom_id", "child_id", name="uq_class_membership"),)
+
+    id: Mapped[uuid.UUID] = _id()
+    classroom_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("classroom.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("child_profile.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = _created()
