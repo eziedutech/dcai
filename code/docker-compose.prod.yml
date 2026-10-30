@@ -74,9 +74,6 @@ services:
       BT_MUSE_MODEL: ${BT_MUSE_MODEL:-}
       BT_MUSE_JSON_MODE: ${BT_MUSE_JSON_MODE:-}
       BT_MUSE_REASONING_EFFORT: ${BT_MUSE_REASONING_EFFORT:-}
-      VOICE_ENDPOINT: ${VOICE_ENDPOINT:-}
-      VOICE_MODEL: ${VOICE_MODEL:-}
-      VOICE_PRICE_PER_HOUR: ${VOICE_PRICE_PER_HOUR:-}
     volumes:
       - dcai-lists:/srv/lists
     expose:

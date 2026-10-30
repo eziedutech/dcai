@@ -165,5 +165,27 @@ _V5_EN = _V4_EN.replace(
     "- Conversations: messages dcAI sees on the child's phone are processed on the phone: from the dcAI keyboard, from chat apps' notifications, and, when screen reading is on, from the text shown on screen in any app.\n"
     "- Screen (all apps): when the parent turns it on, dcAI reads the text shown on screen in any app to recognise risky patterns, always with the persistent notification and no hidden mode. Text is masked on the phone and only flagged messages are sent. In a chat that is already risky, dcAI takes a screenshot and assesses it on the phone; the screenshot is never sent.",
 )
-CURRENT = ConsentText(version="2026-10-30.1", id=_V5_ID, en=_V5_EN, scopes=tuple(Scope))
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, CURRENT)}
+V5 = ConsentText(version="2026-10-30.1", id=_V5_ID, en=_V5_EN, scopes=tuple(Scope))
+
+# V6 removes voice notes. The phone cannot capture a voice note from other apps, so the
+# scope was never functional; the Suara paragraph is dropped and SUARA leaves the offered
+# scopes. Older versions keep it for records already granted.
+_V6_ID = _V5_ID.replace(
+    "- Suara: pesan suara di percakapan yang sudah berisiko dikirim ke layanan transkripsi "
+    "Meta untuk diubah menjadi teks, lalu teksnya disamarkan dan dinilai seperti pesan lain. "
+    "Rekaman suara diproses di memori dan tidak disimpan.\n",
+    "",
+)
+_V6_EN = _V5_EN.replace(
+    "- Voice: a voice note in a chat that is already risky is sent to Meta's transcription "
+    "service to be turned into text; the text is then masked and assessed like other "
+    "messages. Recordings are processed in memory and not stored.\n",
+    "",
+)
+CURRENT = ConsentText(
+    version="2026-10-30.2",
+    id=_V6_ID,
+    en=_V6_EN,
+    scopes=tuple(s for s in Scope if s != Scope.SUARA),
+)
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, CURRENT)}

@@ -18,7 +18,6 @@ from app.api.messages import router as messages_router
 from app.api.sites import router as sites_router
 from app.config import get_settings
 from app.llm import build_clients
-from app.voice.transcribe import build_voice_client
 
 
 def configure_logging() -> None:
@@ -34,7 +33,6 @@ async def lifespan(app: FastAPI):
     http = httpx.AsyncClient()
     app.state.settings = settings
     app.state.muse, app.state.openweights = build_clients(settings, http)
-    app.state.voice = build_voice_client(settings, http)
     try:
         yield
     finally:

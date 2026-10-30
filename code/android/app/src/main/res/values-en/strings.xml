@@ -125,11 +125,6 @@
     <string name="f_site_stays">The sites you open stay on this phone. App traffic does not pass through dcAI. The VPN key icon at the top of the screen shows this protection is on.</string>
     <string name="f_site_sent">Only the category of a held site, such as \"gambling\". The site\'s name is not sent.</string>
 
-    <string name="f_voice">Voice notes</string>
-    <string name="f_voice_short">Voice notes in risky chats.</string>
-    <string name="f_voice_what">A voice note in a chat that is already risky is turned into text, masked, then assessed like any message. This comes to the app soon.</string>
-    <string name="f_voice_stays">Recordings are not stored.</string>
-    <string name="f_voice_sent">The recording goes to Meta\'s transcription service to become text. The text is masked before it is assessed.</string>
 
     <string name="f_keyboard">dcAI keyboard</string>
     <string name="f_keyboard_short">Beside you when you type.</string>

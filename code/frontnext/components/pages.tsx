@@ -172,7 +172,7 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
         h: "Yang tidak dilakukan AI",
         list: [
           "Tidak mengirim isi pesan ke orang tua.",
-          "Tidak menyimpan gambar, rekaman suara, atau riwayat penjelajahan.",
+          "Tidak menyimpan gambar atau riwayat penjelajahan.",
           "Tidak membaca isi aplikasi lain. Untuk waktu online, yang dihitung hanya durasi per kategori.",
           "Tidak bekerja diam-diam. Anak selalu tahu dcAI aktif.",
         ],
@@ -208,7 +208,7 @@ const HOW: Record<"id" | "en", { title: string; lead: string; levels: Record<Lev
         h: "What the AI does not do",
         list: [
           "It does not send message text to parents.",
-          "It does not store images, voice recordings or browsing history.",
+          "It does not store images or browsing history.",
           "It does not read other apps. For time online, only the duration per category is counted.",
           "It does not work in secret. The child always knows dcAI is on.",
         ],

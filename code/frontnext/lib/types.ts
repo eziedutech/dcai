@@ -2,7 +2,7 @@
 
 export type Lang = "id" | "en";
 export type Level = "aman" | "perhatian" | "waspada" | "mendesak";
-export type Scope = "percakapan" | "layar" | "gambar" | "domain" | "suara" | "keyboard" | "waktu";
+export type Scope = "percakapan" | "layar" | "gambar" | "domain" | "keyboard" | "waktu";
 
 export type Guardian = { id: string; email: string; name: string; language: Lang };
 

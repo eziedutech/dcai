@@ -7,7 +7,6 @@ import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -37,7 +36,6 @@ enum class Feature(
     LAYAR("layar", Icons.Rounded.Smartphone, Art.CHAT, R.string.f_screen, R.string.f_screen_short, R.string.f_screen_what, R.string.f_screen_stays, R.string.f_screen_sent),
     GAMBAR("gambar", Icons.Rounded.Image, Art.IMAGE, R.string.f_image, R.string.f_image_short, R.string.f_image_what, R.string.f_image_stays, R.string.f_image_sent),
     SITUS("domain", Icons.Rounded.Language, Art.SITE, R.string.f_site, R.string.f_site_short, R.string.f_site_what, R.string.f_site_stays, R.string.f_site_sent),
-    SUARA("suara", Icons.Rounded.Mic, Art.VOICE, R.string.f_voice, R.string.f_voice_short, R.string.f_voice_what, R.string.f_voice_stays, R.string.f_voice_sent),
     PAPAN_KETIK("keyboard", Icons.Rounded.Keyboard, Art.KEYBOARD, R.string.f_keyboard, R.string.f_keyboard_short, R.string.f_keyboard_what, R.string.f_keyboard_stays, R.string.f_keyboard_sent),
     WAKTU("waktu", Icons.Rounded.Timer, Art.CLOCK, R.string.f_time, R.string.f_time_short, R.string.f_time_what, R.string.f_time_stays, R.string.f_time_sent),
 }
@@ -63,8 +61,6 @@ data class Snapshot(
         f == Feature.LAYAR -> if (accessibilityOn) Status.ON else Status.NEEDS_SETUP
         f == Feature.PAPAN_KETIK -> if (keyboardOn) Status.ON else Status.NEEDS_SETUP
         f == Feature.WAKTU -> if (usageOn && overlayOn) Status.ON else Status.NEEDS_SETUP
-        // Voice notes are assessed by the backend; recording them on this phone comes later.
-        f == Feature.SUARA -> Status.SOON
         else -> Status.ON
     }
 

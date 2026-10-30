@@ -140,11 +140,6 @@
     <string name="f_site_stays">Riwayat situs yang kamu buka tetap di ponsel ini. Lalu lintas aplikasi tidak melewati dcAI. Ikon kunci VPN di atas layar menandai perlindungan ini aktif.</string>
     <string name="f_site_sent">Hanya kategori situs yang ditahan, misalnya \"judi\". Nama situsnya tidak dikirim.</string>
 
-    <string name="f_voice">Pesan suara</string>
-    <string name="f_voice_short">Pesan suara di obrolan berisiko.</string>
-    <string name="f_voice_what">Pesan suara di obrolan yang sudah berisiko diubah menjadi teks, disamarkan, lalu dinilai seperti pesan lain. Fitur ini segera hadir di aplikasi.</string>
-    <string name="f_voice_stays">Rekaman suara tidak disimpan.</string>
-    <string name="f_voice_sent">Rekaman dikirim ke layanan transkripsi Meta untuk diubah menjadi teks. Teksnya disamarkan sebelum dinilai.</string>
 
     <string name="f_keyboard">Papan ketik dcAI</string>
     <string name="f_keyboard_short">Mendampingi pesan yang kamu ketik.</string>

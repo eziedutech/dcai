@@ -151,7 +151,7 @@ HOW_DCAI_WORKS = {
         "the app name where a chat happened",
         "image labels, never images",
     ],
-    "never_stored": ["message text", "images", "voice recordings", "browsing history"],
+    "never_stored": ["message text", "images", "browsing history"],
     "levels": {"aman": "0-29", "perhatian": "30-59", "waspada": "60-84", "mendesak": "85-100"},
     "models": "Muse Spark (Meta) assesses patterns and writes advice; Llama labels messages.",
     "parent_controls": ["withdraw any consent scope", "revoke the phone", "delete all data"],

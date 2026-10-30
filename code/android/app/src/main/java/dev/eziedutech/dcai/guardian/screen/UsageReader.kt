@@ -89,12 +89,19 @@ class UsageReader(private val context: Context) {
         /** Apps that do not declare a category but are short video or feeds. */
         val KNOWN = mapOf(
             "com.google.android.youtube" to AppCategory.VIDEO,
-            "com.zhiliaoapp.musically" to AppCategory.VIDEO,
-            "com.ss.android.ugc.trill" to AppCategory.VIDEO,
-            "com.instagram.android" to AppCategory.SOSIAL,
-            "com.facebook.katana" to AppCategory.SOSIAL,
+            "com.google.android.apps.youtube.music" to AppCategory.VIDEO,
+            "com.zhiliaoapp.musically" to AppCategory.VIDEO, // TikTok
+            "com.ss.android.ugc.trill" to AppCategory.VIDEO, // TikTok Lite / regional
+            "com.ss.android.ugc.aweme" to AppCategory.VIDEO, // TikTok / Douyin
+            "com.kwai.bulldog" to AppCategory.VIDEO, // SnackVideo
+            "video.like" to AppCategory.VIDEO, // Likee
+            "com.instagram.android" to AppCategory.SOSIAL, // Instagram, incl. Reels
+            "com.instagram.barcelona" to AppCategory.SOSIAL, // Threads
+            "com.facebook.katana" to AppCategory.SOSIAL, // Facebook, incl. Reels
+            "com.facebook.lite" to AppCategory.SOSIAL, // Facebook Lite
             "com.snapchat.android" to AppCategory.SOSIAL,
-            "com.twitter.android" to AppCategory.SOSIAL,
+            "com.twitter.android" to AppCategory.SOSIAL, // X
+            "com.ss.android.ugc.tiktok" to AppCategory.VIDEO,
         )
         val NEVER = setOf(
             "com.android.systemui", "com.android.settings", "com.google.android.dialer", "com.android.dialer",

@@ -77,10 +77,12 @@ def test_consent_text_is_public(api):
         "keyboard",
         "gambar",
         "domain",
-        "suara",
         "waktu",
         "layar",
     }
+    # Voice was removed: it is not offered and its paragraph is gone from the text.
+    assert "suara" not in body["scopes"]
+    assert "Suara:" not in body["id"] and "- Voice:" not in body["en"]
     for word in ("memonitor", "memantau", "mengawasi", "memata-matai", "spyware"):
         assert word not in body["id"].lower()
     # The phone-wide text says what a child always sees and what never leaves the phone.

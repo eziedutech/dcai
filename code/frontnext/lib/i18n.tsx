@@ -202,7 +202,6 @@ const id = {
   "home.privacy.s5": "Insight dan saran untuk orang tua",
   "home.privacy.n1": "Isi pesan",
   "home.privacy.n2": "Gambar dan foto",
-  "home.privacy.n3": "Rekaman suara",
   "home.privacy.n4": "Riwayat penjelajahan",
   "home.privacy.note":
     "Anak selalu tahu dcAI aktif: ada notifikasi tetap di ponselnya, dan tidak ada mode tersembunyi.",
@@ -446,13 +445,11 @@ const id = {
   "scope.layar": "Teks layar",
   "scope.gambar": "Gambar",
   "scope.domain": "Situs",
-  "scope.suara": "Pesan suara",
   "scope.keyboard": "Papan ketik",
   "scopeHint.percakapan": "Pesan yang ditandai di ponsel dinilai polanya setelah disamarkan.",
   "scopeHint.layar": "dcAI membaca teks di layar aplikasi apa pun untuk mengenali pola berisiko; teks disamarkan di ponsel. Selalu dengan notifikasi tetap, tanpa mode tersembunyi.",
   "scopeHint.gambar": "Gambar dinilai di ponsel dan tidak pernah dikirim. Wajah dan data pribadi pada gambar yang akan dibagikan dikaburkan.",
   "scopeHint.domain": "Situs dicocokkan dengan daftar di ponsel; hanya kategorinya dikirim.",
-  "scopeHint.suara": "Pesan suara di obrolan berisiko diubah jadi teks, lalu disamarkan.",
   "scopeHint.keyboard": "Nada teks yang diketik diperiksa setelah disamarkan. Opsional.",
 
   "service.accessibility": "Pembaca layar dcAI",
@@ -670,7 +667,6 @@ const en: Record<Key, string> = {
   "home.privacy.s5": "Insight and advice for the parent",
   "home.privacy.n1": "Message text",
   "home.privacy.n2": "Images and photos",
-  "home.privacy.n3": "Voice recordings",
   "home.privacy.n4": "Browsing history",
   "home.privacy.note":
     "The child always knows dcAI is on: a persistent notification on their phone, and no hidden mode.",
@@ -912,13 +908,11 @@ const en: Record<Key, string> = {
   "scope.layar": "Screen text",
   "scope.gambar": "Images",
   "scope.domain": "Sites",
-  "scope.suara": "Voice notes",
   "scope.keyboard": "Keyboard",
   "scopeHint.percakapan": "Messages flagged on the phone are assessed as patterns after masking.",
   "scopeHint.layar": "dcAI reads text on screen in any app to recognise risky patterns; text is masked on the phone. Always with the persistent notification, no hidden mode.",
   "scopeHint.gambar": "Images are judged on the phone and never sent. Faces and personal data in an image about to be shared are blurred.",
   "scopeHint.domain": "Sites are matched against a list on the phone; only the category is sent.",
-  "scopeHint.suara": "Voice notes in risky chats become text, then are masked.",
   "scopeHint.keyboard": "The tone of typed text is checked after masking. Optional.",
 
   "service.accessibility": "dcAI screen reader",
