@@ -12,9 +12,10 @@ from app import audit
 from app.age import AgeRange
 from app.api.deps import DbDep, GuardianDep, owned_child
 from app.api.devices import notify_config_changed, notify_devices_revoked
-from app.consent.service import active_scopes
+from app.auth.security import hash_class_code
+from app.consent.service import active_scopes, has_consent
 from app.consent.texts import CURRENT, VERSIONS, Scope
-from app.db.models import ChildProfile, ConsentRecord
+from app.db.models import ChildProfile, ClassMembership, Classroom, ConsentRecord
 
 router = APIRouter(tags=["children", "consent"])
 
@@ -146,6 +147,58 @@ def consent_history(child_id: uuid.UUID, db: DbDep, guardian: GuardianDep) -> li
         .order_by(ConsentRecord.created_at, ConsentRecord.id)
     ).all()
     return [_consent_out(r) for r in rows]
+
+
+class JoinClassIn(BaseModel):
+    join_code: Annotated[str, StringConstraints(strip_whitespace=True, min_length=4, max_length=16)]
+
+
+class JoinClassOut(BaseModel):
+    classroom_id: str
+    joined: bool
+
+
+@router.post("/children/{child_id}/class", status_code=status.HTTP_201_CREATED)
+def join_class(
+    child_id: uuid.UUID, body: JoinClassIn, db: DbDep, guardian: GuardianDep
+) -> JoinClassOut:
+    """Add a child to a class by its join code (proposal 0004). Requires the sekolah scope
+    to be granted for this child; the child is then counted in that class's aggregate only."""
+    child = owned_child(db, guardian, child_id)
+    if not has_consent(db, child.id, Scope.SEKOLAH):
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN, "the sekolah scope is not granted for this child"
+        )
+    room = db.scalar(
+        select(Classroom).where(Classroom.join_code_hash == hash_class_code(body.join_code))
+    )
+    if room is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "class not found")
+    existing = db.scalar(
+        select(ClassMembership).where(
+            ClassMembership.classroom_id == room.id, ClassMembership.child_id == child.id
+        )
+    )
+    if existing is None:
+        db.add(ClassMembership(classroom_id=room.id, child_id=child.id))
+        audit.record(db, audit.guardian_actor(guardian.id), "class_joined", child.id)
+        db.commit()
+    return JoinClassOut(classroom_id=str(room.id), joined=True)
+
+
+@router.delete("/children/{child_id}/class/{classroom_id}", status_code=status.HTTP_204_NO_CONTENT)
+def leave_class(
+    child_id: uuid.UUID, classroom_id: uuid.UUID, db: DbDep, guardian: GuardianDep
+) -> None:
+    child = owned_child(db, guardian, child_id)
+    db.execute(
+        delete(ClassMembership).where(
+            ClassMembership.child_id == child.id,
+            ClassMembership.classroom_id == classroom_id,
+        )
+    )
+    audit.record(db, audit.guardian_actor(guardian.id), "class_left", child.id)
+    db.commit()
 
 
 @router.delete("/children/{child_id}/data", status_code=status.HTTP_204_NO_CONTENT)

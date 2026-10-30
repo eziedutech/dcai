@@ -4,10 +4,12 @@ a small class shows no numbers."""
 
 import uuid
 
+from app.consent.texts import CURRENT
 from app.db.base import session_factory
 from app.db.models import (
     ChildProfile,
     ClassMembership,
+    ConsentRecord,
     Conversation,
     Event,
     Guardian,
@@ -42,6 +44,7 @@ def make_class(api, tok, name="7A"):
 
 
 def seed(db_url, classroom_id, levels, support_idx=()):
+    ids = []
     with session_factory(db_url)() as db:
         g = Guardian(email=f"{uuid.uuid4().hex}@ex.test", name="G", password_hash="h")
         db.add(g)
@@ -50,6 +53,7 @@ def seed(db_url, classroom_id, levels, support_idx=()):
             c = ChildProfile(guardian_id=g.id, nickname=f"A{i}", age_range="11-13")
             db.add(c)
             db.flush()
+            ids.append((g.id, c.id))
             conv = Conversation(child_id=c.id, channel="dm")
             db.add(conv)
             db.flush()
@@ -67,7 +71,34 @@ def seed(db_url, classroom_id, levels, support_idx=()):
             )
             if i in support_idx:
                 db.add(Event(child_id=c.id, kind="dukungan_dibutuhkan", level=lvl))
+            # Only children whose parent granted the sekolah scope are counted.
+            db.add(
+                ConsentRecord(
+                    guardian_id=g.id,
+                    child_id=c.id,
+                    text_version=CURRENT.version,
+                    action="grant",
+                    scopes=["sekolah"],
+                    age_range="11-13",
+                )
+            )
             db.add(ClassMembership(classroom_id=uuid.UUID(classroom_id), child_id=c.id))
+        db.commit()
+    return ids
+
+
+def revoke_sekolah(db_url, guardian_id, child_id):
+    with session_factory(db_url)() as db:
+        db.add(
+            ConsentRecord(
+                guardian_id=guardian_id,
+                child_id=child_id,
+                text_version=CURRENT.version,
+                action="revoke",
+                scopes=["sekolah"],
+                age_range="11-13",
+            )
+        )
         db.commit()
 
 
@@ -126,3 +157,47 @@ def test_another_school_cannot_see_the_class(api):
     other = register(api, email="lain@example.com", school="SMP Lain")
     resp = api.get(f"/v1/school/classes/{room['id']}/overview", headers=sauth(other))
     assert resp.status_code == 404
+
+
+def test_parent_joins_only_with_the_sekolah_scope(api):
+    from tests.conftest import auth
+    from tests.conftest import register as guardian_register
+    from tests.test_children_consent import add_child, consent
+
+    tok = register(api)
+    room = make_class(api, tok)
+    g = guardian_register(api)
+    child = add_child(api, g)
+    body = {"join_code": room["join_code"]}
+    # Without the sekolah scope the join is refused.
+    assert (
+        api.post(f"/v1/children/{child['id']}/class", json=body, headers=auth(g)).status_code == 403
+    )
+    consent(api, g, child["id"], scopes=["sekolah"])
+    joined = api.post(f"/v1/children/{child['id']}/class", json=body, headers=auth(g))
+    assert joined.status_code == 201 and joined.json()["joined"] is True
+    # Idempotent, and the class now counts one member.
+    assert (
+        api.post(f"/v1/children/{child['id']}/class", json=body, headers=auth(g)).status_code == 201
+    )
+    assert api.get("/v1/school/classes", headers=sauth(tok)).json()[0]["members"] == 1
+    # A wrong code is a 404; leaving removes the membership.
+    bad = api.post(
+        f"/v1/children/{child['id']}/class", json={"join_code": "ZZZZZZ"}, headers=auth(g)
+    )
+    assert bad.status_code == 404
+    cid = joined.json()["classroom_id"]
+    assert api.delete(f"/v1/children/{child['id']}/class/{cid}", headers=auth(g)).status_code == 204
+    assert api.get("/v1/school/classes", headers=sauth(tok)).json()[0]["members"] == 0
+
+
+def test_revoking_sekolah_drops_a_child_from_the_count(api, db_url):
+    tok = register(api)
+    room = make_class(api, tok)
+    members = seed(db_url, room["id"], ["aman"] * 4 + ["waspada"])  # 5, all consenting
+    ov = api.get(f"/v1/school/classes/{room['id']}/overview", headers=sauth(tok)).json()
+    assert ov["suppressed"] is False and ov["total"] == 5
+    guardian_id, child_id = members[0]
+    revoke_sekolah(db_url, guardian_id, child_id)
+    ov2 = api.get(f"/v1/school/classes/{room['id']}/overview", headers=sauth(tok)).json()
+    assert ov2["total"] == 4 and ov2["suppressed"] is True  # below k again

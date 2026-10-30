@@ -186,10 +186,28 @@ _V6_EN = _V5_EN.replace(
     "messages. Recordings are processed in memory and not stored.\n",
     "",
 )
-CURRENT = ConsentText(
-    version="2026-10-30.2",
-    id=_V6_ID,
-    en=_V6_EN,
-    scopes=tuple(s for s in _V5_SCOPES if s != Scope.SUARA),
+_V6_SCOPES = tuple(s for s in _V5_SCOPES if s != Scope.SUARA)
+V6 = ConsentText(version="2026-10-30.2", id=_V6_ID, en=_V6_EN, scopes=_V6_SCOPES)
+
+# V7 adds the optional school scope (proposal 0004): a child counted in a class aggregate.
+# Only counts per level reach the school, never a child's level, insight or identity.
+_V7_ID = _V6_ID.replace(
+    "Anak dapat meminta tambahan waktu dengan alasan singkat yang disamarkan lalu dikirim ke orang tua.",
+    "Anak dapat meminta tambahan waktu dengan alasan singkat yang disamarkan lalu dikirim ke orang tua.\n"
+    "- Sekolah (opsional): bila orang tua mengaktifkannya, anak dihitung dalam statistik kelas. "
+    "Yang dibagikan ke sekolah hanya jumlah anak per level, tanpa nama, tanpa percakapan, dan tanpa "
+    "dapat menunjuk anak tertentu. Angka hanya tampil bila cukup banyak anak ikut, agar tidak ada "
+    "yang bisa disimpulkan. Dapat ditarik kapan saja.",
 )
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, CURRENT)}
+_V7_EN = _V6_EN.replace(
+    "The child can ask for more time with a short reason, masked, then sent to the parent.",
+    "The child can ask for more time with a short reason, masked, then sent to the parent.\n"
+    "- School (optional): when the parent turns it on, the child is counted in class statistics. "
+    "Only the number of children per level is shared with the school, with no name, no conversation "
+    "and no way to single out a child. Numbers show only when enough children take part, so none can "
+    "be inferred. It can be withdrawn at any time.",
+)
+CURRENT = ConsentText(
+    version="2026-10-30.3", id=_V7_ID, en=_V7_EN, scopes=(*_V6_SCOPES, Scope.SEKOLAH)
+)
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, V6, CURRENT)}

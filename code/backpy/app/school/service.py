@@ -10,6 +10,8 @@ from datetime import timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.consent.service import has_consent
+from app.consent.texts import Scope
 from app.dashboard.queries import _RANK, _latest_assessments
 from app.db.base import utcnow
 from app.db.models import ClassMembership, Event
@@ -51,6 +53,10 @@ def class_counts(db: Session, classroom_id: uuid.UUID, *, days: int = 7) -> Grou
     levels: list[Level] = []
     support: list[bool] = []
     for cid in child_ids:
+        # A parent who withdrew the sekolah scope drops out of the count at once, even if the
+        # membership row remains.
+        if not has_consent(db, cid, Scope.SEKOLAH):
+            continue
         lvl, sup = _child_level_and_support(db, cid, since)
         levels.append(lvl)
         support.append(sup)
