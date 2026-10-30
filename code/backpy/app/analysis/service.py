@@ -2,9 +2,10 @@
 
 Every message goes through one queue per conversation, in order. The worker labels each
 message (stage 1), runs stage 2 only for the last message waiting in that queue, stores
-the assessment, runs the Guide when the level rises or distress first shows, records
-events and publishes live updates. Text lives only in the job and the in-memory window;
-it is never written to the database, a log or a live update.
+the assessment, runs the Guide once per escalation to perhatian or above (whether the
+level rose on this message or earlier via the rule floor), records events and publishes
+live updates. Text lives only in the job and the in-memory window; it is never written to
+the database, a log or a live update.
 """
 
 import asyncio
@@ -28,6 +29,10 @@ from app.risk.schemas import Level
 log = logging.getLogger("dcai.analysis")
 
 MAX_CONVERSATIONS_IN_MEMORY = 500
+# A burst never postpones the considered assessment (stage 2 + Guide) longer than this many
+# messages: under a steady flood the queue never empties, so without a cap assess would stay
+# False forever and the level would go out with no insight and no nudge.
+MAX_DEFERRED_MESSAGES = 8
 
 
 class ConsentWithdrawn(Exception):
@@ -58,8 +63,6 @@ class Result:
     step: Step
     guide: GuideResult | None
     events: tuple[str, ...]
-    # The Guide was due but left to a later message waiting in the same queue.
-    guide_deferred: bool = False
 
 
 class Analyzers:
@@ -124,18 +127,21 @@ class Worker:
 
     async def _drain(self, cid: uuid.UUID) -> None:
         queue = self._queues[cid]
-        guide_due = False
+        deferred = 0
         try:
             while queue:
                 job, fut = queue.popleft()
+                # Assess on the last queued message, or once the cap is reached so a flood
+                # can never postpone stage 2 and the Guide indefinitely.
+                assess = not queue or deferred >= MAX_DEFERRED_MESSAGES
                 try:
-                    result = await process(self.state, job, assess=not queue, guide_due=guide_due)
+                    result = await process(self.state, job, assess=assess)
                 except Exception as exc:  # one failed message must not stop the queue
                     log.warning("analysis_failed error=%s", type(exc).__name__)
                     if fut is not None and not fut.done():
                         fut.set_exception(exc)
                     continue
-                guide_due = result.guide_deferred
+                deferred = 0 if assess else deferred + 1
                 if fut is not None and not fut.done():
                     fut.set_result(result)
         finally:
@@ -169,12 +175,28 @@ def _analyzer(state, db: Session, conversation: Conversation, child: ChildProfil
     return analyzer
 
 
-async def process(state, job: Job, *, assess: bool = True, guide_due: bool = False) -> Result:
+def _has_insight_for_level(db: Session, conversation_id: uuid.UUID, level: Level) -> bool:
+    """Whether this conversation already has an insight stored at this level band. The score
+    only rises, so each band is reached once; this makes the Guide fire exactly once per
+    escalation even when stage 2 never ran, and survives a restart (the truth is the row)."""
+    return (
+        db.scalar(
+            select(Insight.id)
+            .join(RiskAssessment, Insight.assessment_id == RiskAssessment.id)
+            .where(RiskAssessment.conversation_id == conversation_id)
+            .where(RiskAssessment.level == level.value)
+            .limit(1)
+        )
+        is not None
+    )
+
+
+async def process(state, job: Job, *, assess: bool = True) -> Result:
     """Analyse one message. The level goes out as soon as it is known; the Guide follows.
 
-    With assess=False more messages of this conversation are waiting: stage 2 and the
-    Guide are left to the last of them (guide_due carries the debt), so a level that is
-    already out of date is never guided."""
+    With assess=False more messages of this conversation are waiting: stage 2 and the Guide
+    are left to the last of them (the analyzer's guide_due carries the debt across drain
+    cycles), so a level that is already out of date is never guided."""
     bus = broker(state)
     with session_factory(state.settings.database_url)() as db:
         child = db.get(ChildProfile, job.child_id)
@@ -194,16 +216,40 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
         # A considered (stage 2) assessment at perhatian or above must guide even when the
         # level did not rise on this exact step. Under a burst the level often reaches risk
         # via an earlier message (stage 1 + rule floor), so by the time stage 2 runs,
-        # step.raised is already False; the raise-only trigger then skipped the Guide, so the
-        # dashboard got a level but no insight and the child got no nudge.
+        # step.raised is already False; the raise-only trigger then skipped the Guide.
         considered_risk = step.source == "model" and step.level != Level.AMAN
+        # Safety net: as long as the level is at perhatian or above and no insight has been
+        # stored for that band yet, guide it, whatever raised/source/assess say. This is what
+        # guarantees one insight + nudge per escalation: a level reached via the rule floor
+        # (no stage 2, raised already False on the message that carries it) used to leave the
+        # dashboard with a level but no insight and the child with no nudge.
+        need_insight = step.level != Level.AMAN and not _has_insight_for_level(
+            db, conversation.id, step.level
+        )
         due = (
-            guide_due
+            analyzer.guide_due
             or (step.raised and step.level != Level.AMAN)
             or considered_risk
             or first_support
+            or need_insight
         )
         run_guide = due and assess
+        log.info(
+            "guide_decision cid=%s level=%s source=%s raised=%s assess=%s guide_due=%s "
+            "considered_risk=%s first_support=%s need_insight=%s run_guide=%s",
+            conversation.id,
+            step.level.value,
+            step.source,
+            step.raised,
+            assess,
+            analyzer.guide_due,
+            considered_risk,
+            first_support,
+            need_insight,
+            run_guide,
+        )
+        # The debt is paid when the Guide runs, kept when it is deferred to a later message.
+        analyzer.guide_due = due and not assess
         assessment = None
         if step.raised or step.source == "model" or step.index == 1 or run_guide:
             assessment = RiskAssessment(
@@ -229,7 +275,10 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
         db.commit()
         quick = None
         if job.device_id is not None and (
-            (step.raised and step.level != Level.AMAN) or considered_risk or first_support
+            (step.raised and step.level != Level.AMAN)
+            or considered_risk
+            or first_support
+            or run_guide
         ):
             quick = instant(
                 level=step.level,
@@ -278,7 +327,7 @@ async def process(state, job: Job, *, assess: bool = True, guide_due: bool = Fal
             db.commit()
             _publish_guide(bus, job, step, conversation.id, guide_result, thread_key)
 
-    return Result(conversation.id, step, guide_result, tuple(events), due and not assess)
+    return Result(conversation.id, step, guide_result, tuple(events))
 
 
 def _publish_step(
