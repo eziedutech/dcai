@@ -309,23 +309,25 @@ Model calls: 4 stage 1, 1 stage 2, 1 Guide. Before the queue merged them, the sa
 
 | Scenario | Split | Expected | v2 (default) | v3 |
 | --- | --- | --- | --- | --- |
-| kenakalan-001 | dev | waspada | waspada | mendesak |
-| kenakalan-002 | dev | waspada | waspada | mendesak |
-| kenakalan-003 | dev | mendesak | mendesak | mendesak |
-| kenakalan-004 | dev | waspada | mendesak | mendesak |
-| kasus_sulit-010 (silat) | dev | aman | aman | aman |
-| kasus_sulit-011 (poster) | dev | aman | waspada | aman |
-| kenakalan-005 | test | waspada | waspada | mendesak |
-| kenakalan-006 | test | waspada | mendesak | mendesak |
+| kenakalan-001 | dev | Alert | Alert | Urgent |
+| kenakalan-002 | dev | Alert | Alert | Urgent |
+| kenakalan-003 | dev | Urgent | Urgent | Urgent |
+| kenakalan-004 | dev | Alert | Urgent | Urgent |
+| kasus_sulit-010 (silat) | dev | Safe | Safe | Safe |
+| kasus_sulit-011 (poster) | dev | Safe | Alert | Safe |
+| kenakalan-005 | test | Alert | Alert | Urgent |
+| kenakalan-006 | test | Alert | Urgent | Urgent |
 
-With both students all six reach `waspada` or higher. With v2 the poster project was a false alarm; v3 keeps both look-alike cases at `aman`, and ends all five scenarios expected at `waspada` one level higher, at `mendesak`. Stage 1 for this label:
+Levels, lowest to highest: Safe, Needs attention, Alert, Urgent (`aman`, `perhatian`, `waspada`, `mendesak`).
+
+With both students all six reach `Alert` or higher. With v2 the poster project was a false alarm; v3 keeps both look-alike cases at `Safe`, and ends all five scenarios expected at `Alert` one level higher, at `Urgent`. Stage 1 for this label:
 
 | Student | Dev (11 messages) | Test (3 messages) |
 | --- | --- | --- |
 | v2 | precision 0.67, recall 0.55 | precision 0.75, recall 1.00 |
 | v3 | precision 1.00, recall 0.55 | precision 1.00, recall 0.33 |
 
-v3 no longer puts the label on harmless messages, and still misses about half of the invitations; the rest of each conversation brings it to `waspada`.
+v3 no longer puts the label on harmless messages, and still misses about half of the invitations; the rest of each conversation brings it to `Alert`.
 
 ### Citizenship Guide
 
