@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { api, me, session } from "@/lib/api";
 import { useT } from "@/lib/i18n";
@@ -15,6 +15,15 @@ type Dash = {
   setGuardian: (g: Guardian) => void;
 };
 const DashContext = createContext<Dash | null>(null);
+
+// The per-child sub-menu, mirrored as tabs on the child page (hash kept in sync).
+const SUBTABS = [
+  ["overview", "dash.tab.overview"],
+  ["time", "dash.tab.time"],
+  ["school", "dash.tab.school"],
+  ["phone", "dash.tab.phone"],
+  ["settings", "dash.tab.settings"],
+] as const;
 
 export function useDash() {
   const ctx = useContext(DashContext);
@@ -30,6 +39,9 @@ export function DashShell({ children }: { children: React.ReactNode }) {
   const [kids, setKids] = useState<Child[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const params = useSearchParams();
+  const activeChild = path.match(/^\/dasbor\/anak\/([^/]+)/)?.[1] ?? null;
+  const activeTab = params.get("tab") ?? "overview";
 
   const reload = useCallback(async () => {
     const list = await api<Child[]>("children");
@@ -116,8 +128,56 @@ export function DashShell({ children }: { children: React.ReactNode }) {
             }}
           >
             <p className="px-3 pb-1.5 text-sm font-semibold text-slate">{t("dash.children")}</p>
-            <div className="space-y-0.5">
-              {kids.map((k) => link(`/dasbor/anak/${k.id}`, k.nickname))}
+            <div className="space-y-1">
+              {kids.map((k) => {
+                const base = `/dasbor/anak/${k.id}`;
+                const open = activeChild === k.id;
+                return (
+                  <div key={k.id}>
+                    <Link
+                      href={base}
+                      aria-current={open ? "page" : undefined}
+                      className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-[0.95rem] ${
+                        open ? "bg-navy font-semibold text-paper shadow-[0_8px_20px_-12px_rgba(31,58,95,0.9)]" : "font-medium text-ink hover:bg-white/70"
+                      }`}
+                    >
+                      <span className="truncate">{k.nickname}</span>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        aria-hidden
+                        className={`shrink-0 transition-transform ${open ? "rotate-180" : "opacity-60"}`}
+                      >
+                        <path d="M4 6l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Link>
+                    {open && (
+                      <div className="mt-1 ml-3 space-y-0.5 border-l border-ink/[0.1] pl-2">
+                        {SUBTABS.map(([key, label]) => {
+                          const on = activeTab === key;
+                          const href = key === "overview" ? base : `${base}?tab=${key}`;
+                          return (
+                            <Link
+                              key={key}
+                              href={href}
+                              aria-current={on ? "true" : undefined}
+                              className={`block rounded-lg px-3 py-1.5 text-sm ${
+                                on ? "bg-white/80 font-semibold text-ink" : "font-medium text-slate hover:bg-white/60 hover:text-ink"
+                              }`}
+                            >
+                              {t(label)}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
               {link("/dasbor/tambah", `+ ${t("dash.addChild")}`)}
             </div>
             <div className="mt-5 space-y-0.5 border-t border-ink/[0.07] pt-4">
