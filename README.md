@@ -1,27 +1,29 @@
 # dcAI: Digital Citizenship AI, Family Safety Guardian
 
-> An AI companion that helps children make safe choices online at the moment it matters, and gives parents insight and conversation starters. When a chat starts to follow a risky pattern, the child gets a short, friendly reminder with the reason; the parent learns what kind of pattern appeared and how to talk about it. Message text is never shared.
+> An AI companion on the child's phone that helps children make safe choices online at the moment it matters, gives parents insight and conversation starters, and gives schools an anonymous class-level picture. When a chat starts to follow a risky pattern, the child gets a short, friendly reminder with the reason; the parent learns what kind of pattern appeared and how to talk about it. Message text is never shared, and a school never sees a single child.
 
 ![Python 3.14](https://img.shields.io/badge/Python-3.14-3776AB)
 ![FastAPI 0.162](https://img.shields.io/badge/FastAPI-0.162-009688)
 ![Muse Spark 1.3](https://img.shields.io/badge/Muse%20Spark-1.3-0866FF)
-![Llama 3.3 70B](https://img.shields.io/badge/Llama-3.3%2070B-0866FF)
+![Llama 3.1 8B distilled](https://img.shields.io/badge/Llama-3.1%208B%20distilled-0866FF)
+![Llama 3.3 70B backup](https://img.shields.io/badge/Llama-3.3%2070B%20backup-0866FF)
 ![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-336791)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000000)
 ![Android API 30+](https://img.shields.io/badge/Android-API%2030%2B-3DDC84)
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). MVP; all data is synthetic.
 
-**Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app) (homepage and parent dashboard; the phone's API is under `/v1`). Please use synthetic data only: free model credits allow the provider to use request content.
+**Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app): the homepage, the parent dashboard (`/dasbor`), the school dashboard (`/sekolah`) and the Android APK (download button on the homepage). The phone's API is under `/v1`. Please use synthetic data only: free model credits allow the provider to use request content.
 
-**Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video), and guidance for the parent. It is one pillar of digitalsafe.app. Masking and a small classifier run on the phone; only flagged, masked messages reach the cloud. With a parent's separate consent a school can see class-level aggregates only, never a child.
+**Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video, focus mode), and guidance for the parent. It is one pillar of digitalsafe.app. Masking, the image checks and the site lists run on the phone; only flagged, masked messages reach the cloud. With a parent's separate consent, a school sees anonymous counts per class, never a child (see [School module](#school-module)).
 
-**Meta at the core.** Meta's models run every reasoning step. Muse Spark (Meta), on the Meta Model API, handles the conversation assessment, the Citizenship Guide and Ask dcAI; Meta Llama screens each message. The stage 1 screener is a Llama 3.1 8B student distilled from a Muse Spark teacher that labels the training data (LoRA SFT). Built for the Meta Global AI Developer Hackathon.
+**Meta at the core.** Meta's models do the AI work in dcAI, for inference and for training. Muse Spark, on the Meta Model API, assesses conversations, writes the Citizenship Guide and answers parents in Ask dcAI. Each message is screened by a Llama 3.1 8B student distilled from a Muse Spark teacher that labelled the training data (LoRA SFT), with Llama 3.3 70B as a backup. A deterministic rule floor sits under the models, and reviewed templates take over when a model fails. Submission summary: [docs/submission.md](docs/submission.md).
 
 ## Table of Contents
 
 - [What it is](#what-it-is)
 - [How it works](#how-it-works)
+- [School module](#school-module)
 - [How to test](#how-to-test)
 - [Architecture](#architecture)
 - [Running locally](#running-locally)
@@ -51,14 +53,15 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost. v2 is the default stage 1 screener. Student v3, retrained with the invitation label, was evaluated and not adopted: it removes a false alarm but misses more risk (below). Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
-- **dcAI, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Two ingest sources share one on-phone masking path: the dcAI keyboard checks the child's own typing, and an app that integrated the dcAI SDK (the included sample chat app, Messenger Z) hands over messages through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
+- **dcAI, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Messages arrive from four sources (next item); an app that integrated the dcAI SDK (the included sample chat app, Messenger Z) hands them over through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
 - **The app as a child and parent see it.** The dcAI logo and colours, flat illustrations drawn in code (light and dark), onboarding in four steps (connect with the parent's code, read the consent together with two confirmations and the full text, create the parent PIN, switch protections on), then Home, Protection and Settings tabs. Each protection shows an indicator, and its page says what it does, what stays on the phone and what is sent. Switching a protection off needs the parent PIN and is reported to the parent. Indonesian and English, following the phone's language by default and selectable per app.
+- **Four message sources, one masking path.** Screen text through an accessibility service is the main source: it reads the chat on screen in any app, with any keyboard, only under the `layar` scope and with dcAI listed in Android's accessibility settings. Chat notifications bring the other person's side of a chat. The dcAI keyboard checks the child's own typing, and apps with the dcAI SDK hand over messages directly. All four go through the same on-phone masking, and only flagged, masked messages are sent.
 - **Images, judged on the phone.** An app with the dcAI SDK asks dcAI about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2).
 - **Sites, matched on the phone.** A DNS-only VPN: the phone's DNS server is an address inside the VPN and only that address is routed into it, so app traffic never passes through dcAI. Each looked-up name and its parent domains are matched on the phone against category lists built from UT1 Blacklists (CC BY-SA 4.0): adult, gambling, scams, malware, dating, drugs and hate, about 5.1 million domains in 26 MB of 40-bit hashes, so the phone holds no readable list. A listed site gets "no such domain" and the child a notification saying which category and why; any other name goes to the network's own resolver. The server receives the category, at most once per category in 30 minutes, never the site's name or a lookup history. The child can show a held site to the parent, who allows it on the phone with the PIN; the server gets a false-detection note with the category only. The VPN key icon shows the whole time, and switching the VPN off is an event for the parent.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Guide call, for the final level.
 - **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
-- **School view, aggregates only** (`/sekolah`, with `/sekolah/masuk` and `/sekolah/daftar`; `POST /v1/school/*`). A parent may grant an optional `sekolah` consent scope and join a class with a one-time join code. The school sees only k-anonymity counts per level over the class, never a child's identity, level, insight or conversation. Counts show from 5 consenting children; the more sensitive "needs support" count needs 10, and the group is otherwise suppressed. Each child's level and support flag are counted on the server and dropped, never returned per child. The school module lives in `code/backpy/app/school/`.
+- **School dashboard, aggregates only** (`/sekolah`): a school creates classes and sees anonymous counts per level for each one, from 5 consenting children; parents opt in per child and can leave at any time. How it works is in [School module](#school-module).
 - **Facts page** (`/fakta`): published figures for each risk dcAI addresses (UNICEF, WHO/Europe, The Lancet, Disrupting Harm Indonesia, PPATK, BNPT and others), each quoted as its source states it and linked to the page that was checked. These are the only figures in the product not measured by this project.
 - **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
 - **Time online.** The parent sets daily limits for school days and weekends, limits per category (video, games, social, other), bedtime with a wind-down reminder, breaks after long short-video sessions, and apps that are always allowed. **Focus mode** uses that allowlist the other way: the parent names the apps the child may keep using, and everything else is held, for homework or bedtime. The phone counts foreground time from Android's usage access (app names and minutes, never what is inside an app), reminds the child before time runs out, and shows a break screen at a limit or at bedtime. The child can ask for more time with a short reason, masked on the phone and again on the server; Muse Spark suggests allow, allow part or not now, and the parent decides on the dashboard, which reaches the phone over the live stream. The server keeps minutes per category per day, bedtime minutes and the longest session. Muse Spark also writes a weekly summary for the parent from aggregate numbers and can propose limits, which change nothing until the parent saves them.
@@ -67,14 +70,15 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Not built yet
 
-In build order: a sensitive-image classifier (sexual content, violence) in the slot that exists on the phone, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, and per-category site settings for the parent.
+In build order: a sensitive-image classifier (sexual content, violence) in the slot that exists on the phone, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, and per-category site settings for the parent. For schools: more staff accounts per school, a school-wide view across classes, and per-case referral controlled by the parent.
 
 ## How it works
 
 ```
-message ──> mask ──> stage 1: Llama 3.3 70B ──> rule floor ──┐
-           (rules)   labels + signal per msg   (deterministic) ├─> score = max(previous, floor, model)
-                                                               │
+message ──> mask ──> stage 1: Llama 3.1 8B ───> rule floor ──┐
+           (rules)   distilled student,        (deterministic) ├─> score = max(previous, floor, model)
+                     70B backup; labels                        │
+                     + signal per msg                          │
                      stage 2: Muse Spark  <── only if the ─────┘
                      window assessment        window shows a signal
 ```
@@ -83,6 +87,21 @@ message ──> mask ──> stage 1: Llama 3.3 70B ──> rule floor ──┐
 - **The score never drops within a conversation.** This is a deliberate, cautious choice, kept even after a restart.
 - **If a model fails, the level is never shown as safe.** A stage 1 outage shows `perhatian` with "analysis unavailable".
 - **Levels:** `aman` 0 to 29, `perhatian` 30 to 59, `waspada` 60 to 84, `mendesak` 85 to 100. Every assessment carries a confidence level and is marked as an estimate.
+
+## School module
+
+A school sees how its classes are doing as a group, never a child. Each child takes part only when their parent opts in. Code: `code/backpy/app/school/`, `code/backpy/app/api/school.py`, and the web pages under `/sekolah`.
+
+1. **A school signs up** at `/sekolah/daftar`. This creates the school and its first staff account (role `kepala`). Staff accounts are separate from parent accounts: a parent's or a phone's token reaches no staff endpoint, and a staff token reaches no child. The staff session is a 15-minute access token in an httpOnly cookie, and the web server forwards only three staff paths: the account, the class list and a class overview.
+2. **The school creates a class** and gets a 6-character join code, shown once. Look-alike characters are left out. Only a hash of the code is stored, so it is never listed again.
+3. **The teacher shares the code with parents**, outside dcAI.
+4. **The parent opts in.** In the dashboard, the parent grants the optional "School overview" scope for that child (consent version 2026-10-30.3 adds it, with its own paragraph), then enters the code in Settings. Without the scope the join is refused (`403`); a wrong code is not found (`404`); joining twice changes nothing. The parent sees the child's classes and can leave any of them.
+5. **The school sees an aggregate.** For one class over the last 7 days, the server reads two values for each member whose school consent is active right now: the child's highest current level across their conversations (`aman` when there is none), and whether a "needs support" event happened. It counts them per level and drops the per-child values. Only the totals are returned.
+6. **k-anonymity.** Counts show only from 5 consenting children; below that, the class shows that not enough children take part yet. The more sensitive "needs support" count shows only from 10.
+7. **Withdrawal is immediate.** If a parent withdraws the school scope, the child leaves the counts on the next view, before leaving the class. Deleting a child's data removes the membership as well.
+8. **Isolation and audit.** Staff of another school get `404` for a class that is not theirs. The audit log records sign-up, class creation, joining and leaving, by id only.
+
+A school never sees a child's name or nickname, which child is at which level, insight, conversations, events, images, sites or devices. The class list shows how many children joined. Tests: `code/backpy/tests/test_school.py` and `tests/test_school_aggregate.py`.
 
 ## How to test
 
@@ -124,8 +143,9 @@ code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, 
 code/distill/  OpenPipe ART: fine-tunes the stage 1 student on a serverless training service
                (code/distill/train.py).
 code/android/  Kotlin: dcAI (pairing, foreground service, nudges, on-phone masking,
-               dcAI keyboard, image checks, DNS-only site VPN) and a sample chat app, built with Gradle. Masking parity is
-               tested against data/privacy.
+               accessibility screen reader, chat notification listener, dcAI keyboard, image
+               checks, DNS-only site VPN, time online with the break screen and focus mode) and a
+               sample chat app, built with Gradle. Masking parity is tested against data/privacy.
 docs/          architecture decision records
 ```
 
@@ -203,7 +223,7 @@ The site's download button offers the APK from the repository's GitHub release. 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite | 360 passed |
+| Unit and API tests on SQLite (31 Oct 2026) | 381 passed |
 | The database tests again on PostgreSQL 18 (CI) | 102 passed |
 | Dashboard: type check, lint, production build | passing |
 | Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets, time rules), lint, debug APK | 35 passed |
@@ -373,7 +393,7 @@ The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on
 
 | Model | Labelled messages found | Ordinary-chat messages given a label | p95 latency | Cost per run |
 |---|---|---|---|---|
-| **Llama 3.3 70B (used)** | recall 0.88, precision 0.77 | 4 of 80 | 1.5 s | USD 0.22 |
+| **Llama 3.3 70B (default before the student)** | recall 0.88, precision 0.77 | 4 of 80 | 1.5 s | USD 0.22 |
 | Llama 3.1 8B | recall 0.86, precision 0.53 | 24 of 80 | 1.4 s | USD 0.07 |
 
 The weakest labels for 70B are `pindah_kanal` (precision 0.43) and `membangun_kedekatan` (0.50). Full tables are in `eval/stage1/`.
