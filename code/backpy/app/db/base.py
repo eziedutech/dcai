@@ -42,7 +42,17 @@ def make_engine(url: str) -> Engine:
     # Without a connect timeout an unreachable database makes requests hang forever instead
     # of failing with a clear error (found when the dev container had stopped).
     connect_args = {"connect_timeout": 5} if url.startswith("postgresql") else {}
-    engine = create_engine(url, pool_pre_ping=True, connect_args=connect_args)
+    kwargs: dict = {"pool_pre_ping": True, "connect_args": connect_args}
+    if url.startswith("postgresql"):
+        # Device-wide screen reading bursts many messages at once, and every live SSE stream
+        # (phone and dashboard) holds a connection for its whole life. The default 5+10 pool
+        # is exhausted under that load (QueuePool timeout), which hangs the dashboard and
+        # starves the background Guide/nudge work, so the level is stored but no insight or
+        # nudge is produced. Give the pool real headroom (well under Postgres max_connections).
+        kwargs["pool_size"] = 20
+        kwargs["max_overflow"] = 40
+        kwargs["pool_recycle"] = 1800
+    engine = create_engine(url, **kwargs)
     if engine.dialect.name == "sqlite":
         # SQLite ignores foreign keys unless asked, and cascading deletes depend on them.
         @event.listens_for(engine, "connect")
