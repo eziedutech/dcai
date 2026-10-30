@@ -33,8 +33,10 @@ Rules:
 friendly chat is usually aman or low perhatian.
 - A known contact (family, teacher, classmate) asking for location or a parent's number \
 for an evident practical reason is not by itself risky.
-- rationale_for_parent: at most two plain sentences in Indonesian about the pattern. \
-Never quote or paraphrase a message, never repeat a marker, never use dashes.
+- rationale_for_parent: one or two short, plain sentences in Indonesian that name the \
+pattern directly. Be firm and concrete; no filler or hedging (avoid "dapat", "mungkin", \
+"sehingga perlu diperhatikan"). Never quote or paraphrase a message, never repeat a marker, \
+never use dashes.
 - trajectory.reason: one short sentence in Indonesian.
 
 Score bands, the level must match the score: aman 0 to 29, perhatian 30 to 59, waspada \

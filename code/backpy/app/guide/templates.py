@@ -11,8 +11,8 @@ _T: dict[str, dict[Situation, dict]] = {
     "id": {
         Situation.APPROACH: {
             "child_nudge": "Berhenti dulu chatnya dan coba bicarakan dengan orang tuamu. Kamu tidak wajib merahasiakan apa pun, dan ini bukan salahmu.",
-            "what_we_see": "Kontak dalam obrolan ini menunjukkan pola pendekatan yang perlu didampingi, misalnya membangun kedekatan dengan cepat atau meminta hal pribadi.",
-            "why_it_matters": "Pola seperti ini sering berjalan bertahap. Anak yang merasa aman bercerita lebih mudah dilindungi sejak awal.",
+            "what_we_see": "Kontak di obrolan ini menunjukkan pola pendekatan: membangun kedekatan cepat dan meminta hal pribadi.",
+            "why_it_matters": "Pola begini berjalan bertahap. Anak yang nyaman bercerita lebih mudah dilindungi sejak awal.",
             "starters": [
                 "Akhir-akhir ini kamu kenal teman baru di internet? Seru nggak ngobrolnya?",
                 "Kalau ada yang minta kamu merahasiakan sesuatu dari Ibu atau Ayah, menurutmu kenapa ya?",
@@ -33,8 +33,8 @@ _T: dict[str, dict[Situation, dict]] = {
         },
         Situation.DANGEROUS_INVITE: {
             "child_nudge": "Ajakan berkelahi, mencoba obat atau minuman keras, dan membawa senjata tajam selalu boleh kamu tolak, cukup bilang kamu sudah ditunggu di rumah lalu menjauh. Ceritakan ke orang dewasa yang kamu percaya, kamu tidak akan disalahkan.",
-            "what_we_see": "Ada ajakan ke kegiatan berbahaya dalam obrolan, misalnya ikut berkelahi atau tawuran, mencoba obat terlarang atau minuman keras, atau membawa senjata tajam.",
-            "why_it_matters": "Di usia ini tekanan dari teman terasa kuat dan menolak bisa terasa sulit. Anak yang tahu cara menolak dan tahu bisa bercerita ke orang tua lebih mudah menjauh dari bahaya.",
+            "what_we_see": "Ada ajakan ke kegiatan berbahaya: berkelahi atau tawuran, obat terlarang, minuman keras, atau membawa senjata tajam.",
+            "why_it_matters": "Tekanan teman di usia ini kuat dan menolak terasa sulit. Anak yang tahu cara menolak lebih mudah menjauh dari bahaya.",
             "starters": [
                 "Akhir-akhir ini teman-temanmu lagi sering ngajak ke mana aja?",
                 "Kalau ada yang ngajak hal yang bikin kamu nggak enak hati, biasanya kamu jawab apa?",
@@ -159,8 +159,8 @@ _T: dict[str, dict[Situation, dict]] = {
     "en": {
         Situation.APPROACH: {
             "child_nudge": "Stop this chat for now and talk to your parent about it. You do not have to keep anything secret, and this is not your fault.",
-            "what_we_see": "The contact in this chat shows an approach pattern that needs your support, such as building closeness fast or asking for personal things.",
-            "why_it_matters": "Patterns like this often unfold step by step. A child who feels safe to talk is easier to protect early.",
+            "what_we_see": "The contact in this chat shows an approach pattern: building closeness fast and asking for personal things.",
+            "why_it_matters": "Patterns like this unfold step by step. A child who feels safe to talk is easier to protect early.",
             "starters": [
                 "Have you met anyone new online lately? What do you talk about?",
                 "If someone asked you to keep a secret from us, why do you think they would?",
@@ -181,8 +181,8 @@ _T: dict[str, dict[Situation, dict]] = {
         },
         Situation.DANGEROUS_INVITE: {
             "child_nudge": "You can always say no to fights, drugs, alcohol or carrying a weapon; just say you are expected at home and walk away. Tell an adult you trust; you will not be blamed.",
-            "what_we_see": "The chat contains an invitation to something dangerous, such as joining a fight, trying drugs or alcohol, or carrying a sharp weapon.",
-            "why_it_matters": "At this age pressure from friends feels strong and saying no can be hard. A child who knows how to refuse and knows they can tell a parent finds it easier to stay away from harm.",
+            "what_we_see": "The chat contains a dangerous invitation: a fight, drugs or alcohol, or carrying a weapon.",
+            "why_it_matters": "Peer pressure is strong at this age and saying no is hard. A child who knows how to refuse finds it easier to stay away from harm.",
             "starters": [
                 "What have your friends been inviting you to lately?",
                 "When someone asks you to do something that feels wrong, what do you usually say?",
