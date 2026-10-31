@@ -1,57 +1,59 @@
 # Export the student to ExecuTorch (.pte) for the phone
 
-Turns the merged checkpoint from `train_1b.py` into a quantized `.pte` that runs on Android
-through ExecuTorch. Run on the GPU/Linux host, not the laptop. ExecuTorch officially supports
-Llama 3.2 1B/3B on mobile; exact flags change between releases, so pin the ExecuTorch version
-and check the installed example's README when you run this.
+Turns the merged HF checkpoint from `train_1b.py` into a quantized `.pte` that runs on Android
+through ExecuTorch. This step is CPU only; no GPU is needed. We use `optimum-executorch`, which
+exports a Hugging Face checkpoint directly, so there is no consolidated.pth conversion.
 
-Reference: https://github.com/pytorch/executorch/blob/main/examples/models/llama/README.md
+Run on Linux. On a Windows laptop use WSL2 (Ubuntu), or a small CPU cloud box. The merged
+checkpoint is at `code/distill/ondevice/out/Llama-3.2-1B-dcai-stage1/merged`; from WSL that is
+`/mnt/d/HACKATHON/DCAI/code/distill/ondevice/out/Llama-3.2-1B-dcai-stage1/merged`.
 
-## 1. Install ExecuTorch and the llama example
-
-```bash
-git clone https://github.com/pytorch/executorch.git
-cd executorch
-./install_executorch.sh
-./examples/models/llama/install_requirements.sh
-```
-
-Pin to a specific release tag rather than main for a reproducible build.
-
-## 2. Convert the merged HF checkpoint
-
-ExecuTorch's llama export expects a checkpoint plus a `params.json`. Convert the
-`out/Llama-3.2-1B-dcai-stage1/merged` directory (HF safetensors) to the format the example
-expects using the conversion utility shipped with the llama example (see its README section
-on fine-tuned / custom checkpoints). Keep the tokenizer that `train_1b.py` saved.
-
-## 3. Export to .pte with 4-bit quantization
-
-Use `export_llm` with a quantization config. Options, strongest accuracy last:
-
-- 4-bit groupwise (group size 32) weights + 8-bit dynamic activations (XNNPACK)
-- SpinQuant (lower outliers, higher accuracy)
-- QAT + LoRA (quantization-aware)
+## 1. Install optimum-executorch
 
 ```bash
-python -m extension.llm.export.export_llm \
-  --config examples/models/llama/config/llama_xnnpack_spinquant.yaml \
-  +base.model_class=llama3_2 \
-  +base.checkpoint=<converted_checkpoint> \
-  +base.params=<params.json>
+conda create -n oe python=3.11 && conda activate oe
+git clone https://github.com/huggingface/optimum-executorch.git
+cd optimum-executorch
+pip install '.[dev]'
+python install_dev.py   # pulls executorch, torch, torchao, transformers (nightly/source)
 ```
 
-Expected size for 1B at 4-bit: about 1.1 GB (SpinQuant ~1083 MiB, QAT+LoRA ~1127 MiB).
+Pin the optimum-executorch commit you use, since it tracks nightlies.
 
-## 4. Validate on the host, then on a phone
+## 2. Export to .pte (4-bit, XNNPACK / CPU)
 
-- Build the llama runner and run `llama_main` with the `.pte`, the tokenizer, and a sample
-  masked message to confirm the labels match the eval.
-- Push to an Android device with `adb` and benchmark, then wire it into the app behind the
-  on-device mode.
+```bash
+MERGED=/mnt/d/HACKATHON/DCAI/code/distill/ondevice/out/Llama-3.2-1B-dcai-stage1/merged
+optimum-cli export executorch \
+  --model "$MERGED" \
+  --task text-generation \
+  --recipe xnnpack \
+  --use_custom_sdpa \
+  --use_custom_kv_cache \
+  --qlinear 8da4w \
+  --qembedding 8w \
+  --output_dir out_pte
+```
 
-## Delivery
+`8da4w` is 8-bit dynamic activations with 4-bit weights (TorchAO PTQ); `8w` is 8-bit
+embeddings. The `.pte` lands in `out_pte/`. Expect roughly 0.7 to 1.1 GB for a 1B at 4-bit;
+record the real size after the run (no guessed numbers).
 
-The `.pte` is large, so it is not bundled in the APK. The app downloads it when a parent
-turns on the on-device mode, stores it in app data, and loads it lazily with an idle evict
-(see docs/proposals/on-device-behavior.md). HP that cannot run it stay on the online mode.
+## 3. Sanity check, then Android
+
+- Quick generation check: load the `.pte` with `optimum.executorch.ExecuTorchModelForCausalLM`
+  (or the ExecuTorch llama runner) on one masked sample message and confirm it emits the
+  stage 1 label JSON.
+- Wire the `.pte` into the Android app behind the on-device mode (see
+  docs/proposals/on-device-behavior.md). It is large, so the app downloads it on demand and
+  loads it lazily; it is not bundled in the APK.
+
+## Notes
+
+- `--model` takes a local HF directory (standard `from_pretrained`). If it rejects the path,
+  pass an absolute path, or check `optimum-cli export executorch --help`.
+- Measure before trusting the student: serve the merged checkpoint and run the same eval as the
+  8B student (`app.risk.stage1_eval`, `app.risk.pipeline_eval`). Report only eval numbers.
+- Alternative path: the raw ExecuTorch llama example
+  (examples/models/llama/README.md) also works, but it expects a consolidated.00.pth plus
+  params.json, so it needs an HF-to-consolidated conversion first. optimum-executorch avoids that.
