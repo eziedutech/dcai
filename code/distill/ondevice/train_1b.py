@@ -53,10 +53,6 @@ LORA_TARGETS = [
     "down_proj",
 ]
 
-# The Llama 3.2 Instruct assistant turn starts after this header; loss is masked to the text
-# that follows it, so only the assistant (label) turn trains.
-RESPONSE_TEMPLATE = "<|start_header_id|>assistant<|end_header_id|>\n\n"
-
 
 def balance(src: Path, dst: Path) -> tuple[int, int, dict[str, int]]:
     """Expand the training file by repeating labelled and rare-labelled examples, writing the
@@ -82,7 +78,7 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
     from datasets import load_dataset
     from peft import LoraConfig
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
+    from trl import SFTConfig, SFTTrainer
 
     if not TRAIN.exists():
         sys.exit(
@@ -96,14 +92,15 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    def render(example: dict) -> dict:
-        text = tokenizer.apply_chat_template(
-            example["messages"], tokenize=False, add_generation_prompt=False
-        )
-        return {"text": text}
+    # Prompt/completion split so loss falls on the assistant (label) turn only, without
+    # relying on chat-template generation tags: prompt = system + user, completion = the
+    # teacher's label JSON. TRL applies the chat template and masks the prompt tokens.
+    def to_pc(example: dict) -> dict:
+        msgs = example["messages"]
+        return {"prompt": msgs[:-1], "completion": [msgs[-1]]}
 
     dataset = load_dataset("json", data_files=str(BALANCED), split="train").map(
-        render, remove_columns=["messages"]
+        to_pc, remove_columns=["messages"]
     )
 
     # bf16 needs Ampere or newer; a T4 (Turing) has no bf16, so fall back to fp16 there.
@@ -123,10 +120,6 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         target_modules=LORA_TARGETS,
     )
 
-    collator = DataCollatorForCompletionOnlyLM(
-        response_template=RESPONSE_TEMPLATE, tokenizer=tokenizer
-    )
-
     config = SFTConfig(
         output_dir=str(out_dir / "trainer"),
         num_train_epochs=epochs,
@@ -134,12 +127,12 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         gradient_accumulation_steps=4,
         learning_rate=2e-4,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.1,
+        warmup_steps=15,
         logging_steps=10,
         bf16=use_bf16,
         fp16=not use_bf16,
-        max_seq_length=max_seq_len,
-        dataset_text_field="text",
+        max_length=max_seq_len,
+        completion_only_loss=True,
         report_to="none",
     )
 
@@ -148,7 +141,7 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         args=config,
         train_dataset=dataset,
         peft_config=lora,
-        data_collator=collator,
+        processing_class=tokenizer,
     )
     trainer.train()
 
