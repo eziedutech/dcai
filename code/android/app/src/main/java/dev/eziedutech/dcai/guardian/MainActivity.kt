@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import dev.eziedutech.dcai.guardian.data.AnalysisMode
 import dev.eziedutech.dcai.guardian.data.GuardianStore
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.BackendException
@@ -245,6 +246,14 @@ class MainActivity : LocalizedActivity() {
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
+                            val analysisModeLabel = when {
+                                ServiceLocator.onDeviceAnalyzer.installed &&
+                                    store.analysisMode == AnalysisMode.ONDEVICE ->
+                                    stringResource(R.string.set_analysis_ondevice)
+                                ServiceLocator.onDeviceAnalyzer.installed ->
+                                    stringResource(R.string.set_analysis_online)
+                                else -> stringResource(R.string.set_analysis_online_only)
+                            }
                             SettingsTab(
                                 padding, languageLabel, themeName(theme),
                                 DeviceInfo(
@@ -254,6 +263,7 @@ class MainActivity : LocalizedActivity() {
                                     consentVersion = config?.consentVersion ?: "-",
                                     appVersion = BuildConfig.VERSION_NAME,
                                 ),
+                                analysisMode = analysisModeLabel,
                                 onLanguage = { dialog = "language" },
                                 onTheme = { dialog = "theme" },
                                 onChangePin = { pinPurpose = "change_pin" },

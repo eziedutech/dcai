@@ -161,6 +161,10 @@
     <string name="set_for">Guiding</string>
     <string name="set_server">Server</string>
     <string name="set_version">Version</string>
+    <string name="set_analysis">Message analysis</string>
+    <string name="set_analysis_online">Online (server)</string>
+    <string name="set_analysis_ondevice">On device</string>
+    <string name="set_analysis_online_only">Online (server). On-device mode is not available in this version yet.</string>
     <string name="set_consent_version">consent %1$s</string>
     <string name="set_info">Information</string>
     <string name="set_consent_text">Consent text</string>

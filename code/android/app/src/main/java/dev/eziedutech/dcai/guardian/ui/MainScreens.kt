@@ -29,6 +29,7 @@ import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.Gavel
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.Lock
@@ -422,6 +423,7 @@ fun SettingsTab(
     languageLabel: String,
     themeLabel: String,
     info: DeviceInfo,
+    analysisMode: String,
     onLanguage: () -> Unit,
     onTheme: () -> Unit,
     onChangePin: () -> Unit,
@@ -450,6 +452,7 @@ fun SettingsTab(
             SettingRow(Icons.Rounded.Badge, stringResource(R.string.set_for), "${info.nickname} · ${info.ageRange}", trailing = null)
             SettingRow(Icons.Rounded.Dns, stringResource(R.string.set_server), info.server, trailing = null)
             SettingRow(Icons.Rounded.Info, stringResource(R.string.set_version), "${info.appVersion} · ${stringResource(R.string.set_consent_version, info.consentVersion)}", trailing = null)
+            SettingRow(Icons.Rounded.Memory, stringResource(R.string.set_analysis), analysisMode, trailing = null)
         }
 
         SectionTitle(stringResource(R.string.set_info))

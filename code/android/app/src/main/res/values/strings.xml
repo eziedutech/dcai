@@ -178,6 +178,10 @@
     <string name="set_for">Mendampingi</string>
     <string name="set_server">Server</string>
     <string name="set_version">Versi</string>
+    <string name="set_analysis">Analisis pesan</string>
+    <string name="set_analysis_online">Online (server)</string>
+    <string name="set_analysis_ondevice">Di ponsel</string>
+    <string name="set_analysis_online_only">Online (server). Mode di ponsel belum tersedia di versi ini.</string>
     <string name="set_consent_version">persetujuan %1$s</string>
     <string name="set_info">Informasi</string>
     <string name="set_consent_text">Teks persetujuan</string>
