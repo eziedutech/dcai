@@ -50,11 +50,11 @@ def main(pte: str, tokenizer_dir: str, train: str, max_new_tokens: int) -> None:
             tokenize=False,
             add_generation_prompt=True,
         )
-        # optimum-executorch generation. The exact call is confirmed on the instance against
-        # the installed version (introspect ExecuTorchModelForCausalLM.generate) and adjusted
-        # if needed; the generate loop itself does not change the rest of this script.
-        out = model.generate(
-            tokenizer=tok, prompt=prompt, max_seq_len=max_new_tokens + 1024
+        # optimum-executorch: text_generation(tokenizer, prompt, max_seq_len) returns the
+        # generated text; echo=False drops the prompt. max_seq_len is the total budget, capped
+        # by the model's exported max_seq_len (1024).
+        out = model.text_generation(
+            tokenizer=tok, prompt=prompt, max_seq_len=1024, echo=False
         )
         print("=" * 60)
         print(f"sender={sender} text={text!r}")
