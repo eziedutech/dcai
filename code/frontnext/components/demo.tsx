@@ -192,14 +192,8 @@ export function LiveDemo() {
   const assessing = f.packet !== null;
   return (
     <div ref={ref} className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,22rem)_auto_minmax(0,1fr)] lg:gap-6">
-      <div className="mx-auto w-full max-w-[22rem]">
-        <p className="eyebrow">{t("home.demo.eyebrow")}</p>
-        <h3 id="demo-h" className="mt-2 text-[1.5rem] font-bold leading-tight tracking-[-0.02em]">
-          {t("home.demo.title")}
-        </h3>
-        <p className="mt-2 mb-6 text-[0.95rem] leading-snug text-ink/75">{t("home.demo.lead")}</p>
-        <figure className="w-full">
-          <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.child")}</figcaption>
+      <figure className="mx-auto w-full max-w-[22rem]">
+        <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.child")}</figcaption>
         <div className="rounded-[var(--radius-phone)] border-[7px] border-ink bg-ink p-1 shadow-[0_30px_60px_-30px_rgba(20,35,58,0.6)]">
           <div className="flex h-[30rem] flex-col overflow-hidden rounded-[22px] bg-[#f4f6f9]">
             <div className="flex items-center gap-3 border-b border-line bg-white px-4 py-3">
@@ -245,14 +239,19 @@ export function LiveDemo() {
             </div>
           </div>
         </div>
-        </figure>
-      </div>
+      </figure>
 
       <Bridge packet={f.packet} frame={frame} />
 
-      <figure className="w-full">
-        <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.parent")}</figcaption>
-        <div className="glass-fill rounded-2xl bg-white/80 p-6">
+      <div className="w-full">
+        <p className="eyebrow">{t("home.demo.eyebrow")}</p>
+        <h3 id="demo-h" className="mt-2 max-w-[22ch] text-[1.5rem] font-bold leading-tight tracking-[-0.02em]">
+          {t("home.demo.title")}
+        </h3>
+        <p className="mt-2 mb-6 max-w-[52ch] text-[0.95rem] leading-snug text-ink/75">{t("home.demo.lead")}</p>
+        <figure className="w-full">
+          <figcaption className="mb-3 text-sm font-semibold text-slate">{t("home.demo.parent")}</figcaption>
+          <div className="glass-fill rounded-2xl bg-white/80 p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-lg font-bold">Raka, 10-12</p>
             <span key={f.level} className="arrive">
@@ -286,8 +285,9 @@ export function LiveDemo() {
             </svg>
             {t("home.demo.noText")}
           </p>
-        </div>
-      </figure>
+          </div>
+        </figure>
+      </div>
     </div>
   );
 }

@@ -215,6 +215,8 @@ const id = {
   "home.privacy.n1": "Isi pesan",
   "home.privacy.n2": "Gambar dan foto",
   "home.privacy.n4": "Riwayat penjelajahan",
+  "home.privacy.n5": "Lokasi atau GPS",
+  "home.privacy.n6": "Daftar kontak",
   "home.privacy.note":
     "Anak selalu tahu dcAI aktif: ada notifikasi tetap di ponselnya, dan tidak ada mode tersembunyi.",
 
@@ -770,6 +772,8 @@ const en: Record<Key, string> = {
   "home.privacy.n1": "Message text",
   "home.privacy.n2": "Images and photos",
   "home.privacy.n4": "Browsing history",
+  "home.privacy.n5": "Location or GPS",
+  "home.privacy.n6": "Contacts",
   "home.privacy.note":
     "The child always knows dcAI is on: a persistent notification on their phone, and no hidden mode.",
 

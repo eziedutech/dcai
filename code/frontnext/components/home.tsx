@@ -166,7 +166,7 @@ function Control() {
             <div>
               <p className="eyebrow">{t("home.privacy.never")}</p>
               <ul className="mt-3 space-y-2 text-[0.95rem]">
-                {(["n1", "n2", "n4"] as const).map((k) => (
+                {(["n1", "n2", "n4", "n5", "n6"] as const).map((k) => (
                   <li key={k} className="flex items-center gap-2 rounded-xl border border-dashed border-ink/15 px-3.5 py-2 font-medium">
                     <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden className="shrink-0 text-mendesak">
                       <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
