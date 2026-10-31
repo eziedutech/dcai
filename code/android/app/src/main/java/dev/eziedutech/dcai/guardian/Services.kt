@@ -3,6 +3,8 @@ package dev.eziedutech.dcai.guardian
 import android.content.Context
 import dev.eziedutech.dcai.guardian.data.GuardianStore
 import dev.eziedutech.dcai.guardian.ingest.MessageIngest
+import dev.eziedutech.dcai.guardian.ingest.NoOnDeviceAnalyzer
+import dev.eziedutech.dcai.guardian.ingest.OnDeviceAnalyzer
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.vision.ImageGuard
 import dev.eziedutech.dcai.guardian.vision.NoSensitiveModel
@@ -25,7 +27,7 @@ object ServiceLocator {
         val existing = cached
         if (existing != null && existing.first == server) return existing.second
         val client = BackendClient(server) { store(context).deviceToken }
-        cached = Triple(server, client, MessageIngest(store, client))
+        cached = Triple(server, client, MessageIngest(store, client, onDeviceAnalyzer))
         return client
     }
 
@@ -36,6 +38,11 @@ object ServiceLocator {
 
     /** A licensed sensitive-image classifier is registered here; none ships with this build. */
     val sensitiveModel: SensitiveModel = NoSensitiveModel
+
+    /** The on-device stage 1 analyzer (the Llama .pte mode) is registered here; none ships
+     * with this build, so ingest stays on the online path until an ExecuTorch runner is
+     * plugged in. */
+    val onDeviceAnalyzer: OnDeviceAnalyzer = NoOnDeviceAnalyzer
 
     private val detectors by lazy { OnDeviceDetectors(sensitiveModel) }
 

@@ -19,6 +19,12 @@ import kotlinx.serialization.json.Json
 @kotlinx.serialization.Serializable
 data class Nudge(val text: String, val at: Long)
 
+/** How messages are analysed on this phone: online (server, the default) or on-device. */
+enum class AnalysisMode {
+    ONLINE,
+    ONDEVICE,
+}
+
 class GuardianStore(context: Context) {
     private val prefs = context.getSharedPreferences("dcai_guardian", Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true }
@@ -104,6 +110,14 @@ class GuardianStore(context: Context) {
         get() = prefs.getString(KEY_CONSENT_READ, null)
         set(value) = prefs.edit { putString(KEY_CONSENT_READ, value) }
 
+    /** Which engine analyses messages on this phone. Online (server) is the default; the
+     * on-device mode needs the Llama model installed, otherwise ingest stays online. */
+    var analysisMode: AnalysisMode
+        get() =
+            runCatching { AnalysisMode.valueOf(prefs.getString(KEY_ANALYSIS_MODE, null) ?: "") }
+                .getOrDefault(AnalysisMode.ONLINE)
+        set(value) = prefs.edit { putString(KEY_ANALYSIS_MODE, value.name) }
+
     /** The child's latest reminders, newest first. Reminder text only, never a message. */
     val nudges: List<Nudge>
         get() = prefs.getString(KEY_NUDGES, null)?.let {
@@ -154,6 +168,7 @@ class GuardianStore(context: Context) {
         const val KEY_SITES_ON = "sites_on"
         const val KEY_SETUP_DONE = "setup_done"
         const val KEY_CONSENT_READ = "consent_read"
+        const val KEY_ANALYSIS_MODE = "analysis_mode"
         const val KEY_NUDGES = "nudges"
         const val KEY_BONUS = "time_bonus_"
         const val KEY_SESSION_LIMITS = "time_session_limits_"
