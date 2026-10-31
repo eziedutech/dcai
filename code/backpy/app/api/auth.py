@@ -150,6 +150,37 @@ def logout(body: RefreshIn, db: DbDep, guardian: GuardianDep) -> None:
     db.commit()
 
 
+class ChangePasswordIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    current_password: str = Field(max_length=128)
+    new_password: str = Field(min_length=10, max_length=128)
+
+
+@router.post("/change-password", status_code=status.HTTP_204_NO_CONTENT)
+def change_password(body: ChangePasswordIn, db: DbDep, guardian: GuardianDep) -> None:
+    """Change the account password. The current password must be given. Other sessions are
+    not ended here; 'sign out everywhere' is a separate, explicit action."""
+    if not verify_password(guardian.password_hash, body.current_password):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "current password is wrong")
+    guardian.password_hash = hash_password(body.new_password)
+    audit.record(db, audit.guardian_actor(guardian.id), "guardian_password_changed", guardian.id)
+    db.commit()
+
+
+@router.post("/logout-all", status_code=status.HTTP_204_NO_CONTENT)
+def logout_all(db: DbDep, guardian: GuardianDep) -> None:
+    """End every session of this account: revoke all its refresh tokens. The caller's own
+    cookies are cleared by the web layer, so this signs out this device too."""
+    db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.guardian_id == guardian.id, RefreshToken.revoked_at.is_(None))
+        .values(revoked_at=utcnow())
+    )
+    audit.record(db, audit.guardian_actor(guardian.id), "guardian_logout_all", guardian.id)
+    db.commit()
+
+
 @router.get("/me")
 def me(guardian: GuardianDep) -> GuardianOut:
     return _guardian_out(guardian)

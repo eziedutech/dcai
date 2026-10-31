@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n";
+import { APK_VERSION } from "@/lib/download";
 import type { Level } from "@/lib/types";
 
 export const LEVEL_STYLE: Record<Level, { text: string; bg: string; bar: string }> = {
@@ -176,8 +177,8 @@ export function SiteFooter() {
     {
       h: t("foot.product"),
       links: [
-        ["/#cara-kerja", t("nav.howHome")],
         ["/cara-kerja", t("nav.howPage")],
+        ["/panduan", t("foot.guide")],
         ["/fakta", t("nav.facts")],
         ["/next", t("foot.next")],
         ["/#tentang", t("foot.download")],
@@ -195,7 +196,9 @@ export function SiteFooter() {
     {
       h: t("foot.policy"),
       links: [
+        ["/ketentuan", t("foot.terms")],
         ["/privasi", t("nav.privacy")],
+        ["mailto:zia@eziedutech.dev", t("foot.contact")],
         ["/#solusi", t("foot.ecosystem")],
       ],
     },
@@ -225,7 +228,11 @@ export function SiteFooter() {
       <div className="border-t border-ink/[0.07]">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs text-slate sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>{t("foot.rights")}</p>
-          <p>{t("foot.synthetic")}</p>
+          <p className="flex items-center gap-3">
+            <span className="tabular">dcAI v{APK_VERSION}</span>
+            <span aria-hidden>·</span>
+            <span>{t("foot.synthetic")}</span>
+          </p>
         </div>
       </div>
     </footer>

@@ -11,6 +11,7 @@ const ALLOWED = [
   /^consents(\/text)?$/,
   /^devices\/[0-9a-f-]{36}$/,
   /^auth\/me$/,
+  /^auth\/change-password$/,
   /^ask$/,
   /^messages\/analyze$/,
   /^health$/,

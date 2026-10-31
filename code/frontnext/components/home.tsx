@@ -104,6 +104,27 @@ function Features() {
   );
 }
 
+/** A small animated mark: a rising signal with a pulsing "live" dot, for the real-time line. */
+function LiveMark() {
+  return (
+    <span aria-hidden className="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-navy/[0.06] ring-1 ring-navy/10">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" className="stroke-navy" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 22l6-7 5 4 8-11" />
+        <g className="fill-navy stroke-none">
+          <circle cx="5" cy="22" r="1.7" />
+          <circle cx="11" cy="15" r="1.7" />
+          <circle cx="16" cy="19" r="1.7" />
+          <circle cx="24" cy="8" r="1.7" />
+        </g>
+      </svg>
+      <span className="absolute right-2 top-2 flex h-2.5 w-2.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-aman/60" />
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-aman" />
+      </span>
+    </span>
+  );
+}
+
 function Control() {
   const { t } = useT();
   return (
@@ -123,6 +144,13 @@ function Control() {
               </li>
             ))}
           </ul>
+          <div className="glass-fill mt-8 flex items-center gap-4 rounded-2xl p-5">
+            <LiveMark />
+            <div>
+              <p className="font-semibold">{t("home.control.live")}</p>
+              <p className="mt-1 text-sm text-slate">{t("home.control.liveHint")}</p>
+            </div>
+          </div>
         </div>
         <div className="glass rounded-3xl p-7 sm:p-8">
           <h3 className="text-lg font-bold">{t("home.privacy.title")}</h3>
@@ -425,11 +453,6 @@ export function HomePage() {
         <section id="cara-kerja" className="mx-auto mt-32 max-w-6xl scroll-mt-24 px-5 sm:px-8" aria-labelledby="how-h">
           <SectionHead id="how-h" eyebrow={t("home.how.eyebrow")} title={t("home.how.title")} lead={t("home.how.lead")} />
           <div className="glass relative z-10 mt-10 rounded-[2rem] p-5 sm:p-8" aria-labelledby="demo-h">
-            <p className="eyebrow">{t("home.demo.eyebrow")}</p>
-            <h3 id="demo-h" className={`mt-3 max-w-[26ch] ${sub}`}>
-              {t("home.demo.title")}
-            </h3>
-            <p className="mt-3 mb-7 max-w-[64ch] text-ink/75">{t("home.demo.lead")}</p>
             <LiveDemo />
           </div>
           <CardDemo />

@@ -100,6 +100,48 @@ def test_logout_revokes_refresh_token(api):
     assert again.status_code == 401
 
 
+def test_change_password(api):
+    tokens = register(api)
+    # Wrong current password is refused.
+    bad = api.post(
+        "/v1/auth/change-password",
+        json={"current_password": "salah", "new_password": "sandi-baru-panjang"},
+        headers=auth(tokens),
+    )
+    assert bad.status_code == 401
+    ok = api.post(
+        "/v1/auth/change-password",
+        json={"current_password": "kata-sandi-panjang", "new_password": "sandi-baru-panjang"},
+        headers=auth(tokens),
+    )
+    assert ok.status_code == 204
+    # The new password works; the old one no longer does.
+    assert (
+        api.post(
+            "/v1/auth/login", json={"email": "ibu@example.com", "password": "sandi-baru-panjang"}
+        ).status_code
+        == 200
+    )
+    assert (
+        api.post(
+            "/v1/auth/login", json={"email": "ibu@example.com", "password": "kata-sandi-panjang"}
+        ).status_code
+        == 401
+    )
+
+
+def test_logout_all_ends_every_session(api):
+    tokens = register(api)
+    second = api.post("/v1/auth/refresh", json={"refresh_token": tokens["refresh_token"]}).json()
+    resp = api.post("/v1/auth/logout-all", headers=auth(second))
+    assert resp.status_code == 204
+    # The newest refresh token no longer works either.
+    assert (
+        api.post("/v1/auth/refresh", json={"refresh_token": second["refresh_token"]}).status_code
+        == 401
+    )
+
+
 def test_no_secret_key_refuses_to_issue_tokens(api, monkeypatch):
     api.app.state.settings.secret_key = ""
     resp = api.post(

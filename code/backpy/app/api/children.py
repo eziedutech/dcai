@@ -97,6 +97,22 @@ def add_child(body: ChildIn, db: DbDep, guardian: GuardianDep) -> ChildOut:
     return _child_out(db, child)
 
 
+class ChildPatchIn(BaseModel):
+    nickname: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=40)]
+
+
+@router.patch("/children/{child_id}")
+def update_child(
+    child_id: uuid.UUID, body: ChildPatchIn, db: DbDep, guardian: GuardianDep
+) -> ChildOut:
+    """Rename a child's nickname. Nothing else about the child changes."""
+    child = owned_child(db, guardian, child_id)
+    child.nickname = body.nickname
+    audit.record(db, audit.guardian_actor(guardian.id), "child_renamed", child.id)
+    db.commit()
+    return _child_out(db, child)
+
+
 @router.get("/children")
 def list_children(db: DbDep, guardian: GuardianDep) -> list[ChildOut]:
     children = db.scalars(

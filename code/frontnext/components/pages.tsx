@@ -271,3 +271,93 @@ export function HowPage() {
     </>
   );
 }
+
+/** A plain document page: header, then glass cards. Used for the guide and the terms. */
+function DocPage({ eyebrow, title, lead, sections }: { eyebrow: string; title: string; lead: string; sections: Section[] }) {
+  return (
+    <>
+      <SiteHeader />
+      <main className="mx-auto max-w-5xl px-5 pt-14 sm:px-8">
+        <PageIntro eyebrow={eyebrow} title={title} lead={lead} />
+        <div className="mt-10 grid gap-6">
+          {sections.map((s) => (
+            <Card key={s.h} s={s} />
+          ))}
+        </div>
+      </main>
+      <SiteFooter />
+    </>
+  );
+}
+
+const CONTACT = "zia@eziedutech.dev";
+
+const GUIDE: Record<"id" | "en", { title: string; lead: string; sections: Section[] }> = {
+  id: {
+    title: "Panduan penggunaan",
+    lead: "Langkah memakai dcAI, dari membuat akun sampai membaca dasbor. Semua di bawah persetujuan Anda, dan dcAI selalu terlihat di ponsel anak.",
+    sections: [
+      { h: "1. Buat akun orang tua", list: ["Daftar lewat halaman Daftar dengan email dan kata sandi. Bahasa bisa diubah kapan saja di Pengaturan umum."] },
+      { h: "2. Tambah anak", list: ["Di dasbor, pilih Tambah anak. Isi nama panggilan (bisa diganti nanti di tab Pengaturan anak) dan rentang usia (10-12, 13-15, atau 16-17)."] },
+      { h: "3. Setujui lingkup", list: ["Pilih apa yang boleh dibantu dcAI: percakapan, teks layar, gambar, situs, papan ketik, waktu online, dan opsional sekolah. Setiap lingkup bisa ditarik kapan saja di tab Pengaturan anak."] },
+      { h: "4. Pasang ponsel anak", list: ["Buka tab Ponsel pada anak itu, pilih Hubungkan ponsel untuk membuat kode sekali pakai, lalu masukkan kode itu di aplikasi dcAI di ponsel anak.", "Saat memasang, buat PIN orang tua di ponsel. PIN dipakai untuk mematikan proteksi atau menyetujui situs/gambar, dan hanya tersimpan di ponsel itu.", "Anak uninstall atau ganti ponsel? Buat kode baru dari tab Ponsel dan pasang lagi."] },
+      { h: "5. Baca dasbor", list: ["Ringkasan: level 7 hari terakhir, insight dengan pembuka percakapan, peristiwa, dan daftar percakapan (pola saja, tanpa isi pesan.)", "Waktu online: batas harian per kategori, jam tidur, jeda video pendek, dan mode fokus.", "Sekolah: masukkan kode kelas dari guru untuk ikut statistik kelas anonim, atau keluar kapan saja.", "Pengaturan: ganti nama anak, atur lingkup persetujuan, bersihkan riwayat, atau hapus semua data anak."] },
+      { h: "6. Tanya dcAI", list: ["Tanyakan apa saja tentang insight anak Anda. Jawaban hanya dari data yang juga tampil di dasbor; pertanyaan dan jawaban tidak disimpan."] },
+      { h: "Butuh bantuan?", p: [`Hubungi kami di ${CONTACT}.`] },
+    ],
+  },
+  en: {
+    title: "User guide",
+    lead: "How to use dcAI, from creating an account to reading the dashboard. Everything runs under your consent, and dcAI is always visible on the child's phone.",
+    sections: [
+      { h: "1. Create a parent account", list: ["Sign up on the Sign up page with an email and a password. You can change the language any time in General settings."] },
+      { h: "2. Add a child", list: ["In the dashboard, choose Add a child. Enter a nickname (you can rename it later in the child's Settings tab) and an age range (10-12, 13-15 or 16-17)."] },
+      { h: "3. Agree to scopes", list: ["Choose what dcAI may help with: conversations, screen text, images, sites, the keyboard, time online, and optionally school. Each scope can be withdrawn at any time in the child's Settings tab."] },
+      { h: "4. Pair the child's phone", list: ["Open that child's Phone tab, choose Connect a phone to make a single-use code, then enter it in the dcAI app on the child's phone.", "During setup, create a parent PIN on the phone. The PIN is used to turn protections off or to allow a site or image, and it is stored only on that phone.", "Child uninstalled or changed phones? Make a new code from the Phone tab and pair again."] },
+      { h: "5. Read the dashboard", list: ["Overview: the level over the last 7 days, insight with conversation starters, events, and the conversation list (patterns only, never message text).", "Time online: daily limits per category, bedtime, short-video breaks, and focus mode.", "School: enter a class code from the teacher to join the anonymous class statistics, or leave at any time.", "Settings: rename the child, manage consent scopes, clear history, or delete all of the child's data."] },
+      { h: "6. Ask dcAI", list: ["Ask anything about your child's insight. Answers come only from data the dashboard also shows; questions and answers are not stored."] },
+      { h: "Need help?", p: [`Reach us at ${CONTACT}.`] },
+    ],
+  },
+};
+
+export function GuidePage() {
+  const { lang, t } = useT();
+  return <DocPage eyebrow={t("page.guide.eyebrow")} {...GUIDE[lang]} />;
+}
+
+const TERMS: Record<"id" | "en", { title: string; lead: string; sections: Section[] }> = {
+  id: {
+    title: "Ketentuan Layanan",
+    lead: "Ketentuan penggunaan dcAI. Ini produk tahap awal (MVP) dan belum ditinjau penasihat hukum.",
+    sections: [
+      { h: "Tentang layanan", p: ["dcAI adalah layanan pendamping keselamatan digital anak, salah satu pilar digitalsafe.app oleh EZI EDUTECH. Saat ini berstatus MVP untuk peragaan dan pengembangan; semua data contoh adalah sintetis dan layanan belum ditujukan untuk keluarga sungguhan."] },
+      { h: "Penggunaan yang diizinkan", list: ["Gunakan dcAI hanya untuk mendampingi anak Anda sendiri atau anak di bawah perwalian sah Anda.", "Selama MVP, jangan memasukkan data pribadi anak yang sebenarnya.", "Jangan menyalahgunakan layanan untuk mengawasi orang lain tanpa hak, atau melanggar hukum yang berlaku."] },
+      { h: "Akun dan keamanan", list: ["Anda bertanggung jawab menjaga kerahasiaan kata sandi akun dan PIN orang tua.", "Beri tahu kami bila Anda menduga ada akses tanpa izin. Anda dapat keluar dari semua perangkat dari Pengaturan umum."] },
+      { h: "Penilaian AI adalah perkiraan", p: ["Penilaian dan bimbingan dcAI dibuat oleh model AI, bisa salah, dan bukan nasihat medis, psikologis, atau hukum. Keputusan tetap pada Anda sebagai orang tua."] },
+      { h: "Ketersediaan dan perubahan", p: ["Karena masih MVP, fitur dapat berubah, terganggu, atau dihentikan sewaktu-waktu tanpa pemberitahuan. Ketentuan ini dapat diperbarui; versi terbaru yang berlaku."] },
+      { h: "Batasan tanggung jawab", p: ["Sejauh diizinkan hukum, layanan disediakan apa adanya tanpa jaminan apa pun, dan kami tidak bertanggung jawab atas kerugian yang timbul dari penggunaan MVP ini."] },
+      { h: "Kode sumber", p: ["Kode dcAI tersedia dengan lisensi MIT. Komponen pihak ketiga mengikuti lisensinya masing-masing."] },
+      { h: "Kontak", p: [`Pertanyaan tentang ketentuan ini dapat dikirim ke ${CONTACT}. Teks ini dan halaman Privasi belum ditinjau penasihat hukum.`] },
+    ],
+  },
+  en: {
+    title: "Terms of Service",
+    lead: "The terms for using dcAI. This is an early-stage product (MVP) and has not had legal review.",
+    sections: [
+      { h: "About the service", p: ["dcAI is a child digital-safety companion, one pillar of digitalsafe.app by EZI EDUTECH. It is currently an MVP for demonstration and development; all example data is synthetic and the service is not yet meant for real families."] },
+      { h: "Permitted use", list: ["Use dcAI only to support your own child or a child under your lawful guardianship.", "During the MVP, do not enter a real child's personal data.", "Do not misuse the service to watch other people without the right to, or to break applicable law."] },
+      { h: "Account and security", list: ["You are responsible for keeping your account password and the parent PIN confidential.", "Tell us if you suspect unauthorised access. You can sign out of every device from General settings."] },
+      { h: "AI assessments are estimates", p: ["dcAI's assessments and guidance are produced by AI models, can be wrong, and are not medical, psychological or legal advice. Decisions remain yours as the parent."] },
+      { h: "Availability and changes", p: ["As an MVP, features may change, break or stop at any time without notice. These terms may be updated; the latest version applies."] },
+      { h: "Limitation of liability", p: ["To the extent permitted by law, the service is provided as is, without warranty of any kind, and we are not liable for losses arising from use of this MVP."] },
+      { h: "Source code", p: ["dcAI's code is available under the MIT license. Third-party components follow their own licenses."] },
+      { h: "Contact", p: [`Questions about these terms can be sent to ${CONTACT}. This page and the Privacy page have not had legal review.`] },
+    ],
+  },
+};
+
+export function TermsPage() {
+  const { lang, t } = useT();
+  return <DocPage eyebrow={t("page.terms.eyebrow")} {...TERMS[lang]} />;
+}

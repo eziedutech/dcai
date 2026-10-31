@@ -502,10 +502,26 @@ function SettingsPanel({ child }: { child: Child }) {
   const [busy, setBusy] = useState(false);
   const [confirmingClear, setConfirmingClear] = useState(false);
   const [cleared, setCleared] = useState(false);
+  const [name, setName] = useState(child.nickname);
+  const [nameSaved, setNameSaved] = useState(false);
 
   useEffect(() => {
     api<ConsentText>("consents/text").then(setText, () => undefined);
   }, []);
+
+  async function rename(e: React.FormEvent) {
+    e.preventDefault();
+    const n = name.trim();
+    if (!n || n === child.nickname) return;
+    setBusy(true);
+    try {
+      await api(`children/${child.id}`, { method: "PATCH", body: { nickname: n } });
+      await reload();
+      setNameSaved(true);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function toggle(scope: Scope, on: boolean) {
     if (!text) return;
@@ -541,6 +557,26 @@ function SettingsPanel({ child }: { child: Child }) {
 
   return (
     <div className="space-y-6">
+      <section className="glass rounded-2xl p-6 sm:p-7" aria-labelledby="name-h">
+        <h2 id="name-h" className="text-lg font-bold">{t("set.nameLabel")}</h2>
+        <form onSubmit={rename} className="mt-3 flex flex-wrap items-end gap-2">
+          <Field
+            id={`name-${child.id}`}
+            label={t("add.nickname")}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setNameSaved(false);
+            }}
+            maxLength={40}
+          />
+          <Button type="submit" disabled={busy || !name.trim() || name.trim() === child.nickname}>
+            {t("set.save")}
+          </Button>
+          {nameSaved && <span role="status" className="text-sm text-aman">{t("set.saved")}</span>}
+        </form>
+      </section>
+
       <section className="glass rounded-2xl p-6 sm:p-7" aria-labelledby="consent-h">
         <h2 id="consent-h" className="text-lg font-bold">{t("set.consent")}</h2>
         <p className="mt-1 max-w-[62ch] text-sm text-slate">{t("dash.settingsLead")}</p>

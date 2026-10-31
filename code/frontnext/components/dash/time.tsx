@@ -407,6 +407,35 @@ function BedtimeFields({ label, value, onChange }: { label: string; value: Bedti
   );
 }
 
+/** One bounded, collapsible group in the policy form, so the long settings do not run
+ * together. The summary gives a glance of the group while it is closed. */
+function Fold({
+  title,
+  summary,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  summary?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <details open={defaultOpen} className="group glass-fill rounded-2xl">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-3.5 [&::-webkit-details-marker]:hidden">
+        <span className="min-w-0">
+          <span className="block font-bold">{title}</span>
+          {summary && <span className="mt-0.5 block truncate text-sm text-slate group-open:hidden">{summary}</span>}
+        </span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden className="shrink-0 text-slate transition-transform group-open:rotate-180">
+          <path d="M4 6l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </summary>
+      <div className="border-t border-ink/[0.07] px-5 py-5">{children}</div>
+    </details>
+  );
+}
+
 function PolicyForm({ childId, ageRange, initial, onSaved }: {
   childId: string;
   ageRange: string;
@@ -496,10 +525,9 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
         {t("time.enabled")}
       </label>
 
-      <fieldset className={`mt-6 space-y-6 ${p.enabled ? "" : "pointer-events-none opacity-50"}`} disabled={!p.enabled}>
-        <div>
-          <p className="text-sm font-semibold">{t("time.schoolDays")}</p>
-          <div className="mt-2 flex flex-wrap gap-2">
+      <fieldset className={`mt-6 space-y-3 ${p.enabled ? "" : "pointer-events-none opacity-50"}`} disabled={!p.enabled}>
+        <Fold title={t("time.schoolDays")} defaultOpen>
+          <div className="flex flex-wrap gap-2">
             {days.map((name, i) => {
               const n = i + 1;
               const on = p.school_days.includes(n);
@@ -516,16 +544,24 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
               );
             })}
           </div>
-        </div>
+        </Fold>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-4">
-            <p className="font-bold">{t("time.daily")}</p>
+        <Fold
+          title={t("time.daily")}
+          defaultOpen
+          summary={`${p.daily_limit_school ?? "~"} / ${p.daily_limit_weekend ?? "~"} ${t("time.minutes")}`}
+        >
+          <div className="grid max-w-md gap-4">
             <Minutes label={t("time.school")} nullable value={p.daily_limit_school} onChange={(v) => set({ daily_limit_school: v })} />
             <Minutes label={t("time.weekend")} nullable value={p.daily_limit_weekend} onChange={(v) => set({ daily_limit_weekend: v })} />
           </div>
-          <div className="space-y-4">
-            <p className="font-bold">{t("time.categories")}</p>
+        </Fold>
+
+        <Fold
+          title={t("time.categories")}
+          summary={`${CATS.filter((c) => p.category_limits[c] != null).length}/${CATS.length}`}
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
             {CATS.map((c) => (
               <Minutes
                 key={c}
@@ -536,21 +572,23 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
               />
             ))}
           </div>
-        </div>
+        </Fold>
 
-        <div>
-          <p className="font-bold">{t("time.bedtime")}</p>
-          <div className="mt-3 grid gap-4 md:grid-cols-2">
+        <Fold title={t("time.bedtime")} defaultOpen>
+          <div className="grid gap-4 md:grid-cols-2">
             <BedtimeFields label={t("time.school")} value={p.bedtime_school} onChange={(b) => set({ bedtime_school: b })} />
             <BedtimeFields label={t("time.weekend")} value={p.bedtime_weekend} onChange={(b) => set({ bedtime_weekend: b })} />
           </div>
           <div className="mt-4">
             <Minutes label={t("time.windDown")} min={0} max={60} value={p.wind_down_minutes} onChange={(v) => set({ wind_down_minutes: v ?? 0 })} />
           </div>
-        </div>
+        </Fold>
 
-        <div>
-          <label className="flex items-center gap-2.5 font-bold">
+        <Fold
+          title={t("time.session")}
+          summary={p.session.enabled ? t("dash.protectionOn") : t("dash.protectionOff")}
+        >
+          <label className="flex items-center gap-2.5 font-semibold">
             <input
               type="checkbox"
               className="h-4 w-4 accent-[#1f3a5f]"
@@ -564,11 +602,10 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
             <Minutes label={t("time.sessionLimit")} min={10} max={240} value={p.session.limit_minutes} onChange={(v) => set({ session: { ...p.session, limit_minutes: v ?? 10 } })} />
             <Minutes label={t("time.sessionBreak")} min={1} max={60} value={p.session.break_minutes} onChange={(v) => set({ session: { ...p.session, break_minutes: v ?? 1 } })} />
           </div>
-        </div>
+        </Fold>
 
-        <label className="block">
-          <span className="block font-bold">{t("time.allowed")}</span>
-          <span className="mt-1 block text-sm text-slate">{t("time.allowedHint")}</span>
+        <Fold title={t("time.allowed")} summary={`${allowed.split(/\s+/).filter(Boolean).length}`}>
+          <p className="text-sm text-slate">{t("time.allowedHint")}</p>
           <textarea
             rows={3}
             value={allowed}
@@ -580,20 +617,25 @@ function PolicyForm({ childId, ageRange, initial, onSaved }: {
             className="mt-2 w-full max-w-xl rounded-xl border border-ink/10 bg-white/75 px-3.5 py-2.5 font-mono text-sm outline-none focus:border-navy"
             placeholder="com.example.belajar"
           />
-        </label>
+        </Fold>
 
-        <label className="flex items-start gap-2.5">
-          <input
-            type="checkbox"
-            className="mt-1 h-4 w-4 accent-[#1f3a5f]"
-            checked={p.focus_mode}
-            onChange={(e) => set({ focus_mode: e.target.checked })}
-          />
-          <span>
-            <span className="block font-bold">{t("time.focus")}</span>
-            <span className="mt-1 block text-sm text-slate">{t("time.focusHint")}</span>
-          </span>
-        </label>
+        <Fold
+          title={t("time.focus")}
+          summary={p.focus_mode ? t("dash.protectionOn") : t("dash.protectionOff")}
+        >
+          <label className="flex items-start gap-2.5">
+            <input
+              type="checkbox"
+              className="mt-1 h-4 w-4 accent-[#1f3a5f]"
+              checked={p.focus_mode}
+              onChange={(e) => set({ focus_mode: e.target.checked })}
+            />
+            <span>
+              <span className="block font-bold">{t("time.focus")}</span>
+              <span className="mt-1 block text-sm text-slate">{t("time.focusHint")}</span>
+            </span>
+          </label>
+        </Fold>
       </fieldset>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">

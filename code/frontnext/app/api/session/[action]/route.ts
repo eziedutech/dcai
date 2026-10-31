@@ -50,6 +50,20 @@ export async function POST(request: Request, ctx: RouteContext<"/api/session/[ac
     await clearTokens();
     return new Response(null, { status: 204 });
   }
+
+  if (action === "logout-all") {
+    const jar = await cookies();
+    const at = jar.get(ACCESS_COOKIE)?.value;
+    if (at) {
+      await fetch(`${BACKEND}/v1/auth/logout-all`, {
+        method: "POST",
+        headers: { authorization: `Bearer ${at}` },
+        cache: "no-store",
+      }).catch(() => undefined);
+    }
+    await clearTokens();
+    return new Response(null, { status: 204 });
+  }
   return json({ detail: "not found" }, 404);
 }
 

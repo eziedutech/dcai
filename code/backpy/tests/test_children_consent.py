@@ -174,6 +174,24 @@ def test_delete_child_data_cascades_and_is_audited(api, db_url):
     assert api.get("/v1/children", headers=auth(tokens)).json() == []
 
 
+def test_rename_child(api):
+    tokens = register(api)
+    child = add_child(api, tokens, nickname="Anak 1")
+    resp = api.patch(
+        f"/v1/children/{child['id']}", json={"nickname": "Bintang"}, headers=auth(tokens)
+    )
+    assert resp.status_code == 200 and resp.json()["nickname"] == "Bintang"
+    assert api.get("/v1/children", headers=auth(tokens)).json()[0]["nickname"] == "Bintang"
+    # Another guardian cannot rename this child.
+    other = register(api, email="lain@example.com")
+    assert (
+        api.patch(
+            f"/v1/children/{child['id']}", json={"nickname": "X"}, headers=auth(other)
+        ).status_code
+        == 404
+    )
+
+
 def test_clear_history_keeps_child_consent_and_phones(api, db_url):
     import uuid as _uuid
 

@@ -45,7 +45,10 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
   return parse<T>(resp);
 }
 
-export async function session<T>(action: "login" | "register" | "logout", body?: unknown): Promise<T> {
+export async function session<T>(
+  action: "login" | "register" | "logout" | "logout-all",
+  body?: unknown,
+): Promise<T> {
   const resp = await fetch(`/api/session/${action}`, {
     method: "POST",
     headers: { "content-type": "application/json", "x-dcai-request": "1" },
