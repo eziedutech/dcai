@@ -11,7 +11,9 @@ so it uses HF transformers + PEFT and writes a merged checkpoint on disk.
 
 ## What runs where
 
-- Training and export run on a GPU host (Baseten Training Jobs, H100). Not on the laptop.
+- Training and export run on a GPU host (Brev / NVIDIA GPU VM). Not on the laptop. The
+  Baseten hackathon grant is inference only (Muse Spark Open), so it is not used for training.
+  Stop the Brev instance when idle; it bills per hour.
 - The trained `.pte` is downloaded by the Android app when a parent chooses the on-device
   mode. The online mode (Muse Spark) stays the default, and a lightweight classifier is a
   planned third option.
