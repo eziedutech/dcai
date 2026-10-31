@@ -244,6 +244,15 @@ def test_phone_never_receives_parent_insight(api):
 
 def test_no_screen_text_in_database_response_logs_or_live_updates(api, db_url, caplog):
     import logging
+    import re
+
+    # Conversation ids are random UUIDs whose hex can contain a short digit run like "0812"
+    # by chance, which would fail the phone-leak check for the wrong reason. Strip UUIDs
+    # before that check; the raw screen text SENTINEL is a unique marker and stays as is.
+    uuid_re = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.I)
+
+    def no_uuid(s: str) -> str:
+        return uuid_re.sub("", s)
 
     caplog.set_level(logging.DEBUG)
     _tokens, child, dev, body = paired(api)
@@ -251,14 +260,15 @@ def test_no_screen_text_in_database_response_logs_or_live_updates(api, db_url, c
     for msg in (f"halo {SENTINEL}", f"rahasia ya {SENTINEL}", f"pindah {SENTINEL} 0812-0000-1234"):
         resp = message(api, dev, msg)
         assert resp.status_code == 200
-        assert SENTINEL not in resp.text and "0812" not in resp.text
+        assert SENTINEL not in resp.text and "0812" not in no_uuid(resp.text)
 
     assert any(r.name.startswith("dcai") for r in caplog.records)  # something was logged
-    assert SENTINEL not in caplog.text and "0812" not in caplog.text
+    assert SENTINEL not in caplog.text and "0812" not in no_uuid(caplog.text)
     bus = api.app.state.broker
     for key in (f"device:{body['device_id']}", f"child:{child['id']}"):
         for e in bus.since(key, "old-0"):
-            assert SENTINEL not in e.encode(bus.boot) and "0812" not in e.encode(bus.boot)
+            enc = e.encode(bus.boot)
+            assert SENTINEL not in enc and "0812" not in no_uuid(enc)
     engine = create_engine(db_url)
     with engine.connect() as conn:
         for table in inspect(engine).get_table_names():
