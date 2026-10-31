@@ -106,8 +106,12 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         render, remove_columns=["messages"]
     )
 
+    # bf16 needs Ampere or newer; a T4 (Turing) has no bf16, so fall back to fp16 there.
+    use_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    dtype = torch.bfloat16 if use_bf16 else torch.float16
+    print(f"dtype: {'bf16' if use_bf16 else 'fp16'}")
     model = AutoModelForCausalLM.from_pretrained(
-        base_model, torch_dtype=torch.bfloat16, device_map="auto"
+        base_model, torch_dtype=dtype, device_map="auto", low_cpu_mem_usage=True
     )
 
     lora = LoraConfig(
@@ -132,7 +136,8 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         lr_scheduler_type="cosine",
         warmup_ratio=0.1,
         logging_steps=10,
-        bf16=True,
+        bf16=use_bf16,
+        fp16=not use_bf16,
         max_seq_length=max_seq_len,
         dataset_text_field="text",
         report_to="none",

@@ -4,17 +4,23 @@ Concrete recipe to produce the on-device student checkpoint on a Brev GPU VM, th
 to a `.pte` for the phone. Llama 3.2 1B LoRA SFT is light (minutes on one mid GPU). Stop the
 instance when done; Brev bills per hour.
 
-## 0. One-time prerequisites (on your accounts)
+## 0. Base model (easiest path)
 
-- Accept the Llama 3.2 Community License for `meta-llama/Llama-3.2-1B-Instruct` on Hugging
-  Face, and create an HF access token.
-- Keep the token out of git and out of chat. Put it in the environment on the instance only.
+- Use the ungated mirror `unsloth/Llama-3.2-1B-Instruct`: same Llama 3.2 1B Instruct weights,
+  safetensors BF16, no access gate, no HF token needed. Pass it with `--base-model`.
+- The official `meta-llama/Llama-3.2-1B-Instruct` is gated (approval can be pending); if you
+  prefer it, accept the license on your HF account and set `HF_TOKEN` on the instance only.
+- Either way the Llama 3.2 Community License applies: the product states "Built with Llama".
 
 ## 1. Provision the instance
 
-- Brev GPU VM, Ubuntu, Python 3.12.
-- GPU: an L4 or A10 (24 GB) is plenty for 1B LoRA in bf16. An A100 is faster but costs more;
-  not needed for 1B. Disk: ~100 GB (base weights ~2.5 GB plus checkpoints).
+- Brev GPU VM, Ubuntu, Python 3.12, x86_64.
+- GPU: 16 GB VRAM is enough for 1B LoRA. A T4 (16 GB) works; the script auto-uses fp16 on it
+  because T4 has no bf16. An L4/A10 (24 GB, bf16 native) is a bit nicer but not needed.
+- System RAM and CPU matter here: pick at least ~16 GB RAM and 2+ vCPUs. A tiny 1 vCPU /
+  3.75 GB RAM tier risks running out of memory when loading or merging the model, and is slow
+  to pip install and tokenise.
+- Disk: ~100 GB is enough for 1B (base ~2.5 GB plus checkpoints); more is fine.
 
 ## 2. Get the code and data onto the instance
 
@@ -37,14 +43,14 @@ not include it. Two options:
 
 ```bash
 cd ~/dcai/code/distill/ondevice
-export HF_TOKEN=...        # from your HF account, never commit or paste in chat
+# HF_TOKEN only needed for the gated official repo; the unsloth mirror needs none.
 pip install -r requirements.txt
 ```
 
 ## 4. Train
 
 ```bash
-python train_1b.py --epochs 2
+python train_1b.py --base-model unsloth/Llama-3.2-1B-Instruct --epochs 2
 ```
 
 Writes the merged checkpoint to `out/Llama-3.2-1B-dcai-stage1/merged`. This reuses the same
