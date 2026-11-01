@@ -26,6 +26,10 @@ class MessageIngest(
     private val store: GuardianStore,
     private val client: BackendClient,
     private val analyzer: OnDeviceAnalyzer = NoOnDeviceAnalyzer,
+    // Whether this phone has the memory headroom to run the on-device model (see
+    // DeviceCapabilities). On a phone that does not, the on-device path is never taken even if
+    // the mode was set or the files are present: every masked message goes online, the default.
+    private val onDeviceAllowed: Boolean = true,
 ) {
     /**
      * @param threadId a stable identifier of the conversation on the phone (chat title,
@@ -55,7 +59,7 @@ class MessageIngest(
         // ones. Online mode (the default) always sends the masked text for the server to
         // judge. If the parent chose on-device but no model is installed, or the model
         // declines, fall through and send (fail safe).
-        if (store.analysisMode == AnalysisMode.ONDEVICE && analyzer.installed) {
+        if (store.analysisMode == AnalysisMode.ONDEVICE && onDeviceAllowed && analyzer.installed) {
             val r = analyzer.label(sender, maskedText)
             val flagged = r == null || r.labels.isNotEmpty() || r.signal >= ONDEVICE_SEND_SIGNAL
             if (!flagged) return null

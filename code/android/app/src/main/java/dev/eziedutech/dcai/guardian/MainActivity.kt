@@ -41,6 +41,7 @@ import dev.eziedutech.dcai.guardian.net.BackendException
 import dev.eziedutech.dcai.guardian.service.GuardianService
 import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
 import dev.eziedutech.dcai.guardian.ui.AppLocale
+import dev.eziedutech.dcai.guardian.ingest.DeviceCapabilities
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceModel
 import dev.eziedutech.dcai.guardian.ui.AnalysisModeDialog
 import dev.eziedutech.dcai.guardian.ui.ChoiceDialog
@@ -255,8 +256,10 @@ class MainActivity : LocalizedActivity() {
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
+                            val canOnDevice = DeviceCapabilities.supportsOnDevice(context)
                             val installed = ServiceLocator.onDeviceModel(context).installed
                             val analysisModeLabel = when {
+                                !canOnDevice -> stringResource(R.string.set_analysis_unsupported)
                                 installed && store.analysisMode == AnalysisMode.ONDEVICE ->
                                     stringResource(R.string.set_analysis_ondevice)
                                 installed -> stringResource(R.string.set_analysis_online)
@@ -350,6 +353,7 @@ class MainActivity : LocalizedActivity() {
                 confirmButton = { TextButton(onClick = { dialog = null }) { Text(stringResource(R.string.action_close)) } },
             )
             "analysis" -> AnalysisModeDialog(
+                supported = DeviceCapabilities.supportsOnDevice(context),
                 installed = ServiceLocator.onDeviceModel(context).installed,
                 mode = store.analysisMode,
                 progress = modelProgress,

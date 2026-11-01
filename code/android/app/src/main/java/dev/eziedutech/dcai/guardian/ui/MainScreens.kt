@@ -618,6 +618,7 @@ fun ChoiceDialog(title: String, options: List<Pair<String, String>>, selected: S
  */
 @Composable
 fun AnalysisModeDialog(
+    supported: Boolean,
     installed: Boolean,
     mode: AnalysisMode,
     progress: Int?,
@@ -632,7 +633,11 @@ fun AnalysisModeDialog(
         title = { Text(stringResource(R.string.set_analysis)) },
         text = {
             Column {
-                if (installed) {
+                if (!supported) {
+                    // This phone does not have the memory headroom for on-device mode, so it is
+                    // not offered; messages are assessed online (the default), text masked first.
+                    Text(stringResource(R.string.analysis_unsupported))
+                } else if (installed) {
                     Text(stringResource(R.string.analysis_choose))
                     Spacer(Modifier.height(8.dp))
                     val options = listOf(
@@ -666,14 +671,14 @@ fun AnalysisModeDialog(
             }
         },
         confirmButton = {
-            if (!installed && progress == null) {
+            if (supported && !installed && progress == null) {
                 TextButton(onClick = onDownload) { Text(stringResource(R.string.analysis_download)) }
             } else {
                 TextButton(onClick = onDismiss, enabled = progress == null) { Text(stringResource(R.string.action_close)) }
             }
         },
         dismissButton = {
-            if (!installed && progress == null) {
+            if (supported && !installed && progress == null) {
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_close)) }
             }
         },

@@ -2,6 +2,7 @@ package dev.eziedutech.dcai.guardian
 
 import android.content.Context
 import dev.eziedutech.dcai.guardian.data.GuardianStore
+import dev.eziedutech.dcai.guardian.ingest.DeviceCapabilities
 import dev.eziedutech.dcai.guardian.ingest.ExecuTorchStage1Analyzer
 import dev.eziedutech.dcai.guardian.ingest.MessageIngest
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceAnalyzer
@@ -29,7 +30,14 @@ object ServiceLocator {
         val existing = cached
         if (existing != null && existing.first == server) return existing.second
         val client = BackendClient(server) { store(context).deviceToken }
-        cached = Triple(server, client, MessageIngest(store, client, onDeviceAnalyzer(context)))
+        cached = Triple(
+            server,
+            client,
+            MessageIngest(
+                store, client, onDeviceAnalyzer(context),
+                onDeviceAllowed = DeviceCapabilities.supportsOnDevice(context),
+            ),
+        )
         return client
     }
 

@@ -165,10 +165,12 @@
     <string name="set_analysis_online">Online (server)</string>
     <string name="set_analysis_ondevice">On device</string>
     <string name="set_analysis_online_only">Online (server). Tap to set up on-device mode.</string>
+    <string name="set_analysis_unsupported">Online (server). This phone cannot run on-device mode.</string>
     <string name="analysis_choose">Choose how your child\'s messages are assessed.</string>
     <string name="analysis_online_long">Online (server). Masked text is assessed on the server.</string>
     <string name="analysis_ondevice_long">On the phone (Llama). Messages are assessed on the phone; only risky ones are sent.</string>
     <string name="analysis_ondevice_explain">On-device mode runs a Llama model on the phone (about a 0.8 GB download). After that, ordinary messages are assessed and dropped on the phone, and only risky messages are sent to the server. Built with Llama.</string>
+    <string name="analysis_unsupported">On-device mode needs a phone with more memory, so it is not available on this phone. Messages are assessed online (server): the text is still masked on the phone before it is sent.</string>
     <string name="analysis_download">Download model (about 0.8 GB)</string>
     <string name="analysis_downloading">Downloading model... %1$d%%</string>
     <string name="analysis_download_failed">Download failed. Try again when connected.</string>
