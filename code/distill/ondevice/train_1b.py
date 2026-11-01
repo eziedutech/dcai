@@ -28,7 +28,6 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 TRAIN = REPO / "data" / "distill" / "stage1-train.jsonl"
-BALANCED = REPO / "data" / "distill" / "stage1-train-balanced.jsonl"
 
 # Same balancing as code/distill/train.py: in the teacher labels most messages carry no
 # label and some labels are rare, so labelled examples are repeated and rare ones repeated
@@ -85,18 +84,22 @@ def balance(src: Path, dst: Path) -> tuple[int, int, dict[str, int]]:
     return len(rows), len(out), {lab: counts[lab] for lab in sorted(rare)}
 
 
-def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
+def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int, train_path: Path) -> None:
     import torch
     from datasets import load_dataset
     from peft import LoraConfig
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTConfig, SFTTrainer
 
-    if not TRAIN.exists():
+    if not train_path.exists():
         sys.exit(
-            f"missing {TRAIN}; run: cd code/backpy && uv run python -m app.distill.build"
+            f"missing {train_path}; run: cd code/backpy && uv run python -m app.distill.build "
+            "(then build_short.py for the short coded variant)"
         )
-    unique, n, rare = balance(TRAIN, BALANCED)
+    # Write the balanced file next to the training file, so this runs anywhere (for example a
+    # bare GPU box) without the repo layout the default path assumes.
+    balanced = train_path.with_name(train_path.stem + "-balanced.jsonl")
+    unique, n, rare = balance(train_path, balanced)
     print(f"examples: {unique} unique, {n} after balancing; rare labels {rare}")
     print(f"base: {base_model}, epochs: {epochs}, max_seq_len: {max_seq_len}")
 
@@ -111,7 +114,7 @@ def main(base_model: str, epochs: int, out_dir: Path, max_seq_len: int) -> None:
         msgs = example["messages"]
         return {"prompt": msgs[:-1], "completion": [msgs[-1]]}
 
-    dataset = load_dataset("json", data_files=str(BALANCED), split="train").map(
+    dataset = load_dataset("json", data_files=str(balanced), split="train").map(
         to_pc, remove_columns=["messages"]
     )
 
@@ -174,5 +177,8 @@ if __name__ == "__main__":
     # Name prefixed "Llama" per the Llama 3.2 Community License.
     p.add_argument("--out", default="out/Llama-3.2-1B-dcai-stage1")
     p.add_argument("--max-seq-len", type=int, default=DEFAULT_MAX_SEQ_LEN)
+    # The training file. Default is the full-prompt JSON set; pass the short coded set
+    # (build_short.py output) to distil the compact on-device student.
+    p.add_argument("--train", default=str(TRAIN))
     a = p.parse_args()
-    main(a.base_model, a.epochs, Path(a.out), a.max_seq_len)
+    main(a.base_model, a.epochs, Path(a.out), a.max_seq_len, Path(a.train))
