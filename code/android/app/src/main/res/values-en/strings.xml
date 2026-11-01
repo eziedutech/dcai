@@ -164,7 +164,15 @@
     <string name="set_analysis">Message analysis</string>
     <string name="set_analysis_online">Online (server)</string>
     <string name="set_analysis_ondevice">On device</string>
-    <string name="set_analysis_online_only">Online (server). On-device mode is not available in this version yet.</string>
+    <string name="set_analysis_online_only">Online (server). Tap to set up on-device mode.</string>
+    <string name="analysis_choose">Choose how your child\'s messages are assessed.</string>
+    <string name="analysis_online_long">Online (server). Masked text is assessed on the server.</string>
+    <string name="analysis_ondevice_long">On the phone (Llama). Messages are assessed on the phone; only risky ones are sent.</string>
+    <string name="analysis_ondevice_explain">On-device mode runs a Llama model on the phone (about a 2 GB download). After that, ordinary messages are assessed and dropped on the phone, and only risky messages are sent to the server. Built with Llama.</string>
+    <string name="analysis_download">Download model (about 2 GB)</string>
+    <string name="analysis_downloading">Downloading model... %1$d%%</string>
+    <string name="analysis_download_failed">Download failed. Try again when connected.</string>
+    <string name="analysis_remove">Remove the model from this phone</string>
     <string name="set_consent_version">consent %1$s</string>
     <string name="set_info">Information</string>
     <string name="set_consent_text">Consent text</string>
@@ -175,7 +183,7 @@
 
     <string name="tr_p1">dcAI does not work in secret. The \"dcAI is on\" notification shows the whole time dcAI runs, and you can always open this page.</string>
     <string name="tr_p2">When your parent turns on screen reading, dcAI reads the text on your screen to guide chats in any app. It also works with the dcAI keyboard and with chat notifications. dcAI reads only while the \"dcAI is on\" notification is showing.</string>
-    <string name="tr_p3">Personal data is masked on the phone. Images stay on the phone. For sites, only the category is sent.</string>
+    <string name="tr_p3">Personal data is masked on the phone before anything is sent. In online mode the masked text is assessed on the server. In on-device mode messages are assessed on the phone and only risky ones are sent. Images stay on the phone. For sites, only the category is sent.</string>
     <string name="tr_p4">Parents receive levels, patterns and conversation starters. They do not receive message text or images.</string>
     <string name="tr_p5">An AI assessment is an estimate and can be wrong. If you think dcAI got it wrong, tell your parent.</string>
 

@@ -9,13 +9,15 @@ What a phone may receive is limited to what the child may see: its configuration
 of its own conversations and Guide nudges. Parent insight never goes to the phone.
 """
 
+import hashlib
 import uuid
 from datetime import datetime, timedelta
 from enum import StrEnum
+from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -32,6 +34,7 @@ from app.analysis.service import (
 )
 from app.api.deps import DbDep, DeviceDep, GuardianDep, SettingsDep, owned_child
 from app.auth.security import hash_pairing_code, new_device_token, new_pairing_code
+from app.config import Settings
 from app.consent.service import active_scopes
 from app.consent.texts import Scope
 from app.db.base import utcnow
@@ -274,6 +277,88 @@ def pair(body: PairIn, db: DbDep) -> PairOut:
 def get_config(db: DbDep, device: DeviceDep) -> DeviceConfig:
     db.commit()  # last_seen_at
     return device_config(db, device)
+
+
+# ---------------------------------------------------------------- on-device model
+#
+# The phone downloads the on-device stage 1 model (Llama di ponsel) from here when the parent
+# picks that analysis mode. It is served from settings.ondevice_model_dir, gated by the device
+# token like every other /v1/device route; no message text is involved. When the directory is
+# unset or the files are missing the endpoints answer 404, so a deployment without them (the
+# default) simply offers no on-device mode.
+
+_PTE_NAME = "stage1.pte"
+_TOK_NAME = "tokenizer.json"
+
+# sha256 of a 2 GB file is expensive, so it is computed once per (path, size, mtime).
+_sha_cache: dict[tuple[str, int, float], str] = {}
+
+
+def _model_file(settings: Settings, name: str) -> Path:
+    base = settings.ondevice_model_dir.strip()
+    path = Path(base) / name if base else None
+    if path is None or not path.is_file():
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "on-device model not available")
+    return path
+
+
+def _sha256(path: Path) -> str:
+    stat = path.stat()
+    key = (str(path), stat.st_size, stat.st_mtime)
+    if (cached := _sha_cache.get(key)) is not None:
+        return cached
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            digest.update(chunk)
+    hexdigest = digest.hexdigest()
+    _sha_cache[key] = hexdigest
+    return hexdigest
+
+
+class ModelManifest(BaseModel):
+    """What the phone checks before downloading, so an unchanged model is not pulled again."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    version: str
+    pte_bytes: int
+    pte_sha256: str
+    tokenizer_bytes: int
+    tokenizer_sha256: str
+
+
+@device_router.get("/model/stage1/manifest")
+def stage1_manifest(device: DeviceDep, settings: SettingsDep) -> ModelManifest:
+    pte = _model_file(settings, _PTE_NAME)
+    tok = _model_file(settings, _TOK_NAME)
+    pte_sha = _sha256(pte)
+    return ModelManifest(
+        version=pte_sha[:12],
+        pte_bytes=pte.stat().st_size,
+        pte_sha256=pte_sha,
+        tokenizer_bytes=tok.stat().st_size,
+        tokenizer_sha256=_sha256(tok),
+    )
+
+
+@device_router.get("/model/stage1.pte")
+def stage1_pte(device: DeviceDep, settings: SettingsDep) -> FileResponse:
+    # FileResponse handles Range and ETag, so a dropped 2 GB download resumes.
+    return FileResponse(
+        _model_file(settings, _PTE_NAME),
+        media_type="application/octet-stream",
+        filename=_PTE_NAME,
+    )
+
+
+@device_router.get("/model/stage1-tokenizer.json")
+def stage1_tokenizer(device: DeviceDep, settings: SettingsDep) -> FileResponse:
+    return FileResponse(
+        _model_file(settings, _TOK_NAME),
+        media_type="application/json",
+        filename=_TOK_NAME,
+    )
 
 
 class HeartbeatIn(BaseModel):

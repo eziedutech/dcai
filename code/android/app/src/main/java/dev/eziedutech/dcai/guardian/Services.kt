@@ -2,9 +2,10 @@ package dev.eziedutech.dcai.guardian
 
 import android.content.Context
 import dev.eziedutech.dcai.guardian.data.GuardianStore
+import dev.eziedutech.dcai.guardian.ingest.ExecuTorchStage1Analyzer
 import dev.eziedutech.dcai.guardian.ingest.MessageIngest
-import dev.eziedutech.dcai.guardian.ingest.NoOnDeviceAnalyzer
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceAnalyzer
+import dev.eziedutech.dcai.guardian.ingest.OnDeviceModel
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.vision.ImageGuard
 import dev.eziedutech.dcai.guardian.vision.NoSensitiveModel
@@ -27,7 +28,7 @@ object ServiceLocator {
         val existing = cached
         if (existing != null && existing.first == server) return existing.second
         val client = BackendClient(server) { store(context).deviceToken }
-        cached = Triple(server, client, MessageIngest(store, client, onDeviceAnalyzer))
+        cached = Triple(server, client, MessageIngest(store, client, onDeviceAnalyzer(context)))
         return client
     }
 
@@ -39,10 +40,18 @@ object ServiceLocator {
     /** A licensed sensitive-image classifier is registered here; none ships with this build. */
     val sensitiveModel: SensitiveModel = NoSensitiveModel
 
-    /** The on-device stage 1 analyzer (the Llama .pte mode) is registered here; none ships
-     * with this build, so ingest stays on the online path until an ExecuTorch runner is
-     * plugged in. */
-    val onDeviceAnalyzer: OnDeviceAnalyzer = NoOnDeviceAnalyzer
+    @Volatile private var model: OnDeviceModel? = null
+    @Volatile private var analyzer: OnDeviceAnalyzer? = null
+
+    /** The on-device stage 1 model (the Llama .pte mode): its files, download and runtime.
+     * Nothing is downloaded until the parent picks on-device mode, so [OnDeviceModel.installed]
+     * stays false and ingest keeps to the online path by default. */
+    fun onDeviceModel(context: Context): OnDeviceModel =
+        model ?: OnDeviceModel(context.applicationContext).also { model = it }
+
+    /** The analyzer that drives message labelling on the phone over [onDeviceModel]. */
+    fun onDeviceAnalyzer(context: Context): OnDeviceAnalyzer =
+        analyzer ?: ExecuTorchStage1Analyzer(onDeviceModel(context)).also { analyzer = it }
 
     private val detectors by lazy { OnDeviceDetectors(sensitiveModel) }
 

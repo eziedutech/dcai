@@ -181,7 +181,15 @@
     <string name="set_analysis">Analisis pesan</string>
     <string name="set_analysis_online">Online (server)</string>
     <string name="set_analysis_ondevice">Di ponsel</string>
-    <string name="set_analysis_online_only">Online (server). Mode di ponsel belum tersedia di versi ini.</string>
+    <string name="set_analysis_online_only">Online (server). Ketuk untuk menyiapkan mode di ponsel.</string>
+    <string name="analysis_choose">Pilih bagaimana pesan anak dinilai.</string>
+    <string name="analysis_online_long">Online (server). Teks yang sudah disamarkan dinilai di server.</string>
+    <string name="analysis_ondevice_long">Di ponsel (Llama). Pesan dinilai di ponsel; hanya yang berisiko yang dikirim.</string>
+    <string name="analysis_ondevice_explain">Mode di ponsel memakai model Llama di ponsel (unduhan sekitar 2 GB). Setelah itu pesan biasa dinilai dan dibuang di ponsel, dan hanya pesan berisiko yang dikirim ke server. Dibuat dengan Llama.</string>
+    <string name="analysis_download">Unduh model (sekitar 2 GB)</string>
+    <string name="analysis_downloading">Mengunduh model... %1$d%%</string>
+    <string name="analysis_download_failed">Unduhan gagal. Coba lagi saat tersambung.</string>
+    <string name="analysis_remove">Hapus model dari ponsel</string>
     <string name="set_consent_version">persetujuan %1$s</string>
     <string name="set_info">Informasi</string>
     <string name="set_consent_text">Teks persetujuan</string>
@@ -193,7 +201,7 @@
     <!-- Transparency -->
     <string name="tr_p1">dcAI tidak bekerja diam-diam. Notifikasi \"dcAI aktif\" selalu tampil selama dcAI berjalan, dan halaman ini selalu bisa kamu buka.</string>
     <string name="tr_p2">Bila orang tuamu mengaktifkan pembacaan teks layar, dcAI membaca teks di layarmu untuk mendampingi obrolan di aplikasi apa pun. dcAI juga bekerja dengan papan ketik dcAI dan dengan notifikasi obrolan. dcAI hanya membaca selama notifikasi \"dcAI aktif\" tampil.</string>
-    <string name="tr_p3">Data pribadi disamarkan di ponsel. Gambar tetap di ponsel. Untuk situs, yang dikirim hanya kategorinya.</string>
+    <string name="tr_p3">Data pribadi disamarkan di ponsel sebelum apa pun dikirim. Dalam mode online, teks yang sudah disamarkan dinilai di server. Dalam mode di ponsel, pesan dinilai di ponsel dan hanya yang berisiko yang dikirim. Gambar tetap di ponsel. Untuk situs, yang dikirim hanya kategorinya.</string>
     <string name="tr_p4">Orang tua menerima level, pola, dan saran untuk memulai percakapan. Orang tua tidak menerima isi pesan atau gambar.</string>
     <string name="tr_p5">Penilaian AI adalah perkiraan dan bisa salah. Bila menurutmu dcAI keliru, ceritakan ke orang tuamu.</string>
 

@@ -42,6 +42,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,6 +69,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.eziedutech.dcai.guardian.R
+import dev.eziedutech.dcai.guardian.data.AnalysisMode
 import dev.eziedutech.dcai.guardian.data.Nudge
 import dev.eziedutech.dcai.guardian.ui.art.Art
 import dev.eziedutech.dcai.guardian.ui.art.Illustration
@@ -424,6 +426,7 @@ fun SettingsTab(
     themeLabel: String,
     info: DeviceInfo,
     analysisMode: String,
+    onAnalysis: () -> Unit,
     onLanguage: () -> Unit,
     onTheme: () -> Unit,
     onChangePin: () -> Unit,
@@ -452,7 +455,7 @@ fun SettingsTab(
             SettingRow(Icons.Rounded.Badge, stringResource(R.string.set_for), "${info.nickname} · ${info.ageRange}", trailing = null)
             SettingRow(Icons.Rounded.Dns, stringResource(R.string.set_server), info.server, trailing = null)
             SettingRow(Icons.Rounded.Info, stringResource(R.string.set_version), "${info.appVersion} · ${stringResource(R.string.set_consent_version, info.consentVersion)}", trailing = null)
-            SettingRow(Icons.Rounded.Memory, stringResource(R.string.set_analysis), analysisMode, trailing = null)
+            SettingRow(Icons.Rounded.Memory, stringResource(R.string.set_analysis), analysisMode, onAnalysis)
         }
 
         SectionTitle(stringResource(R.string.set_info))
@@ -604,5 +607,75 @@ fun ChoiceDialog(title: String, options: List<Pair<String, String>>, selected: S
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_close)) } },
+    )
+}
+
+/**
+ * The analysis-mode chooser. Before the model is on the phone it explains the download (about
+ * 2 GB) and the honest per-mode data flow, then offers to fetch it. Once installed it picks
+ * between online (masked text sent to the server) and on-device (judged on the phone, only
+ * flagged messages sent), and can remove the model.
+ */
+@Composable
+fun AnalysisModeDialog(
+    installed: Boolean,
+    mode: AnalysisMode,
+    progress: Int?,
+    error: String?,
+    onPick: (AnalysisMode) -> Unit,
+    onDownload: () -> Unit,
+    onRemove: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.set_analysis)) },
+        text = {
+            Column {
+                if (installed) {
+                    Text(stringResource(R.string.analysis_choose))
+                    Spacer(Modifier.height(8.dp))
+                    val options = listOf(
+                        AnalysisMode.ONLINE to R.string.analysis_online_long,
+                        AnalysisMode.ONDEVICE to R.string.analysis_ondevice_long,
+                    )
+                    options.forEach { (value, label) ->
+                        Row(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { onPick(value) }.padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RadioButton(selected = value == mode, onClick = { onPick(value) })
+                            Text(stringResource(label))
+                        }
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    TextButton(onClick = onRemove) { Text(stringResource(R.string.analysis_remove)) }
+                } else {
+                    Text(stringResource(R.string.analysis_ondevice_explain))
+                    if (progress != null) {
+                        Spacer(Modifier.height(12.dp))
+                        LinearProgressIndicator(progress = { progress / 100f }, modifier = Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(4.dp))
+                        Text(stringResource(R.string.analysis_downloading, progress))
+                    }
+                    if (error != null) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(stringResource(R.string.analysis_download_failed), color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (!installed && progress == null) {
+                TextButton(onClick = onDownload) { Text(stringResource(R.string.analysis_download)) }
+            } else {
+                TextButton(onClick = onDismiss, enabled = progress == null) { Text(stringResource(R.string.action_close)) }
+            }
+        },
+        dismissButton = {
+            if (!installed && progress == null) {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_close)) }
+            }
+        },
     )
 }

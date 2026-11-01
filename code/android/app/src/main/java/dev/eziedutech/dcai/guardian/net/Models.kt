@@ -154,6 +154,17 @@ data class SiteManifest(
     val categories: List<SiteListEntry>,
 )
 
+/** What the phone checks before downloading the on-device stage 1 model, so an unchanged
+ * model is not pulled again. Mirrors the backend ModelManifest. */
+@Serializable
+data class Stage1Manifest(
+    val version: String,
+    @SerialName("pte_bytes") val pteBytes: Long,
+    @SerialName("pte_sha256") val pteSha256: String,
+    @SerialName("tokenizer_bytes") val tokenizerBytes: Long,
+    @SerialName("tokenizer_sha256") val tokenizerSha256: String,
+)
+
 /** A site held on the phone: the category only. There is no field for the site's name. */
 @Serializable
 data class SiteSignalRequest(

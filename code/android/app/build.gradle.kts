@@ -75,6 +75,9 @@ dependencies {
     // Bundled on-device models: no download at runtime, nothing leaves the phone.
     implementation(libs.mlkit.face)
     implementation(libs.mlkit.text)
+    // On-device stage 1 message analysis (Llama di ponsel): the ExecuTorch runtime. The model
+    // itself is downloaded on demand, not bundled; nothing message-related leaves the phone.
+    implementation(libs.executorch.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -71,6 +71,12 @@ class Settings(BaseSettings):
     sse_heartbeat_seconds: float = 15.0
     sse_max_seconds: float = 300.0
 
+    # Directory holding the on-device stage 1 model the phone downloads: stage1.pte and
+    # tokenizer.json. Empty means the on-device model is not offered (the serving endpoints
+    # answer 404), so a deployment without the files behaves cleanly. The files are placed on
+    # the volume out of band; they are large and never enter the repo.
+    ondevice_model_dir: str = ""
+
     # Site lists built by app.blocklist.build; empty means data/blocklist in the repo.
     site_lists_dir: str = ""
     # A repeat of the same site category within this window is not a new parent event.

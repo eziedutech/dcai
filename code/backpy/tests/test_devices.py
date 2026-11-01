@@ -121,6 +121,32 @@ def test_device_endpoints_need_a_device_token(api):
     assert api.get("/v1/device/config", headers=dev).status_code == 200
 
 
+def test_ondevice_model_is_served_to_a_paired_phone_only(api, tmp_path):
+    tokens, _child, dev, _ = paired(api)
+    # No model configured: the endpoints answer 404, not 500.
+    assert api.get("/v1/device/model/stage1/manifest", headers=dev).status_code == 404
+    assert api.get("/v1/device/model/stage1.pte", headers=dev).status_code == 404
+
+    (tmp_path / "stage1.pte").write_bytes(b"pte-bytes")
+    (tmp_path / "tokenizer.json").write_text('{"tok": true}', encoding="utf-8")
+    api.app.state.settings.ondevice_model_dir = str(tmp_path)
+
+    # A device token is required, like every other /v1/device route.
+    assert api.get("/v1/device/model/stage1/manifest").status_code == 401
+    assert api.get("/v1/device/model/stage1/manifest", headers=auth(tokens)).status_code == 401
+
+    manifest = api.get("/v1/device/model/stage1/manifest", headers=dev)
+    assert manifest.status_code == 200, manifest.text
+    body = manifest.json()
+    assert body["pte_bytes"] == len(b"pte-bytes")
+    assert len(body["pte_sha256"]) == 64 and body["version"] == body["pte_sha256"][:12]
+
+    pte = api.get("/v1/device/model/stage1.pte", headers=dev)
+    assert pte.status_code == 200 and pte.content == b"pte-bytes"
+    tok = api.get("/v1/device/model/stage1-tokenizer.json", headers=dev)
+    assert tok.status_code == 200 and tok.json() == {"tok": True}
+
+
 def test_revoked_device_is_locked_out_and_told(api):
     tokens, _child, dev, body = paired(api)
     assert api.delete(f"/v1/devices/{body['device_id']}", headers=auth(tokens)).status_code == 204

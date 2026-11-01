@@ -15,8 +15,9 @@ interface OnDeviceAnalyzer {
     val installed: Boolean
 
     /** Labels and a 0..100 signal for one masked message, or null when the model declines
-     * or is unavailable (the caller then sends the message, to fail safe). */
-    fun label(sender: String, maskedText: String): OnDeviceResult?
+     * or is unavailable (the caller then sends the message, to fail safe). Suspends: the model
+     * runs off the main thread and loads on first use. */
+    suspend fun label(sender: String, maskedText: String): OnDeviceResult?
 }
 
 data class OnDeviceResult(val labels: List<String>, val signal: Int)
@@ -24,5 +25,5 @@ data class OnDeviceResult(val labels: List<String>, val signal: Int)
 object NoOnDeviceAnalyzer : OnDeviceAnalyzer {
     override val installed = false
 
-    override fun label(sender: String, maskedText: String): OnDeviceResult? = null
+    override suspend fun label(sender: String, maskedText: String): OnDeviceResult? = null
 }

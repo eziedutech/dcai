@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,6 +41,8 @@ import dev.eziedutech.dcai.guardian.net.BackendException
 import dev.eziedutech.dcai.guardian.service.GuardianService
 import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
 import dev.eziedutech.dcai.guardian.ui.AppLocale
+import dev.eziedutech.dcai.guardian.ingest.OnDeviceModel
+import dev.eziedutech.dcai.guardian.ui.AnalysisModeDialog
 import dev.eziedutech.dcai.guardian.ui.ChoiceDialog
 import dev.eziedutech.dcai.guardian.ui.ConnectScreen
 import dev.eziedutech.dcai.guardian.ui.ConsentScreen
@@ -64,6 +67,7 @@ import dev.eziedutech.dcai.guardian.ui.WelcomeScreen
 import dev.eziedutech.dcai.guardian.ui.art.Art
 import dev.eziedutech.dcai.guardian.ui.theme.DcaiTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Where the app is. Onboarding comes first; the main app has three tabs. */
 private sealed interface Route {
@@ -126,6 +130,11 @@ class MainActivity : LocalizedActivity() {
         var dialog by remember { mutableStateOf<String?>(null) }
         var pinPurpose by remember { mutableStateOf<String?>(null) }
         var consentText by remember { mutableStateOf<List<String>?>(null) }
+        // On-device model download: a 0..100 percent while running, null otherwise; and the
+        // last failure status (never message text), shown in the analysis dialog.
+        var modelProgress by remember { mutableStateOf<Int?>(null) }
+        var modelError by remember { mutableStateOf<String?>(null) }
+        val scope = rememberCoroutineScope()
 
         fun go(route: Route) = stack.add(route)
         fun replaceAll(route: Route) { stack.clear(); stack.add(route) }
@@ -246,12 +255,11 @@ class MainActivity : LocalizedActivity() {
                         )
                         Tab.SETTINGS -> {
                             val config = store.config
+                            val installed = ServiceLocator.onDeviceModel(context).installed
                             val analysisModeLabel = when {
-                                ServiceLocator.onDeviceAnalyzer.installed &&
-                                    store.analysisMode == AnalysisMode.ONDEVICE ->
+                                installed && store.analysisMode == AnalysisMode.ONDEVICE ->
                                     stringResource(R.string.set_analysis_ondevice)
-                                ServiceLocator.onDeviceAnalyzer.installed ->
-                                    stringResource(R.string.set_analysis_online)
+                                installed -> stringResource(R.string.set_analysis_online)
                                 else -> stringResource(R.string.set_analysis_online_only)
                             }
                             SettingsTab(
@@ -264,6 +272,7 @@ class MainActivity : LocalizedActivity() {
                                     appVersion = BuildConfig.VERSION_NAME,
                                 ),
                                 analysisMode = analysisModeLabel,
+                                onAnalysis = { modelError = null; dialog = "analysis" },
                                 onLanguage = { dialog = "language" },
                                 onTheme = { dialog = "theme" },
                                 onChangePin = { pinPurpose = "change_pin" },
@@ -339,6 +348,54 @@ class MainActivity : LocalizedActivity() {
                 title = { Text(stringResource(R.string.set_unpair)) },
                 text = { Text(stringResource(R.string.set_unpair_body)) },
                 confirmButton = { TextButton(onClick = { dialog = null }) { Text(stringResource(R.string.action_close)) } },
+            )
+            "analysis" -> AnalysisModeDialog(
+                installed = ServiceLocator.onDeviceModel(context).installed,
+                mode = store.analysisMode,
+                progress = modelProgress,
+                error = modelError,
+                onPick = { picked ->
+                    store.analysisMode = picked
+                    refresh++
+                    dialog = null
+                },
+                onDownload = {
+                    modelError = null
+                    val client = ServiceLocator.client(context)
+                    if (client == null) {
+                        modelError = "not_paired"
+                    } else {
+                        modelProgress = 0
+                        scope.launch {
+                            var lastPct = -1
+                            val model = ServiceLocator.onDeviceModel(context)
+                            val ok = model.ensureDownloaded(client) { p ->
+                                when (p) {
+                                    is OnDeviceModel.Progress.Downloading -> {
+                                        val pct = if (p.total > 0) ((p.done * 100) / p.total).toInt() else 0
+                                        if (pct != lastPct) { lastPct = pct; modelProgress = pct }
+                                    }
+                                    OnDeviceModel.Progress.Verifying -> modelProgress = 100
+                                    OnDeviceModel.Progress.Done -> {}
+                                    is OnDeviceModel.Progress.Failed -> modelError = p.reason
+                                }
+                            }
+                            modelProgress = null
+                            if (ok) {
+                                store.analysisMode = AnalysisMode.ONDEVICE
+                                refresh++
+                                dialog = null
+                            }
+                        }
+                    }
+                },
+                onRemove = {
+                    ServiceLocator.onDeviceModel(context).remove()
+                    store.analysisMode = AnalysisMode.ONLINE
+                    refresh++
+                    dialog = null
+                },
+                onDismiss = { if (modelProgress == null) dialog = null },
             )
         }
 

@@ -108,6 +108,53 @@ class BackendClient(
         }
     }
 
+    /** The on-device stage 1 model manifest (sizes and sha256), to decide whether to download. */
+    suspend fun stage1Manifest(): Stage1Manifest = withContext(Dispatchers.IO) {
+        execute<Stage1Manifest>(
+            authed(Request.Builder().url(url("/v1/device/model/stage1/manifest"))).get().build()
+        )
+    }
+
+    /**
+     * Streams a model file to [target], resuming from whatever is already there with a Range
+     * request so a dropped 2 GB download continues instead of starting over. [onProgress] gets
+     * (bytes so far, total) as it runs. The caller verifies the sha256 afterwards.
+     */
+    suspend fun downloadModelFile(
+        path: String,
+        target: java.io.File,
+        totalBytes: Long,
+        onProgress: (Long, Long) -> Unit,
+    ): Unit = withContext(Dispatchers.IO) {
+        val have = if (target.exists()) target.length() else 0L
+        if (have >= totalBytes && totalBytes > 0) {
+            onProgress(totalBytes, totalBytes)
+            return@withContext
+        }
+        val builder = authed(Request.Builder().url(url(path))).get()
+        if (have > 0) builder.header("Range", "bytes=$have-")
+        val request = builder.build()
+        client.newCall(request).execute().use { resp ->
+            if (resp.code == 401) throw DeviceRevokedException()
+            if (!resp.isSuccessful) throw BackendException(resp.code, "HTTP ${resp.code}")
+            // 200 means the server ignored the Range (or there was nothing yet): start over.
+            val append = resp.code == 206 && have > 0
+            var done = if (append) have else 0L
+            java.io.FileOutputStream(target, append).use { out ->
+                val buf = ByteArray(1 shl 16)
+                resp.body.byteStream().use { input ->
+                    while (true) {
+                        val n = input.read(buf)
+                        if (n < 0) break
+                        out.write(buf, 0, n)
+                        done += n
+                        onProgress(done, totalBytes)
+                    }
+                }
+            }
+        }
+    }
+
     suspend fun sendSiteSignal(signal: SiteSignalRequest): Unit = withContext(Dispatchers.IO) {
         executeNoBody(authed(Request.Builder().url(url("/v1/device/sites/signals"))).post(body(signal)).build())
     }
