@@ -31,9 +31,10 @@ import kotlinx.coroutines.launch
  * no hidden mode.
  *
  * What leaves the phone is the same as every other source: [MessageIngest] masks the text
- * here, and only flagged, masked messages are sent. When a conversation is already risky, a
- * screenshot is judged on the phone through the existing vision pipeline; the screenshot is
- * never sent.
+ * here, and only the masked text leaves. In online mode every masked message is sent for the
+ * server to judge; in on-device mode the message is judged on the phone and only flagged ones
+ * are sent. When a conversation is already risky, a screenshot is judged on the phone through
+ * the existing vision pipeline; the screenshot is never sent.
  */
 class ScreenReaderService : AccessibilityService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

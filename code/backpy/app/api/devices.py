@@ -1,9 +1,10 @@
 """The child's phone (dcAI Guardian) and the guardian's control over it.
 
 Guardian side: create a pairing code, list and revoke devices, follow a child live.
-Phone side (/v1/device): pair, read its configuration, report service state, send flagged
-messages (already masked on the phone, masked again here), image labels and confirmed
-false detections, and follow its own live updates.
+Phone side (/v1/device): pair, read its configuration, report service state, send messages
+(already masked on the phone, masked again here; every masked message in online mode, only
+flagged ones in on-device mode), image labels and confirmed false detections, and follow its
+own live updates. It also downloads the on-device stage 1 model when the parent picks that mode.
 
 What a phone may receive is limited to what the child may see: its configuration, levels
 of its own conversations and Guide nudges. Parent insight never goes to the phone.

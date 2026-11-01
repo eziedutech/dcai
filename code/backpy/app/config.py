@@ -66,7 +66,9 @@ class Settings(BaseSettings):
     replay_mode: bool = False
 
     pairing_code_minutes: int = 10
-    # Only messages the phone flagged reach the server, so a normal day is far below this.
+    # In on-device mode only flagged messages reach the server; in online mode (the default)
+    # every masked message does. 30 per device per minute is generous for a child's real pace
+    # either way.
     device_messages_per_minute: int = 30
     sse_heartbeat_seconds: float = 15.0
     sse_max_seconds: float = 300.0
