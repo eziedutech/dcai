@@ -2,15 +2,15 @@
 same way production does on a bare box (GPU or CPU) without importing the backend package.
 
 Keep in sync with app/privacy/mask.py: same rules, same markers, same Masked(.text,.findings)
-interface. No model, no network. Needs Python 3.11+ (StrEnum).
+interface. No model, no network. Runs on Python 3.10+ (str-mixin Enum, not 3.11 StrEnum).
 """
 
 import re
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import Enum
 
 
-class Kind(StrEnum):
+class Kind(str, Enum):
     TELEPON = "TELEPON"
     EMAIL = "EMAIL"
     KARTU = "KARTU"
