@@ -1,6 +1,7 @@
 package dev.eziedutech.dcai.guardian.ingest
 
 import android.app.Service
+import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -84,6 +85,26 @@ class OnDeviceModelService : Service() {
             mutex.withLock {
                 module?.close()
                 module = null
+            }
+        }
+    }
+
+    /**
+     * Under critical system memory pressure, release the model before the OS resorts to killing
+     * a process. The ~1 GB runtime is the biggest thing on the phone, so freeing it here relieves
+     * the whole device and makes it less likely the OS reclaims the main dcAI process (and the
+     * accessibility scope with it). The next message reloads the model lazily; if the process was
+     * killed anyway, ingest falls back to the online path.
+     */
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
+            evictJob?.cancel()
+            scope.launch {
+                mutex.withLock {
+                    module?.close()
+                    module = null
+                }
             }
         }
     }
