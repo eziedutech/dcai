@@ -3,10 +3,22 @@
 Runs the on-device student over every message of the test scenarios, masks each message the
 same way production does (the ported app/privacy/mask.py), applies the stage 1 deterministic
 rules, and compares predicted labels to the scenario gold labels. Reports label recall and
-precision and how many ordinary (wajar) messages drew a label.
+precision, the message-level flagged recall/precision (the send policy, see below), and how
+many ordinary (wajar) messages drew a label.
 
-    python eval_pte.py --pte ~/out_pte --tokenizer ~/merged_tok \
-        --train ~/stage1-train.jsonl --scenarios ~/scenarios --split ~/split.json
+    python eval_pte.py --pte ~/out_pte_short --tokenizer ~/merged \
+        --train ~/stage1-train-short.jsonl --scenarios ~/scenarios --split ~/split.json
+
+The short on-device student emits a COMPACT CODE, not JSON: the present label letters (sorted)
+then one signal digit, or "N" for no labels. "BC4" = {meminta_kerahasiaan, pindah_kanal},
+signal ~40; "N0" = ordinary. This decoder mirrors Stage1Prompt.parse on the phone
+(code/android/.../ingest/Stage1Prompt.kt) and the codebook in build_short.py exactly. Pass the
+short train file as --train so the system prompt read from its first row is SHORT_SYSTEM.
+
+On the on-device path a message is sent to the server when it carries any label OR a signal at
+or above ONDEVICE_SEND_SIGNAL (20), see app .../ingest/MessageIngest.kt. The flagged metric
+below scores that same decision against whether the gold message is risky (has any gold label),
+so a missed threat (false negative) shows up directly.
 
 This is stage 1 labels only (no stage 2, rule floor or final level): the part the on-device
 model is responsible for. Numbers here are the measured ones; nothing is guessed.
@@ -14,9 +26,32 @@ model is responsible for. Numbers here are the measured ones; nothing is guessed
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 import mask as M  # the ported app/privacy/mask.py, stdlib only
+
+# Letter -> label, the inverse of build_short.py LETTERS and Stage1Prompt.LABEL_OF.
+LABEL_OF = {
+    "A": "membangun_kedekatan",
+    "B": "meminta_kerahasiaan",
+    "C": "pindah_kanal",
+    "D": "meminta_data_pribadi",
+    "E": "menawarkan_hadiah",
+    "F": "menguji_batas",
+    "G": "menekan_mengancam",
+    "H": "perundungan",
+    "I": "kata_kasar",
+    "J": "berbagi_data_pribadi",
+    "K": "menyakiti_diri",
+    "L": "ajakan_berbahaya",
+}
+
+# Same pattern as Stage1Prompt.CODE: letters then one signal digit.
+CODE = re.compile(r"([A-LN]+)([0-9])")
+
+# The on-device send threshold (ONDEVICE_SEND_SIGNAL in MessageIngest.kt).
+SEND_SIGNAL = 20
 
 # Approach patterns describe what a contact does; on a child's own message they are noise and
 # stripped, except a threat, which a child can make. Mirrors app/risk/stage1.apply_rules.
@@ -40,20 +75,24 @@ def apply_rules(sender: str, model_labels: list[str], has_findings: bool) -> set
     return labels
 
 
-def parse_labels(out) -> list[str] | None:
+def parse_code(out) -> tuple[list[str], int] | None:
+    """Decode the coded answer the way the phone does: the last non-empty line, the first code
+    in it, letters -> labels (drop N), the final digit -> signal (x10). None when nothing
+    parses, so the caller fails safe (counts as a bad decode and an empty label set)."""
     text = out if isinstance(out, str) else getattr(out, "text", str(out))
     text = (text or "").strip()
-    cands = [text]
-    if "\n" in text:
-        cands.append(text.splitlines()[-1])
-    for cand in cands:
-        try:
-            obj = json.loads(cand)
-        except json.JSONDecodeError:
-            continue
-        if isinstance(obj, dict) and isinstance(obj.get("labels"), list):
-            return [str(x) for x in obj["labels"]]
-    return None
+    line = next(
+        (ln.strip() for ln in reversed(text.splitlines()) if ln.strip()), None
+    )
+    if line is None:
+        return None
+    m = CODE.search(line.upper())
+    if m is None:
+        return None
+    letters, digit = m.group(1), m.group(2)
+    labels = [LABEL_OF[c] for c in letters if c != "N" and c in LABEL_OF]
+    signal = min(100, max(0, int(digit) * 10))
+    return labels, signal
 
 
 def main(
@@ -69,7 +108,10 @@ def main(
     system = json.loads(first)["messages"][0]["content"]
     test_ids = json.loads(Path(split_path).read_text(encoding="utf-8"))["test"]
 
-    tp = fp = fn = msgs = bad_json = wajar_false = 0
+    tp = fp = fn = msgs = bad_code = wajar_false = 0
+    # Message-level flagged decision (the send policy): did the model send this message, and
+    # should it have (gold message is risky = has any gold label)?
+    f_tp = f_fp = f_fn = 0
     for sid in test_ids:
         group = sid.rsplit("-", 1)[0]
         sc = json.loads(
@@ -91,26 +133,43 @@ def main(
                 add_generation_prompt=True,
             )
             out = model.text_generation(
-                tokenizer=tok, prompt=prompt, max_seq_len=1024, echo=False
+                tokenizer=tok, prompt=prompt, max_seq_len=512, echo=False
             )
-            preds = parse_labels(out)
-            if preds is None:
-                bad_json += 1
-                preds = []
-            pred = apply_rules(sender, preds, bool(masked.findings))
+            decoded = parse_code(out)
+            if decoded is None:
+                bad_code += 1
+                raw_labels, signal = [], 0
+            else:
+                raw_labels, signal = decoded
+            pred = apply_rules(sender, raw_labels, bool(masked.findings))
             gold = set(m.get("labels", []))
             tp += len(pred & gold)
             fp += len(pred - gold)
             fn += len(gold - pred)
             if group == "wajar" and pred:
                 wajar_false += 1
+            # A bad decode fails safe (sent) on the phone, so it counts as flagged here too.
+            flagged = decoded is None or bool(pred) or signal >= SEND_SIGNAL
+            risky = bool(gold)
+            if flagged and risky:
+                f_tp += 1
+            elif flagged and not risky:
+                f_fp += 1
+            elif not flagged and risky:
+                f_fn += 1
 
     recall = tp / (tp + fn) if (tp + fn) else 0.0
     precision = tp / (tp + fp) if (tp + fp) else 0.0
+    f_recall = f_tp / (f_tp + f_fn) if (f_tp + f_fn) else 0.0
+    f_precision = f_tp / (f_tp + f_fp) if (f_tp + f_fp) else 0.0
     print("=" * 50)
-    print(f"test scenarios={len(test_ids)} messages={msgs} bad_json={bad_json}")
+    print(f"test scenarios={len(test_ids)} messages={msgs} bad_code={bad_code}")
     print(
         f"label recall={recall:.2f} precision={precision:.2f} (tp={tp} fp={fp} fn={fn})"
+    )
+    print(
+        f"flagged recall={f_recall:.2f} precision={f_precision:.2f} "
+        f"(tp={f_tp} fp={f_fp} fn={f_fn}); missed risky messages={f_fn}"
     )
     print(f"wajar messages given any label (false alarms)={wajar_false}")
 
