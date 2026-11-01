@@ -128,6 +128,13 @@
             android:permission="dev.eziedutech.dcai.guardian.permission.INGEST"
             android:theme="@style/Theme.DcaiGuardian" />
 
+        <!-- The on-device stage 1 model runs in its own process, so an out-of-memory kill of the
+             large model takes only this process, not the dcAI UI or the accessibility service. -->
+        <service
+            android:name=".ingest.OnDeviceModelService"
+            android:exported="false"
+            android:process=":ondevice" />
+
         <!-- Site protection: a DNS-only VPN. Only DNS lookups enter it. -->
         <service
             android:name=".sites.SiteGuardVpn"

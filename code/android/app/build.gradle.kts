@@ -15,8 +15,8 @@ android {
         minSdk = 30
         targetSdk = 36
         // Raise both for every APK published; the site's download button names this version.
-        versionCode = 9
-        versionName = "0.3.5"
+        versionCode = 10
+        versionName = "0.3.6"
         // The backend as seen from the Android emulator. A real phone sets it during setup.
         buildConfigField("String", "DEFAULT_SERVER", "\"http://10.0.2.2:8000\"")
     }
@@ -47,6 +47,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        aidl = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

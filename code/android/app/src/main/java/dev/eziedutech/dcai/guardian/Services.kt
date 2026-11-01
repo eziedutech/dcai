@@ -6,6 +6,7 @@ import dev.eziedutech.dcai.guardian.ingest.ExecuTorchStage1Analyzer
 import dev.eziedutech.dcai.guardian.ingest.MessageIngest
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceAnalyzer
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceModel
+import dev.eziedutech.dcai.guardian.ingest.OnDeviceModelClient
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.vision.ImageGuard
 import dev.eziedutech.dcai.guardian.vision.NoSensitiveModel
@@ -49,9 +50,14 @@ object ServiceLocator {
     fun onDeviceModel(context: Context): OnDeviceModel =
         model ?: OnDeviceModel(context.applicationContext).also { model = it }
 
-    /** The analyzer that drives message labelling on the phone over [onDeviceModel]. */
+    /** The analyzer that drives message labelling on the phone. It runs the model in the
+     * separate :ondevice process through an [OnDeviceModelClient]; the downloaded files are
+     * shared with [onDeviceModel]. */
     fun onDeviceAnalyzer(context: Context): OnDeviceAnalyzer =
-        analyzer ?: ExecuTorchStage1Analyzer(onDeviceModel(context)).also { analyzer = it }
+        analyzer ?: ExecuTorchStage1Analyzer(
+            context.applicationContext,
+            OnDeviceModelClient(context),
+        ).also { analyzer = it }
 
     private val detectors by lazy { OnDeviceDetectors(sensitiveModel) }
 
