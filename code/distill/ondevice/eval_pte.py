@@ -95,8 +95,36 @@ def parse_code(out) -> tuple[list[str], int] | None:
     return labels, signal
 
 
+def decode_json(out) -> tuple[list[str], int] | None:
+    """Decode the full-prompt JSON answer ({"labels":[...], "signal": N}): the last line that
+    parses as a JSON object carrying a 'labels' list. None when nothing parses, so the caller
+    fails safe (bad decode, empty labels)."""
+    text = out if isinstance(out, str) else getattr(out, "text", str(out))
+    text = (text or "").strip()
+    cands = [text, *reversed(text.splitlines())] if text else []
+    for cand in cands:
+        cand = cand.strip()
+        if not cand:
+            continue
+        try:
+            obj = json.loads(cand)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict) and isinstance(obj.get("labels"), list):
+            labels = [str(x) for x in obj["labels"]]
+            signal = int(obj.get("signal", 0) or 0)
+            return labels, min(100, max(0, signal))
+    return None
+
+
 def main(
-    pte: str, tokenizer_dir: str, train: str, scenarios_dir: str, split_path: str
+    pte: str,
+    tokenizer_dir: str,
+    train: str,
+    scenarios_dir: str,
+    split_path: str,
+    fmt: str,
+    max_seq_len: int,
 ) -> None:
     from optimum.executorch import ExecuTorchModelForCausalLM
     from transformers import AutoTokenizer
@@ -106,6 +134,7 @@ def main(
     with Path(train).open(encoding="utf-8") as fh:
         first = fh.readline()
     system = json.loads(first)["messages"][0]["content"]
+    decode = parse_code if fmt == "code" else decode_json
     test_ids = json.loads(Path(split_path).read_text(encoding="utf-8"))["test"]
 
     tp = fp = fn = msgs = bad_code = wajar_false = 0
@@ -133,9 +162,9 @@ def main(
                 add_generation_prompt=True,
             )
             out = model.text_generation(
-                tokenizer=tok, prompt=prompt, max_seq_len=512, echo=False
+                tokenizer=tok, prompt=prompt, max_seq_len=max_seq_len, echo=False
             )
-            decoded = parse_code(out)
+            decoded = decode(out)
             if decoded is None:
                 bad_code += 1
                 raw_labels, signal = [], 0
@@ -181,5 +210,10 @@ if __name__ == "__main__":
     p.add_argument("--train", default="stage1-train.jsonl")
     p.add_argument("--scenarios", default="scenarios")
     p.add_argument("--split", default="split.json")
+    # The assistant answer format: "code" (short letters+digit, the compact on-device student)
+    # or "json" (the full-prompt student that emits {"labels":[...], "signal": N}).
+    p.add_argument("--format", choices=["code", "json"], default="code")
+    # Export/runtime context length; must cover the prompt (short ~150 tok, full ~950 tok).
+    p.add_argument("--max-seq-len", type=int, default=512)
     a = p.parse_args()
-    main(a.pte, a.tokenizer, a.train, a.scenarios, a.split)
+    main(a.pte, a.tokenizer, a.train, a.scenarios, a.split, a.format, a.max_seq_len)
