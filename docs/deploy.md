@@ -70,6 +70,42 @@ baru sebelum mendeploy api (perlu akses sementara ke kedua database).
 Daftarkan webhook deploy Dokploy untuk `dcai-api` dan `dcai-web` ke push `main` di GitHub
 (seperti yang sudah dilakukan untuk resource Compose). Database tidak perlu webhook.
 
+## 7. Model on-device (Llama di ponsel)
+
+Mode analisis "di ponsel" mengunduh model stage 1 (Llama 3.2 3B distilasi) dari backend.
+Backend menyajikannya dari direktori `ONDEVICE_MODEL_DIR`, digerbang device token:
+
+- `GET /v1/device/model/stage1/manifest` (version, ukuran, sha256)
+- `GET /v1/device/model/stage1.pte`
+- `GET /v1/device/model/stage1-tokenizer.json`
+
+Bila `ONDEVICE_MODEL_DIR` kosong atau berkas tak ada, ketiganya menjawab 404 (default aman:
+mode di ponsel tidak ditawarkan). Berkas TIDAK pernah masuk repo (sekitar 2 GB, gitignored).
+
+Langkah di produksi (dcai-api):
+
+1. Pasang mount persisten ke `dcai-api`: bind mount dari direktori host (mis. `/srv/dcai-model`)
+   ke `/srv/model` di container, READ-ONLY. Bind mount dipilih agar berkas 2 GB mudah ditaruh
+   dan tetap ada melintasi rebuild/redeploy.
+2. Unggah dua berkas ke lokasi itu (dari laptop, berkas ada di laptop dan gitignored). Nama di
+   direktori WAJIB `stage1.pte` dan `tokenizer.json`:
+
+   ```bash
+   scp out/Llama-3.2-3B-dcai-stage1/model.pte USER@HOST:/srv/dcai-model/stage1.pte
+   scp out/Llama-3.2-3B-dcai-stage1/tokenizer/tokenizer.json USER@HOST:/srv/dcai-model/tokenizer.json
+   chmod 644 /srv/dcai-model/stage1.pte /srv/dcai-model/tokenizer.json   # terbaca uid 10001
+   ```
+
+   Host perlu ruang kosong sekitar 2,1 GB.
+3. Set env `ONDEVICE_MODEL_DIR=/srv/model` di `dcai-api` (pertahankan semua env lain).
+4. Redeploy `dcai-api`.
+5. Verifikasi: `GET https://dcai.digitalsafe.app/v1/device/model/stage1/manifest` dengan device
+   token terpasang -> 200; `pte_bytes` cocok dengan ukuran berkas laptop dan `pte_sha256` cocok
+   dengan `sha256sum model.pte`.
+
+Urutan penting: unggah berkas dan pasang mount SEBELUM set env dan redeploy, supaya permintaan
+pertama sudah menemukan berkasnya.
+
 ## Catatan
 
 `code/docker-compose.prod.yml` tetap ada untuk pengembangan lokal dan rujukan; produksi

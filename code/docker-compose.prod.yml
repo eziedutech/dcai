@@ -76,8 +76,13 @@ services:
       BT_MUSE_MODEL: ${BT_MUSE_MODEL:-}
       BT_MUSE_JSON_MODE: ${BT_MUSE_JSON_MODE:-}
       BT_MUSE_REASONING_EFFORT: ${BT_MUSE_REASONING_EFFORT:-}
+      # The on-device stage 1 model the phone downloads. Empty means the model endpoints 404;
+      # set to /srv/model and place stage1.pte + tokenizer.json in the mounted volume to offer it.
+      ONDEVICE_MODEL_DIR: ${ONDEVICE_MODEL_DIR:-}
     volumes:
       - dcai-lists:/srv/lists
+      # Read-only: the model files are placed here out of band, the app only serves them.
+      - dcai-model:/srv/model:ro
     expose:
       - "8000"
     healthcheck:
@@ -103,3 +108,4 @@ services:
 volumes:
   dcai-db:
   dcai-lists:
+  dcai-model:
