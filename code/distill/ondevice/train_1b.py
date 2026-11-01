@@ -54,11 +54,23 @@ LORA_TARGETS = [
 ]
 
 
+def _labels_of_row(row: dict) -> set[str]:
+    """The label set of one row, for balancing. Handles both the JSON target
+    ({"labels":[...]}) and the compact on-device code target (sorted label letters then one
+    signal digit; "N" for none) produced by build_short.py. Letters are a bijection with
+    labels, so counting them balances the same way."""
+    content = row["messages"][-1]["content"].strip()
+    if content.startswith("{"):
+        return set(json.loads(content)["labels"])
+    letters = content[:-1]
+    return set() if letters == "N" else set(letters)
+
+
 def balance(src: Path, dst: Path) -> tuple[int, int, dict[str, int]]:
     """Expand the training file by repeating labelled and rare-labelled examples, writing the
     balanced file. Returns (unique rows, rows after balancing, rare-label counts)."""
     rows = [json.loads(line) for line in src.open(encoding="utf-8")]
-    labels_of = [set(json.loads(r["messages"][-1]["content"])["labels"]) for r in rows]
+    labels_of = [_labels_of_row(r) for r in rows]
     counts = Counter(lab for labs in labels_of for lab in labs)
     rare = {lab for lab, c in counts.items() if c <= RARE_MAX}
     out = []
