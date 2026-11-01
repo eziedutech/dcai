@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class Kind(str, Enum):
+class Kind(str, Enum):  # noqa: UP042 - str-mixin keeps this importable on Python 3.10 boxes
     TELEPON = "TELEPON"
     EMAIL = "EMAIL"
     KARTU = "KARTU"
