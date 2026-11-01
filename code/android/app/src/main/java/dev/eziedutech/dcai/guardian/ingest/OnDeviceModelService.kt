@@ -97,9 +97,9 @@ class OnDeviceModelService : Service() {
 
     private companion object {
         const val TAG = "dcai.ondevice"
-        // The model was exported at max_seq_len 1024; labels are short, so cap new tokens low.
-        const val MAX_SEQ_LEN = 1024
-        const val MAX_NEW_TOKENS = 64
+        // The short student was exported at max_seq_len 512; the coded answer is a few tokens.
+        const val MAX_SEQ_LEN = 512
+        const val MAX_NEW_TOKENS = 8
         const val IDLE_EVICT_MS = 60_000L
     }
 }

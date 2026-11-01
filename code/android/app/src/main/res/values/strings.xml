@@ -185,8 +185,8 @@
     <string name="analysis_choose">Pilih bagaimana pesan anak dinilai.</string>
     <string name="analysis_online_long">Online (server). Teks yang sudah disamarkan dinilai di server.</string>
     <string name="analysis_ondevice_long">Di ponsel (Llama). Pesan dinilai di ponsel; hanya yang berisiko yang dikirim.</string>
-    <string name="analysis_ondevice_explain">Mode di ponsel memakai model Llama di ponsel (unduhan sekitar 2 GB). Setelah itu pesan biasa dinilai dan dibuang di ponsel, dan hanya pesan berisiko yang dikirim ke server. Dibuat dengan Llama.</string>
-    <string name="analysis_download">Unduh model (sekitar 2 GB)</string>
+    <string name="analysis_ondevice_explain">Mode di ponsel memakai model Llama di ponsel (unduhan sekitar 0,8 GB). Setelah itu pesan biasa dinilai dan dibuang di ponsel, dan hanya pesan berisiko yang dikirim ke server. Dibuat dengan Llama.</string>
+    <string name="analysis_download">Unduh model (sekitar 0,8 GB)</string>
     <string name="analysis_downloading">Mengunduh model... %1$d%%</string>
     <string name="analysis_download_failed">Unduhan gagal. Coba lagi saat tersambung.</string>
     <string name="analysis_remove">Hapus model dari ponsel</string>

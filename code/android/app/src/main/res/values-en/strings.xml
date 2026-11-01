@@ -168,8 +168,8 @@
     <string name="analysis_choose">Choose how your child\'s messages are assessed.</string>
     <string name="analysis_online_long">Online (server). Masked text is assessed on the server.</string>
     <string name="analysis_ondevice_long">On the phone (Llama). Messages are assessed on the phone; only risky ones are sent.</string>
-    <string name="analysis_ondevice_explain">On-device mode runs a Llama model on the phone (about a 2 GB download). After that, ordinary messages are assessed and dropped on the phone, and only risky messages are sent to the server. Built with Llama.</string>
-    <string name="analysis_download">Download model (about 2 GB)</string>
+    <string name="analysis_ondevice_explain">On-device mode runs a Llama model on the phone (about a 0.8 GB download). After that, ordinary messages are assessed and dropped on the phone, and only risky messages are sent to the server. Built with Llama.</string>
+    <string name="analysis_download">Download model (about 0.8 GB)</string>
     <string name="analysis_downloading">Downloading model... %1$d%%</string>
     <string name="analysis_download_failed">Download failed. Try again when connected.</string>
     <string name="analysis_remove">Remove the model from this phone</string>
