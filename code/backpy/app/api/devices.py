@@ -49,9 +49,11 @@ from app.db.models import (
     Guardian,
     ImageSignal,
     PairingCode,
+    RiskAssessment,
 )
 from app.live.broker import child_key, device_key, sse_stream
 from app.ratelimit import RateLimiter
+from app.risk.schemas import Level
 from app.scenarios.schema import Channel
 
 guardian_router = APIRouter(tags=["devices"])
@@ -702,12 +704,40 @@ async def device_stream(
     request: Request, db: DbDep, device: DeviceDep, settings: SettingsDep
 ) -> StreamingResponse:
     key = device_key(device.id)
+    levels = current_levels(db, device.id)
     db.commit()
     db.close()
-    return _sse(request, key, settings)
+    return _sse(request, key, settings, initial=[("level", lv) for lv in levels])
 
 
-def _sse(request: Request, key: str, settings) -> StreamingResponse:
+LEVEL_WINDOW = timedelta(days=7)
+
+
+def current_levels(db: Session, device_id: uuid.UUID) -> list[dict]:
+    """The phone keeps thread levels in memory only, so after a restart or an app update it
+    would skip the images of an already risky chat until a new message raised the level
+    again. Each stream connection therefore starts with the latest level of every chat of
+    this phone at perhatian or above in the last 7 days (the dashboard's window)."""
+    since = utcnow() - LEVEL_WINDOW
+    rows = db.execute(
+        select(Conversation.thread_key, RiskAssessment.level)
+        .join(RiskAssessment, RiskAssessment.conversation_id == Conversation.id)
+        .where(
+            Conversation.device_id == device_id,
+            Conversation.thread_key.is_not(None),
+            RiskAssessment.created_at >= since,
+        )
+        .order_by(RiskAssessment.created_at)
+    ).all()
+    latest = {thread: level for thread, level in rows}  # later rows win
+    return [
+        {"thread_key": thread, "level": level}
+        for thread, level in latest.items()
+        if level != Level.AMAN.value
+    ]
+
+
+def _sse(request: Request, key: str, settings, initial=()) -> StreamingResponse:
     return StreamingResponse(
         sse_stream(
             broker(request.app.state),
@@ -716,6 +746,7 @@ def _sse(request: Request, key: str, settings) -> StreamingResponse:
             heartbeat=settings.sse_heartbeat_seconds,
             max_seconds=settings.sse_max_seconds,
             is_disconnected=request.is_disconnected,
+            initial=initial,
         ),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"},

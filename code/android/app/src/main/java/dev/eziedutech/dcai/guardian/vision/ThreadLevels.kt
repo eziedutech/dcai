@@ -5,7 +5,8 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * The latest level of each conversation, from the live stream. A received image is only
  * looked at when its conversation is already at perhatian or above; images in an ordinary
- * chat are left alone. Kept in memory: after a restart the next level event fills it again.
+ * chat are left alone. Kept in memory: each stream connection starts with the levels of the
+ * risky chats, so a restart or an update fills it again.
  */
 object ThreadLevels {
     private val ORDER = listOf("aman", "perhatian", "waspada", "mendesak")

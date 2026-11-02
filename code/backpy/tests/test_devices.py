@@ -281,6 +281,23 @@ def test_phone_hears_the_level_again_without_a_raise(api):
     assert all(e["level"] == "waspada" and e["thread_key"] == THREAD for e in levels)
 
 
+def test_stream_connection_brings_back_risky_levels(api, db_url):
+    # After a restart or an app update the phone has no levels until the stream connects;
+    # the connection itself must bring back every risky chat, and only those.
+    from sqlalchemy.orm import Session
+
+    from app.api.devices import current_levels
+    from app.db.models import Device
+
+    _tokens, _child, dev, body = paired(api)
+    message(api, dev, "kirim foto kamu")
+    message(api, dev, "halo", thread="thread-key-calm-0123456789")
+    with Session(create_engine(db_url)) as db:
+        device = db.get(Device, __import__("uuid").UUID(body["device_id"]))
+        levels = current_levels(db, device.id)
+    assert levels == [{"thread_key": THREAD, "level": "waspada"}]
+
+
 def test_no_screen_text_in_database_response_logs_or_live_updates(api, db_url, caplog):
     import logging
     import re

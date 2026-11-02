@@ -14,7 +14,7 @@ import asyncio
 import json
 import secrets
 from collections import deque
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterable
 from dataclasses import dataclass
 
 BUFFER_PER_KEY = 100
@@ -85,14 +85,19 @@ async def sse_stream(
     heartbeat: float,
     max_seconds: float,
     is_disconnected: Callable[[], Awaitable[bool]] | None = None,
+    initial: Iterable[tuple[str, dict]] = (),
 ) -> AsyncIterator[str]:
-    """Missed events first, then live ones, a comment line as heartbeat, and a close after
-    max_seconds so clients reconnect (and re-authenticate) regularly."""
+    """Current state first (initial, without ids), then missed events, then live ones, a
+    comment line as heartbeat, and a close after max_seconds so clients reconnect (and
+    re-authenticate) regularly."""
     queue = broker.subscribe(key)
     loop = asyncio.get_running_loop()
     deadline = loop.time() + max_seconds
     try:
         yield "retry: 3000\n\n"
+        for event, data in initial:
+            payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+            yield f"event: {event}\ndata: {payload}\n\n"
         last = 0
         for item in broker.since(key, last_event_id):
             last = item.seq

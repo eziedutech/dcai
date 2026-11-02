@@ -287,3 +287,21 @@ async def test_consent_withdrawn_while_queued_drops_the_message(state):
     with pytest.raises(ConsentWithdrawn):
         await fut
     assert state.openweights.seen_text == []  # never reached a model
+
+
+async def test_stream_starts_with_current_state_without_ids():
+    bus = Broker()
+    bus.publish("k", "a", {})
+    chunks = await collect(
+        sse_stream(
+            bus,
+            "k",
+            "deadbeef-1",
+            heartbeat=1,
+            max_seconds=0.05,
+            initial=[("level", {"thread_key": "t", "level": "waspada"})],
+        )
+    )
+    state = [c for c in chunks if "event: level" in c]
+    assert len(state) == 1 and not state[0].startswith("id:")
+    assert chunks.index(state[0]) < next(i for i, c in enumerate(chunks) if c.startswith("id:"))
