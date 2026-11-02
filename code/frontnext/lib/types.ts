@@ -26,6 +26,14 @@ export type Child = {
   age_range: string;
   created_at: string;
   consent_scopes: Scope[];
+  consent_versions: Partial<Record<Scope, string>>;
+  consent_review: ConsentReview | null;
+};
+
+export type ConsentReview = {
+  scopes: Scope[];
+  material: boolean;
+  changes: { version: string; summary_id: string; summary_en: string; material: boolean }[];
 };
 
 export type ParentInsight = {

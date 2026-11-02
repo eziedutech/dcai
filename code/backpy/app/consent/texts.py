@@ -28,6 +28,14 @@ class ConsentText:
     en: str
     # The scopes this text explains. A grant may only name these.
     scopes: tuple[Scope, ...]
+    # What changed from the version before (proposal 0005). A parent whose grant for a scope
+    # predates a change to it is asked to read the change. A material change (more data or a
+    # new way of processing it) pauses the scope until the parent agrees again; otherwise
+    # protection goes on and the dashboard shows the change until it is read.
+    changed: tuple[Scope, ...] = ()
+    summary_id: str = ""
+    summary_en: str = ""
+    material: bool = False
 
 
 _V1_ID = """\
@@ -223,5 +231,21 @@ _V8_EN = _V7_EN.replace(
     "cannot change how an image is shown, so the child gets a reminder and the parent gets "
     "the label.",
 )
-CURRENT = ConsentText(version="2026-11-02.1", id=_V8_ID, en=_V8_EN, scopes=V7.scopes)
+CURRENT = ConsentText(
+    version="2026-11-02.1",
+    id=_V8_ID,
+    en=_V8_EN,
+    scopes=V7.scopes,
+    changed=(Scope.GAMBAR,),
+    summary_id=(
+        "Di aplikasi chat yang memasang dcAI, gambar sensitif dikaburkan penuh. Di aplikasi "
+        "lain, dcAI tidak dapat mengubah tampilan gambar, jadi anak mendapat pengingat dan "
+        "orang tua menerima labelnya."
+    ),
+    summary_en=(
+        "In chat apps that integrate dcAI, a sensitive image is fully blurred. In other apps "
+        "dcAI cannot change how an image is shown, so the child gets a reminder and the parent "
+        "gets the label."
+    ),
+)
 VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, V6, V7, CURRENT)}

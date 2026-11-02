@@ -260,3 +260,103 @@ def test_current_text_says_other_apps_get_a_reminder_not_a_blur():
     assert "anak mendapat pengingat" in CURRENT.id
     assert "the child gets a reminder" in CURRENT.en
     assert "A sensitive image is fully blurred." not in CURRENT.en
+
+
+def _old_grant(db_url, child_id, version, scopes):
+    """A grant given before the current text existed (the API only takes the current one)."""
+    import uuid
+
+    from sqlalchemy.orm import Session
+
+    from app.db.models import ChildProfile, ConsentRecord
+
+    with Session(create_engine(db_url)) as s:
+        child = s.get(ChildProfile, uuid.UUID(child_id))
+        s.add(
+            ConsentRecord(
+                guardian_id=child.guardian_id,
+                child_id=child.id,
+                text_version=version,
+                action="grant",
+                scopes=list(scopes),
+                age_range=child.age_range,
+            )
+        )
+        s.commit()
+
+
+def test_a_parent_who_agreed_before_v8_is_asked_to_read_the_image_change(api, db_url):
+    from app.consent.texts import V7
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    _old_grant(db_url, child["id"], V7.version, ["gambar", "percakapan"])
+
+    listed = api.get("/v1/children", headers=auth(tokens)).json()[0]
+    # Not material: protection goes on while the change waits to be read.
+    assert listed["consent_scopes"] == ["gambar", "percakapan"]
+    assert listed["consent_versions"] == {"gambar": V7.version, "percakapan": V7.version}
+    review = listed["consent_review"]
+    assert review["scopes"] == ["gambar"] and review["material"] is False
+    assert [c["version"] for c in review["changes"]] == [CURRENT.version]
+    assert "pengingat" in review["changes"][0]["summary_id"]
+
+    # "I have read it" is a new grant of the same scopes to the current text.
+    assert consent(api, tokens, child["id"], scopes=["gambar", "percakapan"]).status_code == 201
+    listed = api.get("/v1/children", headers=auth(tokens)).json()[0]
+    assert listed["consent_review"] is None
+    assert listed["consent_versions"]["gambar"] == CURRENT.version
+
+
+def test_no_review_for_a_scope_the_parent_did_not_grant(api, db_url):
+    from app.consent.texts import V7
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    _old_grant(db_url, child["id"], V7.version, ["percakapan"])
+    assert api.get("/v1/children", headers=auth(tokens)).json()[0]["consent_review"] is None
+
+
+def test_a_scope_granted_again_on_the_current_text_needs_no_review(api, db_url):
+    from app.consent.texts import V7
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    _old_grant(db_url, child["id"], V7.version, ["gambar"])
+    consent(api, tokens, child["id"], scopes=["gambar"], action="revoke")
+    consent(api, tokens, child["id"], scopes=["gambar"])
+    assert api.get("/v1/children", headers=auth(tokens)).json()[0]["consent_review"] is None
+
+
+def test_a_material_change_pauses_the_scope_until_agreed(api, db_url):
+    """With a test text only: no published version is material."""
+    import dataclasses
+    import uuid
+
+    from sqlalchemy.orm import Session
+
+    from app.consent.service import active_scopes, review
+    from app.consent.texts import VERSIONS, Scope
+
+    tokens = register(api)
+    child = add_child(api, tokens)
+    consent(api, tokens, child["id"], scopes=["gambar", "percakapan"])
+    later = dataclasses.replace(
+        CURRENT, version="2099-01-01.1", changed=(Scope.GAMBAR,), material=True
+    )
+    versions = {**VERSIONS, later.version: later}
+    with Session(create_engine(db_url)) as s:
+        cid = uuid.UUID(child["id"])
+        assert active_scopes(s, cid, versions) == {Scope.PERCAKAPAN}
+        found = review(s, cid, versions)
+        assert found is not None and found.material and found.scopes == [Scope.GAMBAR]
+        # The published texts change nothing for this child.
+        assert active_scopes(s, cid) == {Scope.GAMBAR, Scope.PERCAKAPAN}
+
+
+def test_an_earlier_text_version_can_be_read(api):
+    from app.consent.texts import V7
+
+    body = api.get("/v1/consents/text", params={"version": V7.version}).json()
+    assert body["version"] == V7.version and "dikaburkan penuh" in body["id"]
+    assert api.get("/v1/consents/text", params={"version": "1999-01-01.1"}).status_code == 404

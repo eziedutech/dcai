@@ -9,6 +9,7 @@ import { follow } from "@/lib/sse";
 import type {
   Child,
   ChildClass,
+  ConsentReview,
   Conversation,
   ConsentText,
   Device,
@@ -83,6 +84,10 @@ export function ChildView({ childId }: { childId: string }) {
         ))}
       </div>
 
+      {child.consent_review && (tab === "overview" || tab === "settings") && (
+        <ConsentReviewCard child={child} review={child.consent_review} />
+      )}
+
       <div className="mt-6">
         {tab === "overview" && <OverviewPanel childId={childId} />}
         {tab === "time" && <TimeView childId={childId} ageRange={child.age_range} />}
@@ -91,6 +96,67 @@ export function ChildView({ childId }: { childId: string }) {
         {tab === "settings" && <SettingsPanel child={child} />}
       </div>
     </div>
+  );
+}
+
+// --- Consent text changed since the parent agreed (proposal 0005) ---
+
+function ConsentReviewCard({ child, review }: { child: Child; review: ConsentReview }) {
+  const { t, lang } = useT();
+  const { reload } = useDash();
+  const [text, setText] = useState<ConsentText | null>(null);
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    api<ConsentText>("consents/text").then(setText, () => undefined);
+  }, []);
+
+  async function record(action: "grant" | "revoke", scopes: Scope[]) {
+    if (!text) return;
+    setBusy(true);
+    try {
+      await api("consents", {
+        method: "POST",
+        body: { child_id: child.id, text_version: text.version, action, scopes },
+      });
+      await reload();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="glass mt-6 rounded-2xl border border-waspada/30 p-6 sm:p-7" aria-labelledby="review-h">
+      <h2 id="review-h" className="text-lg font-bold">{t("review.title")}</h2>
+      <p className="mt-1 max-w-[62ch] text-sm text-slate">{t(review.material ? "review.leadMaterial" : "review.lead")}</p>
+      <ul className="mt-3 max-w-[62ch] list-disc space-y-1 pl-5">
+        {review.changes.map((c) => (
+          <li key={c.version}>{lang === "en" ? c.summary_en : c.summary_id}</li>
+        ))}
+      </ul>
+      <p className="mt-3 text-sm text-slate">
+        {t("review.scopes")} {review.scopes.map((s) => t(`scope.${s}`)).join(", ")}
+      </p>
+      {text && (
+        <button type="button" className="mt-2 text-sm font-semibold text-navy underline" onClick={() => setOpen(!open)}>
+          {t(open ? "review.hideFull" : "review.full")}
+        </button>
+      )}
+      {open && text && (
+        <p className="mt-2 max-w-[70ch] whitespace-pre-line text-sm">{lang === "en" ? text.en : text.id}</p>
+      )}
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Button disabled={busy || !text} onClick={() => record("grant", review.scopes)}>
+          {t("review.agree")}
+        </Button>
+        {review.scopes.map((s) => (
+          <Button key={s} variant="quiet" disabled={busy || !text} onClick={() => record("revoke", [s])}>
+            {t("review.withdraw").replace("{scope}", t(`scope.${s}`))}
+          </Button>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -588,6 +654,11 @@ function SettingsPanel({ child }: { child: Child }) {
                 <span>
                   <span className="block font-medium">{t(`scope.${s}`)}</span>
                   <span className="block text-sm text-slate">{t(`scopeHint.${s}`)}</span>
+                  {on && child.consent_versions[s] && (
+                    <span className="block text-xs text-slate">
+                      {t("set.version").replace("{version}", child.consent_versions[s] ?? "")}
+                    </span>
+                  )}
                 </span>
                 <Button variant={on ? "quiet" : "primary"} disabled={busy} onClick={() => toggle(s, !on)} className="shrink-0">
                   {on ? t("set.withdraw") : t("set.grant")}

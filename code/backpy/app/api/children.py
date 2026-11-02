@@ -13,7 +13,7 @@ from app.age import AgeRange
 from app.api.deps import DbDep, GuardianDep, owned_child
 from app.api.devices import notify_config_changed, notify_devices_revoked
 from app.auth.security import hash_class_code
-from app.consent.service import active_scopes, has_consent
+from app.consent.service import active_scopes, granted_versions, has_consent, review
 from app.consent.texts import CURRENT, VERSIONS, Scope
 from app.db.models import (
     ChildProfile,
@@ -28,6 +28,20 @@ from app.db.models import (
 router = APIRouter(tags=["children", "consent"])
 
 
+class ConsentChangeOut(BaseModel):
+    version: str
+    summary_id: str
+    summary_en: str
+    material: bool
+
+
+class ConsentReviewOut(BaseModel):
+    scopes: list[Scope]
+    # True while a scope is paused until the parent agrees to the changed text.
+    material: bool
+    changes: list[ConsentChangeOut]
+
+
 class ChildIn(BaseModel):
     nickname: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=40)]
     age_range: AgeRange
@@ -39,6 +53,10 @@ class ChildOut(BaseModel):
     age_range: str
     created_at: datetime
     consent_scopes: list[Scope]
+    # The text version each granted scope was agreed to.
+    consent_versions: dict[Scope, str]
+    # Changes to the consent text the parent has not read yet (proposal 0005).
+    consent_review: ConsentReviewOut | None = None
 
 
 class ConsentIn(BaseModel):
@@ -72,6 +90,27 @@ def _child_out(db, child: ChildProfile) -> ChildOut:
         age_range=child.age_range,
         created_at=child.created_at,
         consent_scopes=sorted(active_scopes(db, child.id)),
+        consent_versions=dict(sorted(granted_versions(db, child.id).items())),
+        consent_review=_review_out(db, child),
+    )
+
+
+def _review_out(db, child: ChildProfile) -> ConsentReviewOut | None:
+    found = review(db, child.id)
+    if found is None:
+        return None
+    return ConsentReviewOut(
+        scopes=found.scopes,
+        material=found.material,
+        changes=[
+            ConsentChangeOut(
+                version=c.version,
+                summary_id=c.summary_id,
+                summary_en=c.summary_en,
+                material=c.material,
+            )
+            for c in found.changes
+        ],
     )
 
 
@@ -124,11 +163,13 @@ def list_children(db: DbDep, guardian: GuardianDep) -> list[ChildOut]:
 
 
 @router.get("/consents/text")
-def consent_text() -> ConsentTextOut:
-    """The current consent text. Public, so it can be read before signing up."""
-    return ConsentTextOut(
-        version=CURRENT.version, id=CURRENT.id, en=CURRENT.en, scopes=list(CURRENT.scopes)
-    )
+def consent_text(version: str | None = None) -> ConsentTextOut:
+    """The current consent text, or a published earlier version. Public, so it can be read
+    before signing up."""
+    text = CURRENT if version is None else VERSIONS.get(version)
+    if text is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "unknown consent text version")
+    return ConsentTextOut(version=text.version, id=text.id, en=text.en, scopes=list(text.scopes))
 
 
 @router.post("/consents", status_code=status.HTTP_201_CREATED)
