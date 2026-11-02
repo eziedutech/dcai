@@ -127,7 +127,8 @@ class ScreenReaderService : AccessibilityService() {
             }
             if (node.isVisibleToUser && ScreenImages.isPicture(node.className?.toString(), node.viewIdResourceName)) {
                 node.getBoundsInScreen(rect)
-                images.add(ScreenBox(rect.left, rect.top, rect.right, rect.bottom))
+                val video = ScreenImages.isVideo(node.viewIdResourceName, node.contentDescription)
+                images.add(ScreenBox(rect.left, rect.top, rect.right, rect.bottom, video))
             }
             for (i in 0 until node.childCount) node.getChild(i)?.let { stack.addLast(it) }
         }
@@ -167,7 +168,7 @@ class ScreenReaderService : AccessibilityService() {
                                 boxes.any { b ->
                                     val crop = Bitmap.createBitmap(bitmap, b.left, b.top, b.width, b.height)
                                     try {
-                                        guard.check(crop, context).remind
+                                        guard.check(crop, context.copy(video = b.video)).remind
                                     } finally {
                                         if (crop !== bitmap) crop.recycle()
                                     }

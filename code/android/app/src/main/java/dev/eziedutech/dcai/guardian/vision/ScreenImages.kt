@@ -1,7 +1,10 @@
 package dev.eziedutech.dcai.guardian.vision
 
-/** An on-screen rectangle in screen pixels (left, top inclusive; right, bottom exclusive). */
-data class ScreenBox(val left: Int, val top: Int, val right: Int, val bottom: Int) {
+/**
+ * An on-screen rectangle in screen pixels (left, top inclusive; right, bottom exclusive).
+ * [video] marks a video's cover: only the cover is on screen, and it is reported as a video.
+ */
+data class ScreenBox(val left: Int, val top: Int, val right: Int, val bottom: Int, val video: Boolean = false) {
     val width get() = right - left
     val height get() = bottom - top
     val area get() = width.toLong() * height
@@ -29,6 +32,15 @@ object ScreenImages {
     // so the view id counts too. Needs flagReportViewIds in the accessibility config.
     private val PICTURE_ID = Regex("image|media|photo|picture|thumb", RegexOption.IGNORE_CASE)
 
+    // WhatsApp describes a video's cover as "Video, HD, duration 39 seconds" (Indonesian
+    // "Video, ..." too) and names its row conversation_row_video.
+    private val VIDEO = Regex("\\bvideo\\b", RegexOption.IGNORE_CASE)
+
+    /** Whether a picture on screen is a video's cover, from its view id or description. */
+    fun isVideo(viewId: String?, description: CharSequence?): Boolean =
+        viewId?.substringAfterLast('/')?.let { VIDEO.containsMatchIn(it.replace('_', ' ')) } == true ||
+            description?.let { VIDEO.containsMatchIn(it) } == true
+
     /** Whether an on-screen element looks like a picture, from its class and view id. */
     fun isPicture(className: String?, viewId: String?): Boolean =
         className?.endsWith("ImageView") == true ||
@@ -43,12 +55,17 @@ object ScreenImages {
                 b.top.coerceAtLeast(0),
                 b.right.coerceAtMost(screenWidth),
                 b.bottom.coerceAtMost(screenHeight),
+                b.video,
             )
             c.takeIf { it.width >= min && it.height >= min && it.area <= maxArea }
         }.distinct().sortedByDescending { it.area }
-        // A picture inside a larger kept one (a thumbnail inside its frame) adds nothing.
+        // A picture inside a larger kept one (a thumbnail inside its frame) adds nothing, but
+        // a video cover inside a frame makes the frame a video.
         val kept = ArrayList<ScreenBox>()
-        for (b in clipped) if (kept.none { it.contains(b) }) kept.add(b)
+        for (b in clipped) {
+            val outer = kept.indexOfFirst { it.contains(b) }
+            if (outer < 0) kept.add(b) else if (b.video) kept[outer] = kept[outer].copy(video = true)
+        }
         return kept.take(MAX)
     }
 }

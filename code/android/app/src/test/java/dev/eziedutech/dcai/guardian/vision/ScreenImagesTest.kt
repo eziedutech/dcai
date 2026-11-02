@@ -52,4 +52,22 @@ class ScreenImagesTest {
         assertEquals(false, ScreenImages.isPicture("android.widget.Button", "com.whatsapp:id/send"))
         assertEquals(false, ScreenImages.isPicture("android.widget.TextView", null))
     }
+
+    @Test
+    fun aVideoCoverIsKnownByItsDescriptionOrId() {
+        assertEquals(true, ScreenImages.isVideo("com.whatsapp:id/thumb", "Video, HD, duration 39 seconds"))
+        assertEquals(true, ScreenImages.isVideo("com.whatsapp:id/conversation_row_video", null))
+        assertEquals(false, ScreenImages.isVideo("com.whatsapp:id/image", "Photo"))
+        assertEquals(false, ScreenImages.isVideo("com.whatsapp:id/thumb", "Videography studio logo"))
+        assertEquals(false, ScreenImages.isVideo(null, null))
+    }
+
+    @Test
+    fun aVideoCoverInsideItsFrameMakesTheFrameAVideo() {
+        // WhatsApp, measured: media_container holds the cover ImageView described as a video.
+        val frame = ScreenBox(34, 621, 502, 1270)
+        val cover = ScreenBox(42, 629, 494, 1262, video = true)
+        assertEquals(listOf(frame.copy(video = true)), ScreenImages.pick(listOf(frame, cover), 720, 1440))
+        assertEquals(listOf(frame), ScreenImages.pick(listOf(frame, cover.copy(video = false)), 720, 1440))
+    }
 }

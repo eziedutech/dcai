@@ -20,6 +20,8 @@ data class ImageContext(
     val contactKnown: Boolean,
     /** Read from another app's screen: dcAI cannot blur it there, only remind the child. */
     val shownByOtherApp: Boolean = false,
+    /** A video's cover read from another app's screen: reported as a video. */
+    val video: Boolean = false,
 )
 
 /**
@@ -72,7 +74,7 @@ class ImageGuard(
 
         // Counts and labels only; never text or pixels.
         Log.d(TAG, "image judged trigger=${context.trigger.wire} category=${decision.category.wire} text_blocks=${result.blocks.size} faces=${result.findings.faces.size}")
-        report(decision, key, context, MEDIA_IMAGE)
+        report(decision, key, context, if (context.video) MEDIA_VIDEO else MEDIA_IMAGE)
 
         if (context.trigger == Trigger.PERCAKAPAN) {
             val text = OcrText.joined(result.blocks)
