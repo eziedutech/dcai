@@ -209,7 +209,7 @@
 
     <!-- Licenses -->
     <string name="lic_p1">Daftar situs: UT1 Blacklists, Université Toulouse Capitole, lisensi CC BY-SA 4.0. Daftar di ponsel ini adalah adaptasi berbentuk hash dengan lisensi yang sama.</string>
-    <string name="lic_p2">Deteksi wajah dan teks di gambar: Google ML Kit, model di perangkat. Deteksi gambar seksual: Falconsai/nsfw_image_detection, lisensi Apache-2.0, dijalankan di ponsel tanpa diubah.</string>
+    <string name="lic_p2">Deteksi wajah dan teks di gambar: Google ML Kit, model di perangkat.</string>
     <string name="lic_p3">Penilaian pola: Muse Spark dan Llama dari Meta.</string>
     <string name="lic_p4">Komponen sumber terbuka: AndroidX, Jetpack Compose, Kotlin, OkHttp, kotlinx.serialization, dengan lisensi masing-masing.</string>
 
