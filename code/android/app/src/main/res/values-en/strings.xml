@@ -190,9 +190,9 @@
     <string name="tr_p5">An AI assessment is an estimate and can be wrong. If you think dcAI got it wrong, tell your parent.</string>
 
     <string name="lic_p1">Site lists: UT1 Blacklists, Université Toulouse Capitole, CC BY-SA 4.0. The lists on this phone are hashed adaptations under the same license.</string>
-    <string name="lic_p2">Face and text detection in images: Google ML Kit, on-device models.</string>
+    <string name="lic_p2">Face and text detection in images: Google ML Kit, on-device models. Sexual image detection: Falconsai/nsfw_image_detection, Apache-2.0, converted to LiteRT with int8 weights and run on the phone, not retrained.</string>
     <string name="lic_p3">Pattern assessment: Muse Spark and Llama by Meta.</string>
-    <string name="lic_p4">Open source components: AndroidX, Jetpack Compose, Kotlin, OkHttp, kotlinx.serialization, under their own licenses.</string>
+    <string name="lic_p4">Open source components: AndroidX, Jetpack Compose, Kotlin, OkHttp, kotlinx.serialization, LiteRT, under their own licenses.</string>
 
     <string name="review_title">Review with a parent</string>
     <string name="review_lead">dcAI blurred this image. A parent enters the PIN to see it and decide.</string>
