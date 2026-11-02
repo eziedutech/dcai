@@ -13,11 +13,11 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
  * The slot for a sensitive-image classifier (sexual content, violence). It runs on the
  * phone; the image never leaves it.
  *
- * No model ships with this build. A model is plugged in by implementing this interface
- * with a licensed classifier and registering it in ServiceLocator. Its accuracy is the
- * figure its source states; dcAI has not measured it, and we do not create or collect
- * sensitive images to test one. Until a model is installed, installed is false, the
- * transparency screen says so, and only faces and personal text are detected.
+ * This build bundles one: [VisionNsfwModel] (sexual content), registered in ServiceLocator.
+ * A violence model plugs in the same way. Its accuracy is the figure its source states;
+ * dcAI has not measured it, and we do not create or collect sensitive images to test one.
+ * Without a model, installed is false, the transparency screen says so, and only faces and
+ * personal text are detected.
  */
 interface SensitiveModel {
     val installed: Boolean

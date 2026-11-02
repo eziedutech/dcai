@@ -52,3 +52,6 @@ Thumbs.db
 
 # Site lists built from UT1 (large, refreshed from the source)
 /data/blocklist/
+
+# Bundled vision model (87 MB): regenerate with code/vision/export_nsfw.py before a release build.
+/code/android/app/src/main/assets/vision/*.pte

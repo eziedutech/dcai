@@ -10,9 +10,9 @@ import dev.eziedutech.dcai.guardian.ingest.OnDeviceModel
 import dev.eziedutech.dcai.guardian.ingest.OnDeviceModelClient
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.vision.ImageGuard
-import dev.eziedutech.dcai.guardian.vision.NoSensitiveModel
 import dev.eziedutech.dcai.guardian.vision.OnDeviceDetectors
 import dev.eziedutech.dcai.guardian.vision.SensitiveModel
+import dev.eziedutech.dcai.guardian.vision.VisionNsfwModel
 
 /**
  * Small hand-wired container. The store is the source of truth for the server URL and the
@@ -46,8 +46,12 @@ object ServiceLocator {
         return cached?.third
     }
 
-    /** A licensed sensitive-image classifier is registered here; none ships with this build. */
-    val sensitiveModel: SensitiveModel = NoSensitiveModel
+    @Volatile private var sensitive: SensitiveModel? = null
+
+    /** The bundled sexual-content classifier (Falconsai ViT, Apache-2.0). Without its asset,
+     * [SensitiveModel.installed] is false and only faces and personal text are detected. */
+    fun sensitiveModel(context: Context): SensitiveModel =
+        sensitive ?: VisionNsfwModel(context).also { sensitive = it }
 
     @Volatile private var model: OnDeviceModel? = null
     @Volatile private var analyzer: OnDeviceAnalyzer? = null
@@ -67,12 +71,15 @@ object ServiceLocator {
             OnDeviceModelClient(context),
         ).also { analyzer = it }
 
-    private val detectors by lazy { OnDeviceDetectors(sensitiveModel) }
+    @Volatile private var detectors: OnDeviceDetectors? = null
+
+    private fun detectors(context: Context): OnDeviceDetectors =
+        detectors ?: OnDeviceDetectors(sensitiveModel(context)).also { detectors = it }
 
     fun imageGuard(context: Context): ImageGuard? {
         val client = client(context) ?: return null
         val ingest = cached?.third ?: return null
-        return ImageGuard(store(context), client, ingest, detectors)
+        return ImageGuard(store(context), client, ingest, detectors(context))
     }
 
     fun reset() {

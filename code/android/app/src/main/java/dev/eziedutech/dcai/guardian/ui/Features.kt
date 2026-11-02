@@ -78,7 +78,7 @@ data class Snapshot(
             sitesOn = SiteGuardVpn.running,
             messagesOn = dev.eziedutech.dcai.guardian.ingest.MessageNotificationListener.enabled(context),
             accessibilityOn = dev.eziedutech.dcai.guardian.ingest.ScreenReaderService.enabled(context),
-            sensitiveModel = ServiceLocator.sensitiveModel.installed,
+            sensitiveModel = ServiceLocator.sensitiveModel(context).installed,
             usageOn = UsageReader(context).hasPermission(),
             overlayOn = android.provider.Settings.canDrawOverlays(context),
             today = ScreenGuard.today,
