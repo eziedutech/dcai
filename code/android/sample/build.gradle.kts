@@ -13,8 +13,8 @@ android {
         minSdk = 30
         targetSdk = 36
         // Same version as dcAI Guardian; published beside it for demos on a real phone.
-        versionCode = 3
-        versionName = "0.2.1"
+        versionCode = 4
+        versionName = "0.3.9"
     }
 
     // Signed with the same key as dcAI Guardian, from the environment, so the signature
