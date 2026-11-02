@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
+import dev.eziedutech.dcai.guardian.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -49,10 +50,17 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
                 val m = interpreter ?: load().also { interpreter = it }
                 m.run(input, probs)
             }
-            // Timing only, never the score or anything about the image.
-            Log.i(TAG, "nsfw scored in ${SystemClock.elapsedRealtime() - started} ms")
+            val ms = SystemClock.elapsedRealtime() - started
+            val result = NsfwInput.toScore(probs[0])
+            // Timing only in release. Debug builds add the score (a number, nothing about the
+            // image) to calibrate the threshold on the test phone.
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "nsfw scored in $ms ms score=${result?.score ?: 0}")
+            } else {
+                Log.i(TAG, "nsfw scored in $ms ms")
+            }
             scheduleEvict()
-            NsfwInput.toScore(probs[0])
+            result
         } catch (t: Throwable) {
             // Type only. A failed model leaves the image to the face and text detectors.
             Log.w(TAG, "nsfw score failed: ${t.javaClass.simpleName}")
@@ -93,6 +101,7 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
         const val TAG = "dcai.vision"
         const val ASSET_DIR = "vision"
         const val MODEL = "nsfw.tflite"
+        // 4 threads measured no faster than 2 on a Helio P35 (about 3.5 s warm, 5.5 s cold).
         const val THREADS = 2
         const val IDLE_EVICT_MS = 60_000L
     }
