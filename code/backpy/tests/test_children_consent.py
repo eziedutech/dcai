@@ -250,3 +250,13 @@ def test_clear_history_keeps_child_consent_and_phones(api, db_url):
 
     listed = api.get("/v1/children", headers=auth(tokens)).json()
     assert listed[0]["id"] == child["id"] and "percakapan" in listed[0]["consent_scopes"]
+
+
+def test_current_text_says_other_apps_get_a_reminder_not_a_blur():
+    from app.consent.texts import V7
+
+    assert CURRENT.version != V7.version
+    assert "Gambar sensitif dikaburkan penuh." in V7.id  # the published text stays as it was
+    assert "anak mendapat pengingat" in CURRENT.id
+    assert "the child gets a reminder" in CURRENT.en
+    assert "A sensitive image is fully blurred." not in CURRENT.en

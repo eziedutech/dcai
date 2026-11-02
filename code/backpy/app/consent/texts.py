@@ -207,7 +207,21 @@ _V7_EN = _V6_EN.replace(
     "and no way to single out a child. Numbers show only when enough children take part, so none can "
     "be inferred. It can be withdrawn at any time.",
 )
-CURRENT = ConsentText(
-    version="2026-10-30.3", id=_V7_ID, en=_V7_EN, scopes=(*_V6_SCOPES, Scope.SEKOLAH)
+V7 = ConsentText(version="2026-10-30.3", id=_V7_ID, en=_V7_EN, scopes=(*_V6_SCOPES, Scope.SEKOLAH))
+
+# V8 states what happens to a sensitive image in another app's chat (read from the screen):
+# dcAI cannot blur it there, so the child gets a reminder and the parent the label.
+_V8_ID = _V7_ID.replace(
+    "Gambar sensitif dikaburkan penuh.",
+    "Di aplikasi chat yang memasang dcAI, gambar sensitif dikaburkan penuh. Di aplikasi lain, "
+    "dcAI tidak dapat mengubah tampilan gambar, jadi anak mendapat pengingat dan orang tua "
+    "menerima labelnya.",
 )
-VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, V6, CURRENT)}
+_V8_EN = _V7_EN.replace(
+    "A sensitive image is fully blurred.",
+    "In chat apps that integrate dcAI, a sensitive image is fully blurred. In other apps dcAI "
+    "cannot change how an image is shown, so the child gets a reminder and the parent gets "
+    "the label.",
+)
+CURRENT = ConsentText(version="2026-11-02.1", id=_V8_ID, en=_V8_EN, scopes=V7.scopes)
+VERSIONS: dict[str, ConsentText] = {t.version: t for t in (V1, V2, V3, V4, V5, V6, V7, CURRENT)}
