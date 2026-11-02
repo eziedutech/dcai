@@ -19,6 +19,7 @@ Steps (on a GPU box, see docs/log/2026-11-02.md section 6 for the Brev setup):
     tar xf movinet_a0_stream.tar.gz  # a plain tar despite the name
     v/bin/python train_violence.py manifest --root VID --violent "*/Violence/*" \
         --normal "*/NonViolence/*" --out manifest.csv
+    v/bin/python train_violence.py cache --manifest manifest.csv --cache cache --workers 10
     v/bin/python train_violence.py train --manifest manifest.csv \
         --checkpoint movinet_a0_stream --cache cache --out out
 
@@ -81,22 +82,23 @@ def sample_frames(video: Path, frames: int = FRAMES, size: int = SIZE) -> np.nda
     [T, size, size, 3]. What the phone does (VideoPolicy.timesUs, then size x size)."""
     import cv2
 
+    def small(frame):
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        return cv2.resize(rgb, (size, size), interpolation=cv2.INTER_LINEAR)
+
+    # Every frame is shrunk as it is read, so a long full-HD clip stays small in memory.
     cap = cv2.VideoCapture(str(video))
     decoded = []
     ok, frame = cap.read()
     while ok:
-        decoded.append(frame)
+        decoded.append(small(frame))
         ok, frame = cap.read()
     cap.release()
     if not decoded:
         raise ValueError(f"no frames in {video}")
     total = len(decoded)
     idx = ((2 * np.arange(frames) + 1) * total) // (2 * frames)
-    out = np.empty((frames, size, size, 3), dtype=np.uint8)
-    for i, j in enumerate(idx):
-        rgb = cv2.cvtColor(decoded[j], cv2.COLOR_BGR2RGB)
-        out[i] = cv2.resize(rgb, (size, size), interpolation=cv2.INTER_LINEAR)
-    return out
+    return np.stack([decoded[j] for j in idx])
 
 
 def clip_array(root: Path, rel: str, cache: Path | None) -> np.ndarray:
@@ -109,6 +111,26 @@ def clip_array(root: Path, rel: str, cache: Path | None) -> np.ndarray:
     cache.mkdir(parents=True, exist_ok=True)
     np.save(key, arr)
     return arr
+
+
+def _cache_one(job: tuple[str, str, str]) -> str | None:
+    root, rel, cache = job
+    try:
+        clip_array(Path(root), rel, Path(cache))
+        return None
+    except ValueError:
+        return rel
+
+
+def precache(manifest: Path, cache: Path, workers: int) -> None:
+    """Decodes every clip once, in parallel, so training reads small arrays."""
+    from multiprocessing import Pool
+
+    root, rows = read_manifest(manifest)
+    jobs = [(str(root), p, str(cache)) for p, _, _ in rows]
+    with Pool(workers) as pool:
+        bad = [r for r in pool.imap_unordered(_cache_one, jobs, chunksize=4) if r]
+    print(f"cached {len(jobs) - len(bad)} clips, unreadable {len(bad)}")
 
 
 def dataset(root, rows, split, cache, batch, shuffle):
@@ -355,6 +377,11 @@ def main() -> None:
     m.add_argument("--normal", required=True, help="glob under root for non-violent clips")
     m.add_argument("--out", type=Path, required=True, help="CSV; clip paths are relative to root")
 
+    c = sub.add_parser("cache", help="decode every clip once, in parallel")
+    c.add_argument("--manifest", type=Path, required=True)
+    c.add_argument("--cache", type=Path, required=True)
+    c.add_argument("--workers", type=int, default=8)
+
     for name in ("train", "smoke"):
         t = sub.add_parser(name)
         t.add_argument("--manifest", type=Path)
@@ -375,6 +402,8 @@ def main() -> None:
     if args.cmd == "manifest":
         # The manifest sits next to the clips' root so train can resolve relative paths.
         print(build_manifest(args.root, args.violent, args.normal, args.out))
+    elif args.cmd == "cache":
+        precache(args.manifest, args.cache, args.workers)
     elif args.cmd == "train":
         if not (args.manifest and args.out):
             raise SystemExit("train needs --manifest and --out")
