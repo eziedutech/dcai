@@ -368,7 +368,10 @@ def _publish_step(
                 "source": step.source,
             },
         )
-    if job.device_id is not None and (step.raised or quick is not None):
+    # The phone keeps thread levels in memory only, so after a restart it would not know an
+    # already risky chat until the level rose again (and would skip its images). Every step
+    # at perhatian or above re-sends the level; a nudge rides only on a raise or quick guide.
+    if job.device_id is not None and (step.raised or quick is not None or step.level != Level.AMAN):
         nudge = None
         if quick is not None:
             # A reviewed template, so the child is guided now; the "nudge" event that

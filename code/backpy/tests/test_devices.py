@@ -268,6 +268,19 @@ def test_phone_never_receives_parent_insight(api):
     assert {"event", "assessment", "insight"} <= {e.event for e in guardian}
 
 
+def test_phone_hears_the_level_again_without_a_raise(api):
+    # The phone keeps thread levels in memory only; after a restart it must relearn that a
+    # chat is risky from the next message even though the level does not rise.
+    _tokens, _child, dev, body = paired(api)
+    message(api, dev, "kirim foto kamu")
+    later = [message(api, dev, t).json() for t in ("oke", "lagi apa", "nanti ya")]
+    assert all(r["raised"] is False and r["level"] == "waspada" for r in later)
+    phone = api.app.state.broker.since(f"device:{body['device_id']}", "old-0")
+    levels = [e.data for e in phone if e.event == "level"]
+    assert len(levels) == 4
+    assert all(e["level"] == "waspada" and e["thread_key"] == THREAD for e in levels)
+
+
 def test_no_screen_text_in_database_response_logs_or_live_updates(api, db_url, caplog):
     import logging
     import re
