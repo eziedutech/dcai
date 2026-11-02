@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
@@ -13,7 +14,9 @@ import android.view.accessibility.AccessibilityNodeInfo
 import dev.eziedutech.dcai.guardian.R
 import dev.eziedutech.dcai.guardian.ServiceLocator
 import dev.eziedutech.dcai.guardian.service.Notifications
+import dev.eziedutech.dcai.guardian.vision.ScreenBox
 import dev.eziedutech.dcai.guardian.vision.ImageContext
+import dev.eziedutech.dcai.guardian.vision.ScreenImages
 import dev.eziedutech.dcai.guardian.vision.ThreadLevels
 import dev.eziedutech.dcai.guardian.vision.Trigger
 import kotlinx.coroutines.CoroutineScope
@@ -73,7 +76,7 @@ class ScreenReaderService : AccessibilityService() {
             for (line in screen.newLines(pkg, thread, lines)) {
                 submit(thread, pkg, sender = "contact", raw = line)
             }
-            maybeScreenshot(pkg, thread)
+            maybeScreenshot(pkg, thread, collected.images)
         }
     }
 
@@ -93,12 +96,22 @@ class ScreenReaderService : AccessibilityService() {
         }
     }
 
-    /** One text buffer the child is editing, plus the other text lines on screen and a title. */
-    private class Collected(val editable: String?, val lines: List<String>, val title: String?)
+    /**
+     * One text buffer the child is editing, the other text lines on screen, a title, and where
+     * the pictures are.
+     */
+    private class Collected(
+        val editable: String?,
+        val lines: List<String>,
+        val title: String?,
+        val images: List<ScreenBox>,
+    )
 
     private fun collect(root: AccessibilityNodeInfo): Collected {
         var editable: String? = null
         val lines = ArrayList<String>()
+        val images = ArrayList<ScreenBox>()
+        val rect = Rect()
         val stack = ArrayDeque<AccessibilityNodeInfo>()
         stack.addLast(root)
         var budget = 600
@@ -112,18 +125,24 @@ class ScreenReaderService : AccessibilityService() {
                     lines.add(t)
                 }
             }
+            if (node.className?.toString()?.endsWith("ImageView") == true && node.isVisibleToUser) {
+                node.getBoundsInScreen(rect)
+                images.add(ScreenBox(rect.left, rect.top, rect.right, rect.bottom))
+            }
             for (i in 0 until node.childCount) node.getChild(i)?.let { stack.addLast(it) }
         }
         val title = root.paneTitle?.toString()?.trim()?.takeIf { it.isNotEmpty() }
-        return Collected(editable, lines, title)
+        return Collected(editable, lines, title, images)
     }
 
     /**
      * In a conversation already at perhatian or above, judge a screenshot on the phone through
      * the same vision pipeline the chat-SDK path uses. The bitmap never leaves the phone and is
-     * recycled straight after. A sensitive result shows the child a reminder.
+     * recycled straight after. Each picture on screen is cut out and judged on its own (see
+     * [ScreenImages]); with none, the whole screen is judged. A sensitive result shows the
+     * child a reminder.
      */
-    private fun maybeScreenshot(pkg: String, thread: String) {
+    private fun maybeScreenshot(pkg: String, thread: String, images: List<ScreenBox>) {
         val store = ServiceLocator.store(this)
         if (store.config?.has("gambar") != true) return
         if (!ThreadLevels.atLeast(threadKey(pkg, thread), "perhatian")) return
@@ -140,11 +159,21 @@ class ScreenReaderService : AccessibilityService() {
                     scope.launch {
                         try {
                             val guard = ServiceLocator.imageGuard(this@ScreenReaderService) ?: return@launch
-                            val decision = guard.check(
-                                bitmap,
-                                ImageContext(Trigger.PERCAKAPAN, thread, pkg, "dm", "contact", false),
-                            )
-                            if (decision.blurAll) {
+                            val context = ImageContext(Trigger.PERCAKAPAN, thread, pkg, "dm", "contact", false)
+                            val boxes = ScreenImages.pick(images, bitmap.width, bitmap.height)
+                            val sensitive = if (boxes.isEmpty()) {
+                                guard.check(bitmap, context).blurAll
+                            } else {
+                                boxes.any { b ->
+                                    val crop = Bitmap.createBitmap(bitmap, b.left, b.top, b.width, b.height)
+                                    try {
+                                        guard.check(crop, context).blurAll
+                                    } finally {
+                                        if (crop !== bitmap) crop.recycle()
+                                    }
+                                }
+                            }
+                            if (sensitive) {
                                 Notifications.showNudge(
                                     this@ScreenReaderService,
                                     getString(R.string.screen_sensitive_nudge),
