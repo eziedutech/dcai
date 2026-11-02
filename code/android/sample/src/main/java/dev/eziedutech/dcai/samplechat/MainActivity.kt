@@ -13,6 +13,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -593,7 +594,8 @@ private fun DemoMenu(open: Boolean, chat: ChatState, onDismiss: () -> Unit, onNe
     }
 }
 
-/** The phone's gallery, as far as this demo needs: two synthetic pictures. */
+/** The phone's gallery, as far as this demo needs: two synthetic pictures, or any photo on
+ * the phone through the system photo picker (for testing dcAI with a real picture). */
 @Composable
 private fun Gallery(onPick: (Uri) -> Unit) {
     val context = LocalContext.current
@@ -605,6 +607,13 @@ private fun Gallery(onPick: (Uri) -> Unit) {
             ).map { (label, uri) -> Triple(label, uri, loadBitmap(context, uri)) }
         }
     }.value
+    val scope = rememberCoroutineScope()
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { source ->
+        source ?: return@rememberLauncherForActivityResult
+        scope.launch {
+            withContext(Dispatchers.IO) { SampleImages.picked(context, source) }?.let(onPick)
+        }
+    }
     Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
         Text(stringResource(R.string.gallery), fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = Ink)
         Spacer(Modifier.height(14.dp))
@@ -621,6 +630,10 @@ private fun Gallery(onPick: (Uri) -> Unit) {
                 }
             }
         }
+        TextButton(
+            onClick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+            modifier = Modifier.padding(top = 8.dp),
+        ) { Text(stringResource(R.string.share_other)) }
     }
 }
 

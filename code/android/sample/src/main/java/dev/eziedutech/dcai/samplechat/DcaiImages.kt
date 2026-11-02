@@ -209,6 +209,21 @@ object SampleImages {
         c.drawText(s, x, y, p)
     }
 
+    /**
+     * A photo the tester picked with the system photo picker, copied into this app's cache so
+     * dcAI can be granted read access like the drawn ones. Only the latest pick is kept.
+     */
+    fun picked(context: Context, source: Uri): Uri? {
+        val dir = File(context.cacheDir, "images").apply { mkdirs() }
+        dir.listFiles { f -> f.name.startsWith("pilihan-") }?.forEach { it.delete() }
+        val file = File(dir, "pilihan-${System.currentTimeMillis()}.img")
+        val copied = context.contentResolver.openInputStream(source)?.use { input ->
+            file.outputStream().use { input.copyTo(it) }
+        } ?: return null
+        if (copied <= 0) return null
+        return FileProvider.getUriForFile(context, "${context.packageName}.images", file)
+    }
+
     private fun save(context: Context, name: String, w: Int, h: Int, draw: (Canvas, Int, Int) -> Unit): Uri {
         val dir = File(context.cacheDir, "images").apply { mkdirs() }
         val file = File(dir, name)

@@ -19,6 +19,7 @@
     <string name="restart">Ulang percakapan</string>
     <string name="share_card">Kartu pelajar</string>
     <string name="share_landscape">Pemandangan</string>
+    <string name="share_other">Pilih foto lain dari ponsel</string>
     <string name="checking">dcAI memeriksa gambar…</string>
     <string name="blurred_all">dcAI mengaburkan gambar ini.</string>
     <string name="blurred_private">dcAI mengaburkan data pribadi di gambar ini.</string>
