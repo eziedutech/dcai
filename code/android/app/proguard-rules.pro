@@ -6,3 +6,8 @@
 -keep class org.pytorch.executorch.** { *; }
 -keep class com.facebook.jni.** { *; }
 -keepclasseswithmembernames class * { native <methods>; }
+
+# ML Kit finds its components by instantiating the registrars named in the manifest by
+# reflection. Without their no-arg constructors (stripped by R8 full mode) no component
+# registers and every InputImage call crashes.
+-keep class * implements com.google.firebase.components.ComponentRegistrar { <init>(); }

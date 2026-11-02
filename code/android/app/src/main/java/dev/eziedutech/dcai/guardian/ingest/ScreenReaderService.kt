@@ -150,6 +150,9 @@ class ScreenReaderService : AccessibilityService() {
                                     getString(R.string.screen_sensitive_nudge),
                                 )
                             }
+                        } catch (e: Exception) {
+                            // Type only. An image check never takes the screen reader down.
+                            Log.w(TAG, "screenshot check failed: ${e.javaClass.simpleName}")
                         } finally {
                             bitmap.recycle()
                         }

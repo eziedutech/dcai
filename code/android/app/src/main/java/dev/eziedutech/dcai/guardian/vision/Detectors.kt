@@ -2,6 +2,7 @@ package dev.eziedutech.dcai.guardian.vision
 
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.util.Log
 import com.google.android.gms.tasks.Tasks
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
@@ -49,18 +50,23 @@ class OnDeviceDetectors(private val sensitive: SensitiveModel) {
     data class Result(val findings: Findings, val blocks: List<OcrBlock>)
 
     fun run(bitmap: Bitmap, knownNames: List<String>, wantFaces: Boolean): Result {
-        val image = InputImage.fromBitmap(bitmap, 0)
+        val image = runCatching { InputImage.fromBitmap(bitmap, 0) }
+            .onFailure { Log.w(TAG, "ml kit input failed: ${it.javaClass.simpleName}") }.getOrNull()
         val w = bitmap.width.toFloat()
         val h = bitmap.height.toFloat()
         fun box(r: Rect?): Box =
             if (r == null) Box(0f, 0f, 1f, 1f)
             else Box((r.left / w).coerceIn(0f, 1f), (r.top / h).coerceIn(0f, 1f), (r.right / w).coerceIn(0f, 1f), (r.bottom / h).coerceIn(0f, 1f))
 
-        val text = Tasks.await(textClient.process(image))
-        val blocks = text.textBlocks.map { b ->
-            OcrBlock(b.text, box(b.boundingBox), b.lines.map { OcrLine(it.text, box(it.boundingBox)) })
-        }
-        val faces = if (wantFaces) Tasks.await(faceClient.process(image)).map { box(it.boundingBox) } else emptyList()
+        // Each detector fails on its own: a broken one leaves its part empty, never the app.
+        val blocks = runCatching {
+            Tasks.await(textClient.process(image!!)).textBlocks.map { b ->
+                OcrBlock(b.text, box(b.boundingBox), b.lines.map { OcrLine(it.text, box(it.boundingBox)) })
+            }
+        }.onFailure { Log.w(TAG, "text detector failed: ${it.javaClass.simpleName}") }.getOrDefault(emptyList())
+        val faces = if (!wantFaces) emptyList() else runCatching {
+            Tasks.await(faceClient.process(image!!)).map { box(it.boundingBox) }
+        }.onFailure { Log.w(TAG, "face detector failed: ${it.javaClass.simpleName}") }.getOrDefault(emptyList())
         val findings = Findings(
             faces = faces,
             personalText = OcrText.personalRegions(blocks, knownNames),
@@ -73,5 +79,6 @@ class OnDeviceDetectors(private val sensitive: SensitiveModel) {
     companion object {
         /** The ML Kit artifacts in app/build.gradle.kts, plus the shared masking rules. */
         const val VERSION = "mlkit-face-16.1.7+text-16.0.1+mask"
+        private const val TAG = "dcai.vision"
     }
 }
