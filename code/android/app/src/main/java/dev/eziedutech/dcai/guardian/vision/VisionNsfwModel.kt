@@ -5,17 +5,8 @@ import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
 import dev.eziedutech.dcai.guardian.BuildConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.tensorflow.lite.Interpreter
-import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.channels.FileChannel
 import kotlin.math.roundToInt
 
 /**
@@ -24,21 +15,14 @@ import kotlin.math.roundToInt
  * assets. It runs on the phone; the image never leaves it. Its accuracy is the figure its
  * source states; dcAI has not measured it.
  *
- * Violence (KEKERASAN) is a video model in a later build; this one only scores SEKSUAL.
- *
- * The model is memory-mapped from the APK on first use and released after a short idle, so
- * the ~90 MB model does not sit in the main process between images. Call [score] off the main
- * thread.
+ * Violence (KEKERASAN) is a video model ([VisionViolenceModel]); this one only scores SEKSUAL.
+ * Call [score] off the main thread.
  */
 class VisionNsfwModel(context: Context) : SensitiveModel {
-    private val app = context.applicationContext
-    private val lock = Any()
-    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    private var interpreter: Interpreter? = null
-    private var evictJob: Job? = null
+    // 4 threads measured no faster than 2 on a Helio P35 (about 3.5 s warm, 5.5 s cold).
+    private val model = LiteRtModel(context, "vision/nsfw.tflite", threads = 2)
 
-    override val installed: Boolean =
-        runCatching { app.assets.list(ASSET_DIR)?.contains(MODEL) == true }.getOrDefault(false)
+    override val installed: Boolean get() = model.installed
 
     override fun score(bitmap: Bitmap): SensitiveScore? {
         if (!installed) return null
@@ -46,10 +30,7 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
             val input = NsfwInput.buffer(NsfwInput.pixels(scaled(bitmap)))
             val probs = Array(1) { FloatArray(2) }
             val started = SystemClock.elapsedRealtime()
-            synchronized(lock) {
-                val m = interpreter ?: load().also { interpreter = it }
-                m.run(input, probs)
-            }
+            model.run(input, probs)
             val ms = SystemClock.elapsedRealtime() - started
             val result = NsfwInput.toScore(probs[0])
             // Timing only in release. Debug builds add the score (a number, nothing about the
@@ -59,7 +40,6 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
             } else {
                 Log.i(TAG, "nsfw scored in $ms ms")
             }
-            scheduleEvict()
             result
         } catch (t: Throwable) {
             // Type only. A failed model leaves the image to the face and text detectors.
@@ -76,34 +56,8 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
         return px
     }
 
-    /** Maps the uncompressed asset (build.gradle.kts noCompress) straight from the APK. */
-    private fun load(): Interpreter {
-        val mapped = app.assets.openFd("$ASSET_DIR/$MODEL").use { fd ->
-            FileInputStream(fd.fileDescriptor).channel.use {
-                it.map(FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.declaredLength)
-            }
-        }
-        return Interpreter(mapped, Interpreter.Options().setNumThreads(THREADS))
-    }
-
-    private fun scheduleEvict() {
-        evictJob?.cancel()
-        evictJob = scope.launch {
-            delay(IDLE_EVICT_MS)
-            synchronized(lock) {
-                interpreter?.close()
-                interpreter = null
-            }
-        }
-    }
-
     private companion object {
         const val TAG = "dcai.vision"
-        const val ASSET_DIR = "vision"
-        const val MODEL = "nsfw.tflite"
-        // 4 threads measured no faster than 2 on a Helio P35 (about 3.5 s warm, 5.5 s cold).
-        const val THREADS = 2
-        const val IDLE_EVICT_MS = 60_000L
     }
 }
 

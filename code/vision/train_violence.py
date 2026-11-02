@@ -77,12 +77,11 @@ def read_manifest(path: Path) -> tuple[Path, list[tuple[str, int, str]]]:
 
 
 def sample_frames(video: Path, frames: int = FRAMES, size: int = SIZE) -> np.ndarray:
-    """`frames` frames spread evenly over the clip, RGB uint8 [T, size, size, 3]. What the
-    phone does (MediaMetadataRetriever at evenly spaced times, scaled to size x size)."""
+    """`frames` frames at the midpoints of `frames` equal slices of the clip, RGB uint8
+    [T, size, size, 3]. What the phone does (VideoPolicy.timesUs, then size x size)."""
     import cv2
 
     cap = cv2.VideoCapture(str(video))
-    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     decoded = []
     ok, frame = cap.read()
     while ok:
@@ -92,7 +91,7 @@ def sample_frames(video: Path, frames: int = FRAMES, size: int = SIZE) -> np.nda
     if not decoded:
         raise ValueError(f"no frames in {video}")
     total = len(decoded)
-    idx = np.linspace(0, total - 1, frames).round().astype(int)
+    idx = ((2 * np.arange(frames) + 1) * total) // (2 * frames)
     out = np.empty((frames, size, size, 3), dtype=np.uint8)
     for i, j in enumerate(idx):
         rgb = cv2.cvtColor(decoded[j], cv2.COLOR_BGR2RGB)

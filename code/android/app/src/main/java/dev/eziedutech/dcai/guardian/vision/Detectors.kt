@@ -49,6 +49,9 @@ class OnDeviceDetectors(private val sensitive: SensitiveModel) {
 
     data class Result(val findings: Findings, val blocks: List<OcrBlock>)
 
+    /** The sensitive-image model alone, for video frames (no faces or text). */
+    fun sensitiveScore(bitmap: Bitmap): SensitiveScore? = sensitive.score(bitmap)
+
     fun run(bitmap: Bitmap, knownNames: List<String>, wantFaces: Boolean): Result {
         val image = runCatching { InputImage.fromBitmap(bitmap, 0) }
             .onFailure { Log.w(TAG, "ml kit input failed: ${it.javaClass.simpleName}") }.getOrNull()

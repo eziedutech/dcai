@@ -19,6 +19,9 @@ android {
         versionName = "0.3.9"
         // The backend as seen from the Android emulator. A real phone sets it during setup.
         buildConfigField("String", "DEFAULT_SERVER", "\"http://10.0.2.2:8000\"")
+        // Video checks stay off in published builds until the consent text names video
+        // (proposal 0005: a material change). A test build turns them on with -Pdcai.video=true.
+        buildConfigField("boolean", "VIDEO_CHECK", (findProperty("dcai.video") ?: "false").toString())
     }
 
     // Release signing comes from the environment (the keystore never enters the repo).

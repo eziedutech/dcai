@@ -32,14 +32,25 @@ class ImageGuard(
     private val client: BackendClient,
     private val ingest: MessageIngest,
     private val detectors: OnDeviceDetectors,
+    private val videoModel: VideoModel,
 ) {
-    suspend fun check(bitmap: Bitmap, context: ImageContext): Decision = withContext(Dispatchers.Default) {
-        val config = store.config ?: return@withContext Decision.leave()
-        if (!config.has("gambar")) return@withContext Decision.leave()
+    /** Whether this image or video is checked at all: the gambar scope, and for a received
+     * one, a chat already at perhatian or above. */
+    private fun wanted(context: ImageContext): Boolean {
+        val config = store.config ?: return false
+        if (!config.has("gambar")) return false
         val key = threadKey(context.appPackage, context.threadId)
-        if (context.trigger == Trigger.PERCAKAPAN && !ThreadLevels.atLeast(key, "perhatian")) {
-            return@withContext Decision.leave()
-        }
+        return context.trigger != Trigger.PERCAKAPAN || ThreadLevels.atLeast(key, "perhatian")
+    }
+
+    /** How many frames to take from a video: what the video model reads, else a few for the
+     * image model. */
+    val videoFrames: Int get() = if (videoModel.installed) videoModel.frames else VideoPolicy.IMAGE_FRAMES
+
+    suspend fun check(bitmap: Bitmap, context: ImageContext): Decision = withContext(Dispatchers.Default) {
+        if (!wanted(context)) return@withContext Decision.leave()
+        val config = store.config ?: return@withContext Decision.leave()
+        val key = threadKey(context.appPackage, context.threadId)
 
         val names = listOf(config.childNickname).filter { it.isNotBlank() }
         val result = detectors.run(bitmap, names, wantFaces = context.trigger == Trigger.DIBAGIKAN)
@@ -61,21 +72,7 @@ class ImageGuard(
 
         // Counts and labels only; never text or pixels.
         Log.d(TAG, "image judged trigger=${context.trigger.wire} category=${decision.category.wire} text_blocks=${result.blocks.size} faces=${result.findings.faces.size}")
-        if (decision.signal) {
-            runCatching {
-                client.sendImageSignal(
-                    ImageSignalRequest(
-                        threadKey = key,
-                        trigger = context.trigger.wire,
-                        sender = context.sender,
-                        category = decision.category.wire,
-                        action = decision.action.wire,
-                        score = decision.score,
-                        modelVersion = decision.modelVersion,
-                    ),
-                )
-            }.onFailure { Log.d(TAG, "image signal failed: ${it.javaClass.simpleName}") }
-        }
+        report(decision, key, context, MEDIA_IMAGE)
 
         if (context.trigger == Trigger.PERCAKAPAN) {
             val text = OcrText.joined(result.blocks)
@@ -95,7 +92,59 @@ class ImageGuard(
         decision
     }
 
+    /**
+     * A video, judged from frames taken on the phone ([VideoFrames]). The image model reads up
+     * to [VideoPolicy.IMAGE_FRAMES] of them and stops at the first sensitive one; the video
+     * model, when installed, reads them all. Faces and text are not looked for in a video.
+     */
+    suspend fun checkVideo(frames: List<Bitmap>, context: ImageContext): Decision = withContext(Dispatchers.Default) {
+        if (frames.isEmpty() || !wanted(context)) return@withContext Decision.leave()
+        val key = threadKey(context.appPackage, context.threadId)
+        val thresholds = store.thresholds()
+
+        val scores = mutableListOf<SensitiveScore?>()
+        for (i in VideoPolicy.spread(frames.size, VideoPolicy.IMAGE_FRAMES)) {
+            val s = detectors.sensitiveScore(frames[i])
+            scores += s
+            if (VideoPolicy.over(s, thresholds)) break
+        }
+        if (scores.none { VideoPolicy.over(it, thresholds) } && videoModel.installed) {
+            scores += videoModel.score(frames)
+        }
+        val hash = Bitmaps.dHash(frames[frames.size / 2])
+        val decision = ImagePolicy.decide(
+            context.trigger,
+            Findings(sensitive = VideoPolicy.top(scores, thresholds)),
+            thresholds = thresholds,
+            confirmedFalse = LocalTuning.matches(hash, store.confirmedFalse()),
+        )
+        // Counts and labels only.
+        Log.d(TAG, "video judged trigger=${context.trigger.wire} category=${decision.category.wire} frames=${frames.size} scored=${scores.size}")
+        report(decision, key, context, MEDIA_VIDEO)
+        decision
+    }
+
+    private suspend fun report(decision: Decision, key: String, context: ImageContext, media: String) {
+        if (!decision.signal) return
+        runCatching {
+            client.sendImageSignal(
+                ImageSignalRequest(
+                    threadKey = key,
+                    trigger = context.trigger.wire,
+                    sender = context.sender,
+                    category = decision.category.wire,
+                    action = decision.action.wire,
+                    score = decision.score,
+                    modelVersion = decision.modelVersion,
+                    media = media,
+                ),
+            )
+        }.onFailure { Log.d(TAG, "image signal failed: ${it.javaClass.simpleName}") }
+    }
+
     private companion object {
         const val TAG = "dcai.vision"
+        const val MEDIA_IMAGE = "gambar"
+        const val MEDIA_VIDEO = "video"
     }
 }

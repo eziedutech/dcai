@@ -141,6 +141,8 @@ data class ImageSignalRequest(
     val action: String,
     val score: Int,
     @SerialName("model_version") val modelVersion: String,
+    /** "gambar" or "video"; the server words the parent's event by it. */
+    val media: String = "gambar",
 )
 
 @Serializable

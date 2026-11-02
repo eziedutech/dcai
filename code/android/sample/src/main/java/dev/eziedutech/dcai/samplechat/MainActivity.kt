@@ -54,6 +54,7 @@ import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.SentimentSatisfied
@@ -138,6 +139,7 @@ private data class ImageItem(
     val decision: ImageDecision?,
     val checking: Boolean,
     val reviewed: Boolean = false,
+    val video: Boolean = false,
 ) : Item
 
 /**
@@ -410,16 +412,21 @@ private fun ChatScreen(chat: ChatState, images: DcaiImageClient, scope: Coroutin
 
     // The image is shown only after dcAI's answer, so a sensitive one is never on screen
     // unblurred. Without dcAI the app shows it as any chat app would.
-    fun sendImage(sender: String, uri: Uri) {
+    fun sendMedia(sender: String, uri: Uri, video: Boolean) {
         val id = nextImage++
-        messages.add(ImageItem(id, sender, now(), uri, shown = null, decision = null, checking = true))
+        messages.add(ImageItem(id, sender, now(), uri, shown = null, decision = null, checking = true, video = video))
         scope.launch {
             val trigger = if (sender == "child") "dibagikan" else "percakapan"
-            val decision = images.check(uri, trigger, chat.thread, CHANNEL, sender)
-            val shown = withContext(Dispatchers.Default) { loadBitmap(context, uri)?.let { Blur.apply(it, decision) } }
+            val decision = images.check(uri, trigger, chat.thread, CHANNEL, sender, media = if (video) "video" else "gambar")
+            val shown = withContext(Dispatchers.Default) {
+                val still = if (video) SampleImages.videoCover(context, uri) else loadBitmap(context, uri)
+                still?.let { Blur.apply(it, decision) }
+            }
             update(id) { it.copy(shown = shown, decision = decision, checking = false) }
         }
     }
+
+    fun sendImage(sender: String, uri: Uri) = sendMedia(sender, uri, video = false)
 
     fun childSends(text: String) {
         val turn = Turn("child", text)
@@ -516,7 +523,7 @@ private fun ChatScreen(chat: ChatState, images: DcaiImageClient, scope: Coroutin
             items(messages) { item ->
                 when (item) {
                     is TextItem -> MessageBubble(item, chat.contact.group)
-                    is ImageItem -> ImageBubble(item, onReview = {
+                    is ImageItem -> ImageBubble(item, onPlay = { play(context, item.uri) }, onReview = {
                         val decision = item.decision
                         if (decision != null) {
                             reviewing = item.id
@@ -567,9 +574,9 @@ private fun ChatScreen(chat: ChatState, images: DcaiImageClient, scope: Coroutin
 
     if (gallery) {
         ModalBottomSheet(onDismissRequest = { gallery = false }, containerColor = Color.White) {
-            Gallery { uri ->
+            Gallery { uri, video ->
                 gallery = false
-                sendImage("child", uri)
+                sendMedia("child", uri, video)
                 answerLater(context, chat, scope, ::sendImage)
             }
         }
@@ -594,10 +601,10 @@ private fun DemoMenu(open: Boolean, chat: ChatState, onDismiss: () -> Unit, onNe
     }
 }
 
-/** The phone's gallery, as far as this demo needs: two synthetic pictures, or any photo on
- * the phone through the system photo picker (for testing dcAI with a real picture). */
+/** The phone's gallery, as far as this demo needs: two synthetic pictures, or any photo or
+ * video on the phone through the system photo picker (for testing dcAI with real media). */
 @Composable
-private fun Gallery(onPick: (Uri) -> Unit) {
+private fun Gallery(onPick: (Uri, Boolean) -> Unit) {
     val context = LocalContext.current
     val picks = produceState<List<Triple<Int, Uri, Bitmap?>>>(emptyList()) {
         value = withContext(Dispatchers.IO) {
@@ -611,7 +618,7 @@ private fun Gallery(onPick: (Uri) -> Unit) {
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { source ->
         source ?: return@rememberLauncherForActivityResult
         scope.launch {
-            withContext(Dispatchers.IO) { SampleImages.picked(context, source) }?.let(onPick)
+            withContext(Dispatchers.IO) { SampleImages.picked(context, source) }?.let { onPick(it.uri, it.video) }
         }
     }
     Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
@@ -619,7 +626,7 @@ private fun Gallery(onPick: (Uri) -> Unit) {
         Spacer(Modifier.height(14.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             picks.forEach { (label, uri, bitmap) ->
-                Column(Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).clickable { onPick(uri) }) {
+                Column(Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).clickable { onPick(uri, false) }) {
                     if (bitmap != null) {
                         Image(
                             bitmap.asImageBitmap(), stringResource(label), contentScale = ContentScale.Crop,
@@ -631,7 +638,7 @@ private fun Gallery(onPick: (Uri) -> Unit) {
             }
         }
         TextButton(
-            onClick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+            onClick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)) },
             modifier = Modifier.padding(top = 8.dp),
         ) { Text(stringResource(R.string.share_other)) }
     }
@@ -686,7 +693,7 @@ private fun MessageBubble(item: TextItem, group: Boolean) {
 }
 
 @Composable
-private fun ImageBubble(item: ImageItem, onReview: () -> Unit) {
+private fun ImageBubble(item: ImageItem, onPlay: () -> Unit, onReview: () -> Unit) {
     val mine = item.sender == "child"
     Bubble(mine) {
         Column(Modifier.width(250.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -698,12 +705,27 @@ private fun ImageBubble(item: ImageItem, onReview: () -> Unit) {
                     Text(stringResource(R.string.checking), color = Muted, fontSize = 13.sp)
                 }
             } else {
-                Image(shown.asImageBitmap(), contentDescription = null, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)))
                 val decision = item.decision
+                val hidden = decision != null && decision.blurred
+                Box(contentAlignment = Alignment.Center) {
+                    Image(
+                        shown.asImageBitmap(), contentDescription = null,
+                        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                            .then(if (item.video && !hidden) Modifier.clickable(onClick = onPlay) else Modifier),
+                    )
+                    // A hidden video cannot be played from here.
+                    if (item.video && !hidden) {
+                        Icon(
+                            Icons.Rounded.PlayArrow, stringResource(R.string.play_video), tint = Color.White,
+                            modifier = Modifier.size(48.dp).background(Color(0x66000000), CircleShape).padding(8.dp),
+                        )
+                    }
+                }
                 if (item.reviewed) {
                     Text(stringResource(R.string.reviewed), color = Ink, fontSize = 12.sp)
                 } else if (decision != null && decision.blurred) {
                     val note = when {
+                        item.video -> R.string.blurred_video
                         decision.blurAll -> R.string.blurred_all
                         mine -> R.string.blurred_shared
                         else -> R.string.blurred_private
@@ -713,7 +735,10 @@ private fun ImageBubble(item: ImageItem, onReview: () -> Unit) {
                         Spacer(Modifier.width(6.dp))
                         Text(stringResource(note), color = Ink, fontSize = 12.sp)
                     }
-                    TextButton(onClick = onReview) { Text(stringResource(R.string.ask_review), color = Purple) }
+                    // The parent's review screen shows pictures; a video stays hidden.
+                    if (!item.video) {
+                        TextButton(onClick = onReview) { Text(stringResource(R.string.ask_review), color = Purple) }
+                    }
                 }
             }
             Stamp(item.time, mine, Modifier.align(Alignment.End))
@@ -749,6 +774,12 @@ private fun sendToDcai(context: Context, chat: ChatState, turn: Turn) {
         if (turn.sender == "contact") putExtra("contact_name", chat.contact.handle)
     }
     runCatching { context.sendBroadcast(intent) }
+}
+
+/** Plays a video the app showed, in the phone's video player. */
+private fun play(context: Context, uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "video/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    runCatching { context.startActivity(intent) }
 }
 
 private fun dcaiInstalled(context: Context): Boolean = runCatching {

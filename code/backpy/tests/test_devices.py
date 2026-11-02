@@ -478,6 +478,12 @@ def image(api, dev, **over):
 def test_image_labels_need_image_consent(api):
     _tokens, _child, dev, _ = paired(api, scopes=("percakapan",))
     assert image(api, dev).status_code == 403
+    assert image(api, dev, media="video").status_code == 403
+
+
+def test_media_is_gambar_or_video(api):
+    _tokens, _child, dev, _ = paired(api)
+    assert image(api, dev, media="audio").status_code == 422
 
 
 @pytest.mark.parametrize(
@@ -485,6 +491,8 @@ def test_image_labels_need_image_consent(api):
     [
         ({}, "gambar_sensitif"),
         ({"action": "diingatkan"}, "gambar_sensitif_diingatkan"),
+        ({"media": "video"}, "video_sensitif"),
+        ({"media": "video", "category": "kekerasan"}, "video_sensitif"),
         ({"trigger": "situs", "sender": None}, "gambar_sensitif"),
         (
             {"trigger": "dibagikan", "sender": "child", "category": "teks_pribadi"},

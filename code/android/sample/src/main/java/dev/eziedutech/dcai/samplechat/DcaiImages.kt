@@ -13,6 +13,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -93,8 +94,11 @@ class DcaiImageClient(private val context: Context) {
         service = null
     }
 
-    /** Null when dcAI is not installed or did not answer in time; the app shows the image. */
-    suspend fun check(uri: Uri, trigger: String, thread: String, channel: String, sender: String): ImageDecision? {
+    /**
+     * Null when dcAI is not installed or did not answer in time; the app shows the image.
+     * A video (media "video") is judged as a whole clip and takes longer on older phones.
+     */
+    suspend fun check(uri: Uri, trigger: String, thread: String, channel: String, sender: String, media: String = "gambar"): ImageDecision? {
         val target = service ?: return null
         context.grantUriPermission(GUARDIAN, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         val id = nextId++
@@ -109,12 +113,13 @@ class DcaiImageClient(private val context: Context) {
                 putString("channel", channel)
                 putString("sender", sender)
                 putBoolean("contact_known", false)
+                putString("media", media)
             }
             replyTo = replies
         }
         return try {
             target.send(msg)
-            withTimeoutOrNull(20_000) { result.await() }
+            withTimeoutOrNull(if (media == "video") 120_000 else 20_000) { result.await() }
         } catch (_: Exception) {
             null
         } finally {
@@ -209,20 +214,36 @@ object SampleImages {
         c.drawText(s, x, y, p)
     }
 
+    /** A photo or video the tester picked, as this app keeps it. */
+    data class Picked(val uri: Uri, val video: Boolean)
+
     /**
-     * A photo the tester picked with the system photo picker, copied into this app's cache so
-     * dcAI can be granted read access like the drawn ones. Only the latest pick is kept.
+     * A photo or video the tester picked with the system photo picker, copied into this app's
+     * cache so dcAI can be granted read access like the drawn ones. Only the latest pick is kept.
      */
-    fun picked(context: Context, source: Uri): Uri? {
+    fun picked(context: Context, source: Uri): Picked? {
+        val video = context.contentResolver.getType(source)?.startsWith("video/") == true
         val dir = File(context.cacheDir, "images").apply { mkdirs() }
         dir.listFiles { f -> f.name.startsWith("pilihan-") }?.forEach { it.delete() }
-        val file = File(dir, "pilihan-${System.currentTimeMillis()}.img")
+        val file = File(dir, "pilihan-${System.currentTimeMillis()}." + if (video) "mp4" else "img")
         val copied = context.contentResolver.openInputStream(source)?.use { input ->
             file.outputStream().use { input.copyTo(it) }
         } ?: return null
         if (copied <= 0) return null
-        return FileProvider.getUriForFile(context, "${context.packageName}.images", file)
+        return Picked(FileProvider.getUriForFile(context, "${context.packageName}.images", file), video)
     }
+
+    /** A still from the middle of a video, for its bubble. */
+    fun videoCover(context: Context, uri: Uri): Bitmap? = runCatching {
+        val r = MediaMetadataRetriever()
+        try {
+            r.setDataSource(context, uri)
+            val ms = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+            r.getScaledFrameAtTime(ms * 500, MediaMetadataRetriever.OPTION_CLOSEST_SYNC, 720, 720)
+        } finally {
+            r.release()
+        }
+    }.getOrNull()
 
     private fun save(context: Context, name: String, w: Int, h: Int, draw: (Canvas, Int, Int) -> Unit): Uri {
         val dir = File(context.cacheDir, "images").apply { mkdirs() }

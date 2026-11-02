@@ -609,6 +609,9 @@ class ImageSignalIn(BaseModel):
     action: ImageAction
     score: int = Field(ge=0, le=100)
     model_version: ModelVersion
+    # A video is judged from frames taken on the phone; only the label arrives, as for an
+    # image. It changes the wording of the parent's event.
+    media: Literal["gambar", "video"] = "gambar"
 
 
 class ImageSignalOut(BaseModel):
@@ -620,9 +623,10 @@ def image_event(body: ImageSignalIn) -> tuple[str, str] | None:
     """(event kind, level) for the parent, or None. The image itself never arrives."""
     if body.category in (ImageCategory.SEKSUAL, ImageCategory.KEKERASAN):
         level = "perhatian" if body.trigger == ImageTrigger.SITUS else "waspada"
+        prefix = "video" if body.media == "video" else "gambar"
         if body.action == ImageAction.DIINGATKAN:
-            return "gambar_sensitif_diingatkan", level
-        return "gambar_sensitif", level
+            return f"{prefix}_sensitif_diingatkan", level
+        return f"{prefix}_sensitif", level
     if body.category in (ImageCategory.TEKS_PRIBADI, ImageCategory.WAJAH) and (
         body.trigger == ImageTrigger.DIBAGIKAN
     ):

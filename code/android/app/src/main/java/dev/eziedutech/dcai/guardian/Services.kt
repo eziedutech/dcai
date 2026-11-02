@@ -12,7 +12,9 @@ import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.vision.ImageGuard
 import dev.eziedutech.dcai.guardian.vision.OnDeviceDetectors
 import dev.eziedutech.dcai.guardian.vision.SensitiveModel
+import dev.eziedutech.dcai.guardian.vision.VideoModel
 import dev.eziedutech.dcai.guardian.vision.VisionNsfwModel
+import dev.eziedutech.dcai.guardian.vision.VisionViolenceModel
 
 /**
  * Small hand-wired container. The store is the source of truth for the server URL and the
@@ -53,6 +55,13 @@ object ServiceLocator {
     fun sensitiveModel(context: Context): SensitiveModel =
         sensitive ?: VisionNsfwModel(context).also { sensitive = it }
 
+    @Volatile private var video: VideoModel? = null
+
+    /** The violence video model (MoViNet-A0). Without its asset, [VideoModel.installed] is
+     * false and videos are checked for sexual content only. */
+    fun videoModel(context: Context): VideoModel =
+        video ?: VisionViolenceModel(context).also { video = it }
+
     @Volatile private var model: OnDeviceModel? = null
     @Volatile private var analyzer: OnDeviceAnalyzer? = null
 
@@ -79,7 +88,7 @@ object ServiceLocator {
     fun imageGuard(context: Context): ImageGuard? {
         val client = client(context) ?: return null
         val ingest = cached?.third ?: return null
-        return ImageGuard(store(context), client, ingest, detectors(context))
+        return ImageGuard(store(context), client, ingest, detectors(context), videoModel(context))
     }
 
     fun reset() {
