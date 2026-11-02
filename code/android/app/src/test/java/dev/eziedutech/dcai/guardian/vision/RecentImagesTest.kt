@@ -22,4 +22,12 @@ class RecentImagesTest {
         assertEquals(true, RecentImages.firstTime("t", 0x7FF0F0F0F0F0F0F0L, 2))
         assertEquals(true, RecentImages.firstTime("t", 0x0F0F0F0F0F0F0F0FL, RecentImages.WINDOW_MS + 1))
     }
+
+    @Test
+    fun aPictureWhoseReportFailedIsTriedAgain() {
+        assertEquals(true, RecentImages.firstTime("t", 0x0F0F0F0F0F0F0F0FL, 0))
+        RecentImages.forget("t", 0x0F0F0F0F0F0F0F0FL)
+        assertEquals(true, RecentImages.firstTime("t", 0x0F0F0F0F0F0F0F0FL, 1))
+        assertEquals(false, RecentImages.firstTime("t", 0x0F0F0F0F0F0F0F0FL, 2))
+    }
 }

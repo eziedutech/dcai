@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor
 import android.util.Log
 import dev.eziedutech.dcai.guardian.ServiceLocator
 import dev.eziedutech.dcai.guardian.net.SiteSignalRequest
+import dev.eziedutech.dcai.guardian.net.brief
 import dev.eziedutech.dcai.guardian.service.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -153,7 +154,7 @@ class SiteGuardVpn : VpnService() {
                 val client = ServiceLocator.client(this@SiteGuardVpn) ?: return@launch
                 val version = SiteLists(this@SiteGuardVpn, client).manifest()?.version ?: return@launch
                 runCatching { client.sendSiteSignal(SiteSignalRequest(match.category, version)) }
-                    .onFailure { Log.d(TAG, "site signal failed: ${it.javaClass.simpleName}") }
+                    .onFailure { Log.d(TAG, "site signal failed: ${it.brief()}") }
             }
         }
     }

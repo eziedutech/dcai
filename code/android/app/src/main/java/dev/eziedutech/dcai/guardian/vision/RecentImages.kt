@@ -26,6 +26,12 @@ object RecentImages {
         return !again
     }
 
+    /** Drops a picture recorded by [firstTime] whose report did not go out. */
+    @Synchronized
+    fun forget(threadKey: String, hash: Long) {
+        seen.removeAll { it.key == threadKey && it.hash == hash }
+    }
+
     @Synchronized
     fun clear() = seen.clear()
 }

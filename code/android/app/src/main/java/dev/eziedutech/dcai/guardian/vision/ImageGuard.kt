@@ -7,6 +7,7 @@ import dev.eziedutech.dcai.guardian.ingest.MessageIngest
 import dev.eziedutech.dcai.guardian.ingest.threadKey
 import dev.eziedutech.dcai.guardian.net.BackendClient
 import dev.eziedutech.dcai.guardian.net.ImageSignalRequest
+import dev.eziedutech.dcai.guardian.net.brief
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -74,7 +75,9 @@ class ImageGuard(
 
         // Counts and labels only; never text or pixels.
         Log.d(TAG, "image judged trigger=${context.trigger.wire} category=${decision.category.wire} text_blocks=${result.blocks.size} faces=${result.findings.faces.size}")
-        report(decision, key, context, if (context.video) MEDIA_VIDEO else MEDIA_IMAGE)
+        val sent = report(decision, key, context, if (context.video) MEDIA_VIDEO else MEDIA_IMAGE)
+        // Not reported after all: the next screenshot of the same picture tries again.
+        if (!sent && context.shownByOtherApp && decision.signal) RecentImages.forget(key, hash)
 
         if (context.trigger == Trigger.PERCAKAPAN) {
             val text = OcrText.joined(result.blocks)
@@ -88,7 +91,7 @@ class ImageGuard(
                         sender = context.sender,
                         rawText = text,
                     )
-                }.onFailure { Log.d(TAG, "image text failed: ${it.javaClass.simpleName}") }
+                }.onFailure { Log.d(TAG, "image text failed: ${it.brief()}") }
             }
         }
         decision
@@ -126,9 +129,10 @@ class ImageGuard(
         decision
     }
 
-    private suspend fun report(decision: Decision, key: String, context: ImageContext, media: String) {
-        if (!decision.signal) return
-        runCatching {
+    /** Sends the label of a non-safe decision; false when that failed. */
+    private suspend fun report(decision: Decision, key: String, context: ImageContext, media: String): Boolean {
+        if (!decision.signal) return true
+        return runCatching {
             client.sendImageSignal(
                 ImageSignalRequest(
                     threadKey = key,
@@ -141,7 +145,7 @@ class ImageGuard(
                     media = media,
                 ),
             )
-        }.onFailure { Log.d(TAG, "image signal failed: ${it.javaClass.simpleName}") }
+        }.onFailure { Log.d(TAG, "image signal failed: ${it.brief()}") }.isSuccess
     }
 
     private companion object {

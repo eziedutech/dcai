@@ -18,6 +18,10 @@ class DeviceRevokedException : Exception("device not paired")
 
 class BackendException(val code: Int, message: String) : Exception(message)
 
+/** For logs: the error type, or the HTTP status of a server answer. Never the message,
+ * which may echo a request detail. */
+fun Throwable.brief(): String = if (this is BackendException) "http $code" else javaClass.simpleName
+
 /**
  * Talks to the dcAI backend as the child's phone. Every call carries the device token,
  * except pairing. Masking happens before text is passed here (see ingest), so what leaves

@@ -1,5 +1,6 @@
 package dev.eziedutech.dcai.guardian.ingest
 
+import dev.eziedutech.dcai.guardian.net.brief
 import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName
 import android.content.Context
@@ -92,7 +93,7 @@ class ScreenReaderService : AccessibilityService() {
                     sender = sender,
                     rawText = raw,
                 )
-            }.onFailure { Log.d(TAG, "screen submit failed: ${it.javaClass.simpleName}") }
+            }.onFailure { Log.d(TAG, "screen submit failed: ${it.brief()}") }
         }
     }
 
