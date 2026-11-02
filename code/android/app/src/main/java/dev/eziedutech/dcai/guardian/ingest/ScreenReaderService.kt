@@ -125,7 +125,7 @@ class ScreenReaderService : AccessibilityService() {
                     lines.add(t)
                 }
             }
-            if (node.className?.toString()?.endsWith("ImageView") == true && node.isVisibleToUser) {
+            if (node.isVisibleToUser && ScreenImages.isPicture(node.className?.toString(), node.viewIdResourceName)) {
                 node.getBoundsInScreen(rect)
                 images.add(ScreenBox(rect.left, rect.top, rect.right, rect.bottom))
             }

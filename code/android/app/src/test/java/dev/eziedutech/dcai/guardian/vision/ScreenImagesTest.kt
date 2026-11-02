@@ -36,4 +36,20 @@ class ScreenImagesTest {
         assertEquals(ScreenImages.MAX, picked.size)
         assertEquals(boxes[4], picked[0])
     }
+
+    @Test
+    fun aWallpaperIsNotAPicture() {
+        val wallpaper = ScreenBox(0, 184, 720, 1440)
+        val photo = ScreenBox(42, 563, 494, 1196)
+        assertEquals(listOf(photo), ScreenImages.pick(listOf(wallpaper, photo), 720, 1440))
+    }
+
+    @Test
+    fun picturesAreKnownByClassOrViewId() {
+        assertEquals(true, ScreenImages.isPicture("android.widget.ImageView", null))
+        assertEquals(true, ScreenImages.isPicture("android.widget.Button", "com.whatsapp:id/image"))
+        assertEquals(true, ScreenImages.isPicture("android.widget.FrameLayout", "com.whatsapp:id/media_container"))
+        assertEquals(false, ScreenImages.isPicture("android.widget.Button", "com.whatsapp:id/send"))
+        assertEquals(false, ScreenImages.isPicture("android.widget.TextView", null))
+    }
 }
