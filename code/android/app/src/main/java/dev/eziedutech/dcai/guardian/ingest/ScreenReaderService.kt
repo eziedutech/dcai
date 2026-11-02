@@ -183,7 +183,7 @@ class ScreenReaderService : AccessibilityService() {
                             }
                         } catch (e: Exception) {
                             // Type only. An image check never takes the screen reader down.
-                            Log.w(TAG, "screenshot check failed: ${e.javaClass.simpleName}")
+                            Log.w(TAG, "screenshot check failed: ${e.brief()}")
                         } finally {
                             bitmap.recycle()
                         }
@@ -216,6 +216,7 @@ class ScreenReaderService : AccessibilityService() {
     override fun onInterrupt() {}
 
     override fun onDestroy() {
+        Log.d(TAG, "screen reader stopped")
         scope.cancel()
         super.onDestroy()
     }

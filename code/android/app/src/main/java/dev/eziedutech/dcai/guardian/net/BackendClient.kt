@@ -20,7 +20,12 @@ class BackendException(val code: Int, message: String) : Exception(message)
 
 /** For logs: the error type, or the HTTP status of a server answer. Never the message,
  * which may echo a request detail. */
-fun Throwable.brief(): String = if (this is BackendException) "http $code" else javaClass.simpleName
+fun Throwable.brief(): String = when (this) {
+    is BackendException -> "http $code"
+    // The coroutine library's own wording ("Job was cancelled") and the cause's type.
+    is kotlinx.coroutines.CancellationException -> "cancelled (${message?.take(60)}; cause ${cause?.javaClass?.simpleName})"
+    else -> javaClass.simpleName
+}
 
 /**
  * Talks to the dcAI backend as the child's phone. Every call carries the device token,
