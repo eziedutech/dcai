@@ -33,8 +33,12 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
     private var module: Module? = null
     private var evictJob: Job? = null
 
+    // The executorch-android runtime is built with ARMv8.1 LSE atomics inline, so its generic
+    // Module path dies with SIGILL on ARMv8.0 cores (Cortex-A53, seen on the test phone). On
+    // such a phone the model stays off and images get the face and text detectors only.
     override val installed: Boolean =
-        runCatching { app.assets.list(ASSET_DIR)?.contains(PTE) == true }.getOrDefault(false)
+        CpuFeatures.hasAtomics() &&
+            runCatching { app.assets.list(ASSET_DIR)?.contains(PTE) == true }.getOrDefault(false)
 
     override fun score(bitmap: Bitmap): SensitiveScore? {
         if (!installed) return null
@@ -92,6 +96,19 @@ class VisionNsfwModel(context: Context) : SensitiveModel {
         // Stored uncompressed (build.gradle.kts noCompress) so openFd can read its length.
         const val PTE = "nsfw.pte"
         const val IDLE_EVICT_MS = 60_000L
+    }
+}
+
+/** CPU features read from /proc/cpuinfo ("Features" lines, the kernel's hwcaps). */
+object CpuFeatures {
+    fun hasAtomics(): Boolean =
+        runCatching { atomicsIn(File("/proc/cpuinfo").readText()) }.getOrDefault(false)
+
+    /** True when every core lists "atomics" (a big.LITTLE mix must not schedule onto a core
+     * without them). */
+    fun atomicsIn(cpuinfo: String): Boolean {
+        val lines = cpuinfo.lineSequence().filter { it.startsWith("Features") }.toList()
+        return lines.isNotEmpty() && lines.all { "atomics" in it.substringAfter(':').trim().split(' ') }
     }
 }
 

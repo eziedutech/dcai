@@ -45,4 +45,14 @@ class NsfwInputTest {
         assertEquals(Category.SEKSUAL, d.category)
         assertEquals(true, d.blurAll)
     }
+
+    @Test
+    fun atomicsMustBeOnEveryCore() {
+        val a53 = "processor\t: 0\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid\n"
+        val a55 = "Features\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid\n"
+        assertEquals(false, CpuFeatures.atomicsIn(a53))
+        assertEquals(true, CpuFeatures.atomicsIn(a55 + a55))
+        assertEquals(false, CpuFeatures.atomicsIn(a55 + a53))
+        assertEquals(false, CpuFeatures.atomicsIn(""))
+    }
 }
