@@ -15,6 +15,9 @@ mlkitText = "16.0.1"
 # ExecuTorch on-device runtime (Llama di ponsel). Pinned immutable Maven Central release; the
 # AAR bundles arm64-v8a and x86_64 native libs, so the emulator works too.
 executorch = "1.4.0"
+# LiteRT for the image classifier. It picks its atomics at run time, so it also runs on ARMv8.0
+# cores (Cortex-A53) where the ExecuTorch runtime dies with SIGILL.
+litert = "2.3.0"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -36,6 +39,7 @@ compose-icons = { module = "androidx.compose.material:material-icons-extended", 
 mlkit-face = { module = "com.google.mlkit:face-detection", version.ref = "mlkitFace" }
 mlkit-text = { module = "com.google.mlkit:text-recognition", version.ref = "mlkitText" }
 executorch-android = { module = "org.pytorch:executorch-android", version.ref = "executorch" }
+litert = { module = "com.google.ai.edge.litert:litert", version.ref = "litert" }
 junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]

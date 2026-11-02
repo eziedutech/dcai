@@ -56,9 +56,9 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
-    // The bundled vision model is copied to a file for the runtime; stored uncompressed.
+    // The bundled vision model is memory-mapped straight from the APK; stored uncompressed.
     androidResources {
-        noCompress += "pte"
+        noCompress += "tflite"
     }
 }
 
@@ -83,6 +83,12 @@ dependencies {
     // On-device stage 1 message analysis (Llama di ponsel): the ExecuTorch runtime. The model
     // itself is downloaded on demand, not bundled; nothing message-related leaves the phone.
     implementation(libs.executorch.android)
+    // On-device sensitive-image classifier (vision/VisionNsfwModel.kt). Only the Interpreter is
+    // used; Play AI delivery (NPU model download) brings WorkManager and Room, whose generated
+    // database R8 strips, crashing the app at start.
+    implementation(libs.litert) {
+        exclude(group = "com.google.android.play", module = "ai-delivery")
+    }
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

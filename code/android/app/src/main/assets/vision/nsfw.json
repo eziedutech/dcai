@@ -6,6 +6,7 @@
   "nsfw"
  ],
  "size": 224,
+ "layout": "NCHW",
  "mean": [
   0.5,
   0.5,
@@ -16,7 +17,7 @@
   0.5,
   0.5
  ],
- "quant": "xnnpack dynamic int8",
- "sha256": "2274581d3c5453a4ac6a5ead372d685608181ee498478379161318109ba7a6cf",
- "parity_max_abs": 0.0002
+ "quant": "litert dynamic-range int8",
+ "sha256": "d6f5cce8c5d056639f84a17af442a0f2955cf2a8321f95c73a412f8ab1887001",
+ "parity_max_abs": 0.0007
 }

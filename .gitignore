@@ -54,5 +54,5 @@ Thumbs.db
 /data/blocklist/
 
 # Bundled vision model (87 MB): regenerate with code/vision/export_nsfw.py before a release build.
-/code/android/app/src/main/assets/vision/*.pte
+/code/android/app/src/main/assets/vision/*.tflite
 /code/vision/out/
