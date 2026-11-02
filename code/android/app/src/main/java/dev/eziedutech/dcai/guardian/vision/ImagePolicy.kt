@@ -23,7 +23,13 @@ enum class Category(val wire: String) {
     AMAN("aman"),
 }
 
-enum class Action(val wire: String) { DIKABURKAN("dikaburkan"), DIBIARKAN("dibiarkan") }
+enum class Action(val wire: String) {
+    DIKABURKAN("dikaburkan"),
+    DIBIARKAN("dibiarkan"),
+
+    /** Seen in another app's chat, which dcAI cannot blur: the child gets a reminder. */
+    DIINGATKAN("diingatkan"),
+}
 
 /** A region of the image as fractions of its width and height (0..1). */
 data class Box(val left: Float, val top: Float, val right: Float, val bottom: Float)
@@ -48,9 +54,14 @@ data class Decision(
     val blurAll: Boolean,
     val regions: List<Box>,
     val modelVersion: String,
+    /** The same picture was already reported in this chat recently; no signal, no reminder. */
+    val repeat: Boolean = false,
 ) {
     /** Only a non-safe label is worth a signal to the server. */
     val signal: Boolean get() = category != Category.AMAN
+
+    /** A sensitive picture the child should be reminded about (not a repeat). */
+    val remind: Boolean get() = blurAll && !repeat
 
     companion object {
         fun leave(modelVersion: String = "") =

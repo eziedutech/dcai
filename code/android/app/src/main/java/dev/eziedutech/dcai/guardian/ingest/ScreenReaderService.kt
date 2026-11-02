@@ -159,15 +159,15 @@ class ScreenReaderService : AccessibilityService() {
                     scope.launch {
                         try {
                             val guard = ServiceLocator.imageGuard(this@ScreenReaderService) ?: return@launch
-                            val context = ImageContext(Trigger.PERCAKAPAN, thread, pkg, "dm", "contact", false)
+                            val context = ImageContext(Trigger.PERCAKAPAN, thread, pkg, "dm", "contact", false, shownByOtherApp = true)
                             val boxes = ScreenImages.pick(images, bitmap.width, bitmap.height)
                             val sensitive = if (boxes.isEmpty()) {
-                                guard.check(bitmap, context).blurAll
+                                guard.check(bitmap, context).remind
                             } else {
                                 boxes.any { b ->
                                     val crop = Bitmap.createBitmap(bitmap, b.left, b.top, b.width, b.height)
                                     try {
-                                        guard.check(crop, context).blurAll
+                                        guard.check(crop, context).remind
                                     } finally {
                                         if (crop !== bitmap) crop.recycle()
                                     }

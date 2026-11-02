@@ -87,6 +87,9 @@ class ImageAction(StrEnum):
     DIKABURKAN = "dikaburkan"  # blurred on the phone, never sent
     DITINJAU = "ditinjau"  # sent, reduced and with faces and text blurred, for a cloud look
     DIBIARKAN = "dibiarkan"
+    # Seen in another app's chat (read from the screen), which dcAI cannot blur: the child
+    # got a reminder instead. Not counted as blurred.
+    DIINGATKAN = "diingatkan"
 
 
 # ---------------------------------------------------------------- guardian side
@@ -617,6 +620,8 @@ def image_event(body: ImageSignalIn) -> tuple[str, str] | None:
     """(event kind, level) for the parent, or None. The image itself never arrives."""
     if body.category in (ImageCategory.SEKSUAL, ImageCategory.KEKERASAN):
         level = "perhatian" if body.trigger == ImageTrigger.SITUS else "waspada"
+        if body.action == ImageAction.DIINGATKAN:
+            return "gambar_sensitif_diingatkan", level
         return "gambar_sensitif", level
     if body.category in (ImageCategory.TEKS_PRIBADI, ImageCategory.WAJAH) and (
         body.trigger == ImageTrigger.DIBAGIKAN

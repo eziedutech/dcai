@@ -484,6 +484,7 @@ def test_image_labels_need_image_consent(api):
     ("over", "event"),
     [
         ({}, "gambar_sensitif"),
+        ({"action": "diingatkan"}, "gambar_sensitif_diingatkan"),
         ({"trigger": "situs", "sender": None}, "gambar_sensitif"),
         (
             {"trigger": "dibagikan", "sender": "child", "category": "teks_pribadi"},
@@ -502,6 +503,16 @@ def test_image_label_is_stored_and_becomes_an_event(api, db_url, over, event):
         assert conn.execute(text("SELECT COUNT(*) FROM image_signal")).scalar_one() == 1
         kinds = [k for (k,) in conn.execute(text("SELECT kind FROM event"))]
     assert kinds == ([event] if event else [])
+
+
+def test_a_reminded_image_is_not_counted_as_blurred(api):
+    # Read from another app's screen, the picture stays visible there; the dashboard must not
+    # call it blurred.
+    tokens, child, dev, _ = paired(api)
+    image(api, dev, action="diingatkan")
+    image(api, dev)
+    ov = api.get(f"/v1/children/{child['id']}/overview", headers=auth(tokens)).json()
+    assert ov["sensitive_images_blurred"] == 1
 
 
 def test_image_label_links_to_its_conversation(api, db_url):

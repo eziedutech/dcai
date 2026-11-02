@@ -18,6 +18,8 @@ data class ImageContext(
     val channel: String,
     val sender: String,
     val contactKnown: Boolean,
+    /** Read from another app's screen: dcAI cannot blur it there, only remind the child. */
+    val shownByOtherApp: Boolean = false,
 )
 
 /**
@@ -42,12 +44,20 @@ class ImageGuard(
         val names = listOf(config.childNickname).filter { it.isNotBlank() }
         val result = detectors.run(bitmap, names, wantFaces = context.trigger == Trigger.DIBAGIKAN)
         val hash = Bitmaps.dHash(bitmap)
-        val decision = ImagePolicy.decide(
+        val decided = ImagePolicy.decide(
             context.trigger,
             result.findings,
             thresholds = store.thresholds(),
             confirmedFalse = LocalTuning.matches(hash, store.confirmedFalse()),
         )
+        // On another app's screen the picture stays visible, so it is reported as a reminder,
+        // and a picture still on screen at the next screenshot is reported only once.
+        val decision = when {
+            !context.shownByOtherApp || !decided.signal -> decided
+            !RecentImages.firstTime(key, hash, System.currentTimeMillis()) -> return@withContext decided.copy(repeat = true)
+            decided.action == Action.DIKABURKAN -> decided.copy(action = Action.DIINGATKAN)
+            else -> decided
+        }
 
         // Counts and labels only; never text or pixels.
         Log.d(TAG, "image judged trigger=${context.trigger.wire} category=${decision.category.wire} text_blocks=${result.blocks.size} faces=${result.findings.faces.size}")

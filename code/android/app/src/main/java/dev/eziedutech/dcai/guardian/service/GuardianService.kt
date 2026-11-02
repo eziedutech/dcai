@@ -14,6 +14,7 @@ import dev.eziedutech.dcai.guardian.net.DeviceRevokedException
 import dev.eziedutech.dcai.guardian.screen.ScreenGuard
 import dev.eziedutech.dcai.guardian.sites.SiteGuardVpn
 import dev.eziedutech.dcai.guardian.sites.SiteLists
+import dev.eziedutech.dcai.guardian.vision.RecentImages
 import dev.eziedutech.dcai.guardian.vision.ThreadLevels
 import android.net.VpnService
 import kotlinx.coroutines.CoroutineScope
@@ -184,6 +185,7 @@ class GuardianService : Service() {
         ServiceLocator.store(this).clear()
         ServiceLocator.reset()
         ThreadLevels.clear()
+        RecentImages.clear()
         stopSelf()
     }
 
