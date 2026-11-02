@@ -276,7 +276,6 @@ def pair(body: PairIn, db: DbDep) -> PairOut:
 
 @device_router.get("/config")
 def get_config(db: DbDep, device: DeviceDep) -> DeviceConfig:
-    db.commit()  # last_seen_at
     return device_config(db, device)
 
 

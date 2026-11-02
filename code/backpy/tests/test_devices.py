@@ -343,6 +343,82 @@ def test_too_many_messages_from_one_phone(api):
     assert resp.status_code == 429 and resp.headers["retry-after"] == "60"
 
 
+def _age_last_seen(db_url, minutes=10):
+    from sqlalchemy import update
+
+    from app.db.base import utcnow
+    from app.db.models import Device
+
+    with create_engine(db_url).begin() as conn:
+        conn.execute(update(Device).values(last_seen_at=utcnow() - timedelta(minutes=minutes)))
+
+
+def _device_updates(db_url):
+    """Watch the app's own engine for UPDATE device statements."""
+    from sqlalchemy import event
+
+    from app.db.base import session_factory
+
+    engine = session_factory(db_url).kw["bind"]
+    seen: list[str] = []
+
+    def watch(conn, cursor, statement, params, context, executemany):
+        if statement.lstrip().upper().startswith("UPDATE DEVICE"):
+            seen.append(statement)
+
+    event.listen(engine, "before_cursor_execute", watch)
+    return engine, watch, seen
+
+
+def test_lock_error_on_last_seen_never_fails_a_message(api, db_url):
+    """A burst after an app restart hit a lock timeout on UPDATE device SET last_seen_at,
+    which failed the message with 500 (2 Nov). The message must still go through."""
+    from sqlalchemy import event
+    from sqlalchemy.exc import OperationalError
+
+    _tokens, _child, dev, _ = paired(api)
+    _age_last_seen(db_url)
+    engine, watch, seen = _device_updates(db_url)
+
+    def lock_timeout(conn, cursor, statement, params, context, executemany):
+        if "last_seen_at" in statement and statement.lstrip().upper().startswith("UPDATE"):
+            raise OperationalError(statement, params, Exception("lock timeout"))
+
+    event.listen(engine, "before_cursor_execute", lock_timeout)
+    try:
+        resp = message(api, dev, "halo")
+        assert resp.status_code == 200, resp.text
+        assert seen  # the write was attempted and failed
+    finally:
+        event.remove(engine, "before_cursor_execute", lock_timeout)
+        event.remove(engine, "before_cursor_execute", watch)
+    with create_engine(db_url).connect() as conn:
+        assert conn.execute(text("SELECT COUNT(*) FROM conversation")).scalar_one() == 1
+
+
+def test_last_seen_is_written_once_per_burst(api, db_url):
+    from datetime import datetime
+
+    from sqlalchemy import event
+
+    from app.db.base import utcnow
+    from app.ratelimit import RateLimiter
+
+    tokens, child, dev, _ = paired(api)
+    api.app.state.device_limiter = RateLimiter(per_minute=100)
+    _age_last_seen(db_url)
+    engine, watch, seen = _device_updates(db_url)
+    try:
+        for _ in range(4):
+            assert message(api, dev, "halo").status_code == 200
+    finally:
+        event.remove(engine, "before_cursor_execute", watch)
+    assert len([s for s in seen if "last_seen_at" in s]) == 1
+    devices = api.get(f"/v1/children/{child['id']}/devices", headers=auth(tokens)).json()
+    last = datetime.fromisoformat(devices[0]["last_seen_at"])
+    assert utcnow() - last < timedelta(minutes=1)
+
+
 @pytest.mark.parametrize(
     "bad",
     [
