@@ -150,6 +150,16 @@ classes, and per-case referral controlled by the parent.
   never lowers a level or leaves a child without guidance.
 - Planned: a smaller distilled Llama running on the phone with ExecuTorch.
 
+### Feedback for Meta: a small open vision safety model
+
+We trained a violence classifier for video ourselves (MoViNet-A0 on the CC0 VID dataset):
+accuracy 0.9471 on its own test split, then a miss on the one real chat video it was tried on.
+It is held; the full record is in `eval/violence/report.md`. dcAI judges images and video on the
+phone only, and Meta's open vision models we know of start at 11B parameters. A small open-weights
+vision safety model from Meta (tens of megabytes, exportable to LiteRT or ExecuTorch, for sexual
+content and violence in images and short video, licensed for child-safety use, measured on media
+as shared in chats) would fill exactly this gap for dcAI and projects like it.
+
 ## Privacy and safety by design
 
 - Masking on the phone before anything leaves; masked again on the server.
@@ -194,6 +204,7 @@ classes, and per-case referral controlled by the parent.
   advice.
 - Masking does not catch everything; masked messages do go to model providers.
 - No sensitive-image model ships yet.
+- No violence detection in video: a classifier we trained missed a real chat video and was held.
 - Site protection works at the DNS level and can be gone around.
 - Free Meta credits allow Meta to use request content, so only synthetic data is sent.
 - The consent text has not had legal review.

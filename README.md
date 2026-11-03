@@ -413,6 +413,22 @@ The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on
 
 The weakest labels for 70B are `pindah_kanal` (precision 0.43) and `membangun_kedekatan` (0.50). Full tables are in `eval/stage1/`.
 
+### Violence in video, trained and held
+
+A violence classifier for video (MoViNet-A0, fine-tuned on the CC0 VID dataset, 4 MB in
+LiteRT int8) reads 16 frames on the phone in under a second. On the 454-clip VID test split it
+reaches accuracy 0.9471, precision 0.9283 and recall 0.9692 (int8, threshold 0.5). On the test
+phone it missed the one real chat video it was tried on (score 0.006, threshold 0.70): VID is
+recorded footage from classrooms, homes and streets, unlike the portrait, edited clips children
+receive. It is held and not bundled. Details, including every score, in
+`eval/violence/report.md`.
+
+What would help, and what we would ask of Meta: a small open-weights vision safety model (tens
+of megabytes, exportable to LiteRT or ExecuTorch) for sexual content and violence in images and
+short video, licensed for child-safety use and measured on media as shared in chats. Meta's open
+vision models we know of start at 11B parameters, too large for a child's phone, and sending a
+child's media to a server would break dcAI's rule that images never leave the phone.
+
 ### Masking
 
 On all 543 scenario messages, 15 of the 17 child messages that share personal data are caught, and 0 of the 121 ordinary-chat messages. The rules were adjusted after seeing these messages, so this is not a clean test. The final precision and recall will be measured on unseen cases.
@@ -426,6 +442,7 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **Free Meta credits allow Meta to use request content for product improvement.** Only synthetic data is sent. Real use needs the `meta` endpoint removed or paid usage.
 - **Not everything is processed on the device.** Masked messages go to model providers for assessment.
 - **No sensitive-image model ships, and none has been tested by us.** The phone has the slot, the thresholds and the review flow, tested with a stand-in score. We do not create or collect sexual images of anyone to test a classifier. A licensed classifier's accuracy will be the figure its source states, not ours, and the app says on the child's screen that sensitive-image detection is off until one is installed.
+- **dcAI does not detect violence in video.** A classifier trained for it scored well on its own test split and missed a real chat video, so it was held. See Results.
 - **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible but rare by design: with about 5 million 40-bit hashes, roughly one lookup in 200,000 collides, an estimate from the hash width and list size rather than a measurement. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
 - **The invitation label is new, and the screener was trained before it existed.** Student v2 finds 6 of 11 invitations on dev with precision 0.67, so it raises false alarms (one of two look-alike hard cases on dev) and can miss a single invitation in an otherwise ordinary chat. A retrained v3 removed the false alarm but missed more risk and was not adopted. See Results.
 - The consent text has not had legal review.

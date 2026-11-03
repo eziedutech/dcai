@@ -1,0 +1,47 @@
+{
+ "source": "MoViNet-A0 stream (TF Model Garden, Apache-2.0), Kinetics-600 start",
+ "data": "VID",
+ "labels": [
+  "normal",
+  "kekerasan"
+ ],
+ "frames": 16,
+ "size": 172,
+ "layout": "NTHWC",
+ "range": "0..1",
+ "quant": "litert dynamic-range int8",
+ "sha256": "67923c0a992ff54d5d4a8a2b0e4bdf62133459fd30b21e13f7b1f17ba9c4550a",
+ "bytes": 4062456,
+ "parity_max_abs": 0.1112,
+ "test_skipped_unreadable": 0,
+ "test_keras": {
+  "n": 454,
+  "threshold": 0.5,
+  "accuracy": 0.9471,
+  "precision": 0.9247,
+  "recall": 0.9736,
+  "f1": 0.9485,
+  "confusion": {
+   "tp": 221,
+   "fp": 18,
+   "fn": 6,
+   "tn": 209
+  }
+ },
+ "test_tflite": {
+  "n": 454,
+  "threshold": 0.5,
+  "accuracy": 0.9471,
+  "precision": 0.9283,
+  "recall": 0.9692,
+  "f1": 0.9483,
+  "confusion": {
+   "tp": 220,
+   "fp": 17,
+   "fn": 7,
+   "tn": 210
+  }
+ },
+ "epochs": 10,
+ "seed": 0
+}
