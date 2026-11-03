@@ -60,6 +60,9 @@ as of 31 October 2026.
 5. **Images, judged on the phone** (ML Kit face and text detection): faces and personal data
    in an image the child is about to share are blurred before it is sent; the image never
    leaves the phone, only a label does. A parent can confirm a false detection with the PIN.
+   Sexual content is scored on the phone by an open classifier (Falconsai, Apache-2.0, LiteRT
+   int8, from 0.3.9): fully blurred in apps with the dcAI SDK; in other apps the child gets a
+   reminder and the parent a label.
 6. **Sites, matched on the phone**: a DNS-only VPN checks names against hashed category lists
    from UT1 Blacklists (adult, gambling, scams, malware, dating, drugs, hate; about 5.1 million
    domains). The server gets only the category, never the site or a history.
@@ -203,7 +206,8 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 - Every assessment is an estimate and can be wrong; dcAI gives no medical or psychological
   advice.
 - Masking does not catch everything; masked messages do go to model providers.
-- No sensitive-image model ships yet.
+- The sexual-image classifier is used as published and not measured by us (no accuracy
+  claimed); in other apps it can only remind the child.
 - No violence detection in video: a classifier we trained missed a real chat video and was held.
 - Site protection works at the DNS level and can be gone around.
 - Free Meta credits allow Meta to use request content, so only synthetic data is sent.
@@ -211,7 +215,8 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 
 ## What comes next
 
-A sensitive-image classifier in the slot on the phone; a small on-phone text classifier
+A violence classifier that works on chat video; sensitive-content checks of shared video in
+published builds once the consent text names video; a small on-phone text classifier
 (ExecuTorch) distilled from the same teacher; per-category site settings for parents; more staff
 per school and a school-wide view; expert review and a consented pilot.
 
