@@ -37,6 +37,7 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 - [Architecture](#architecture)
 - [Running locally](#running-locally)
 - [Configuration](#configuration)
+- [Research and training](#research-and-training)
 - [Results](#results)
 - [What it does not claim](#what-it-does-not-claim)
 - [Credits and licenses](#credits-and-licenses)
@@ -82,7 +83,7 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 
 ### Not built yet
 
-In build order: a violence classifier that works on chat video (a first one was trained and held, see Results), sensitive-content checks of shared video in published builds once the consent text names video, a more accurate on-phone Llama (the full-prompt 1B variant measures better than the one served, see Results), and per-category site settings for the parent. For schools: more staff accounts per school, a school-wide view across classes, and per-case referral controlled by the parent.
+In build order: one small multimodal model on the phone for text, images and video (see [Research and training](#research-and-training)), a violence classifier that works on chat video (a first one was trained and held, see Results), sensitive-content checks of shared video in published builds once the consent text names video, a more accurate on-phone Llama (the full-prompt 1B variant measures better than the one served, see Results), and per-category site settings for the parent. For schools: more staff accounts per school, a school-wide view across classes, and per-case referral controlled by the parent.
 
 ## How it works
 
@@ -243,6 +244,25 @@ The site's download button offers the APK from the repository's GitHub release. 
 | `SITE_LISTS_DIR`, `SITE_EVENT_MINUTES` | where the built site lists are (default `data/blocklist`); one parent event per site category in this window |
 
 `.env.example` lists every variable.
+
+## Research and training
+
+Each model in dcAI was trained or chosen after several rounds, measured on the same splits.
+
+| Work | Rounds | Outcome | Record |
+| --- | --- | --- | --- |
+| Muse Spark teacher labels | 2 (34-scenario dev, USD 0.58; 40-scenario dev with the invitation label, USD 0.69, 670 examples) | training data for every student | `eval/distill/teacher-dev*.md` |
+| Stage 1 student, Llama 3.1 8B, LoRA SFT (OpenPipe ART) | 3: v1 missed self-harm; v2 rebalanced the classes; v3 added the invitation label | v2 adopted; v3 held (misses more risk) | `eval/distill/report.md` |
+| Stage 1 model comparison | Llama 3.3 70B, Llama 3.1 8B base, students | student replaces 70B as default; 70B kept as backup | `eval/stage1/`, `eval/distill/report.md` |
+| On-phone student, Llama 3.2 1B and 3B, LoRA SFT, ExecuTorch | 6 variants: short and full prompt, three quantization levels, 1B and 3B | 1B served as an option; prompt format mattered more than quantization | `eval/distill/ondevice-quant.md` |
+| Compressing the on-phone prompt | SpinQuant and LLMLingua-2 examined | not applied | `eval/distill/ondevice-quant.md`, `code/distill/ondevice/compress_prompt.py` |
+| Sexual-image classifier | open model converted to LiteRT int8, tried on two phones | shipped from 0.3.9, not retrained | Results |
+| Violence in video, MoViNet-A0 on VID | trained 10 epochs, measured, tried on the phone | held | `eval/violence/report.md` |
+| Full pipeline | dev split for tuning; locked test split for the final measure, each change re-run | numbers in Results | `eval/pipeline/` |
+
+The test split was used more than once for the students (v1, v2, v3); `eval/distill/report.md` says where.
+
+**Next: one model.** Research and training so far produced separate models: a text student on the server, a text student on the phone, an image classifier and a held video model. The next step is to bring them into one small multimodal model on the phone, distilled from Muse Spark, that labels text, images and short video in one pass. It would need one download, one memory budget and one consent explanation.
 
 ## Results
 

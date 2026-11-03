@@ -201,6 +201,19 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 - Production: three services in one Dokploy project (managed PostgreSQL, API, web), so app
   rebuilds never touch the data. Each push to `main` deploys the API and the web.
 
+## Research and training
+
+- Muse Spark teacher labelled the dev split twice; three Llama 3.1 8B students trained with LoRA
+  SFT (v1 missed self-harm, v2 rebalanced and adopted, v3 with the invitation label held).
+- Six on-phone variants of Llama 3.2 1B and 3B (prompt format and quantization) exported to
+  ExecuTorch and measured; SpinQuant and LLMLingua-2 prompt compression examined, not applied.
+- A violence video model (MoViNet-A0 on VID) trained, measured and held; an open sexual-image
+  classifier converted to LiteRT and tried on two phones.
+- Every pipeline change re-run on the dev split, final numbers on the locked test split.
+  Records: `eval/distill/`, `eval/stage1/`, `eval/pipeline/`, `eval/violence/`.
+- Next: bring the separate models (text on the server, text on the phone, images, video) into
+  one small multimodal model on the phone, distilled from Muse Spark.
+
 ## Results (synthetic data)
 
 - **Full pipeline, locked test split** (16 scenarios, 177 messages): risky approaches at
@@ -235,7 +248,8 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 
 ## What comes next
 
-A violence classifier that works on chat video; sensitive-content checks of shared video in
+One small multimodal model on the phone for text, images and video, distilled from Muse Spark;
+a violence classifier that works on chat video; sensitive-content checks of shared video in
 published builds once the consent text names video; a more accurate on-phone Llama (the
 full-prompt variant); per-category site settings for parents; more staff
 per school and a school-wide view; expert review and a consented pilot.

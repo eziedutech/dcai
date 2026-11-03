@@ -195,7 +195,9 @@ database column.
 
 `LLMClient` rotates calls across a pool of providers, fails over on rate limits and outages, and
 validates every output against a schema. Model IDs and prices come from the environment. Built
-with Llama.
+with Llama. Training rounds and research: README [Research and training](../README.md#research-and-training).
+Planned: one small multimodal model on the phone in place of the separate text, image and video
+models.
 
 ## 14. API (`/v1`)
 
