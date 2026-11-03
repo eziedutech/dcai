@@ -2,7 +2,7 @@
 
 The single source for the README header, the hackathon submission form and the pitch. Every
 figure here is copied from the README's Results section, which takes them from `eval/`. Status
-as of 31 October 2026.
+as of 3 November 2026 (final).
 
 ## Name and one-liners
 
@@ -19,12 +19,18 @@ as of 31 October 2026.
   per class, never a single child.
 - **Event:** Meta Global AI Developer Hackathon (Cerebral Valley, 26 Oct to 4 Nov 2026). MVP;
   all data is synthetic.
+- **Built with Llama.**
 
 ## Links
 
 - Live: <https://dcai.digitalsafe.app> (homepage, parent dashboard at `/dasbor`, school
-  dashboard at `/sekolah`, facts at `/fakta`, privacy at `/privasi`).
-- Android app: the download button on the homepage (APK 0.3.4, Android 11+, API 30+).
+  dashboard at `/sekolah`, facts at `/fakta`, privacy at `/privasi`, terms at `/ketentuan`, parent
+  guide at `/panduan`).
+- Android: <https://github.com/eziedutech/dcai/releases/tag/v0.3.9>: `dcai-guardian-0.3.9.apk`
+  (217 MB with the image model, Android 11+, API 30+) and `dcai-messenger-z-0.3.9.apk` (sample
+  chat app with the dcAI SDK). The homepage download button points to the same release.
+- Video: link added when uploaded.
+- Documentation: `docs/documentation.md`; demo script: `docs/video.md`.
 - Phone API: `https://dcai.digitalsafe.app/v1` (health at `/v1/health`).
 - Code: <https://github.com/eziedutech/dcai>, MIT license.
 
@@ -33,7 +39,7 @@ as of 31 October 2026.
 | Who | What they get |
 |---|---|
 | Child (10 to 17) | A reminder of at most two sentences, at the moment it matters, that never blames; a site or image held with the reason; a break screen at a limit or at bedtime; a way to ask for more time or show a mistake to a parent. dcAI is always visible on the phone (persistent notification, no hidden mode). |
-| Parent | Level for the last 7 days, insight with what was seen, why it matters, three conversation starters, what to do and avoid; events; time online and focus rules; Ask dcAI; consent per scope; one-call deletion of a child's data. |
+| Parent | One tab set per child (Summary, Time online, School, Phone, Settings): level for the last 7 days, insight with what was seen, why it matters, three conversation starters, what to do and avoid; events; time online and focus rules; Ask dcAI; consent per scope and per text version; rename a child, clear history, one-call deletion of a child's data; change password, sign out of every device. |
 | School | Anonymous counts per level for each class, shown only when enough children take part. No names, no insight, no conversation, no way to point at a child. |
 
 ## What is built
@@ -51,7 +57,7 @@ as of 31 October 2026.
 3. **Ask dcAI** (Muse Spark with function tools that are the dashboard's own queries): a parent
    asks in their own words; children are aliases in everything the model sees; questions and
    answers are not stored.
-4. **The Android app** (Kotlin, API 30+, v0.3.4). Pairing by a single-use code, onboarding with
+4. **The Android app** (Kotlin, API 30+, v0.3.9). Pairing by a single-use code, onboarding with
    consent read together, a parent PIN to switch protections off (reported to the parent).
    Four message sources share one on-phone masking path: screen text through an accessibility
    service (the main source, any app, any keyboard), chat notifications for the other person's
@@ -62,20 +68,28 @@ as of 31 October 2026.
    leaves the phone, only a label does. A parent can confirm a false detection with the PIN.
    Sexual content is scored on the phone by an open classifier (Falconsai, Apache-2.0, LiteRT
    int8, from 0.3.9): fully blurred in apps with the dcAI SDK; in other apps the child gets a
-   reminder and the parent a label.
-6. **Sites, matched on the phone**: a DNS-only VPN checks names against hashed category lists
+   reminder and the parent a label. Video (test builds only, until the consent text names
+   video): the image model reads up to four frames taken on the phone.
+6. **Optional on-phone analysis (Llama 3.2 1B, ExecuTorch).** A distilled 1B student judges each
+   message on the phone; ordinary messages are discarded there and only risky ones are sent.
+   Downloaded once (about 0.8 GB, SHA-256 checked), offered only on phones with at least 5 GB
+   RAM; online stays the default and the fallback. Its accuracy is below online.
+7. **Sites, matched on the phone**: a DNS-only VPN checks names against hashed category lists
    from UT1 Blacklists (adult, gambling, scams, malware, dating, drugs, hate; about 5.1 million
    domains). The server gets only the category, never the site or a history.
-7. **Time online**: daily limits for school days and weekends, limits per category, bedtime
+8. **Time online**: daily limits for school days and weekends, limits per category, bedtime
    with a wind-down reminder, breaks after long short-video sessions (doomscrolling), always
    allowed apps, and **focus mode** (only allowed apps plus phone essentials open). The child
    can ask for more time; Muse Spark suggests, the parent decides; a weekly summary from
    aggregate numbers.
-8. **Parent dashboard and homepage** (Next.js 16), Indonesian and English, live over SSE.
-9. **School module** (aggregate only), described below.
-10. **Consent and data rights**: analysis runs only under active consent, per scope; consent
-    records are append-only (a database trigger refuses updates); one call deletes everything
-    about a child and ends the paired phone's token.
+9. **Parent dashboard and homepage** (Next.js 16), Indonesian and English, live over SSE.
+10. **School module** (aggregate only), described below.
+11. **Consent and data rights**: analysis runs only under active consent, per scope; consent
+    records are append-only (a database trigger refuses updates); the consent text is versioned
+    (`2026-11-02.1`), and a material change pauses the scope until the parent agrees again; one
+    call deletes everything about a child and ends the paired phone's token.
+12. **Messenger Z**, a sample chat app with the dcAI SDK and synthetic contacts, released as an
+    APK, with a demo mode driven from a computer.
 
 ## How the school module works
 
@@ -145,13 +159,14 @@ classes, and per-case referral controlled by the parent.
 | Ask dcAI, time-request advice, weekly summary, limit suggestions | Muse Spark | same pool |
 | Training: teacher labels | Muse Spark | labelled the dev messages |
 | Training: student | Llama 3.1 8B, LoRA SFT on the exact production prompt | OpenPipe ART on a serverless training service |
+| Optional on-phone screening | Llama 3.2 1B student, LoRA SFT on the same teacher labels | ExecuTorch on the child's phone |
 
 - One model interface (`LLMClient`) over a pool of OpenAI-compatible endpoints: calls rotate,
   fail over on rate limits and outages, and every output is validated against a schema.
 - Model IDs and prices come from the environment, never from code.
 - Under the models sit a deterministic rule floor and reviewed templates, so a model failure
   never lowers a level or leaves a child without guidance.
-- Planned: a smaller distilled Llama running on the phone with ExecuTorch.
+- Built with Llama.
 
 ### Feedback for Meta: a small open vision safety model
 
@@ -181,7 +196,8 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 - Web: Next.js 16; the browser talks only to the web server, which holds sessions in httpOnly
   cookies and forwards an allowlist of paths.
 - Android: Kotlin, foreground service, accessibility screen reader, notification listener,
-  keyboard, image service, DNS-only VPN, time rules and break screen.
+  keyboard, image service, DNS-only VPN, time rules and break screen, on-phone Llama in a
+  separate process.
 - Production: three services in one Dokploy project (managed PostgreSQL, API, web), so app
   rebuilds never touch the data. Each push to `main` deploys the API and the web.
 
@@ -197,8 +213,11 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
 - **Citizenship Guide**: 9 of 9 cases answered by the model passed the schema and tone rules.
 - **Phone path, one live run**: each message accepted in 10 to 21 ms; a template nudge on the
   phone at 2.0 s.
-- **Tests**: 381 backend tests pass on SQLite (31 Oct 2026); the database tests also run on
-  PostgreSQL in CI; Android unit tests, dashboard type check and lint pass.
+- **On-phone Llama** (test split): the variant served, label recall 0.33 and precision 0.38,
+  send decision recall 0.60 and precision 0.71; the full-prompt variant 0.55 / 0.60 and
+  0.69 / 0.79; the online 8B student 0.81 / 0.95.
+- **Tests** (3 Nov 2026): 402 backend tests pass on SQLite, 128 PostgreSQL variants run in CI;
+  86 Android unit tests; dashboard type check, lint and build pass.
 
 ## What it does not claim
 
@@ -210,14 +229,15 @@ as shared in chats) would fill exactly this gap for dcAI and projects like it.
   claimed); in other apps it can only remind the child.
 - No violence detection in video: a classifier we trained missed a real chat video and was held.
 - Site protection works at the DNS level and can be gone around.
+- On-phone Llama analysis is less accurate than online.
 - Free Meta credits allow Meta to use request content, so only synthetic data is sent.
 - The consent text has not had legal review.
 
 ## What comes next
 
 A violence classifier that works on chat video; sensitive-content checks of shared video in
-published builds once the consent text names video; a small on-phone text classifier
-(ExecuTorch) distilled from the same teacher; per-category site settings for parents; more staff
+published builds once the consent text names video; a more accurate on-phone Llama (the
+full-prompt variant); per-category site settings for parents; more staff
 per school and a school-wide view; expert review and a consented pilot.
 
 ## Ringkasan singkat (Bahasa Indonesia)
@@ -228,4 +248,5 @@ pola yang muncul serta cara membicarakannya. Isi pesan tidak pernah dibagikan at
 Dengan persetujuan terpisah dari orang tua, sekolah hanya melihat jumlah anak per level di setiap
 kelas, dan angka itu baru tampil bila minimal 5 anak ikut. Model Meta menjadi intinya: Muse Spark
 menilai pola, menulis bimbingan, dan menjawab orang tua; murid Llama 3.1 8B hasil distilasi dari
-Muse Spark menyaring tiap pesan.
+Muse Spark menyaring tiap pesan; mode pilihan menjalankan Llama 3.2 1B langsung di ponsel.
+Dibuat dengan Llama.

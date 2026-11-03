@@ -7,17 +7,26 @@
 ![Muse Spark 1.3](https://img.shields.io/badge/Muse%20Spark-1.3-0866FF)
 ![Llama 3.1 8B distilled](https://img.shields.io/badge/Llama-3.1%208B%20distilled-0866FF)
 ![Llama 3.3 70B backup](https://img.shields.io/badge/Llama-3.3%2070B%20backup-0866FF)
+![Llama 3.2 1B on phone](https://img.shields.io/badge/Llama-3.2%201B%20on%20phone-0866FF)
 ![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-336791)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000000)
 ![Android API 30+](https://img.shields.io/badge/Android-API%2030%2B-3DDC84)
 
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to 4 Nov 2026). MVP; all data is synthetic.
 
-**Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app): the homepage, the parent dashboard (`/dasbor`), the school dashboard (`/sekolah`) and the Android APK (download button on the homepage). The phone's API is under `/v1`. Please use synthetic data only: free model credits allow the provider to use request content.
+**Live:** [dcai.digitalsafe.app](https://dcai.digitalsafe.app): the homepage, the parent dashboard (`/dasbor`), the school dashboard (`/sekolah`), and the public pages `/privasi`, `/cara-kerja`, `/fakta`, `/next`, `/ketentuan`, `/panduan`. The phone's API is under `/v1`. Please use synthetic data only: free model credits allow the provider to use request content.
+
+**Android:** [release v0.3.9](https://github.com/eziedutech/dcai/releases/tag/v0.3.9): `dcai-guardian-0.3.9.apk` (dcAI, 217 MB with the image model, Android 11+) and `dcai-messenger-z-0.3.9.apk` (Messenger Z, the sample chat app with the dcAI SDK). The homepage download button points to the same release.
+
+**Video:** link added when uploaded.
+
+**Documentation:** [docs/documentation.md](docs/documentation.md) (features, roles, data flow, API). Submission summary: [docs/submission.md](docs/submission.md). Demo script: [docs/video.md](docs/video.md).
 
 **Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video, focus mode), and guidance for the parent. It is one pillar of digitalsafe.app. Masking, the image checks and the site lists run on the phone; only flagged, masked messages reach the cloud. With a parent's separate consent, a school sees anonymous counts per class, never a child (see [School module](#school-module)).
 
-**Meta at the core.** Meta's models do the AI work in dcAI, for inference and for training. Muse Spark, on the Meta Model API, assesses conversations, writes the Citizenship Guide and answers parents in Ask dcAI. Each message is screened by a Llama 3.1 8B student distilled from a Muse Spark teacher that labelled the training data (LoRA SFT), with Llama 3.3 70B as a backup. A deterministic rule floor sits under the models, and reviewed templates take over when a model fails. Submission summary: [docs/submission.md](docs/submission.md).
+**Meta at the core.** Meta's models do the AI work in dcAI, for inference and for training. Muse Spark, on the Meta Model API, assesses conversations, writes the Citizenship Guide and answers parents in Ask dcAI. Each message is screened by a Llama 3.1 8B student distilled from a Muse Spark teacher that labelled the training data (LoRA SFT), with Llama 3.3 70B as a backup. An optional on-phone mode runs a Llama 3.2 1B student, distilled from the same teacher labels, with ExecuTorch. A deterministic rule floor sits under the models, and reviewed templates take over when a model fails.
+
+**Built with Llama.**
 
 ## Table of Contents
 
@@ -52,25 +61,28 @@ Parental control apps tend to either block or show parents everything. dcAI guid
 - **Citizenship Guide** on Muse Spark, with fixed templates for every situation, level and language when the model fails. Code rejects blame toward the child, punishment advice, links, phone-like numbers and mixed languages. Help channels come from `data/guide/channels.json`, where only manually verified entries carry a number.
 - **Distilled stage 1 student.** Muse Spark labels the dev messages; Llama 3.1 8B is fine-tuned on them with LoRA SFT on a serverless training service (OpenPipe ART), on exactly the production prompt. On the locked test split the full pipeline with the student matches 70B screening on every safety measure at 46% lower cost. v2 is the default stage 1 screener. Student v3, retrained with the invitation label, was evaluated and not adopted: it removes a false alarm but misses more risk (below). Details in `eval/distill/report.md`.
 - **Guardian accounts and consent.** Analysis runs only while consent is active. Consent records cannot be edited, only added to.
+- **Consent per text version.** The consent text is versioned (current `2026-11-02.1`). For a scope the parent agreed to before, the dashboard shows a "text changed" card; a material change pauses that scope until the parent reads and agrees again, a minor change is only shown. Settings show the text version per scope, and older texts stay readable.
 - **Delete all of a child's data** with one call. Paired phones are told and their tokens end.
 - **dcAI, the Android app** (Kotlin, API 30+). A parent pairs the child's phone with a code; the device token is stored on the phone, never shown again. A foreground service keeps a persistent notification the whole time dcAI is active (the transparency requirement and Google Play's monitoring-app rule, `isMonitoringTool=child_monitoring`), follows the live stream, and shows the child a nudge. Messages arrive from four sources (next item); an app that integrated the dcAI SDK (the included sample chat app, Messenger Z) hands them over through a signature-permission broadcast. Masking is ported from Python and passes the same shared cases, so the phone and the server agree on what is personal.
 - **The app as a child and parent see it.** The dcAI logo and colours, flat illustrations drawn in code (light and dark), onboarding in four steps (connect with the parent's code, read the consent together with two confirmations and the full text, create the parent PIN, switch protections on), then Home, Protection and Settings tabs. Each protection shows an indicator, and its page says what it does, what stays on the phone and what is sent. Switching a protection off needs the parent PIN and is reported to the parent. Indonesian and English, following the phone's language by default and selectable per app.
 - **Four message sources, one masking path.** Screen text through an accessibility service is the main source: it reads the chat on screen in any app, with any keyboard, only under the `layar` scope and with dcAI listed in Android's accessibility settings. Chat notifications bring the other person's side of a chat. The dcAI keyboard checks the child's own typing, and apps with the dcAI SDK hand over messages directly. All four go through the same on-phone masking, and only flagged, masked messages are sent.
-- **Images, judged on the phone.** An app with the dcAI SDK asks dcAI about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2). Sexual content is scored on the phone by an open classifier (Falconsai `nsfw_image_detection`, Apache-2.0, converted to LiteRT int8, not retrained, 88 MB, from version 0.3.9). In a chat app with the dcAI SDK a sensitive picture is fully blurred before it shows. In other apps dcAI cannot change what is shown: the screen reader cuts out each picture in the chat and scores it, the child gets a reminder, and the parent gets the label, once per picture.
+- **Images, judged on the phone.** An app with the dcAI SDK asks dcAI about an image before it shows or sends it, by binding to a signature-protected service and granting read access to that one image. ML Kit's bundled models find faces and text on the phone; the text goes through the same masking rules as messages. Faces and personal data (school, name, address, phone) in an image the child is about to share are blurred before it is sent. A received image is looked at only when its conversation is already at `perhatian` or above, and its text is masked and assessed like a message. The image never leaves the phone; the server gets a label (category, action, score, model). If dcAI blurs by mistake, the child shows the parent, who enters a PIN set at pairing and decides on the child's phone. A confirmed false detection is remembered on the phone by perceptual hash and raises that category's threshold in small capped steps (tier 1), and reaches the server as a label and a rounded score without the image (tier 2). Sexual content is scored on the phone by an open classifier (Falconsai `nsfw_image_detection`, Apache-2.0, converted to LiteRT int8, not retrained, 88 MB, from version 0.3.9). In a chat app with the dcAI SDK a sensitive picture is fully blurred before it shows. In other apps dcAI cannot change what is shown: the screen reader cuts out each picture in the chat and scores it, the child gets a reminder, and the parent gets the label, once per picture. **Video** runs only in test builds (`-Pdcai.video=true`) until the consent text names video: frames are taken on the phone and the image model reads up to four; a video cover in another app's chat is reported as video; the dashboard shows "Sensitive video hidden" or "Sensitive video in another app, child reminded".
+- **Optional on-phone analysis (Llama).** Settings offer Online (Muse Spark and the 8B student, the default) or On phone: a Llama 3.2 1B student distilled from the Muse Spark teacher labels, run with ExecuTorch in a separate process (`:ondevice`), downloaded once (about 0.8 GB) from the server with the device token and checked by SHA-256. Ordinary messages are judged and discarded on the phone; only risky ones are sent. The option shows only on phones with at least 5 GB RAM that are not low-RAM devices, and online stays the fallback. It is the privacy option; its accuracy is below online (Results). The app says "Dibuat dengan Llama" (Built with Llama).
 - **Sites, matched on the phone.** A DNS-only VPN: the phone's DNS server is an address inside the VPN and only that address is routed into it, so app traffic never passes through dcAI. Each looked-up name and its parent domains are matched on the phone against category lists built from UT1 Blacklists (CC BY-SA 4.0): adult, gambling, scams, malware, dating, drugs and hate, about 5.1 million domains in 26 MB of 40-bit hashes, so the phone holds no readable list. A listed site gets "no such domain" and the child a notification saying which category and why; any other name goes to the network's own resolver. The server receives the category, at most once per category in 30 minutes, never the site's name or a lookup history. The child can show a held site to the parent, who allows it on the phone with the PIN; the server gets a false-detection note with the category only. The VPN key icon shows the whole time, and switching the VPN off is an event for the parent.
 - **Backend for the child's phone.** A parent creates a single-use pairing code; the phone trades it for a device token stored only as a hash. The phone reads its configuration (scopes it may use, age range, language), reports which protection services are on (a service switched off is an event for the parent), sends flagged messages, image labels (never pixels) and false detections the parent confirmed (stored without child or device id).
 - **One queue per conversation.** The phone gets `202` in milliseconds; analysis runs in the background. Messages that arrive together share one stage 2 call and one Guide call, for the final level.
-- **Parent dashboard and homepage** (Next.js 16): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, deleting a child's data. Indonesian and English. Updates live.
+- **Parent dashboard and homepage** (Next.js 16), one tab set per child (Summary, Time online, School, Phone, Settings): level for the last 7 days, the latest insight with conversation starters, what the child was told and verified help channels, events, conversations (pattern and explanation, no text), the phone's protection state, adding a child with consent and a pairing code, consent per scope, unpairing a phone, renaming a child, clearing a child's history, deleting a child's data; for the account, changing the password and signing out of every device. Indonesian and English. Updates live. Public pages include terms (`/ketentuan`) and a parent guide (`/panduan`).
 - **School dashboard, aggregates only** (`/sekolah`): a school creates classes and sees anonymous counts per level for each one, from 5 consenting children; parents opt in per child and can leave at any time. How it works is in [School module](#school-module).
 - **Facts page** (`/fakta`): published figures for each risk dcAI addresses (UNICEF, WHO/Europe, The Lancet, Disrupting Harm Indonesia, PPATK, BNPT and others), each quoted as its source states it and linked to the page that was checked. These are the only figures in the product not measured by this project.
 - **Ask dcAI.** A parent asks in their own words; Muse Spark answers through function tools that are the dashboard's own queries, so it can see nothing the dashboard does not show. Children are aliases ("Anak A") in everything the model receives, names inside any text included. The answer is checked in code (no links, phone-like numbers or surveillance wording) and replaced by a fixed summary if it fails. Questions and answers are not stored.
 - **Time online.** The parent sets daily limits for school days and weekends, limits per category (video, games, social, other), bedtime with a wind-down reminder, breaks after long short-video sessions, and apps that are always allowed. **Focus mode** uses that allowlist the other way: the parent names the apps the child may keep using, and everything else is held, for homework or bedtime. The phone counts foreground time from Android's usage access (app names and minutes, never what is inside an app), reminds the child before time runs out, and shows a break screen at a limit or at bedtime. The child can ask for more time with a short reason, masked on the phone and again on the server; Muse Spark suggests allow, allow part or not now, and the parent decides on the dashboard, which reaches the phone over the live stream. The server keeps minutes per category per day, bedtime minutes and the longest session. Muse Spark also writes a weekly summary for the parent from aggregate numbers and can propose limits, which change nothing until the parent saves them.
 - **Live updates over SSE** with `Last-Event-ID` replay: the phone receives levels with a reviewed template nudge at once, then the model's nudge; the dashboard receives events, assessments and insight. Parent insight never goes to the phone.
+- **Messenger Z**, the sample chat app with the dcAI SDK, released as an APK. Synthetic contacts (Kak Bima, a stranger; Kelompok IPA 8B; Mama; Dinda) answer each message; pictures and video come from the phone's photo picker. A demo mode is driven from a computer (How to test).
 - **58 synthetic scenarios** (621 messages, seven groups, including invitations to fights, drugs, alcohol or weapons for ages 10 to 17), with a locked 40/18 dev/test split. New scenarios join the split by the same hash, so no earlier id moved.
 
 ### Not built yet
 
-In build order: a violence classifier that works on chat video (a first one was trained and held, see Results), sensitive-content checks of shared video in published builds once the consent text names video, a small on-phone text classifier (ExecuTorch) distilled from the same teacher, and per-category site settings for the parent. For schools: more staff accounts per school, a school-wide view across classes, and per-case referral controlled by the parent.
+In build order: a violence classifier that works on chat video (a first one was trained and held, see Results), sensitive-content checks of shared video in published builds once the consent text names video, a more accurate on-phone Llama (the full-prompt 1B variant measures better than the one served, see Results), and per-category site settings for the parent. For schools: more staff accounts per school, a school-wide view across classes, and per-case referral controlled by the parent.
 
 ## How it works
 
@@ -156,12 +168,12 @@ code/frontnext/ Next.js: homepage, privacy, how the AI helps, parent dashboard, 
                Its server holds the session in httpOnly cookies and forwards an allowlist of
                /v1 paths to the backend; the phone's API is not reachable from the browser.
 code/distill/  OpenPipe ART: fine-tunes the stage 1 student on a serverless training service
-               (code/distill/train.py).
+               (code/distill/train.py); ondevice/ trains and exports the on-phone Llama 3.2 1B.
 code/android/  Kotlin: dcAI (pairing, foreground service, nudges, on-phone masking,
                accessibility screen reader, chat notification listener, dcAI keyboard, image
                checks, DNS-only site VPN, time online with the break screen and focus mode) and a
                sample chat app, built with Gradle. Masking parity is tested against data/privacy.
-docs/          architecture decision records
+docs/          documentation, submission summary, video script, deployment, ADRs
 ```
 
 - **No column can hold conversation text.** A test inspects the migrated database. The conversation window lives in memory only.
@@ -238,10 +250,10 @@ The site's download button offers the APK from the repository's GitHub release. 
 
 | Suite | Result |
 |---|---|
-| Unit and API tests on SQLite (31 Oct 2026) | 381 passed |
-| The database tests again on PostgreSQL 18 (CI) | 102 passed |
+| Backend unit and API tests on SQLite (3 Nov 2026) | 402 passed, 128 skipped (PostgreSQL variants) |
+| The PostgreSQL variants on PostgreSQL 18 (CI) | passing |
 | Dashboard: type check, lint, production build | passing |
-| Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets, time rules), lint, debug APK | 35 passed |
+| Android: unit tests (masking parity, image rules, PIN, site list parity, DNS packets, time rules), lint, debug APK | 86 passed |
 
 ### Full pipeline on the locked test split (final)
 
@@ -413,6 +425,18 @@ The teacher labelled the 366 dev messages (USD 0.58); the student is LoRA SFT on
 
 The weakest labels for 70B are `pindah_kanal` (precision 0.43) and `membangun_kedekatan` (0.50). Full tables are in `eval/stage1/`.
 
+### On-phone Llama analysis
+
+Llama 3.2 1B students (LoRA SFT on the same teacher labels, ExecuTorch `.pte`, 8da4w linear and 4w embedding) on the locked test split, 18 scenarios, 197 messages. "Flagged" is the phone's send decision. Details in `eval/distill/ondevice-quant.md`.
+
+| Model | Size | Label recall / precision | Flagged recall / precision |
+| --- | --- | --- | --- |
+| 1B, short prompt (the one served) | 0.79 GB | 0.33 / 0.38 | 0.60 / 0.71 |
+| 1B, full prompt | 0.83 GB | 0.55 / 0.60 | 0.69 / 0.79 |
+| Online 8B student v2 (default) | server | 0.81 / 0.95 | |
+
+The short prompt was built to cut memory and latency (about 0.5 s to first token against about 20 s for the full prompt on a phone CPU) and costs accuracy. On-phone analysis stays an option; online is the default.
+
 ### Sensitive pictures on a phone, one live run each
 
 A mid-range Android 11 phone (Helio P35), published build unless noted. Every sensitive item was
@@ -422,8 +446,8 @@ runs, not a measurement of accuracy.
 | What was sent | What dcAI did |
 |---|---|
 | An explicit picture in the sample chat app | Blurred before it showed, `seksual`, 5.6 s |
-| An explicit picture in WhatsApp | Picture cut out of the screen and judged `seksual` (5.2 s); child reminded, parent label once |
-| A suggestive, not explicit, picture in WhatsApp | Judged `aman`, nothing shown |
+| An explicit picture in another chat app | Picture cut out of the screen and judged `seksual` (5.2 s); child reminded, parent label once |
+| A suggestive, not explicit, picture in another chat app | Judged `aman`, nothing shown |
 | Ordinary chat screens | No reminder; about 3.5 s per picture after a 5.4 s first load |
 | An adult video of about half a minute in the sample chat app (test build with video on) | Four frames judged, video hidden, parent label "Sensitive video hidden" |
 
@@ -458,12 +482,14 @@ On all 543 scenario messages, 15 of the 17 child messages that share personal da
 - **The sexual-image classifier has not been measured by us.** It is an open model used as published; we tried it only on a few adult test pictures and videos the project owner chose, on one phone (Results). We do not create or collect sexual images of anyone to test or train a classifier, so we report no accuracy for it. It is slow on a low-end phone (about 3.5 s per picture), and in other apps it can only remind the child, not hide the picture.
 - **dcAI does not detect violence in video.** A classifier trained for it scored well on its own test split and missed a real chat video, so it was held. See Results.
 - **Site protection works at the DNS level, and can be gone around.** A browser with its own encrypted DNS, an app with a built-in resolver, or another VPN skips it; switching the VPN off is reported to the parent. A false match is possible but rare by design: with about 5 million 40-bit hashes, roughly one lookup in 200,000 collides, an estimate from the hash width and list size rather than a measurement. UT1's coverage of sites aimed at Indonesia, gambling in particular, has not been measured. When the network gives no resolver, lookups go to a public one (1.1.1.1).
+- **On-phone Llama analysis is less accurate than online.** The variant served finds 0.60 of risky messages at the send decision; see Results.
 - **The invitation label is new, and the screener was trained before it existed.** Student v2 finds 6 of 11 invitations on dev with precision 0.67, so it raises false alarms (one of two look-alike hard cases on dev) and can miss a single invitation in an otherwise ordinary chat. A retrained v3 removed the false alarm but missed more risk and was not adopted. See Results.
 - The consent text has not had legal review.
 
 ## Credits and licenses
 
-- **Meta Muse Spark** through the Meta Model API, with Muse Spark Open on Fireworks and Baseten; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider (Llama 3.x Community License). The stage 1 screener is a Llama 3.1 8B student distilled from a Muse Spark teacher (LoRA SFT via OpenPipe ART).
+- **Meta Muse Spark** through the Meta Model API, with Muse Spark Open on Fireworks and Baseten; **Meta Llama 3.3 70B and 3.1 8B** through an open-weights inference provider; **Meta Llama 3.2 1B** on the phone (Llama 3.1, 3.2 and 3.3 Community Licenses). The stage 1 screener is a Llama 3.1 8B student distilled from a Muse Spark teacher (LoRA SFT via OpenPipe ART). Built with Llama.
+- **ExecuTorch** (BSD) runs the on-phone Llama.
 - **UT1 Blacklists**, Universite Toulouse Capitole, CC BY-SA 4.0: the site lists on the phone are hashed adaptations under the same license.
 - **Falconsai `nsfw_image_detection`**, Apache-2.0: the sexual-image classifier on the phone, converted to LiteRT int8 and not retrained. **MoViNet** (TensorFlow Model Garden, Apache-2.0) and the **VID** dataset (CC0 1.0) for the held violence model. **LiteRT**, Apache-2.0.
 - **Google ML Kit** face detection and text recognition, bundled on-device models (ML Kit terms).
