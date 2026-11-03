@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="linked">Protected by dcAI</string>
+    <string name="not_linked">dcAI is not installed on this phone</string>
+    <string name="synthetic_note">Sample app with the dcAI SDK. Every name, message and picture here is synthetic.</string>
+    <string name="you_prefix">"You: "</string>
+    <string name="photo">Photo</string>
+    <string name="typing">typing…</string>
+    <string name="group_members">Dinda, Raka, You</string>
+    <string name="today">Today</string>
+    <string name="type_hint">Message</string>
+    <string name="attach">Attach</string>
+    <string name="send">Send</string>
+    <string name="gallery">Gallery</string>
+    <string name="demo_next">Demo: next message</string>
+    <string name="demo_image">Demo: contact sends a picture</string>
+    <string name="restart">Restart conversation</string>
+    <string name="share_card">Student card</string>
+    <string name="share_landscape">Landscape</string>
+    <string name="share_other">Pick another photo or video from the phone</string>
+    <string name="checking">dcAI is checking…</string>
+    <string name="blurred_all">dcAI blurred this picture.</string>
+    <string name="blurred_video">dcAI hid this video.</string>
+    <string name="play_video">Play video</string>
+    <string name="blurred_private">dcAI blurred personal data in this picture.</string>
+    <string name="blurred_shared">Personal data blurred before sending.</string>
+    <string name="ask_review">Show a parent</string>
+    <string name="reviewed">A parent marked this a false detection.</string>
+</resources>

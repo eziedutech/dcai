@@ -199,9 +199,10 @@ object SampleImages {
 
     fun invitation(context: Context): Uri = save(context, "ajakan.png", 900, 560) { c, _, _ ->
         c.drawColor(Color.rgb(24, 24, 32))
-        text(c, "ayo pindah ke aplikasi lain", 40f, 160f, 46f, Color.WHITE, bold = true)
-        text(c, "jangan bilang siapa-siapa ya", 40f, 250f, 46f, Color.WHITE)
-        text(c, "add aku: @teman.rahasia", 40f, 360f, 46f, Color.rgb(255, 214, 102), bold = true)
+        val en = java.util.Locale.getDefault().language == "en"
+        text(c, if (en) "let's move to another app" else "ayo pindah ke aplikasi lain", 40f, 160f, 46f, Color.WHITE, bold = true)
+        text(c, if (en) "don't tell anyone ok" else "jangan bilang siapa-siapa ya", 40f, 250f, 46f, Color.WHITE)
+        text(c, if (en) "add me: @secret.friend" else "add aku: @teman.rahasia", 40f, 360f, 46f, Color.rgb(255, 214, 102), bold = true)
     }
 
     private fun text(c: Canvas, s: String, x: Float, y: Float, size: Float, color: Int, bold: Boolean = false) {

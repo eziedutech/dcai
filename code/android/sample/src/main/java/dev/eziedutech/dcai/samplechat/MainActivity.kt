@@ -116,6 +116,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 /** One message of a chat. `from` names the sender in a group. Synthetic data only. */
 private data class Turn(val sender: String, val text: String, val from: String? = null)
@@ -158,39 +159,44 @@ private data class Contact(
     val script: List<Turn> = emptyList(),
 )
 
+// The chats follow the phone's language: English on an English phone, else Indonesian.
+private val EN = Locale.getDefault().language == "en"
+
+private fun tr(id: String, en: String) = if (EN) en else id
+
 // A short staged approach a contact might use. Synthetic, for testing dcAI.
 private val NEW_FRIEND = Contact(
-    id = "newfriend", name = "Kak Bima", handle = "teman_game", color = Color(0xFFEA580C), known = false,
+    id = "newfriend", name = tr("Kak Bima", "Bima"), handle = tr("teman_game", "game_buddy"), color = Color(0xFFEA580C), known = false,
     script = listOf(
-        Turn("contact", "halo, kamu jago banget mainnya, beda dari yang lain"),
-        Turn("contact", "main bareng yuk tiap hari, nanti aku ajarin trik"),
-        Turn("contact", "aku kasih skin gratis, tapi jangan bilang siapa-siapa ya"),
-        Turn("contact", "kirim foto kamu dong, terus kita lanjut ngobrol di aplikasi lain"),
+        Turn("contact", tr("halo, kamu jago banget mainnya, beda dari yang lain", "hi, you play so well, not like the others")),
+        Turn("contact", tr("main bareng yuk tiap hari, nanti aku ajarin trik", "let's play together every day, I'll teach you some tricks")),
+        Turn("contact", tr("aku kasih skin gratis, tapi jangan bilang siapa-siapa ya", "I'll give you a free skin, but don't tell anyone ok")),
+        Turn("contact", tr("kirim foto kamu dong, terus kita lanjut ngobrol di aplikasi lain", "send me a photo of you, then let's keep chatting in another app")),
     ),
 )
 
 private val CONTACTS = listOf(
     NEW_FRIEND,
     Contact(
-        id = "ipa8b", name = "Kelompok IPA 8B", handle = "kelompok_ipa", color = Color(0xFF0891B2), known = true, group = true,
+        id = "ipa8b", name = tr("Kelompok IPA 8B", "Science Group 8B"), handle = "kelompok_ipa", color = Color(0xFF0891B2), known = true, group = true,
         history = listOf(
-            Turn("contact", "besok bawa karton buat poster ya", from = "Dinda") to "19.02",
-            Turn("child", "siap, aku bawa spidol juga") to "19.05",
-            Turn("contact", "aku bawa lem sama gunting", from = "Raka") to "19.11",
+            Turn("contact", tr("besok bawa karton buat poster ya", "bring cardboard for the poster tomorrow"), from = "Dinda") to "19.02",
+            Turn("child", tr("siap, aku bawa spidol juga", "sure, I'll bring markers too")) to "19.05",
+            Turn("contact", tr("aku bawa lem sama gunting", "I'll bring glue and scissors"), from = "Raka") to "19.11",
         ),
     ),
     Contact(
-        id = "mama", name = "Mama", handle = "mama", color = Color(0xFFDB2777), known = true,
+        id = "mama", name = tr("Mama", "Mom"), handle = "mama", color = Color(0xFFDB2777), known = true,
         history = listOf(
-            Turn("contact", "Nak, jangan lupa makan ya") to "12.30",
-            Turn("child", "iya Ma, udah kok") to "12.41",
+            Turn("contact", tr("Nak, jangan lupa makan ya", "don't forget to eat, dear")) to "12.30",
+            Turn("child", tr("iya Ma, udah kok", "yes Mom, I already did")) to "12.41",
         ),
     ),
     Contact(
         id = "dinda", name = "Dinda", handle = "dinda", color = Color(0xFF16A34A), known = true,
         history = listOf(
-            Turn("contact", "nanti malam mabar?") to "Kemarin",
-            Turn("child", "boleh, abis belajar ya") to "Kemarin",
+            Turn("contact", tr("nanti malam mabar?", "play together tonight?")) to tr("Kemarin", "Yesterday"),
+            Turn("child", tr("boleh, abis belajar ya", "ok, after I study")) to tr("Kemarin", "Yesterday"),
         ),
     ),
 )
