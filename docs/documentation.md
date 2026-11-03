@@ -97,7 +97,8 @@ SSE with `Last-Event-ID` replay. Parent insight never reaches the phone.
 - Apps with the dcAI SDK ask dcAI before showing or sending an image (signature-protected
   service, read access to that image only).
 - ML Kit on the phone finds faces and text. Text is masked like a message.
-- **Sharing**: faces and personal data (school, name, address, phone) are blurred before sending.
+- **Sharing**: faces and personal data (school, address, phone, account handles, recognised names)
+  are blurred before sending. A name after a label such as "Nama:" is not recognised.
 - **Receiving**: an image is checked only when its conversation is at `perhatian` or above; its
   text is assessed like a message.
 - **Sexual content**: Falconsai `nsfw_image_detection` (LiteRT int8). SDK apps blur the picture
