@@ -30,7 +30,7 @@ as of 3 November 2026 (final).
   (217 MB with the image model, Android 11+, API 30+) and `dcai-messenger-z-0.3.9.apk` (sample
   chat app with the dcAI SDK). The homepage download button points to the same release.
 - Video: link added when uploaded.
-- Documentation: `docs/documentation.md`; demo script: `docs/video.md`.
+- Documentation: `docs/documentation.md`.
 - Phone API: `https://dcai.digitalsafe.app/v1` (health at `/v1/health`).
 - Code: <https://github.com/eziedutech/dcai>, MIT license.
 

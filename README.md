@@ -20,7 +20,7 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 
 **Video:** link added when uploaded.
 
-**Documentation:** [docs/documentation.md](docs/documentation.md) (features, roles, data flow, API). Submission summary: [docs/submission.md](docs/submission.md). Demo script: [docs/video.md](docs/video.md).
+**Documentation:** [docs/documentation.md](docs/documentation.md) (features, roles, data flow, API). Submission summary: [docs/submission.md](docs/submission.md).
 
 **Direction:** dcAI, an Android app a parent installs on the child's phone (ages 10 to 17): safety in chats, images and sites, healthy habits (daily time online, bedtime, breaks from endless short video, focus mode), and guidance for the parent. It is one pillar of digitalsafe.app. Masking, the image checks and the site lists run on the phone; only flagged, masked messages reach the cloud. With a parent's separate consent, a school sees anonymous counts per class, never a child (see [School module](#school-module)).
 
@@ -174,7 +174,7 @@ code/android/  Kotlin: dcAI (pairing, foreground service, nudges, on-phone maski
                accessibility screen reader, chat notification listener, dcAI keyboard, image
                checks, DNS-only site VPN, time online with the break screen and focus mode) and a
                sample chat app, built with Gradle. Masking parity is tested against data/privacy.
-docs/          documentation, submission summary, video script, deployment, ADRs
+docs/          documentation, submission summary, deployment, ADRs
 ```
 
 - **No column can hold conversation text.** A test inspects the migrated database. The conversation window lives in memory only.
