@@ -18,7 +18,7 @@ Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley, 26 Oct to
 
 **Android:** [release v0.3.9](https://github.com/eziedutech/dcai/releases/tag/v0.3.9): `dcai-guardian-0.3.9.apk` (dcAI, 217 MB with the image model, Android 11+) and `dcai-messenger-z-0.3.9.apk` (Messenger Z, the sample chat app with the dcAI SDK). The homepage download button points to the same release.
 
-**Video:** link added when uploaded.
+**Demo video (3 min):** <https://youtu.be/M4Zzza11sJk>
 
 **Documentation:** [docs/documentation.md](docs/documentation.md) (features, roles, data flow, API). Submission summary: [docs/submission.md](docs/submission.md).
 
