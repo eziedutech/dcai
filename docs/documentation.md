@@ -1,7 +1,7 @@
 # dcAI documentation
 
 Reference for dcAI as released on 3 November 2026: web at <https://dcai.digitalsafe.app>, Android
-v0.3.9. Figures and limits are in the README ([Results](../README.md#results),
+v0.3.10. Figures and limits are in the README ([Results](../README.md#results),
 [What it does not claim](../README.md#what-it-does-not-claim)). All data is synthetic.
 
 ## 1. Roles
@@ -18,7 +18,7 @@ A guardian reaches only their own children (others answer 404). A school never r
 
 1. Parent registers at `/daftar`, adds a child (name, age range, language) and grants consent per scope.
 2. Dashboard shows a single-use pairing code.
-3. On the child's phone, install `dcai-guardian-0.3.9.apk` and follow the four onboarding steps:
+3. On the child's phone, install `dcai-guardian-0.3.10.apk` and follow the four onboarding steps:
    enter the code, read the consent together (two confirmations and the full text), create the
    parent PIN, switch protections on.
 4. The phone shows the persistent "dcAI aktif" notification for as long as dcAI runs.
@@ -161,8 +161,9 @@ SSE with `Last-Event-ID` replay. Parent insight never reaches the phone.
 
 ## 11. Messenger Z
 
-Sample chat app with the dcAI SDK (`dcai-messenger-z-0.3.9.apk`). Synthetic contacts: Kak Bima
-(stranger), Kelompok IPA 8B, Mama, Dinda. Contacts answer each message. Pictures and video come
+Sample chat app with the dcAI SDK (`dcai-messenger-z-0.3.10.apk`), in English on an English phone.
+Synthetic contacts: Bima (stranger), Science Group 8B, Mom, Dinda (Kak Bima, Kelompok IPA 8B, Mama
+in Indonesian). Contacts answer each message. Pictures and video come
 from the photo picker. Demo mode from a computer:
 
 ```bash

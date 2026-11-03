@@ -26,8 +26,8 @@ as of 3 November 2026 (final).
 - Live: <https://dcai.digitalsafe.app> (homepage, parent dashboard at `/dasbor`, school
   dashboard at `/sekolah`, facts at `/fakta`, privacy at `/privasi`, terms at `/ketentuan`, parent
   guide at `/panduan`).
-- Android: <https://github.com/eziedutech/dcai/releases/tag/v0.3.9>: `dcai-guardian-0.3.9.apk`
-  (217 MB with the image model, Android 11+, API 30+) and `dcai-messenger-z-0.3.9.apk` (sample
+- Android: <https://github.com/eziedutech/dcai/releases/tag/v0.3.10>: `dcai-guardian-0.3.10.apk`
+  (217 MB with the image model, Android 11+, API 30+) and `dcai-messenger-z-0.3.10.apk` (sample
   chat app with the dcAI SDK). The homepage download button points to the same release.
 - Demo video (3 min): <https://youtu.be/M4Zzza11sJk>
 - Documentation: `docs/documentation.md`.
@@ -57,7 +57,7 @@ as of 3 November 2026 (final).
 3. **Ask dcAI** (Muse Spark with function tools that are the dashboard's own queries): a parent
    asks in their own words; children are aliases in everything the model sees; questions and
    answers are not stored.
-4. **The Android app** (Kotlin, API 30+, v0.3.9). Pairing by a single-use code, onboarding with
+4. **The Android app** (Kotlin, API 30+, v0.3.10). Pairing by a single-use code, onboarding with
    consent read together, a parent PIN to switch protections off (reported to the parent).
    Four message sources share one on-phone masking path: screen text through an accessibility
    service (the main source, any app, any keyboard), chat notifications for the other person's
