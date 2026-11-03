@@ -131,6 +131,17 @@ private fun TimeOutScreen(reason: BlockReason?, category: String?, until: Long, 
     LaunchedEffect(decisions) {
         if (decisions > 0 && pending && store.pendingTimeRequest == null) onClose()
     }
+    // The decision arrives over the live stream; if that was missed, or the request is gone,
+    // ask the server so the child is not left waiting for an answer that will not come.
+    LaunchedEffect(Unit) {
+        val id = store.pendingTimeRequest ?: return@LaunchedEffect
+        val client = ServiceLocator.client(context) ?: return@LaunchedEffect
+        val open = runCatching { client.myTimeRequests() }.getOrNull() ?: return@LaunchedEffect
+        if (open.none { it.id == id && it.status == "menunggu" }) {
+            store.pendingTimeRequest = null
+            pending = false
+        }
+    }
     BackHandler { if (reason == null) onClose() else onHome() }
 
     val categoryLabel = category?.let { stringResource(categoryName(it)) }
